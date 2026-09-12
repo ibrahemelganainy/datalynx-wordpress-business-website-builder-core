@@ -1,0 +1,15 @@
+/**
+ * Business Builder Core - Admin Page Builder Styles
+ * Final simplified modular structure.
+ */
+
+@import url("page-admin/variables.css");
+@import url("page-admin/components/buttons.css");
+@import url("page-admin/components/builder-header.css");
+@import url("page-admin/components/section-list.css");
+@import url("page-admin/components/section-editor.css");
+@import url("page-admin/components/live-preview.css");
+@import url("page-admin/components/template-shell.css");
+@import url("page-admin/components/slider.css");
+@import url("page-admin/components/content-sections.css");
+@import url("page-admin/components/image-uploader.css");

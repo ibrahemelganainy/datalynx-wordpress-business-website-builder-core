@@ -1,0 +1,100 @@
+/**
+ * Business Builder Core - Frontend: Legal Services section
+ * -------------------------------------------------------
+ * Markup produced by LawFirmSections::render_legal_services_section()
+ *   .bb-services-grid.bb-grid-columns-N
+ *     article.bb-service-card
+ *       .bb-service-image > img.bb-service-thumb
+ *       .bb-service-icon        (emoji/icon fallback)
+ *       h3
+ *       p
+ */
+
+.bb-template .bb-service-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 26px 24px;
+  border-radius: var(--bb-fe-radius-card, 20px);
+  background: var(--bb-fe-card-bg, #ffffff);
+  border: 1px solid var(--bb-fe-card-border, rgba(15, 23, 42, 0.08));
+  box-shadow: var(--bb-fe-card-shadow, 0 18px 34px rgba(15, 23, 42, 0.06));
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.bb-template .bb-service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 44px rgba(15, 23, 42, 0.12);
+}
+
+.bb-template .bb-service-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e2e8f0, #dbeafe);
+}
+
+.bb-template .bb-service-image img,
+.bb-template .bb-service-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bb-template .bb-service-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #dbeafe, #ede9fe);
+  color: #1d4ed8;
+  font-size: 24px;
+  font-weight: 800;
+  overflow: hidden;
+}
+
+.bb-template .bb-service-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Heading forced bold — protected from theme h3 resets. */
+.bb-template .bb-service-card h3 {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+    letter-spacing: -0.01em !important;
+    text-transform: none !important;
+    color: var(--bb-fe-heading-color, #0f172a) !important;
+}
+
+.bb-template .bb-service-card p {
+  margin: 0;
+  color: var(--bb-fe-text-color, #475569);
+  line-height: 1.7;
+}
+
+/* Luxury template tweaks. */
+.bb-template-luxury .bb-service-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(138, 92, 24, 0.14);
+}
+
+.bb-template-luxury .bb-service-card h3 {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.bb-template-luxury .bb-service-icon {
+  background: linear-gradient(135deg, #f6e7cf, #dcc29c);
+  color: #8a5c18;
+}

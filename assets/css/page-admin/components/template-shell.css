@@ -1,0 +1,230 @@
+/* Frontend template shell + shared section blocks */
+.bb-template {
+    display: block;
+    width: 100%;
+    color: #111827;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.bb-template-modern {
+    background:
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 28%),
+        linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.bb-template-luxury {
+    background:
+        radial-gradient(circle at top right, rgba(180, 134, 66, 0.14), transparent 34%),
+        linear-gradient(180deg, #f7f2ea 0%, #fffdfb 100%);
+}
+
+.bb-section {
+    position: relative;
+    padding: 56px 0;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+    /*
+     * FIX (screenshots showing cropped decorative shapes at
+     * the bottom of a section): without a defined bound,
+     * an absolutely-positioned decorative element inside a
+     * section can render past the section's visual edge and
+     * get clipped mid-shape by whatever sits below it. This
+     * makes each section responsible for containing its own
+     * artwork. If a design intentionally needs a shape to
+     * bleed outside the section, add a specific override
+     * (e.g. `.bb-section.has-bleed { overflow: visible; }`)
+     * rather than removing this globally.
+     */
+    overflow: hidden;
+}
+
+.bb-template-modern .bb-section {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(248, 250, 252, 0.92));
+}
+
+.bb-template-luxury .bb-section {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(247, 242, 234, 0.58));
+}
+
+.bb-section-header,
+.bb-section-footer {
+    padding: 0;
+    overflow: visible;
+}
+
+.bb-section-inner {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.bb-template-modern .bb-section-inner {
+    position: relative;
+}
+
+.bb-template-modern .bb-section-inner::before,
+.bb-template-luxury .bb-section-inner::before {
+    content: "";
+    position: absolute;
+    inset: -14px 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.45), transparent);
+}
+
+.bb-template-modern .bb-section h2,
+.bb-template-luxury .bb-section h2 {
+    margin: 0 0 18px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+}
+
+.bb-template-modern .bb-section h2 {
+    color: #0f172a;
+}
+
+.bb-template-luxury .bb-section h2 {
+    color: #1f2937;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.bb-template-modern .bb-section p,
+.bb-template-luxury .bb-section p {
+    color: #475569;
+    line-height: 1.8;
+}
+
+.bb-template-luxury .bb-section .bb-section-inner > h2::after {
+    content: "";
+    display: block;
+    width: 92px;
+    height: 3px;
+    margin-top: 12px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #b8843c, #dcc29c);
+}
+
+.bb-header-bar,
+.bb-footer-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 24px;
+    border-radius: 18px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+}
+
+.bb-header-enterprise,
+.bb-footer-bar {
+    position: relative;
+}
+
+.bb-header-enterprise::before,
+.bb-footer-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: linear-gradient(180deg, #111827, #374151);
+}
+
+.bb-template-luxury .bb-header-bar,
+.bb-template-luxury .bb-footer-bar {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(138, 92, 24, 0.12);
+}
+
+.bb-header-brand,
+.bb-footer-brand h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.bb-header-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.bb-header-nav a,
+.bb-header-cta,
+.bb-footer-meta span,
+.bb-footer-socials a {
+    color: #374151;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.bb-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.bb-header-contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+
+.bb-header-contact-links a {
+    color: #374151;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.bb-header-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    color: #fff !important;
+    padding: 11px 18px;
+    border-radius: 999px;
+    box-shadow: 0 10px 23px rgba(17, 24, 39, 0.18);
+    white-space: nowrap;
+}
+
+.bb-footer-bar {
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.bb-footer-brand,
+.bb-footer-meta,
+.bb-footer-copyright {
+    flex: 1 1 180px;
+}
+
+.bb-footer-brand p {
+    margin: 8px 0 0;
+    color: #4b5563;
+    line-height: 1.7;
+}
+
+.bb-footer-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bb-footer-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bb-footer-copyright {
+    text-align: right;
+    color: #4b5563;
+    font-weight: 600;
+}

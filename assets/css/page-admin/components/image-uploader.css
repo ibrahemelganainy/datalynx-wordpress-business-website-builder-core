@@ -1,0 +1,39 @@
+/**
+ * Image uploader (Media Library field)
+ *
+ * Button colors/sizing come from buttons.css
+ * (.bb-image-actions .bb-select-image-btn /
+ * .bb-image-actions .bb-remove-image-btn). This file styles
+ * the card wrapper and the preview image.
+ */
+
+.bb-image-uploader-wrapper {
+    background: var(--bb-bg-main);
+    padding: var(--bb-space-md);
+    border: 1px solid var(--bb-border-color);
+    border-radius: var(--bb-radius-md);
+    margin-bottom: var(--bb-space-sm);
+    box-shadow: var(--bb-shadow-sm);
+}
+
+.bb-image-preview-container {
+    margin-bottom: var(--bb-space-sm);
+}
+
+.bb-preview-img {
+    display: none;
+    max-width: 100%;
+    height: auto;
+    max-height: 160px;
+    border: 1px solid var(--bb-border-color);
+    border-radius: var(--bb-radius-sm);
+    padding: 3px;
+    background: var(--bb-bg-main);
+}
+
+.bb-image-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--bb-space-sm);
+    clear: both;
+}

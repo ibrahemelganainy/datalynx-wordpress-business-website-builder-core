@@ -1,0 +1,73 @@
+/**
+ * Business Builder Core - Frontend: Practice Areas section
+ * -------------------------------------------------------
+ * Markup produced by LawFirmSections::render_practice_areas_section()
+ *   .bb-practice-areas-grid
+ *     article.bb-practice-area-card
+ *       h3
+ *       p   (term description)
+ */
+
+.bb-template .bb-practice-areas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--bb-fe-section-gap, 24px);
+}
+
+.bb-template .bb-practice-area-card {
+  position: relative;
+  padding: 26px 24px;
+  border-radius: var(--bb-fe-radius-card, 20px);
+  background: var(--bb-fe-card-bg, #ffffff);
+  border: 1px solid var(--bb-fe-card-border, rgba(15, 23, 42, 0.08));
+  box-shadow: var(--bb-fe-card-shadow, 0 18px 34px rgba(15, 23, 42, 0.06));
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.bb-template .bb-practice-area-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--bb-fe-accent, linear-gradient(135deg, #60a5fa, #a78bfa));
+}
+
+.bb-template .bb-practice-area-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 44px rgba(15, 23, 42, 0.12);
+}
+
+/* Heading forced bold — protected from theme h3 resets. */
+.bb-template .bb-practice-area-card h3 {
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+    letter-spacing: -0.01em !important;
+    text-transform: none !important;
+    color: var(--bb-fe-heading-color, #0f172a) !important;
+}
+
+.bb-template .bb-practice-area-card p {
+  margin: 0;
+  color: var(--bb-fe-text-color, #475569);
+  line-height: 1.7;
+}
+
+/* Luxury template tweaks. */
+.bb-template-luxury .bb-practice-area-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(138, 92, 24, 0.14);
+}
+
+.bb-template-luxury .bb-practice-area-card::before {
+  background: linear-gradient(180deg, #b8843c, #dcc29c);
+}
+
+.bb-template-luxury .bb-practice-area-card h3 {
+  font-family: Georgia, "Times New Roman", serif;
+}

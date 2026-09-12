@@ -1,0 +1,346 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Business Builder Core 1.0.0\n"
+"Language: ar\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: includes/Builder/CoreSections.php
+msgid "Hero"
+msgstr "الرئيسية"
+
+msgid "Main introductory section of the website."
+msgstr "القسم التعريفي الرئيسي للموقع."
+
+msgid "About"
+msgstr "من نحن"
+
+msgid "About the business or organization."
+msgstr "نبذة عن الشركة أو المؤسسة."
+
+msgid "Features"
+msgstr "المميزات"
+
+msgid "Display a collection of features or benefits."
+msgstr "عرض مجموعة من المميزات أو الفوائد."
+
+msgid "Call to Action"
+msgstr "دعوة لاتخاذ إجراء"
+
+msgid "Encourage visitors to take an action."
+msgstr "تشجيع الزوار على اتخاذ إجراء."
+
+msgid "Contact"
+msgstr "اتصل بنا"
+
+msgid "Display contact information and contact options."
+msgstr "عرض معلومات الاتصال ووسائل التواصل."
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgctxt "post type general name"
+msgid "Lawyers"
+msgstr "المحامون"
+
+msgctxt "post type singular name"
+msgid "Lawyer"
+msgstr "محامٍ"
+
+msgid "Lawyers"
+msgstr "المحامون"
+
+msgid "Lawyer"
+msgstr "محامٍ"
+
+msgid "Add New"
+msgstr "إضافة جديد"
+
+msgid "Add New Lawyer"
+msgstr "إضافة محامٍ جديد"
+
+msgid "New Lawyer"
+msgstr "محامٍ جديد"
+
+msgid "Edit Lawyer"
+msgstr "تعديل المحامي"
+
+msgid "View Lawyer"
+msgstr "عرض المحامي"
+
+msgid "All Lawyers"
+msgstr "كل المحامين"
+
+msgid "Search Lawyers"
+msgstr "البحث في المحامين"
+
+msgid "No lawyers found."
+msgstr "لم يتم العثور على محامين."
+
+msgid "No lawyers found in Trash."
+msgstr "لم يتم العثور على محامين في سلة المهملات."
+
+msgid "Lawyer Photo"
+msgstr "صورة المحامي"
+
+msgid "Set Lawyer Photo"
+msgstr "تعيين صورة المحامي"
+
+msgid "Remove Lawyer Photo"
+msgstr "إزالة صورة المحامي"
+
+msgid "Use as Lawyer Photo"
+msgstr "استخدامها كصورة للمحامي"
+
+msgid "Lawyer Archives"
+msgstr "أرشيف المحامين"
+
+msgid "Lawyer Attributes"
+msgstr "خصائص المحامي"
+
+msgid "Insert into lawyer"
+msgstr "إدراج في المحامي"
+
+msgid "Uploaded to this lawyer"
+msgstr "تم رفعها إلى هذا المحامي"
+
+msgid "Filter lawyers list"
+msgstr "تصفية قائمة المحامين"
+
+msgid "Lawyers list navigation"
+msgstr "التنقل في قائمة المحامين"
+
+msgid "Lawyers list"
+msgstr "قائمة المحامين"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgctxt "post type general name"
+msgid "Legal Services"
+msgstr "الخدمات القانونية"
+
+msgctxt "post type singular name"
+msgid "Legal Service"
+msgstr "خدمة قانونية"
+
+msgid "Legal Services"
+msgstr "الخدمات القانونية"
+
+msgid "Legal Service"
+msgstr "خدمة قانونية"
+
+msgid "Add New Legal Service"
+msgstr "إضافة خدمة قانونية جديدة"
+
+msgid "New Legal Service"
+msgstr "خدمة قانونية جديدة"
+
+msgid "Edit Legal Service"
+msgstr "تعديل الخدمة القانونية"
+
+msgid "View Legal Service"
+msgstr "عرض الخدمة القانونية"
+
+msgid "All Legal Services"
+msgstr "كل الخدمات القانونية"
+
+msgid "Search Legal Services"
+msgstr "البحث في الخدمات القانونية"
+
+msgid "No legal services found."
+msgstr "لم يتم العثور على خدمات قانونية."
+
+msgid "No legal services found in Trash."
+msgstr "لم يتم العثور على خدمات قانونية في سلة المهملات."
+
+msgid "Service Image"
+msgstr "صورة الخدمة"
+
+msgid "Set Service Image"
+msgstr "تعيين صورة الخدمة"
+
+msgid "Remove Service Image"
+msgstr "إزالة صورة الخدمة"
+
+msgid "Use as Service Image"
+msgstr "استخدامها كصورة للخدمة"
+
+msgid "Legal Service Archives"
+msgstr "أرشيف الخدمات القانونية"
+
+msgid "Legal Service Attributes"
+msgstr "خصائص الخدمة القانونية"
+
+msgid "Insert into legal service"
+msgstr "إدراج في الخدمة القانونية"
+
+msgid "Uploaded to this legal service"
+msgstr "تم رفعها إلى هذه الخدمة القانونية"
+
+msgid "Filter legal services list"
+msgstr "تصفية قائمة الخدمات القانونية"
+
+msgid "Legal services list navigation"
+msgstr "التنقل في قائمة الخدمات القانونية"
+
+msgid "Legal services list"
+msgstr "قائمة الخدمات القانونية"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgctxt "taxonomy general name"
+msgid "Practice Areas"
+msgstr "مجالات الممارسة"
+
+msgctxt "taxonomy singular name"
+msgid "Practice Area"
+msgstr "مجال ممارسة"
+
+msgid "Practice Areas"
+msgstr "مجالات الممارسة"
+
+msgid "Practice Area"
+msgstr "مجال ممارسة"
+
+msgid "Search Practice Areas"
+msgstr "البحث في مجالات الممارسة"
+
+msgid "All Practice Areas"
+msgstr "كل مجالات الممارسة"
+
+msgid "Parent Practice Area"
+msgstr "مجال الممارسة الأب"
+
+msgid "Parent Practice Area:"
+msgstr "مجال الممارسة الأب:"
+
+msgid "Edit Practice Area"
+msgstr "تعديل مجال الممارسة"
+
+msgid "View Practice Area"
+msgstr "عرض مجال الممارسة"
+
+msgid "Update Practice Area"
+msgstr "تحديث مجال الممارسة"
+
+msgid "Add New Practice Area"
+msgstr "إضافة مجال ممارسة جديد"
+
+msgid "New Practice Area Name"
+msgstr "اسم مجال الممارسة الجديد"
+
+msgid "No practice areas found."
+msgstr "لم يتم العثور على مجالات ممارسة."
+
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+msgid "Legal Service Details"
+msgstr "تفاصيل الخدمة القانونية"
+
+msgid "Icon"
+msgstr "الأيقونة"
+
+msgid "Display Order"
+msgstr "ترتيب العرض"
+
+msgid "Lower numbers appear first on the website."
+msgstr "الأرقام الأقل تظهر أولًا على الموقع."
+
+msgid "Show on Website"
+msgstr "عرض على الموقع"
+
+msgid "If disabled, this legal service will not be displayed on the website."
+msgstr "إذا تم تعطيل هذا الخيار، لن تظهر هذه الخدمة القانونية على الموقع."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Display lawyers and legal professionals."
+msgstr "عرض المحامين والمتخصصين القانونيين."
+
+msgid "Display legal services offered by the firm."
+msgstr "عرض الخدمات القانونية التي يقدمها المكتب."
+
+msgid "Display the firm practice areas."
+msgstr "عرض مجالات ممارسة المكتب."
+
+msgid "Testimonials"
+msgstr "آراء العملاء"
+
+msgid "Display client testimonials."
+msgstr "عرض آراء العملاء."
+
+msgid "Frequently Asked Questions"
+msgstr "الأسئلة الشائعة"
+
+msgid "Display frequently asked questions."
+msgstr "عرض الأسئلة الشائعة."
+
+msgid "Legal Consultation"
+msgstr "استشارة قانونية"
+
+msgid "Encourage visitors to request a legal consultation."
+msgstr "تشجيع الزوار على طلب استشارة قانونية."
+
+msgid "Lawyer Details"
+msgstr "تفاصيل المحامي"
+
+msgid "Professional Title"
+msgstr "المسمى المهني"
+
+msgid "Experience"
+msgstr "الخبرة"
+
+msgid "Years of Experience"
+msgstr "سنوات الخبرة"
+
+msgid "License Number"
+msgstr "رقم الترخيص"
+
+msgid "Phone"
+msgstr "الهاتف"
+
+msgid "WhatsApp"
+msgstr "واتساب"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "LinkedIn"
+msgstr "لينكدإن"
+
+msgid "Facebook"
+msgstr "فيسبوك"
+
+msgid "X"
+msgstr "X"
+
+msgid "If disabled, this lawyer will not be displayed on the website."
+msgstr "إذا تم تعطيل هذا الخيار، لن يظهر هذا المحامي على الموقع."
+
+msgid "Enter an icon class, icon name, or icon identifier. The Builder will use this value when rendering the service."
+msgstr "أدخل اسم فئة الأيقونة أو اسم الأيقونة أو معرّف الأيقونة. سيستخدم المنشئ هذه القيمة عند عرض الخدمة."
+
+msgid "For example: Senior Lawyer, Partner, Legal Consultant."
+msgstr "مثال: محامٍ أول، شريك، مستشار قانوني."
+
+msgid "Number of years of professional experience."
+msgstr "عدد سنوات الخبرة المهنية."
+
+msgid "Professional license or registration number."
+msgstr "رقم الترخيص أو التسجيل المهني."
+
+msgid "Lawyer phone number."
+msgstr "رقم هاتف المحامي."
+
+msgid "WhatsApp number including country code."
+msgstr "رقم واتساب متضمنًا رمز الدولة."
+
+msgid "Lawyer email address."
+msgstr "البريد الإلكتروني للمحامي."
+
+msgid "LinkedIn profile URL."
+msgstr "رابط الملف الشخصي على لينكدإن."
+
+msgid "Facebook profile URL."
+msgstr "رابط الملف الشخصي على فيسبوك."
+
+msgid "X profile URL."
+msgstr "رابط الملف الشخصي على X."
+
+msgid "Show featured image in the posts lists only, but hide it in the single post view."
+msgstr "إظهار الصورة البارزة في قوائم المقالات فقط، وإخفاؤها في عرض المقالة الفردية."

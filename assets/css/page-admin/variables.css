@@ -1,0 +1,99 @@
+:root {
+
+    /* ---------------------------------------------------
+     * Surfaces
+     * --------------------------------------------------- */
+    --bb-bg-main: #ffffff;
+    --bb-bg-subtle: #f6f7f7;
+    --bb-bg-muted: #f0f0f1;
+    --bb-bg-hover: #f0f6fc;
+    --bb-bg-dark: #0f172a;
+
+    /* ---------------------------------------------------
+     * Borders
+     * --------------------------------------------------- */
+    --bb-border-color: #dcdcde;
+    --bb-border-dashed: #c3c4c7;
+    --bb-border-strong: #a7aaad;
+
+    /* ---------------------------------------------------
+     * Text
+     * --------------------------------------------------- */
+    --bb-text-muted: #646970;
+    --bb-text-dark: #1d2327;
+    --bb-text-light: #ffffff;
+
+    /* ---------------------------------------------------
+     * Brand / status colors
+     * --------------------------------------------------- */
+    --bb-primary-color: #2271b1;
+    --bb-primary-hover: #135e96;
+    --bb-primary-soft: #f0f6fc;
+
+    --bb-danger-color: #b32d2e;
+    --bb-danger-hover: #8a2424;
+    --bb-danger-soft: #fcf0f0;
+
+    --bb-success-color: #00a32a;
+    --bb-success-soft: #edfaef;
+
+    /* ---------------------------------------------------
+     * Radius scale
+     * --------------------------------------------------- */
+    --bb-radius-sm: 4px;
+    --bb-radius-md: 6px;
+    --bb-radius-lg: 12px;
+    --bb-radius-xl: 20px;
+    --bb-radius-pill: 999px;
+
+    /* ---------------------------------------------------
+     * Shadows
+     * --------------------------------------------------- */
+    --bb-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --bb-shadow-md: 0 4px 14px rgba(15, 23, 42, 0.08);
+    --bb-shadow-lg: 0 18px 34px rgba(15, 23, 42, 0.10);
+    --bb-shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.25);
+
+    /* ---------------------------------------------------
+     * Motion
+     * --------------------------------------------------- */
+    --bb-transition-fast: all 0.15s ease-in-out;
+    --bb-transition-medium: all 0.25s ease-in-out;
+
+    /* ---------------------------------------------------
+     * Layout / stacking
+     * --------------------------------------------------- */
+    --bb-z-index-modal: 100000;
+    --bb-z-index-modal-nested: 100010;
+
+    /* ---------------------------------------------------
+     * Control sizing — every button/select/input in the
+     * builder shares this scale so heights line up
+     * regardless of which component file renders it.
+     * --------------------------------------------------- */
+    --bb-control-height: 36px;
+    --bb-control-height-sm: 30px;
+    --bb-control-height-lg: 42px;
+    --bb-control-padding-x: 16px;
+    --bb-control-padding-x-sm: 10px;
+    --bb-control-font-size: 13px;
+    --bb-control-font-weight: 500;
+    --bb-control-radius: var(--bb-radius-sm);
+
+    /* ---------------------------------------------------
+     * Spacing scale
+     * --------------------------------------------------- */
+    --bb-space-2xs: 4px;
+    --bb-space-xs: 8px;
+    --bb-space-sm: 12px;
+    --bb-space-md: 16px;
+    --bb-space-lg: 24px;
+    --bb-space-xl: 32px;
+    --bb-space-2xl: 48px;
+
+    /* ---------------------------------------------------
+     * Typography
+     * --------------------------------------------------- */
+    --bb-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif;
+}

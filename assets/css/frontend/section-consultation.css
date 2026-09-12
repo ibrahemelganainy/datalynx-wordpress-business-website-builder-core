@@ -1,0 +1,62 @@
+/**
+ * Business Builder Core - Frontend: Consultation section
+ * -------------------------------------------------------
+ * The "consultation" section type is registered by the pack
+ * but has no dedicated PHP renderer yet, so it falls back to
+ * SectionRenderer::render_generic(), which outputs:
+ *   .bb-section-inner
+ *     .bb-section-heading > h2.bb-section-title + .bb-section-description
+ *     (custom action output — phone / whatsapp / button)
+ *
+ * These rules give the fallback content a consistent CTA band
+ * so it matches the rest of the Law Firm pack look.
+ */
+
+.bb-template .bb-section-consultation .bb-section-inner {
+  position: relative;
+}
+
+.bb-template .bb-section-consultation .bb-section-heading {
+  text-align: center;
+  margin: 0 auto 24px;
+}
+
+.bb-template .bb-section-consultation .bb-section-title {
+  margin: 0 0 12px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--bb-fe-heading-color, #0f172a);
+}
+
+.bb-template .bb-section-consultation .bb-section-description {
+  margin: 0 auto;
+  max-width: 680px;
+  color: var(--bb-fe-text-color, #475569);
+  line-height: 1.8;
+}
+
+/* Buttons inside the consultation fallback. */
+.bb-template .bb-section-consultation .bb-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px auto 0;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0f172a, #1d4ed8);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.25);
+}
+
+/* Luxury template tweaks. */
+.bb-template-luxury .bb-section-consultation .bb-section-title {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.bb-template-luxury .bb-section-consultation .bb-primary-button {
+  background: linear-gradient(135deg, #b8843c, #dcc29c);
+  color: #2a1c05;
+  box-shadow: 0 15px 30px rgba(184, 132, 60, 0.28);
+}

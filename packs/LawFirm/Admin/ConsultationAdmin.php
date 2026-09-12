@@ -1,0 +1,331 @@
+<?php
+
+namespace BusinessBuilderCore\Packs\LawFirm\Admin;
+
+use BusinessBuilderCore\Packs\LawFirm\PostTypes\ConsultationMeta;
+use BusinessBuilderCore\Core\Notifications\NotificationManager;
+use BusinessBuilderCore\Core\Notifications\Notification;
+use BusinessBuilderCore\Core\Audit\AuditLog;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * Consultation request administration.
+ *
+ * Replaces the raw meta dump with a readable operational panel and adds
+ * secure action handlers (status change, manual payment verification).
+ *
+ * Actions use admin-post.php so they work without JavaScript, and every
+ * action is capability-checked, nonce-protected, and validated against
+ * the object and the allowed value sets.
+ */
+class ConsultationAdmin {
+
+    private const POST_TYPE = 'bb_consultation';
+    private const ACTION = 'bb_consultation_action';
+    private const NONCE_ACTION = 'bb_consultation_action';
+
+    protected NotificationManager $notifications;
+    protected AuditLog $audit;
+
+    /**
+     * Constructor.
+     *
+     * @param NotificationManager $notifications Notifications.
+     * @param AuditLog            $audit         Audit log.
+     */
+    public function __construct(
+        NotificationManager $notifications,
+        AuditLog $audit
+    ) {
+        $this->notifications = $notifications;
+        $this->audit         = $audit;
+    }
+
+    /**
+     * Register hooks.
+     */
+    public function register(): void {
+
+        add_action( 'add_meta_boxes', array( $this, 'register_meta_box' ) );
+        add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_action' ) );
+    }
+
+    /**
+     * Register the operational meta box.
+     */
+    public function register_meta_box(): void {
+
+        add_meta_box(
+            'bb_consultation_details',
+            __( 'Consultation Request', 'business-builder' ),
+            array( $this, 'render_meta_box' ),
+            self::POST_TYPE,
+            'normal',
+            'high'
+        );
+    }
+
+    /**
+     * Render the operational panel.
+     *
+     * @param \WP_Post $post Consultation post.
+     */
+    public function render_meta_box( $post ): void {
+
+        $id = (int) $post->ID;
+
+        $name    = (string) get_post_meta( $id, ConsultationMeta::key( 'name' ), true );
+        $phone   = (string) get_post_meta( $id, ConsultationMeta::key( 'phone' ), true );
+        $email   = (string) get_post_meta( $id, ConsultationMeta::key( 'email' ), true );
+        $prefer  = (string) get_post_meta( $id, ConsultationMeta::key( 'preferred_contact' ), true );
+        $message = (string) get_post_meta( $id, ConsultationMeta::key( 'message' ), true );
+        $created = (string) get_post_meta( $id, ConsultationMeta::key( 'created' ), true );
+
+        $status = (string) get_post_meta( $id, ConsultationMeta::key( 'status' ), true );
+
+        if ( '' === $status ) {
+            $status = ConsultationMeta::default_status();
+        }
+
+        $payment_required = '1' === (string) get_post_meta( $id, ConsultationMeta::key( 'payment_required' ), true );
+
+        $payment_status = (string) get_post_meta( $id, ConsultationMeta::key( 'payment_status' ), true );
+
+        if ( '' === $payment_status ) {
+            $payment_status = 'not_required';
+        }
+
+        $payment_amount   = (string) get_post_meta( $id, ConsultationMeta::key( 'payment_amount' ), true );
+        $payment_currency = (string) get_post_meta( $id, ConsultationMeta::key( 'payment_currency' ), true );
+
+        /* Client. */
+        echo '<h4>' . esc_html__( 'Client', 'business-builder' ) . '</h4>';
+        echo '<table class="widefat striped">';
+        $this->row( __( 'Name', 'business-builder' ), $name );
+        $this->row( __( 'Phone', 'business-builder' ), $phone );
+        $this->row( __( 'Email', 'business-builder' ), $email );
+        $this->row( __( 'Preferred Contact', 'business-builder' ), $prefer );
+        echo '</table>';
+
+        /* Legal matter (readable practice area + link). */
+        echo '<h4>' . esc_html__( 'Legal Matter', 'business-builder' ) . '</h4>';
+        echo '<table class="widefat striped"><tr>';
+        echo '<th style="width:180px;">' . esc_html__( 'Practice Area', 'business-builder' ) . '</th>';
+        $area_cell = $this->practice_area_html( $id );
+        echo '<td>' . wp_kses_post( $area_cell ) . '</td>';
+        echo '</tr></table>';
+
+        /* Request. */
+        echo '<h4>' . esc_html__( 'Request', 'business-builder' ) . '</h4>';
+        echo '<div style="padding:12px;background:#f6f7f7;border:1px solid #ddd;">';
+        echo wp_kses_post( wpautop( $message ) );
+        echo '</div>';
+
+        /* Status. */
+        echo '<h4>' . esc_html__( 'Status', 'business-builder' ) . '</h4>';
+        echo '<table class="widefat striped">';
+        $this->row( __( 'Consultation Status', 'business-builder' ), ConsultationMeta::status_label( $status ) );
+        $this->row( __( 'Payment Status', 'business-builder' ), ConsultationMeta::payment_label( $payment_status ) );
+        $fee = trim( $payment_amount . ' ' . $payment_currency );
+        $this->row( __( 'Consultation Fee', 'business-builder' ), $fee );
+        echo '</table>';
+
+        if ( '' !== $created ) {
+            echo '<h4>' . esc_html__( 'Submitted', 'business-builder' ) . '</h4>';
+            echo '<p>' . esc_html( $created ) . '</p>';
+        }
+
+        $this->render_actions( $id, $status, $payment_status, $payment_required );
+    }
+
+    /**
+     * Echo a labelled table row.
+     *
+     * @param string $label Label.
+     * @param string $value Value.
+     */
+    protected function row( string $label, string $value ): void {
+
+        echo '<tr>';
+        echo '<th style="width:180px;">' . esc_html( $label ) . '</th>';
+        echo '<td>' . esc_html( $value ) . '</td>';
+        echo '</tr>';
+    }
+
+    /**
+     * Build the readable, linked practice-area cell.
+     *
+     * @param int $id Consultation id.
+     * @return string
+     */
+    protected function practice_area_html( int $id ): string {
+
+        $term = ConsultationMeta::resolve_practice_area(
+            get_post_meta( $id, ConsultationMeta::key( 'practice_area' ), true )
+        );
+
+        if ( ! $term instanceof \WP_Term ) {
+            return esc_html__( '(not specified)', 'business-builder' );
+        }
+
+        $link = get_edit_term_link(
+            $term->term_id,
+            ConsultationMeta::practice_area_taxonomy()
+        );
+
+        if ( $link ) {
+            return '<a href="' . esc_url( $link ) . '">' . esc_html( $term->name ) . '</a>';
+        }
+
+        return esc_html( $term->name );
+    }
+
+    /**
+     * Render action controls.
+     *
+     * @param int    $id               Consultation id.
+     * @param string $status           Current status.
+     * @param string $payment_status   Current payment status.
+     * @param bool   $payment_required Whether payment is required.
+     */
+    protected function render_actions( int $id, string $status, string $payment_status, bool $payment_required ): void {
+
+        echo '<hr>';
+        echo '<h4>' . esc_html__( 'Actions', 'business-builder' ) . '</h4>';
+
+        $endpoint = admin_url( 'admin-post.php' );
+        echo '<form method="post" action="' . esc_url( $endpoint ) . '" style="display:inline-block;margin-right:12px;">';
+        echo '<input type="hidden" name="action" value="' . esc_attr( self::ACTION ) . '" />';
+        echo '<input type="hidden" name="consultation_id" value="' . esc_attr( (string) $id ) . '" />';
+        echo '<input type="hidden" name="bb_op" value="set_status" />';
+        wp_nonce_field( self::NONCE_ACTION );
+        echo '<label><strong>' . esc_html__( 'Change Status', 'business-builder' ) . '</strong> ';
+        echo '<select name="status">';
+
+        foreach ( ConsultationMeta::statuses() as $slug => $label ) {
+            echo '<option value="' . esc_attr( $slug ) . '" ' . selected( $status, $slug, false ) . '>' . esc_html( $label ) . '</option>';
+        }
+
+        echo '</select></label> ';
+        echo '<button type="submit" class="button button-primary">' . esc_html__( 'Apply', 'business-builder' ) . '</button>';
+        echo '</form>';
+
+        if ( $payment_required && in_array( $payment_status, array( 'pending', 'failed' ), true ) ) {
+
+            echo '<form method="post" action="' . esc_url( $endpoint ) . '" style="display:inline-block;">';
+            echo '<input type="hidden" name="action" value="' . esc_attr( self::ACTION ) . '" />';
+            echo '<input type="hidden" name="consultation_id" value="' . esc_attr( (string) $id ) . '" />';
+            echo '<input type="hidden" name="bb_op" value="mark_paid" />';
+            wp_nonce_field( self::NONCE_ACTION );
+            echo '<button type="submit" class="button">' . esc_html__( 'Mark Payment Verified', 'business-builder' ) . '</button>';
+            echo '</form>';
+        }
+    }
+
+    /**
+     * Handle an action.
+     */
+    public function handle_action(): void {
+
+        if ( ! current_user_can( 'edit_pages' ) ) {
+            wp_die( esc_html__( 'You do not have permission to perform this action.', 'business-builder' ) );
+        }
+
+        check_admin_referer( self::NONCE_ACTION );
+
+        $id = isset( $_POST['consultation_id'] ) ? absint( $_POST['consultation_id'] ) : 0;
+
+        if ( $id <= 0 || self::POST_TYPE !== get_post_type( $id ) ) {
+            wp_die( esc_html__( 'Invalid consultation request.', 'business-builder' ) );
+        }
+
+        if ( ! current_user_can( 'edit_post', $id ) ) {
+            wp_die( esc_html__( 'You do not have permission to edit this request.', 'business-builder' ) );
+        }
+
+        $op = isset( $_POST['bb_op'] ) ? sanitize_key( wp_unslash( $_POST['bb_op'] ) ) : '';
+
+        if ( 'set_status' === $op ) {
+            $this->do_set_status( $id );
+        } elseif ( 'mark_paid' === $op ) {
+            $this->do_mark_paid( $id );
+        }
+
+        wp_safe_redirect( get_edit_post_link( $id, 'raw' ) );
+        exit;
+    }
+
+    /**
+     * Change the status.
+     *
+     * @param int $id Consultation id.
+     */
+    protected function do_set_status( int $id ): void {
+        $requested = isset( $_POST['status'] ) ? sanitize_key( wp_unslash( $_POST['status'] ) ) : '';
+
+        if ( ! array_key_exists( $requested, ConsultationMeta::statuses() ) ) {
+            return;
+        }
+
+        update_post_meta( $id, ConsultationMeta::key( 'status' ), $requested );
+
+        $this->audit->record(
+            'consultation.status_changed',
+            'consultation',
+            $id,
+            array( 'status' => $requested )
+        );
+
+        $this->notifications->dispatch(
+            new Notification(
+                'consultation.status',
+                sprintf(
+                    /* translators: 1: id, 2: status */
+                    __( 'Consultation #%1$d status changed to %2$s', 'business-builder' ),
+                    $id,
+                    ConsultationMeta::status_label( $requested )
+                ),
+                '',
+                '',
+                $id,
+                'consultation:' . $id . ':status:' . $requested
+            )
+        );
+    }
+
+    /**
+     * Manually verify a payment.
+     *
+     * @param int $id Consultation id.
+     */
+    protected function do_mark_paid( int $id ): void {
+
+        $required = '1' === (string) get_post_meta( $id, ConsultationMeta::key( 'payment_required' ), true );
+
+        if ( ! $required ) {
+            return;
+        }
+
+        update_post_meta( $id, ConsultationMeta::key( 'payment_status' ), 'paid' );
+
+        $this->audit->record( 'payment.manually_verified', 'consultation', $id, array() );
+
+        $this->notifications->dispatch(
+            new Notification(
+                'payment.paid',
+                sprintf(
+                    /* translators: %d: consultation id */
+                    __( 'Payment verified for consultation #%d', 'business-builder' ),
+                    $id
+                ),
+                '',
+                '',
+                $id,
+                'consultation:' . $id . ':payment:paid:manual'
+            )
+        );
+    }
+}

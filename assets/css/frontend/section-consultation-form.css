@@ -1,0 +1,112 @@
+/**
+ * Business Builder Core - Frontend: Consultation form
+ * -------------------------------------------------------
+ * Styles for templates/consultation-form.php.
+ * Classes:
+ *   .bb-consultation
+ *     .bb-consultation-notice (success / error)
+ *     .bb-consultation-form
+ *       .bb-consultation-grid > .bb-consultation-field
+ *       .bb-consultation-submit
+ */
+
+.bb-template .bb-consultation {
+  --bb-fe-card-bg: #ffffff;
+  --bb-fe-card-border: rgba(15, 23, 42, 0.08);
+  --bb-fe-card-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.bb-template .bb-consultation-form {
+  padding: 32px 30px;
+  border-radius: 20px;
+  background: var(--bb-fe-card-bg, #ffffff);
+  border: 1px solid var(--bb-fe-card-border, rgba(15, 23, 42, 0.08));
+  box-shadow: var(--bb-fe-card-shadow, 0 18px 34px rgba(15, 23, 42, 0.06));
+}
+
+.bb-template .bb-consultation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 22px;
+}
+
+.bb-template .bb-consultation-field {
+  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bb-template .bb-consultation-field label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.bb-template .bb-required {
+  color: #d63638;
+}
+
+.bb-template .bb-consultation-field input,
+.bb-template .bb-consultation-field select,
+.bb-template .bb-consultation-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  border-radius: 12px;
+  background: #fff;
+  color: #1f2937;
+  font: inherit;
+  line-height: 1.5;
+}
+
+.bb-template .bb-consultation-field input:focus,
+.bb-template .bb-consultation-field select:focus,
+.bb-template .bb-consultation-field textarea:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+.bb-template .bb-consultation-field textarea {
+  resize: vertical;
+}
+
+.bb-template .bb-consultation-submit {
+  margin: 6px 0 0;
+}
+
+.bb-template .bb-consultation-submit .bb-primary-button {
+  cursor: pointer;
+  border: 0;
+  font: inherit;
+}
+
+.bb-template .bb-consultation-notice {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.bb-template .bb-consultation-success {
+  background: #edfaef;
+  border: 1px solid #00a32a;
+  color: #0a7a24;
+}
+
+.bb-template .bb-consultation-error {
+  background: #fcf0f0;
+  border: 1px solid #b32d2e;
+  color: #8a2424;
+}
+
+@media (max-width: 640px) {
+  .bb-template .bb-consultation-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

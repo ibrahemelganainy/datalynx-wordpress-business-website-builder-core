@@ -1,0 +1,24 @@
+/**
+ * Business Builder Core - Frontend Styles
+ * -------------------------------------------------------
+ * Aggregator for the front-end section stylesheets.
+ * Every pack section has its own file so a single section
+ * can be restyled in isolation. Loaded on the public site
+ * by Core\Plugin::enqueue_builder_frontend_assets().
+ *
+ * Order matters: section-base.css defines the shared
+ * variables/helpers that the per-section files rely on.
+ */
+
+/* Shared variables + helpers (load first). */
+@import url("frontend/section-base.css");
+
+/* Law Firm pack sections. */
+@import url("frontend/section-testimonials.css");
+@import url("frontend/section-lawyers.css");
+@import url("frontend/section-legal-services.css");
+@import url("frontend/section-practice-areas.css");
+@import url("frontend/section-faq.css");
+@import url("frontend/section-consultation.css");
+@import url("frontend/section-consultation-form.css");
+@import url("frontend/section-lawyer-profile.css");

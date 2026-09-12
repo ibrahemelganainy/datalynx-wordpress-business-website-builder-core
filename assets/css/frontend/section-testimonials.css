@@ -1,0 +1,142 @@
+/**
+ * Business Builder Core - Frontend: Testimonials section
+ * -------------------------------------------------------
+ * Fixes the "client name and rating do not appear" issue:
+ * the markup for both exists in PHP, but no CSS ever
+ * defined these classes, so they rendered as unstyled text.
+ *
+ * Markup produced by LawFirmSections::render_testimonials_section()
+ *   .bb-testimonials-grid
+ *     article.bb-testimonial-card
+ *       .bb-testimonial-image > img.bb-testimonial-thumb
+ *       .bb-testimonial-rating  (★★★★★)
+ *       blockquote              (quote)
+ *       h3                      (client name / display name)
+ *       p                       (client title)
+ */
+
+.bb-template .bb-testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--bb-fe-section-gap, 24px);
+  align-items: stretch;
+}
+
+.bb-template .bb-testimonial-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px 26px;
+  border-radius: var(--bb-fe-radius-card, 20px);
+  background: var(--bb-fe-card-bg, #ffffff);
+  border: 1px solid var(--bb-fe-card-border, rgba(15, 23, 42, 0.08));
+  box-shadow: var(--bb-fe-card-shadow, 0 18px 34px rgba(15, 23, 42, 0.06));
+  overflow: hidden;
+}
+
+/* Decorative quote accent bar along the top of each card. */
+.bb-template .bb-testimonial-card::before {
+  content: "\201C";
+  position: absolute;
+  top: -6px;
+  right: 18px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 96px;
+  line-height: 1;
+  color: rgba(148, 163, 184, 0.18);
+  pointer-events: none;
+}
+
+/* Client photo. */
+.bb-template .bb-testimonial-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex: none;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
+}
+
+.bb-template .bb-testimonial-image img,
+.bb-template .bb-testimonial-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+}
+
+/* Rating — the ★ characters were invisible without this. */
+.bb-template .bb-testimonial-rating {
+  order: -1;
+  font-size: 1.15rem;
+  line-height: 1;
+  letter-spacing: 3px;
+  color: var(--bb-fe-star-color, #f5b301);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
+}
+
+/* Quote text. */
+.bb-template .bb-testimonial-card blockquote {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--bb-fe-text-color, #475569);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/*
+ * Client name — the bold heading that was not styling.
+ *
+ * Why !important: WordPress themes (e.g. Astra) ship a global
+ * reset `h1,h2,h3,...{font-weight:inherit}` and then re-apply
+ * their own heading weight through a MORE specific selector such
+ * as `.ast-separate-container .entry-content h3`, loaded AFTER
+ * plugin styles. That outranks our `.bb-template ... h3` rule and
+ * flattens the name back to normal weight/size. Pinning the
+ * properties a theme reset typically steals guarantees the name
+ * always renders as a bold heading regardless of active theme.
+ *
+ * The doubled class chain also raises specificity on its own so
+ * most theme rules lose even without the !important override.
+ */
+.bb-template .bb-testimonial-card h3,
+.bb-template .bb-testimonial-card .bb-testimonial-name {
+  position: relative;
+  z-index: 1;
+  margin: 4px 0 0 !important;
+  padding: 0 !important;
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+  color: var(--bb-fe-heading-color, #0f172a) !important;
+}
+
+/* Client title / role. */
+.bb-template .bb-testimonial-card > p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Luxury template tweaks. */
+.bb-template-luxury .bb-testimonial-card {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(138, 92, 24, 0.14);
+}
+
+.bb-template-luxury .bb-testimonial-card h3 {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.bb-template-luxury .bb-testimonial-rating {
+  color: #b8843c;
+}

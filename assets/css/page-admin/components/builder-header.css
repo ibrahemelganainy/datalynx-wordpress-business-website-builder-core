@@ -1,0 +1,126 @@
+/**
+ * Builder header + shell
+ *
+ * Button sizing/colors now come entirely from buttons.css —
+ * this file only owns layout: spacing, alignment, wrapping.
+ */
+
+.bb-page-builder {
+    padding-block: var(--bb-space-2xs);
+    font-family: var(--bb-font-family);
+    color: var(--bb-text-dark);
+}
+
+.bb-page-builder hr {
+    margin: var(--bb-space-lg) 0;
+    border: none;
+    border-top: 1px solid var(--bb-border-color);
+}
+
+.bb-builder-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--bb-space-md);
+}
+
+.bb-builder-header h3 {
+    margin: 0 0 var(--bb-space-2xs);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.bb-builder-header .description {
+    margin: 0;
+    color: var(--bb-text-muted);
+    font-size: 13px;
+}
+
+/* Right-hand cluster: Enable Builder checkbox + Live Preview
+   button. Both sit on the same baseline regardless of which
+   one is taller, and wrap onto their own row on narrow
+   screens instead of overlapping. */
+.bb-builder-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--bb-space-md);
+}
+
+.bb-builder-actions label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--bb-space-2xs);
+    height: var(--bb-control-height);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.bb-builder-actions input[type="checkbox"] {
+    margin: 0;
+}
+
+/*
+ * FIX: this button previously rendered as an empty white
+ * box in the header. The height/padding it needs now comes
+ * from buttons.css (.bb-live-preview-button is included in
+ * the shared selector list there), so it can never collapse
+ * to zero width even if its icon or label is briefly empty
+ * while assets load. `gap` guarantees icon and text don't
+ * overlap once both are present.
+ */
+.bb-live-preview-button {
+    gap: var(--bb-space-2xs);
+}
+
+.bb-builder-template {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--bb-space-sm);
+}
+
+.bb-builder-template label {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.bb-builder-template select {
+    min-width: 200px;
+    height: var(--bb-control-height);
+    padding: 0 var(--bb-control-padding-x);
+    border: 1px solid var(--bb-border-color);
+    border-radius: var(--bb-control-radius);
+    font-size: var(--bb-control-font-size);
+    background-color: var(--bb-bg-main);
+}
+
+.bb-builder-sections-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--bb-space-sm);
+    margin-bottom: var(--bb-space-md);
+}
+
+.bb-builder-sections-header h4 {
+    margin: 0 0 var(--bb-space-2xs);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.bb-builder-sections-header span {
+    color: var(--bb-text-muted);
+    font-size: 12px;
+}
+
+.bb-builder-empty {
+    padding: var(--bb-space-xl) var(--bb-space-md);
+    background-color: var(--bb-bg-subtle);
+    border: 1px dashed var(--bb-border-dashed);
+    border-radius: var(--bb-radius-md);
+    text-align: center;
+    color: var(--bb-text-muted);
+}

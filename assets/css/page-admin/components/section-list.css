@@ -1,0 +1,108 @@
+/**
+ * Section list + cards + controls
+ *
+ * Button colors/sizing live in buttons.css. This file keeps
+ * only the card, drag-and-drop, and row layout rules.
+ */
+
+.bb-section-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bb-space-xs);
+}
+
+.bb-section-item {
+    display: flex;
+    align-items: center;
+    gap: var(--bb-space-sm);
+    padding: var(--bb-space-sm);
+    background-color: var(--bb-bg-main);
+    border: 1px solid var(--bb-border-color);
+    border-radius: var(--bb-radius-sm);
+    box-shadow: var(--bb-shadow-sm);
+    transition: var(--bb-transition-fast);
+    cursor: grab;
+}
+
+.bb-section-item[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+.bb-section-item:hover {
+    border-color: var(--bb-border-dashed);
+    box-shadow: var(--bb-shadow-md);
+}
+
+.bb-section-item.is-dragging {
+    opacity: 0.55;
+    border-style: dashed;
+    box-shadow: 0 0 0 2px rgba(34, 113, 177, 0.15);
+}
+
+.bb-section-item.is-drop-target {
+    border-color: var(--bb-primary-color);
+    background-color: var(--bb-bg-hover);
+    box-shadow: inset 0 0 0 1px rgba(34, 113, 177, 0.2);
+}
+
+.bb-section-item-handle {
+    display: flex;
+    align-items: center;
+    color: var(--bb-text-muted);
+    cursor: grab;
+    user-select: none;
+}
+
+.bb-section-item-handle:active {
+    cursor: grabbing;
+}
+
+.bb-section-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.bb-section-item-info strong {
+    font-size: 14px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bb-section-item-info span {
+    color: var(--bb-text-muted);
+    font-size: 12px;
+}
+
+.bb-section-item-order {
+    min-width: 28px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--bb-text-muted);
+}
+
+.bb-builder-section-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--bb-space-xs);
+}
+
+.bb-section-item-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--bb-space-xs);
+    margin-inline-start: auto;
+}
+
+/*
+ * NOTE: this assumes the "Duplicate" button carries the
+ * class `bb-duplicate-section`, matching the naming pattern
+ * of `bb-edit-section` / `bb-delete-section`. If the actual
+ * markup uses a different class, swap it in here — the
+ * color rule for it lives in buttons.css
+ * (.bb-btn-neutral / .bb-section-item-actions .bb-duplicate-section).
+ */
