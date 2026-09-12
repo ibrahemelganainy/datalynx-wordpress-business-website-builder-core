@@ -1794,6 +1794,18 @@ jQuery(function ($) {
 
                 break;
 
+            case 'multicheck':
+
+                html +=
+                    renderMultiCheckField(
+                        fieldId,
+                        fieldKey,
+                        field,
+                        value,
+                        group
+                    );
+
+                break;
 
             case 'image':
 
@@ -2231,17 +2243,108 @@ jQuery(function ($) {
         html +=
             '</label>';
 
-        /*
-         * The normal field label is hidden for checkboxes
-         * because the checkbox itself already contains it.
+            /*
+             * The normal field label is hidden for checkboxes
+             * because the checkbox itself already contains it.
+             */
+            return html;
+        }
+
+        /**
+         * Multi-checkbox group (used for the payment gateway picker).
+         *
+         * Renders one checkbox per declared option inside a container that
+         * carries the field key/type so collectGroupValues() can read the
+         * selected set as an array. The value is normalised to an array of
+         * option keys, matching what the PHP multicheck sanitizer expects.
          */
-        return html;
-    }
+        function renderMultiCheckField(
+            fieldId,
+            fieldKey,
+            field,
+            value,
+            group
+        ) {
 
+            const options =
+                ( field && field.options && typeof field.options === 'object' )
+                    ? field.options
+                    : {};
 
-    /**
-     * ---------------------------------------------------------
-     * Image (WordPress Media Library)
+            let selected = [];
+
+            if ( Array.isArray( value )) {
+                selected = value.map(
+                    function ( item ) {
+                        return String( item );
+                    }
+                );
+            } else if ( value && typeof value === 'object' ) {
+                selected = Object.keys( value ).filter(
+                    function ( key ) {
+                        return Boolean( value[ key ] );
+                    }
+                );
+            }
+
+            let html =
+                '<div ' +
+                'class="bb-multicheck-field" ' +
+                'data-bb-field-key="' +
+                escapeAttribute( fieldKey ) +
+                '" ' +
+                'data-bb-field-type="multicheck">';
+
+            Object.keys( options ).forEach(
+                function ( optionKey, index ) {
+
+                    const optionLabel =
+                        options[ optionKey ];
+
+                    const inputId =
+                        fieldId + '-' + index;
+
+                    const isChecked =
+                        selected.indexOf(
+                            String( optionKey )
+                        ) !== -1;
+
+                    html +=
+                        '<label class="bb-multicheck-option" ' +
+                        'for="' +
+                        escapeAttribute( inputId ) +
+                        '">';
+
+                    html +=
+                        '<input ' +
+                        'type="checkbox" ' +
+                        'id="' +
+                        escapeAttribute( inputId ) +
+                        '" ' +
+                        'data-bb-multicheck-option="' +
+                        escapeAttribute( optionKey ) +
+                        '" ' +
+                        ( isChecked ? 'checked ' : '' ) +
+                        '>';
+
+                    html +=
+                        '<span>' +
+                            escapeHtml( optionLabel ) +
+                        '</span>';
+
+                    html +=
+                        '</label>';
+                }
+            );
+
+            html += '</div>';
+
+            return html;
+        }
+
+        /**
+         * ---------------------------------------------------------
+         * Image (WordPress Media Library)
      * ---------------------------------------------------------
      *
      * The value is always the attachment ID, kept in a
@@ -3760,6 +3863,34 @@ jQuery(function ($) {
                         result[key] =
                             field.is(
                                 ':checked'
+                            );
+
+                    } else if (
+                        type === 'multicheck'
+                    ) {
+
+                        result[key] = [];
+
+                        field
+                            .find(
+                                'input[data-bb-multicheck-option]'
+                            )
+                            .each(
+                                function () {
+
+                                    if (
+                                        $(this).is(
+                                            ':checked'
+                                        )
+                                    ) {
+
+                                        result[key].push(
+                                            $(this).data(
+                                                'bb-multicheck-option'
+                                            )
+                                        );
+                                    }
+                                }
                             );
 
                     } else if (

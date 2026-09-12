@@ -19,9 +19,26 @@ class PaymobGateway extends AbstractApiGateway {
         return 'Paymob';
     }
 
+    public function get_description(): string {
+        return __( 'Accept cards and wallets in Egypt and the region via Paymob. API integration not enabled on this site yet.', 'business-builder' );
+    }
+
+    public function get_supported_currencies(): array {
+        return array( 'EGP', 'USD', 'AED', 'SAR' );
+    }
+
     public function get_settings_schema(): array {
 
         return array(
+            'mode' => array(
+                'label'   => __( 'Mode', 'business-builder' ),
+                'type'    => 'select',
+                'default' => 'test',
+                'options' => array(
+                    'test' => __( 'Test', 'business-builder' ),
+                    'live' => __( 'Live', 'business-builder' ),
+                ),
+            ),
             'api_key' => array(
                 'label'    => __( 'API Key', 'business-builder' ),
                 'type'     => 'password',

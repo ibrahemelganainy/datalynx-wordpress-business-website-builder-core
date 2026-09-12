@@ -19,6 +19,14 @@ class PayPalGateway extends AbstractApiGateway {
         return 'PayPal';
     }
 
+    public function get_description(): string {
+        return __( 'Global payments with a PayPal account or card. API integration not enabled on this site yet.', 'business-builder' );
+    }
+
+    public function get_supported_currencies(): array {
+        return array( 'USD', 'EUR', 'GBP', 'SAR', 'AED', 'CAD', 'AUD', 'EGP' );
+    }
+
     public function get_settings_schema(): array {
 
         return array(

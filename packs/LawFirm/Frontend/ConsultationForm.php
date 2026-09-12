@@ -3,6 +3,7 @@
 namespace BusinessBuilderCore\Packs\LawFirm\Frontend;
 
 use BusinessBuilderCore\Packs\LawFirm\Sections\LawFirmQueries;
+use BusinessBuilderCore\Packs\LawFirm\PostTypes\ConsultationMeta;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -132,9 +133,30 @@ class ConsultationForm {
             ? sanitize_email( wp_unslash( $_POST['bb_email'] ) )
             : '';
 
-        $data['practice_area'] = isset( $_POST['bb_practice_area'] )
-            ? sanitize_title( wp_unslash( $_POST['bb_practice_area'] ) )
+        /*
+         * Practice area: the form posts a term ID (preferred) but older
+         * markup posted a slug/name. Normalize to the matching term so
+         * we store the canonical term ID and never a raw/encoded slug
+         * (bug fix + spec 26). A readable name is also stored for
+         * backward compatibility, never an encoded slug.
+         */
+        $posted_area = isset( $_POST['bb_practice_area'] )
+            ? wp_unslash( $_POST['bb_practice_area'] )
             : '';
+
+        $raw_area = sanitize_text_field( $posted_area );
+
+        $area_term = '' !== $raw_area
+            ? ConsultationMeta::normalize_submitted_practice_area( $raw_area )
+            : null;
+
+        $data['practice_area_id'] = $area_term instanceof \WP_Term
+            ? (int) $area_term->term_id
+            : 0;
+
+        $data['practice_area'] = $area_term instanceof \WP_Term
+            ? (string) $area_term->name
+            : $raw_area;
 
         $data['message'] = isset( $_POST['bb_message'] )
             ? sanitize_textarea_field( wp_unslash( $_POST['bb_message'] ) )
@@ -211,14 +233,25 @@ class ConsultationForm {
             return $post_id;
         }
 
+        /*
+         * Always issue a secure, non-sequential public reference so the
+         * customer can look the request up without exposing an
+         * enumerable post id (privacy).
+         */
+        $public_ref = ConsultationMeta::generate_public_reference();
+
         $map = array(
-            '_bb_consultation_name'              => $data['name'],
-            '_bb_consultation_phone'             => $data['phone'],
-            '_bb_consultation_email'             => $data['email'],
-            '_bb_consultation_practice_area'     => $data['practice_area'],
-            '_bb_consultation_message'           => $data['message'],
-            '_bb_consultation_preferred_contact' => $data['preferred_contact'],
-            '_bb_consultation_created'           => current_time( 'mysql' ),
+            '_bb_consultation_name'               => $data['name'],
+            '_bb_consultation_phone'              => $data['phone'],
+            '_bb_consultation_email'              => $data['email'],
+            '_bb_consultation_practice_area'      => $data['practice_area'],
+            '_bb_consultation_practice_area_id'   => isset( $data['practice_area_id'] ) ? absint( $data['practice_area_id'] ) : 0,
+            '_bb_consultation_message'            => $data['message'],
+            '_bb_consultation_preferred_contact'  => $data['preferred_contact'],
+            '_bb_consultation_public_reference'   => $public_ref,
+            '_bb_consultation_status'             => ConsultationMeta::default_status(),
+            '_bb_consultation_payment_status'     => 'not_required',
+            '_bb_consultation_created'            => current_time( 'mysql' ),
         );
 
         foreach ( $map as $meta_key => $value ) {

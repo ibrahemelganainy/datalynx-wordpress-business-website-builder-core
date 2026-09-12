@@ -1,0 +1,555 @@
+/**
+ * Payment management center styles.
+ *
+ * Professional gateway-card interface for the Law Firm Payment Settings
+ * screen. Direction-neutral; .bb-rtl flips the few mirrored bits.
+ *
+ * @package BusinessBuilderCore
+ */
+
+.bb-payments {
+  --bbp-bg: #f6f7f9;
+  --bbp-surface: #ffffff;
+  --bbp-border: #e2e4e7;
+  --bbp-text: #1d2327;
+  --bbp-muted: #646970;
+  --bbp-primary: #2271b1;
+  --bbp-primary-soft: #f0f6fc;
+  --bbp-success: #00a32a;
+  --bbp-success-soft: #edfaef;
+  --bbp-danger: #b32d2e;
+  --bbp-warning: #b26a00;
+  --bbp-warning-soft: #fef8e7;
+  --bbp-radius: 12px;
+  --bbp-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 20px rgba(15, 23, 42, 0.05);
+  max-width: 1600px;
+  padding-bottom: 48px;
+}
+
+/* Header */
+.bb-payments-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 24px;
+  margin: 12px 0 24px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e2a44 100%);
+  color: #fff;
+  border-radius: var(--bbp-radius);
+  box-shadow: var(--bbp-shadow);
+}
+
+.bb-payments-header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 24px;
+}
+
+.bb-payments-header p {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+}
+
+/* Generic card */
+.bb-pc-card {
+  background: var(--bbp-surface);
+  border: 1px solid var(--bbp-border);
+  border-radius: var(--bbp-radius);
+  box-shadow: var(--bbp-shadow);
+  padding: 20px 22px;
+  margin-bottom: 22px;
+}
+
+.bb-pc-card h2 {
+  margin: 0 0 16px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bb-pc-card h2 .dashicons {
+  color: var(--bbp-primary);
+}
+
+/* Currency row */
+.bb-pc-currency-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-end;
+}
+
+.bb-pc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 240px;
+}
+
+.bb-pc-field label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.bb-pc-field .description {
+  font-size: 12px;
+  color: var(--bbp-muted);
+  margin: 0;
+}
+
+.bb-pc-currency-preview {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bbp-primary);
+  padding: 8px 12px;
+  background: var(--bbp-primary-soft);
+  border-radius: 8px;
+}
+
+/* Gateway grid */
+.bb-gateway-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.bb-gateway-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  background: var(--bbp-surface);
+  border: 1px solid var(--bbp-border);
+  border-radius: var(--bbp-radius);
+  box-shadow: var(--bbp-shadow);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.bb-gateway-card.is-enabled {
+  border-color: var(--bbp-success);
+}
+
+.bb-gateway-card.is-disabled {
+  opacity: 0.92;
+}
+
+.bb-gateway-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.bb-gateway-logo {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--bbp-bg);
+  border: 1px solid var(--bbp-border);
+  overflow: hidden;
+}
+
+.bb-gateway-logo img {
+  max-width: 34px;
+  max-height: 34px;
+  display: block;
+}
+
+.bb-gateway-logo .dashicons {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: var(--bbp-primary);
+}
+
+.bb-gateway-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.bb-gateway-name strong {
+  display: block;
+  font-size: 15px;
+}
+
+.bb-gateway-name span {
+  font-size: 12px;
+  color: var(--bbp-muted);
+}
+
+.bb-gateway-desc {
+  font-size: 12.5px;
+  color: var(--bbp-muted);
+  margin: 0;
+}
+
+/* Badges */
+.bb-gateway-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bb-gtag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.bb-gtag-success {
+  background: var(--bbp-success-soft);
+  color: var(--bbp-success);
+}
+.bb-gtag-warning {
+  background: var(--bbp-warning-soft);
+  color: var(--bbp-warning);
+}
+.bb-gtag-muted {
+  background: var(--bbp-bg);
+  color: var(--bbp-muted);
+}
+.bb-gtag-danger {
+  background: #fcf0f0;
+  color: var(--bbp-danger);
+}
+
+/* Toggle switch */
+.bb-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.bb-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bb-toggle-track {
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: #c3c4c7;
+  position: relative;
+  transition: background 0.15s ease;
+  flex: 0 0 auto;
+}
+
+.bb-toggle-track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  inset-inline-start: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s ease;
+}
+
+.bb-toggle input:checked + .bb-toggle-track {
+  background: var(--bbp-success);
+}
+
+.bb-toggle input:checked + .bb-toggle-track::after {
+  transform: translateX(18px);
+}
+
+.bb-rtl .bb-toggle input:checked + .bb-toggle-track::after {
+  transform: translateX(-18px);
+}
+
+/* Expandable config */
+.bb-gateway-config {
+  border-top: 1px solid var(--bbp-border);
+  padding-top: 14px;
+}
+
+.bb-gateway-config summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--bbp-primary);
+  list-style: none;
+}
+
+.bb-gateway-config summary::-webkit-details-marker {
+  display: none;
+}
+
+.bb-gateway-config summary::before {
+  content: "\f345";
+  font-family: dashicons;
+  display: inline-block;
+  margin-inline-end: 6px;
+  transition: transform 0.15s ease;
+}
+
+.bb-gateway-config[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.bb-gateway-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.bb-gateway-field label {
+  display: block;
+  font-weight: 600;
+  font-size: 12.5px;
+  margin-bottom: 4px;
+}
+
+.bb-gateway-field input[type="text"],
+.bb-gateway-field input[type="password"],
+.bb-gateway-field select,
+.bb-gateway-field textarea {
+  width: 100%;
+  max-width: 100%;
+}
+
+.bb-gateway-field .description {
+  font-size: 12px;
+  color: var(--bbp-muted);
+  margin: 4px 0 0;
+}
+
+.bb-gateway-secret-note {
+  font-size: 11.5px;
+  color: var(--bbp-muted);
+}
+
+/* Status strip */
+.bb-pc-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.bb-pc-status.is-ok {
+  background: var(--bbp-success-soft);
+  color: var(--bbp-success);
+}
+.bb-pc-status.is-warn {
+  background: var(--bbp-warning-soft);
+  color: var(--bbp-warning);
+}
+/* ------------------------------------------------------------------
+   Phase B additions: multi-gateway management center
+   ------------------------------------------------------------------ */
+
+.bb-payments-header-copy {
+  max-width: 70ch;
+}
+
+.bb-payments-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bb-payments-header-badge .dashicons {
+  color: #9fd0a8;
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.bb-pc-section-hint {
+  margin: -6px 0 18px;
+  font-size: 13px;
+}
+
+/* Toggle: explicit On/Off label next to the switch */
+.bb-toggle-gateway {
+  gap: 10px;
+}
+
+.bb-toggle-state {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bbp-muted);
+  min-width: 24px;
+}
+
+.bb-gateway-card.is-enabled .bb-toggle-state {
+  color: var(--bbp-success);
+}
+
+/* Currency combobox (progressive enhancement) */
+.bb-combobox {
+  position: relative;
+  display: block;
+  min-width: 260px;
+}
+
+.bb-combobox-input {
+  width: 100%;
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid #8c8f94;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Hide the native select only once JS has enhanced the combobox */
+.bb-combobox.is-enhanced .bb-combobox-select {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  border: 0;
+  padding: 0;
+  margin: -1px;
+}
+
+/* When JS is unavailable, hide the text input and show the select */
+.bb-combobox:not(.is-enhanced) .bb-combobox-input {
+  display: none;
+}
+
+/* Config toggle button */
+.bb-gateway-config-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 0 0;
+  border: 0;
+  border-top: 1px solid var(--bbp-border);
+  background: none;
+  color: var(--bbp-primary);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: start;
+}
+
+.bb-gateway-config-toggle:hover,
+.bb-gateway-config-toggle:focus {
+  color: var(--bbp-primary);
+  text-decoration: underline;
+}
+
+.bb-gateway-config-toggle .dashicons {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.15s ease;
+}
+
+.bb-gateway-config.is-open .bb-gateway-config-toggle .dashicons {
+  transform: rotate(90deg);
+}
+
+.bb-rtl .bb-gateway-config.is-open .bb-gateway-config-toggle .dashicons {
+  transform: rotate(-90deg);
+}
+
+.bb-gateway-config-toggle:focus-visible {
+  outline: 2px solid var(--bbp-primary);
+  outline-offset: 2px;
+}
+
+/* Save row */
+.bb-payments-save {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  margin-top: 8px;
+  background: var(--bbp-surface);
+  border: 1px solid var(--bbp-border);
+  border-radius: var(--bbp-radius);
+  box-shadow: var(--bbp-shadow);
+}
+
+.bb-payments-save-hint {
+  font-size: 12.5px;
+  color: var(--bbp-muted);
+}
+
+/* Gateway field spacing */
+.bb-gateway-fields {
+  padding-top: 4px;
+}
+
+.bb-gateway-field input[type="text"],
+.bb-gateway-field input[type="password"],
+.bb-gateway-field select,
+.bb-gateway-field textarea {
+  min-height: 32px;
+}
+
+/* Card state accents */
+.bb-gateway-card.is-enabled.is-configured {
+  box-shadow:
+    0 0 0 1px var(--bbp-success),
+    var(--bbp-shadow);
+}
+
+.bb-gateway-card.is-enabled.is-unconfigured {
+  box-shadow:
+    0 0 0 1px var(--bbp-warning),
+    var(--bbp-shadow);
+}
+
+/* Responsive: single column on small screens */
+@media screen and (max-width: 782px) {
+  .bb-gateway-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bb-pc-currency-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bb-pc-field {
+    min-width: 0;
+  }
+
+  .bb-combobox {
+    min-width: 0;
+  }
+
+  .bb-payments-save {
+    position: static;
+  }
+}

@@ -27,6 +27,10 @@ class BankTransferGateway extends AbstractGateway {
         return __( 'Bank Transfer', 'business-builder' );
     }
 
+    public function get_description(): string {
+        return __( 'Offline bank transfer, verified manually by an administrator. Fully functional.', 'business-builder' );
+    }
+
     public function is_manual(): bool {
         return true;
     }

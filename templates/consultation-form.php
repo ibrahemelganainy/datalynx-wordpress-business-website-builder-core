@@ -18,7 +18,7 @@ $bb_areas = ConsultationForm::practice_areas();
 
 $bb_status = isset( $_GET['bb_consult'] )
     ? sanitize_key( wp_unslash( $_GET['bb_consult'] ) )
-    : '';
+
 
 ?>
 
@@ -75,7 +75,7 @@ $bb_status = isset( $_GET['bb_consult'] )
                 <select name="bb_practice_area" id="bb_practice_area">
                     <option value=""><?php esc_html_e( 'Select a practice area', 'business-builder' ); ?></option>
                     <?php foreach ( $bb_areas as $bb_area ) : ?>
-                        <option value="<?php echo esc_attr( $bb_area->slug ); ?>">
+                        <option value="<?php echo esc_attr( (string) $bb_area->term_id ); ?>">
                             <?php echo esc_html( $bb_area->name ); ?>
                         </option>
                     <?php endforeach; ?>

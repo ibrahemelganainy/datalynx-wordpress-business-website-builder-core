@@ -26,6 +26,10 @@ class InstaPayGateway extends AbstractGateway {
         return __( 'InstaPay', 'business-builder' );
     }
 
+    public function get_description(): string {
+        return __( 'Instant bank transfer via InstaPay, verified manually. Fully functional.', 'business-builder' );
+    }
+
     public function is_manual(): bool {
         return true;
     }

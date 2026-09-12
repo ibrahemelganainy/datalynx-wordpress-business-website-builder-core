@@ -322,6 +322,77 @@ class LawFirmSections {
     }
 
     /**
+     * Payment schema shared by the Consultation and Booking sections.
+     *
+     * Rendered entirely by the existing dynamic schema editor — no new
+     * editor. The gateway list is built from the registered gateways so
+     * it always reflects the current Payment Settings, and the currency
+     * list from the structured Currencies catalogue.
+     *
+     * @param string $object_type 'consultation' | 'appointment'.
+     * @return array<string, array<string, mixed>>
+     */
+    protected function payment_fields( string $object_type ): array {
+
+        $object_type = sanitize_key( $object_type );
+
+        $currency_options = array();
+
+        foreach ( \BusinessBuilderCore\Core\Payments\Currencies::all() as $entry ) {
+            $currency_options[ $entry['code'] ] = $entry['name'] . ' (' . $entry['code'] . ') — ' . $entry['symbol'];
+        }
+
+        $gateway_options = array();
+
+        $manager = new \BusinessBuilderCore\Core\Payments\PaymentManager();
+
+        foreach ( $manager->gateways() as $id => $gateway ) {
+            $label = $gateway->get_name();
+
+            $is_enabled = $manager->is_gateway_enabled( $id );
+
+            if ( $is_enabled ) {
+                $label .= ' — ' . __( 'enabled', 'business-builder' );
+            }
+
+            $gateway_options[ $id ] = $label;
+        }
+
+        return array(
+            'payment_enabled' => array(
+                'type'        => 'checkbox',
+                'label'       => __( 'Enable Payment', 'business-builder' ),
+                'default'     => false,
+                'description' => __( 'When on, the customer must pay before the request is confirmed.', 'business-builder' ),
+            ),
+            'payment_fee' => array(
+                'type'        => 'number',
+                'label'       => __( 'Fee', 'business-builder' ),
+                'default'     => 0,
+                'min'         => 0,
+                'step'        => 0.01,
+                'description' => __( 'Numeric amount. Leave 0 to use the site default fee.', 'business-builder' ),
+            ),
+            'payment_currency' => array(
+                'type'    => 'select',
+                'label'   => __( 'Currency', 'business-builder' ),
+                'default' => '',
+                'options' => array_merge(
+                    array( '' => __( 'Use site default', 'business-builder' ) ),
+                    $currency_options
+                ),
+            ),
+            'payment_gateways' => array(
+                'type'        => 'multicheck',
+                'label'       => __( 'Payment Gateways', 'business-builder' ),
+                'default'     => array(),
+                'options'     => $gateway_options,
+                'description' => __( 'Only the selected gateways are offered for this section. Leave all unchecked to allow every available gateway.', 'business-builder' ),
+            ),
+        );
+    }
+
+    /**
      * Consultation section.
      *
      * Registered with a custom render callback (not the generic
@@ -340,7 +411,7 @@ class LawFirmSections {
                 'category'    => 'law-firm',
                 'icon'        => 'dashicons-phone',
                 'supports'    => array( 'title', 'description' ),
-                'settings'    => array(),
+                'settings'    => $this->payment_fields( 'consultation' ),
                 'content'     => $this->heading_fields(),
                 'render'      => array( $this, 'render_consultation_section' ),
             )
@@ -361,7 +432,7 @@ class LawFirmSections {
                 'category'    => 'law-firm',
                 'icon'        => 'dashicons-calendar-alt',
                 'supports'    => array( 'title', 'description' ),
-                'settings'    => array(),
+                'settings'    => $this->payment_fields( 'appointment' ),
                 'content'     => $this->heading_fields(),
                 'render'      => array( $this, 'render_booking_section' ),
             )
@@ -380,6 +451,10 @@ class LawFirmSections {
         echo '<div class="bb-section-inner">';
 
         $this->render_heading( $content );
+
+        /* Section-scoped payment configuration (see consultation). */
+        $bb_payment    = \BusinessBuilderCore\Packs\LawFirm\Payments\SectionPaymentFactory::for_appointment( $settings );
+        $bb_section_id = isset( $section['id'] ) ? sanitize_text_field( (string) $section['id'] ) : '';
 
         $template = BB_CORE_PATH . 'templates/booking-form.php';
 
@@ -402,6 +477,15 @@ class LawFirmSections {
         echo '<div class="bb-section-inner">';
 
         $this->render_heading( $content );
+
+        /*
+         * Resolve this section's payment configuration so the template
+         * can show the fee, currency and allowed gateways. The section id
+         * is passed to the form so the submit handler can re-read the
+         * SAME stored configuration (never trusting the browser).
+         */
+        $bb_payment    = \BusinessBuilderCore\Packs\LawFirm\Payments\SectionPaymentFactory::for_consultation( $settings );
+        $bb_section_id = isset( $section['id'] ) ? sanitize_text_field( (string) $section['id'] ) : '';
 
         $template = BB_CORE_PATH . 'templates/consultation-form.php';
 

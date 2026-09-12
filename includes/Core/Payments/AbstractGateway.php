@@ -31,6 +31,87 @@ abstract class AbstractGateway implements PaymentGatewayInterface {
     }
 
     /**
+     * Default description (empty => the card shows only the name).
+     */
+    public function get_description(): string {
+        return '';
+    }
+
+    /**
+     * Default logo: a local asset at assets/img/gateways/{id}.svg.
+     *
+     * Using a local asset keeps the critical admin UI independent of
+     * fragile external image hosts. Packs/extensions may override this.
+     */
+    public function get_logo_url(): string {
+
+        $relative = 'assets/img/gateways/' . $this->get_id() . '.svg';
+
+        $path = BB_CORE_PATH . $relative;
+
+        if ( file_exists( $path ) ) {
+            return BB_CORE_URL . $relative;
+        }
+
+        return '';
+    }
+
+    /**
+     * Default: a gateway accepts any currency unless it says otherwise.
+     *
+     * @return string[]
+     */
+    public function get_supported_currencies(): array {
+        return array();
+    }
+
+    /**
+     * Default: not integration-ready (honest default).
+     */
+    public function is_integration_ready(): bool {
+        return false;
+    }
+
+    /**
+     * Validate configuration using the declared schema.
+     *
+     * @return string[]
+     */
+    public function validate_configuration(): array {
+
+        $problems = array();
+
+        foreach ( $this->get_settings_schema() as $key => $field ) {
+
+            if ( empty( $field['required'] ) ) {
+                continue;
+            }
+
+            if ( '' === (string) $this->get_setting( $key, '' ) ) {
+
+                $label = isset( $field['label'] ) ? (string) $field['label'] : $key;
+
+                $problems[] = sprintf(
+                    /* translators: %s: field label */
+                    __( '%s is required.', 'business-builder' ),
+                    $label
+                );
+            }
+        }
+
+        return $problems;
+    }
+
+    /**
+     * Default: no redirect URL (manual / embedded gateways override).
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     */
+    public function get_payment_url( PaymentTransaction $transaction ): string {
+        return '';
+    }
+
+    /**
      * Read this gateway's stored settings for the current site.
      *
      * @return array<string, mixed>

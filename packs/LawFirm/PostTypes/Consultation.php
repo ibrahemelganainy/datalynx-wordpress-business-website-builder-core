@@ -68,7 +68,7 @@ class Consultation {
             'labels'              => $labels,
             'public'              => false,
             'show_ui'             => true,
-            'show_in_menu'        => true,
+            'show_in_menu'        => \BusinessBuilderCore\Packs\LawFirm\Admin\DashboardMenu::MENU_SLUG,
             'show_in_rest'        => false,
             'has_archive'         => false,
             'exclude_from_search' => true,

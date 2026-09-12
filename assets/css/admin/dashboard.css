@@ -1,0 +1,582 @@
+/**
+ * LawFirm enterprise dashboard styles.
+ *
+ * Self-contained: it defines its own design tokens so it never depends
+ * on the builder's admin stylesheet. Everything is direction-neutral;
+ * the .bb-rtl class (added server-side via is_rtl()) flips the few
+ * properties that must mirror (e.g. the KPI accent border).
+ *
+ * @package BusinessBuilderCore
+ */
+
+.bb-dashboard {
+  --bbd-bg: #f6f7f9;
+  --bbd-surface: #ffffff;
+  --bbd-border: #e2e4e7;
+  --bbd-text: #1d2327;
+  --bbd-muted: #646970;
+
+  --bbd-primary: #2271b1;
+  --bbd-primary-soft: #f0f6fc;
+  --bbd-success: #00a32a;
+  --bbd-success-soft: #edfaef;
+  --bbd-warning: #b26a00;
+  --bbd-warning-soft: #fef8e7;
+  --bbd-danger: #b32d2e;
+  --bbd-danger-soft: #fcf0f0;
+  --bbd-info: #4f46e5;
+  --bbd-info-soft: #eef0ff;
+
+  --bbd-radius: 12px;
+  --bbd-radius-sm: 8px;
+  --bbd-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 20px rgba(15, 23, 42, 0.05);
+  --bbd-gap: 20px;
+
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 8px 12px 48px;
+  color: var(--bbd-text);
+}
+
+.bb-dashboard * {
+  box-sizing: border-box;
+}
+
+/* ----------------------------------------------------------------
+ * Header
+ * ---------------------------------------------------------------- */
+
+.bb-dashboard-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--bbd-gap);
+  padding: 22px 24px;
+  margin: 12px 0 24px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e2a44 100%);
+  color: #fff;
+  border-radius: var(--bbd-radius);
+  box-shadow: var(--bbd-shadow);
+}
+
+.bb-dashboard-title h1 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.bb-dashboard-title p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 720px;
+}
+
+.bb-dashboard-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ----------------------------------------------------------------
+ * Buttons
+ * ---------------------------------------------------------------- */
+
+.bb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--bbd-radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.bb-btn .dashicons {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 1;
+}
+
+.bb-btn-primary {
+  background: var(--bbd-primary);
+  border-color: var(--bbd-primary);
+  color: #fff;
+}
+
+.bb-btn-primary:hover {
+  background: #135e96;
+  border-color: #135e96;
+  color: #fff;
+}
+
+.bb-btn-ghost {
+  background: transparent;
+  border-color: var(--bbd-border);
+  color: inherit;
+}
+
+.bb-dashboard-header .bb-btn-ghost {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+
+.bb-dashboard-header .bb-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.bb-dashboard-main .bb-btn-ghost,
+.bb-dashboard-side .bb-btn-ghost {
+  border-color: var(--bbd-border);
+  color: var(--bbd-text);
+}
+
+.bb-dashboard-main .bb-btn-ghost:hover,
+.bb-dashboard-side .bb-btn-ghost:hover {
+  background: var(--bbd-primary-soft);
+  border-color: var(--bbd-primary);
+  color: var(--bbd-primary);
+}
+
+.bb-inline-form {
+  display: inline-block;
+  margin: 0;
+}
+
+/* ----------------------------------------------------------------
+ * KPI cards
+ * ---------------------------------------------------------------- */
+
+.bb-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--bbd-gap);
+  margin: 0 0 28px;
+}
+
+.bb-kpi-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px 18px 22px;
+  background: var(--bbd-surface);
+  border: 1px solid var(--bbd-border);
+  border-radius: var(--bbd-radius);
+  box-shadow: var(--bbd-shadow);
+  text-decoration: none;
+  color: var(--bbd-text);
+  overflow: hidden;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.bb-kpi-card::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--bbd-primary);
+}
+
+.bb-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 10px rgba(15, 23, 42, 0.08),
+    0 14px 30px rgba(15, 23, 42, 0.08);
+  color: var(--bbd-text);
+}
+
+.bb-kpi-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  color: var(--bbd-muted);
+}
+
+.bb-kpi-value {
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.bb-kpi-label {
+  font-size: 12.5px;
+  color: var(--bbd-muted);
+}
+
+.bb-accent-primary::before {
+  background: var(--bbd-primary);
+}
+.bb-accent-primary .bb-kpi-icon {
+  color: var(--bbd-primary);
+}
+
+.bb-accent-info::before {
+  background: var(--bbd-info);
+}
+.bb-accent-info .bb-kpi-icon {
+  color: var(--bbd-info);
+}
+
+.bb-accent-success::before {
+  background: var(--bbd-success);
+}
+.bb-accent-success .bb-kpi-icon {
+  color: var(--bbd-success);
+}
+
+.bb-accent-warning::before {
+  background: var(--bbd-warning);
+}
+.bb-accent-warning .bb-kpi-icon {
+  color: var(--bbd-warning);
+}
+
+.bb-accent-danger::before {
+  background: var(--bbd-danger);
+}
+.bb-accent-danger .bb-kpi-icon {
+  color: var(--bbd-danger);
+}
+
+/* ----------------------------------------------------------------
+ * Two-column layout
+ * ---------------------------------------------------------------- */
+
+.bb-dashboard-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: var(--bbd-gap);
+  align-items: start;
+}
+
+@media screen and (max-width: 1100px) {
+  .bb-dashboard-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bb-dashboard-main,
+.bb-dashboard-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bbd-gap);
+  min-width: 0;
+}
+
+/* ----------------------------------------------------------------
+ * Cards
+ * ---------------------------------------------------------------- */
+
+.bb-card {
+  background: var(--bbd-surface);
+  border: 1px solid var(--bbd-border);
+  border-radius: var(--bbd-radius);
+  box-shadow: var(--bbd-shadow);
+  padding: 18px 20px;
+}
+
+.bb-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.bb-card-title .dashicons {
+  color: var(--bbd-primary);
+}
+
+/* ----------------------------------------------------------------
+ * Charts
+ * ---------------------------------------------------------------- */
+
+.bb-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--bbd-gap);
+}
+
+.bb-chart-card {
+  min-height: 220px;
+}
+
+.bb-bar-chart {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bb-bar-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 90px;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.bb-bar-label {
+  font-size: 12.5px;
+  color: var(--bbd-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bb-bar-track {
+  display: block;
+  height: 10px;
+  background: var(--bbd-bg);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bb-bar-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--bbd-primary), #4f83c2);
+  border-radius: 999px;
+}
+
+.bb-bar-value {
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: end;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------
+ * Empty states
+ * ---------------------------------------------------------------- */
+
+.bb-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 30px 16px;
+  color: var(--bbd-muted);
+  text-align: center;
+}
+
+.bb-empty .dashicons {
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  opacity: 0.5;
+}
+
+.bb-empty p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* ----------------------------------------------------------------
+ * Action Center
+ * ---------------------------------------------------------------- */
+
+.bb-action-list,
+.bb-activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bb-action-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--bbd-bg);
+  border: 1px solid var(--bbd-border);
+  border-radius: var(--bbd-radius-sm);
+  margin: 0;
+}
+
+.bb-action-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.bb-action-info strong {
+  font-size: 13.5px;
+}
+
+.bb-action-meta {
+  font-size: 12px;
+  color: var(--bbd-muted);
+}
+
+.bb-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ----------------------------------------------------------------
+ * Badges
+ * ---------------------------------------------------------------- */
+
+.bb-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bbd-primary-soft);
+  color: var(--bbd-primary);
+  white-space: nowrap;
+}
+
+.bb-badge-status {
+  background: var(--bbd-warning-soft);
+  color: var(--bbd-warning);
+}
+
+.bb-badge-payment {
+  background: var(--bbd-success-soft);
+  color: var(--bbd-success);
+}
+
+/* ----------------------------------------------------------------
+ * Quick actions
+ * ---------------------------------------------------------------- */
+
+.bb-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.bb-quick-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--bbd-bg);
+  border: 1px solid var(--bbd-border);
+  border-radius: var(--bbd-radius-sm);
+  text-decoration: none;
+  color: var(--bbd-text);
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.bb-quick-item:hover {
+  background: var(--bbd-primary-soft);
+  border-color: var(--bbd-primary);
+  color: var(--bbd-primary);
+}
+
+.bb-quick-item .dashicons {
+  color: var(--bbd-primary);
+}
+
+/* ----------------------------------------------------------------
+ * Activity feed
+ * ---------------------------------------------------------------- */
+
+.bb-activity-item {
+  margin: 0;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bbd-border);
+}
+
+.bb-activity-item:last-child {
+  border-bottom: 0;
+}
+
+.bb-activity-item a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--bbd-text);
+}
+
+.bb-activity-item strong {
+  font-size: 13.5px;
+}
+
+.bb-activity-meta,
+.bb-activity-time {
+  font-size: 12px;
+  color: var(--bbd-muted);
+}
+
+.bb-activity-time {
+  margin-inline-start: auto;
+}
+
+.bb-activity-ref code {
+  font-size: 11px;
+  background: var(--bbd-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.bb-activity-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--bbd-border);
+  flex-wrap: wrap;
+}
+
+.bb-notif-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--bbd-muted);
+}
+
+/* ----------------------------------------------------------------
+ * RTL adjustments
+ * ---------------------------------------------------------------- */
+
+.bb-rtl .bb-bar-value {
+  text-align: start;
+}
+
+.bb-rtl .bb-activity-time {
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Bank Transfer">
+ <rect x="2" y="2" width="44" height="44" rx="10" fill="#334155"/>
+ <path d="M24 11 8 20h32z" fill="#FFFFFF"/>
+ <rect x="10" y="22" width="4" height="10" fill="#FFFFFF"/>
+ <rect x="17" y="22" width="4" height="10" fill="#FFFFFF"/>
+ <rect x="24" y="22" width="4" height="10" fill="#FFFFFF"/>
+ <rect x="31" y="22" width="4" height="10" fill="#FFFFFF"/>
+ <rect x="8" y="33" width="32" height="4" fill="#C9A227"/>
+</svg>

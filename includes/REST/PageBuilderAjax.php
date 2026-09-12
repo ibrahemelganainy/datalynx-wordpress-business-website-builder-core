@@ -1134,6 +1134,49 @@ class PageBuilderAjax {
         }
 
         /*
+         * Multi-checkbox: an array of selected option keys. Accepts an
+         * array (native form submission) or a JSON array literal (the
+         * editor may send one). Every key is sanitized and kept only if
+         * it exists in the field's declared options, so arbitrary values
+         * can never be stored.
+         */
+        if ( 'multicheck' === $type ) {
+
+            if ( is_string( $value )) {
+                $decoded = json_decode( $value, true );
+                $value   = is_array( $decoded ) ? $decoded : array( $value );
+            }
+
+            if ( ! is_array( $value )) {
+                return array();
+            }
+
+            $allowed = isset( $field['options'] ) && is_array( $field['options'] )
+                ? array_map( 'strval', array_keys( $field['options'] ))
+                : array();
+
+            $clean = array();
+
+            foreach ( $value as $item ) {
+
+                $item = sanitize_key( (string) $item );
+
+                if ( '' === $item ) {
+                    continue;
+                }
+
+                /* Enforce the declared option set when present. */
+                if ( ! empty( $allowed ) && ! in_array( $item, $allowed, true )) {
+                    continue;
+                }
+
+                $clean[] = $item;
+            }
+
+            return array_values( array_unique( $clean ));
+        }
+
+        /*
          * Numeric fields, with optional min/max clamping
          * when the schema declares bounds.
          */

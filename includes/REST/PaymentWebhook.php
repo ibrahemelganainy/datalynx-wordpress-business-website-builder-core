@@ -3,6 +3,7 @@
 namespace BusinessBuilderCore\REST;
 
 use BusinessBuilderCore\Core\Payments\PaymentManager;
+use BusinessBuilderCore\Core\Payments\Checkout\TransactionSynchronizer;
 use BusinessBuilderCore\Core\Notifications\NotificationManager;
 use BusinessBuilderCore\Core\Notifications\Notification;
 use BusinessBuilderCore\Core\Audit\AuditLog;
@@ -49,20 +50,32 @@ class PaymentWebhook {
     protected AuditLog $audit;
 
     /**
+     * Transaction synchronizer (Phase F, optional).
+     *
+     * When present, verification results are applied through the single
+     * synchronizer (which also updates appointment meta). When absent,
+     * the legacy consultation-only path is used unchanged.
+     */
+    protected ?TransactionSynchronizer $synchronizer = null;
+
+    /**
      * Constructor.
      *
-     * @param PaymentManager      $payments      Payments.
-     * @param NotificationManager $notifications Notifications.
-     * @param AuditLog            $audit         Audit log.
+     * @param PaymentManager               $payments      Payments.
+     * @param NotificationManager          $notifications Notifications.
+     * @param AuditLog                     $audit         Audit log.
+     * @param TransactionSynchronizer|null $synchronizer  Synchronizer (optional).
      */
     public function __construct(
         PaymentManager $payments,
         NotificationManager $notifications,
-        AuditLog $audit
+        AuditLog $audit,
+        ?TransactionSynchronizer $synchronizer = null
     ) {
         $this->payments      = $payments;
         $this->notifications = $notifications;
         $this->audit         = $audit;
+        $this->synchronizer  = $synchronizer;
     }
 
     /**
@@ -171,8 +184,16 @@ class PaymentWebhook {
             );
         }
 
-        /* Resolve the transaction by provider reference. */
-        $transaction = $this->payments->find_by_reference( $result->reference );
+        /*
+         * Resolve the transaction by provider reference. Prefer the
+         * Phase F CPT store, then fall back to the legacy option store
+         * so both eras of transactions are found.
+         */
+        $transaction = $this->payments->store()->find_by_reference( $result->reference );
+
+        if ( null === $transaction ) {
+            $transaction = $this->payments->find_by_reference( $result->reference );
+        }
 
         if ( null === $transaction ) {
             return new \WP_REST_Response(
@@ -192,18 +213,29 @@ class PaymentWebhook {
             );
         }
 
-        /* Advance the transaction state from the verified result. */
-        $this->payments->update_transaction(
-            $transaction->id,
-            $result->status,
-            $result->reference
-        );
+        if ( $this->synchronizer instanceof TransactionSynchronizer ) {
 
-        /* Update the consultation payment state (server-controlled). */
-        $this->sync_consultation(
-            $transaction->consultation_id,
-            $result->status
-        );
+            /*
+             * Phase F: single synchronisation path that updates the
+             * CPT-backed transaction store AND the related object meta
+             * (consultation or appointment).
+             */
+            $this->synchronizer->apply( $transaction, $result );
+
+        } else {
+
+            /* Legacy consultation-only path (unchanged behaviour). */
+            $this->payments->update_transaction(
+                $transaction->id,
+                $result->status,
+                $result->reference
+            );
+
+            $this->sync_consultation(
+                $transaction->consultation_id,
+                $result->status
+            );
+        }
 
         /* Notify + audit (both idempotent / scoped). */
         $this->notifications->dispatch(

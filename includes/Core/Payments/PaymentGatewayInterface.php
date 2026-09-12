@@ -33,6 +33,55 @@ interface PaymentGatewayInterface {
     public function get_name(): string;
 
     /**
+     * Short human-readable description shown on the gateway card.
+     *
+     * @return string
+     */
+    public function get_description(): string;
+
+    /**
+     * Browser-safe logo URL for the admin card (local asset, never a
+     * fragile remote image for critical UI).
+     *
+     * @return string
+     */
+    public function get_logo_url(): string;
+
+    /**
+     * Currency codes this gateway supports. An empty array means "any".
+     *
+     * @return string[]
+     */
+    public function get_supported_currencies(): array;
+
+    /**
+     * Whether the provider's live API is implemented AND tested in this
+     * codebase. Gateways that return false are configuration-ready only
+     * and must never be presented as production-ready (spec: Part 6).
+     *
+     * @return bool
+     */
+    public function is_integration_ready(): bool;
+
+    /**
+     * Validate the current configuration, returning human-readable
+     * problems (empty when valid). Used by the admin UI and before a
+     * customer is sent to the provider.
+     *
+     * @return string[]
+     */
+    public function validate_configuration(): array;
+
+    /**
+     * Provider payment URL for a transaction, if the gateway is
+     * redirect-based. Empty for manual / non-redirect gateways.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    public function get_payment_url( PaymentTransaction $transaction ): string;
+
+    /**
      * Whether this gateway is automatic (API) or manual (offline).
      *
      * Manual gateways are verified by an administrator, never by a

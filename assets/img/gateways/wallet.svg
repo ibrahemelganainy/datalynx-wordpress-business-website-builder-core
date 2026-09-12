@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Electronic Wallet">
+ <rect x="2" y="2" width="44" height="44" rx="10" fill="#0F766E"/>
+ <path d="M13 18h22a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V15a2 2 0 0 1 2-2h17v4H14a1 1 0 0 0 0 1z" fill="#FFFFFF"/>
+ <rect x="28" y="22" width="7" height="6" rx="1.6" fill="#0F766E" stroke="#FFFFFF" stroke-width="1.4"/>
+ <circle cx="31.5" cy="25" r="1.1" fill="#FFFFFF"/>
+</svg>

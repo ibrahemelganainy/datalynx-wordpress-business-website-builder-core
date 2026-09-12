@@ -49,8 +49,89 @@ class ConsultationAdmin {
      */
     public function register(): void {
 
-        add_action( 'add_meta_boxes', array( $this, 'register_meta_box' ) );
+        add_action( 'add_meta_boxes', array( $this, 'register_meta_box' ));
+
+        /* Readable list-table columns (Practice Area must never be a slug). */
+        add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'list_columns' ));
+        add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_list_column' ), 10, 2 );
         add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_action' ) );
+    }
+
+    /**
+     * Define readable consultation list columns.
+     *
+     * Replaces the title-only list with operational columns. The
+     * Practice Area column uses the normalized term name so a raw or
+     * encoded slug can never appear in the admin list (bug fix).
+     *
+     * @param array<string, string> $columns Existing columns.
+     * @return array<string, string>
+     */
+    public function list_columns( array $columns ): array {
+
+        $new = array();
+
+        if ( isset( $columns['cb'] )) {
+            $new['cb'] = $columns['cb'];
+        }
+
+        $new['title']            = __( 'Consultation', 'business-builder' );
+        $new['bb_practice_area'] = __( 'Practice Area', 'business-builder' );
+        $new['bb_status']        = __( 'Status', 'business-builder' );
+        $new['bb_payment']       = __( 'Payment', 'business-builder' );
+        $new['bb_reference']     = __( 'Reference', 'business-builder' );
+
+        if ( isset( $columns['date'] )) {
+            $new['date'] = $columns['date'];
+        }
+
+        return $new;
+    }
+
+    /**
+     * Render a value for a custom consultation list column.
+     *
+     * @param string $column  Column key.
+     * @param int    $post_id Consultation id.
+     */
+    public function render_list_column( string $column, int $post_id ): void {
+
+        switch ( $column ) {
+
+            case 'bb_practice_area':
+                $stored = ConsultationMeta::stored_practice_area( $post_id );
+                $term = ConsultationMeta::resolve_practice_area( $stored );
+                
+                if ( $term instanceof \WP_Term ) {
+                    echo esc_html( $term->name );
+                } else {
+                    echo esc_html__( '(not specified)', 'business-builder' );
+                }
+                break;
+
+            case 'bb_status':
+                $status = (string) get_post_meta( $post_id, ConsultationMeta::key( 'status' ), true );
+                if ( '' === $status ) {
+                    $status = ConsultationMeta::default_status();
+                }
+                echo esc_html( ConsultationMeta::status_label( $status ));
+                break;
+
+            case 'bb_payment':
+                $state = (string) get_post_meta( $post_id, ConsultationMeta::key( 'payment_status' ), true );
+                if ( '' === $state ) {
+                    $state = 'not_required';
+                }
+                echo esc_html( ConsultationMeta::payment_label( $state ));
+                break;
+
+            case 'bb_reference':
+                $ref = (string) get_post_meta( $post_id, ConsultationMeta::key( 'public_reference' ), true );
+                echo '' !== $ref
+                    ? '<code>' . esc_html( $ref ) . '</code>'
+                    : '&mdash;';
+                break;
+        }
     }
 
     /**
@@ -164,7 +245,7 @@ class ConsultationAdmin {
     protected function practice_area_html( int $id ): string {
 
         $term = ConsultationMeta::resolve_practice_area(
-            get_post_meta( $id, ConsultationMeta::key( 'practice_area' ), true )
+            ConsultationMeta::stored_practice_area( $id )
         );
 
         if ( ! $term instanceof \WP_Term ) {

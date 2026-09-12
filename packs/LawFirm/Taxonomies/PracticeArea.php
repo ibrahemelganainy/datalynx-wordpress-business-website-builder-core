@@ -107,6 +107,9 @@ class PracticeArea {
 
             'show_ui' => true,
 
+            /* Relocated under the independent Law Firm Dashboard menu. */
+            'show_in_menu' => \BusinessBuilderCore\Packs\LawFirm\Admin\DashboardMenu::MENU_SLUG,
+
             'show_admin_column' => true,
 
             'show_in_rest' => true,

@@ -27,6 +27,10 @@ class WalletGateway extends AbstractGateway {
         return __( 'Electronic Wallet', 'business-builder' );
     }
 
+    public function get_description(): string {
+        return __( 'Mobile wallet transfer (e.g. Vodafone Cash), verified manually. Fully functional.', 'business-builder' );
+    }
+
     public function is_manual(): bool {
         return true;
     }

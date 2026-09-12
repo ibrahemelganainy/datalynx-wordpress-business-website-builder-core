@@ -162,7 +162,8 @@ class LegalService {
 
             'show_ui' => true,
 
-            'show_in_menu' => true,
+            /* Relocated under the independent Law Firm Dashboard menu. */
+            'show_in_menu' => \BusinessBuilderCore\Packs\LawFirm\Admin\DashboardMenu::MENU_SLUG,
 
             'show_in_admin_bar' => true,
 

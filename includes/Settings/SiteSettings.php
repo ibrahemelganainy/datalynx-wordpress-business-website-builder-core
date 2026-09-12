@@ -57,6 +57,7 @@ class SiteSettings {
              * architecture a provider plugs into later.
              */
             'require_consultation_payment' => false,
+            'require_appointment_payment'  => false,
             'consultation_fee'             => '',
             'consultation_currency'        => 'USD',
 
@@ -235,6 +236,7 @@ class SiteSettings {
                     break;
 
                 case 'require_consultation_payment':
+                case 'require_appointment_payment':
                     $settings[ $key ] = ! empty(
                         $settings[ $key ]
                     );
@@ -267,17 +269,18 @@ class SiteSettings {
 
                 case 'consultation_currency':
 
-                    $currency = strtoupper(
-                        preg_replace(
-                            '/[^A-Za-z]/',
-                            '',
-                            (string) $settings[ $key ]
-                        )
+                    /*
+                     * Validate against the structured currency catalogue
+                     * so a free-text value can never be stored (spec:
+                     * Part 3). Unknown values fall back to the default.
+                     */
+                    $currency = \BusinessBuilderCore\Core\Payments\Currencies::normalize(
+                        (string) $settings[ $key ]
                     );
 
-                    $settings[ $key ] = ( '' === $currency )
-                        ? $default
-                        : substr( $currency, 0, 3 );
+                    $settings[ $key ] = ( '' !== $currency )
+                        ? $currency
+                        : (string) $default;
                     break;
             }
         }

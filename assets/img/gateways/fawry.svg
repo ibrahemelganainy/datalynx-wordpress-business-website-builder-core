@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Fawry">
+ <rect x="2" y="2" width="44" height="44" rx="10" fill="#EE1C25"/>
+ <path d="M15 34V14h13v4.3h-8.4v3.9h6.8v4.2h-6.8V34z" fill="#FFFFFF"/>
+ <circle cx="33" cy="31" r="3" fill="#FFCC00"/>
+</svg>

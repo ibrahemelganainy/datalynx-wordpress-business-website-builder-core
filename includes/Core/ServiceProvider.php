@@ -13,9 +13,16 @@ use BusinessBuilderCore\Builder\PageManager;
 use BusinessBuilderCore\Admin\PageAdmin;
 use BusinessBuilderCore\REST\PageBuilderAjax;
 use BusinessBuilderCore\REST\PaymentWebhook;
+use BusinessBuilderCore\REST\PaymentCallback;
 use BusinessBuilderCore\Core\Notifications\NotificationManager;
 use BusinessBuilderCore\Core\Audit\AuditLog;
 use BusinessBuilderCore\Core\Payments\PaymentManager;
+use BusinessBuilderCore\Core\Payments\Checkout\PaymentCheckout;
+use BusinessBuilderCore\Core\Payments\Checkout\CheckoutHandler;
+use BusinessBuilderCore\Core\Payments\Checkout\TransactionSynchronizer;
+use BusinessBuilderCore\Core\Payments\Receipt\ReceiptPage;
+use BusinessBuilderCore\Core\Payments\Receipt\ReceiptRenderer;
+use BusinessBuilderCore\Core\Payments\Transaction\PaymentTransactionPostType;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -52,6 +59,20 @@ class ServiceProvider {
     protected PaymentManager $payment_manager;
 
     protected PaymentWebhook $payment_webhook;
+
+    protected PaymentCallback $payment_callback;
+
+    protected TransactionSynchronizer $transaction_synchronizer;
+
+    protected PaymentCheckout $payment_checkout;
+
+    protected CheckoutHandler $checkout_handler;
+
+    protected ReceiptRenderer $receipt_renderer;
+
+    protected ReceiptPage $receipt_page;
+
+    protected PaymentTransactionPostType $payment_post_type;
 
     protected Container $container;
 
@@ -115,11 +136,49 @@ class ServiceProvider {
 
         $this->payment_manager = new PaymentManager();
 
+        /**
+         * Phase F: single transaction synchronisation path shared by
+         * the webhook and the browser-return callback.
+         */
+        $this->transaction_synchronizer = new TransactionSynchronizer(
+            $this->payment_manager,
+            $this->audit_log
+        );
+
         $this->payment_webhook = new PaymentWebhook(
             $this->payment_manager,
             $this->notification_manager,
+            $this->audit_log,
+            $this->transaction_synchronizer
+        );
+
+        $this->payment_callback = new PaymentCallback(
+            $this->payment_manager,
+            $this->transaction_synchronizer,
+            $this->notification_manager,
             $this->audit_log
         );
+
+        $this->payment_checkout = new PaymentCheckout(
+            $this->payment_manager,
+            $this->audit_log
+        );
+
+        $this->checkout_handler = new CheckoutHandler(
+            $this->payment_checkout,
+            $this->payment_manager,
+            $this->audit_log
+        );
+
+        $this->receipt_renderer = new ReceiptRenderer();
+
+        $this->receipt_page = new ReceiptPage(
+            $this->payment_manager,
+            $this->receipt_renderer,
+            $this->audit_log
+        );
+
+        $this->payment_post_type = new PaymentTransactionPostType();
 
         /**
          * Register shared services in the container.
@@ -142,6 +201,36 @@ class ServiceProvider {
         $this->container->set(
             PaymentWebhook::class,
             $this->payment_webhook
+        );
+
+        $this->container->set(
+            TransactionSynchronizer::class,
+            $this->transaction_synchronizer
+        );
+
+        $this->container->set(
+            PaymentCallback::class,
+            $this->payment_callback
+        );
+
+        $this->container->set(
+            PaymentCheckout::class,
+            $this->payment_checkout
+        );
+
+        $this->container->set(
+            CheckoutHandler::class,
+            $this->checkout_handler
+        );
+
+        $this->container->set(
+            ReceiptRenderer::class,
+            $this->receipt_renderer
+        );
+
+        $this->container->set(
+            ReceiptPage::class,
+            $this->receipt_page
         );
         $this->container->set(
             BusinessType::class,
@@ -233,9 +322,29 @@ class ServiceProvider {
         $this->pack_manager->boot_current();
 
         /**
+         * Register the private payment post type (Phase F).
+         */
+        $this->payment_post_type->register();
+
+        /**
          * Register the payment webhook REST route.
          */
         $this->payment_webhook->register();
+
+        /**
+         * Register the payment browser-return callback REST route.
+         */
+        $this->payment_callback->register();
+
+        /**
+         * Register the checkout endpoint (admin-post).
+         */
+        $this->checkout_handler->register();
+
+        /**
+         * Register the payment receipt shortcode.
+         */
+        $this->receipt_page->register();
     }
 
     /**
@@ -353,6 +462,46 @@ class ServiceProvider {
     public function get_payment_webhook(): PaymentWebhook {
 
         return $this->payment_webhook;
+    }
+
+    /**
+     * Get the transaction synchronizer.
+     */
+    public function get_transaction_synchronizer(): TransactionSynchronizer {
+
+        return $this->transaction_synchronizer;
+    }
+
+    /**
+     * Get the payment browser-return callback.
+     */
+    public function get_payment_callback(): PaymentCallback {
+
+        return $this->payment_callback;
+    }
+
+    /**
+     * Get the payment checkout orchestrator.
+     */
+    public function get_payment_checkout(): PaymentCheckout {
+
+        return $this->payment_checkout;
+    }
+
+    /**
+     * Get the checkout endpoint handler.
+     */
+    public function get_checkout_handler(): CheckoutHandler {
+
+        return $this->checkout_handler;
+    }
+
+    /**
+     * Get the payment receipt page.
+     */
+    public function get_receipt_page(): ReceiptPage {
+
+        return $this->receipt_page;
     }
 
     /**

@@ -16,9 +16,13 @@ use BusinessBuilderCore\Packs\LawFirm\Taxonomies\PracticeAreaFields;
 use BusinessBuilderCore\Packs\LawFirm\Taxonomies\FaqCategory;
 use BusinessBuilderCore\Packs\LawFirm\Frontend\LawyerProfile;
 use BusinessBuilderCore\Packs\LawFirm\Frontend\ConsultationForm;
+use BusinessBuilderCore\Packs\LawFirm\Frontend\StatusPage;
 use BusinessBuilderCore\Packs\LawFirm\Admin\ConsultationAdmin;
 use BusinessBuilderCore\Packs\LawFirm\Admin\PaymentSettingsAdmin;
 use BusinessBuilderCore\Packs\LawFirm\Admin\DashboardAdmin;
+use BusinessBuilderCore\Packs\LawFirm\Admin\DashboardStats;
+use BusinessBuilderCore\Packs\LawFirm\Admin\DashboardMenu;
+use BusinessBuilderCore\Packs\LawFirm\Admin\NotificationsAdmin;
 use BusinessBuilderCore\Packs\LawFirm\Appointments\Appointment;
 use BusinessBuilderCore\Packs\LawFirm\Appointments\AppointmentAdmin;
 use BusinessBuilderCore\Packs\LawFirm\Appointments\Availability;
@@ -53,6 +57,8 @@ class LawFirmPack {
 
     protected ConsultationForm $consultation_form;
 
+    protected StatusPage $status_page;
+
     protected Consultation $consultation;
 
     protected ConsultationAdmin $consultation_admin;
@@ -60,6 +66,12 @@ class LawFirmPack {
     protected PaymentSettingsAdmin $payment_settings_admin;
 
     protected DashboardAdmin $dashboard_admin;
+
+    protected DashboardStats $dashboard_stats;
+
+    protected DashboardMenu $dashboard_menu;
+
+    protected NotificationsAdmin $notifications_admin;
 
     protected Appointment $appointment;
 
@@ -129,6 +141,8 @@ class LawFirmPack {
 
         $this->consultation_form = new ConsultationForm();
 
+        $this->status_page = new StatusPage( $payment_manager );
+
         $this->consultation = new Consultation();
 
         $this->consultation_admin = new ConsultationAdmin(
@@ -142,8 +156,21 @@ class LawFirmPack {
             $site_settings
         );
 
+        $this->dashboard_menu = new DashboardMenu();
+
+        $this->dashboard_stats = new DashboardStats(
+            $payment_manager
+        );
+
         $this->dashboard_admin = new DashboardAdmin(
-            $notification_manager
+            $this->dashboard_stats,
+            $notification_manager,
+            $this->dashboard_menu
+        );
+
+        $this->notifications_admin = new NotificationsAdmin(
+            $notification_manager,
+            $audit_log
         );
 
         $this->appointment = new Appointment();
@@ -197,13 +224,31 @@ class LawFirmPack {
 
         $this->consultation_form->register();
 
+        $this->status_page->register();
+
         $this->consultation->register();
 
         $this->consultation_admin->register();
 
         $this->payment_settings_admin->register();
 
+        $this->dashboard_menu->register();
+
+        /*
+         * Attach the auxiliary LawFirm screens (payment + notifications)
+         * to the single, independent Law Firm menu so we never define a
+         * second top-level menu or duplicate any screen (spec: Part 1).
+         *
+         * We call the attach methods directly (rather than through
+         * do_action) because this runs at `init`, before `admin_menu`:
+         * the screens must be registered before the menu is built.
+         */
+        $this->payment_settings_admin->attach_screen( $this->dashboard_menu );
+        $this->notifications_admin->attach_screen( $this->dashboard_menu );
+
         $this->dashboard_admin->register();
+
+        $this->notifications_admin->register();
 
         $this->appointment->register();
 
