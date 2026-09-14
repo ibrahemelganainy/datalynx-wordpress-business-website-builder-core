@@ -38,6 +38,11 @@ $bb_status = isset( $_GET['bb_booking'] )
 $bb_status_messages = array(
     'success'       => __( 'Your appointment request has been received. We will confirm it shortly.', 'business-builder' ),
     'taken'         => __( 'Sorry, that time slot was just taken. Please choose another slot.', 'business-builder' ),
+    'invalid_time'  => __( 'Please choose a valid time for your appointment.', 'business-builder' ),
+    'invalid_date'  => __( 'Please choose a valid date for your appointment.', 'business-builder' ),
+    'past_date'     => __( 'Please choose a date in the future.', 'business-builder' ),
+    'outside_hours' => __( 'That time is outside our booking hours. Please choose another time.', 'business-builder' ),
+    'closed'        => __( 'We are not taking bookings on the selected day. Please choose another day.', 'business-builder' ),
     'pending'       => __( 'Your appointment was held. Please complete the payment below to confirm it.', 'business-builder' ),
     'payment_error' => __( 'Your appointment was held, but the payment could not be started. Please choose a payment method and try again.', 'business-builder' ),
     'error'         => __( 'Sorry, your request could not be submitted. Please check the required fields.', 'business-builder' ),
@@ -173,28 +178,51 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ) ) {
                 </p>
 
                 <?php if ( count( $bb_gateways ) > 0 ) : ?>
-                    <fieldset class="bb-booking-payment-methods">
-                        <legend class="bb-booking-payment-legend">
+                    <fieldset class="bb-payment-methods" role="radiogroup">
+                        <legend class="bb-payment-legend">
                             <?php esc_html_e( 'Payment Method', 'business-builder' ); ?>
                         </legend>
 
+                        <div class="bb-payment-grid">
                         <?php $bb_first = true; ?>
                         <?php foreach ( $bb_gateways as $bb_gw_id => $bb_gw ) : ?>
-                            <label class="bb-booking-payment-method">
+                            <?php $bb_logo = $bb_gw->get_logo_url(); ?>
+                            <label class="bb-payment-option" data-gateway="<?php echo esc_attr( (string) $bb_gw_id ); ?>">
                                 <input
+                                    class="bb-payment-radio"
                                     type="radio"
                                     name="bb_payment_gateway"
                                     value="<?php echo esc_attr( (string) $bb_gw_id ); ?>"
                                     <?php checked( $bb_first ); ?>
                                 />
-                                <span class="bb-booking-payment-method-name"><?php echo esc_html( $bb_gw->get_name() ); ?></span>
-                                <?php if ( '' !== $bb_gw->get_description() ) : ?>
-                                    <span class="bb-booking-payment-method-desc"><?php echo esc_html( $bb_gw->get_description() ); ?></span>
-                                <?php endif; ?>
+                                <span class="bb-payment-option-body">
+                                    <?php if ( '' !== $bb_logo ) : ?>
+                                        <span class="bb-payment-logo">
+                                            <img src="<?php echo esc_url( $bb_logo ); ?>" alt="<?php echo esc_attr( $bb_gw->get_name() ); ?>" loading="lazy" width="38" height="38" />
+                                        </span>
+                                    <?php endif; ?>
+                                    <span class="bb-payment-option-text">
+                                        <span class="bb-payment-option-name"><?php echo esc_html( $bb_gw->get_name() ); ?></span>
+                                        <?php if ( '' !== $bb_gw->get_description() ) : ?>
+                                            <span class="bb-payment-option-desc"><?php echo esc_html( $bb_gw->get_description() ); ?></span>
+                                        <?php endif; ?>
+                                    </span>
+                                    <span class="bb-payment-check" aria-hidden="true"></span>
+                                </span>
                             </label>
                             <?php $bb_first = false; ?>
                         <?php endforeach; ?>
+                        </div>
+
+                        <p class="bb-payment-secure">
+                            <span class="bb-payment-secure-icon" aria-hidden="true">🔒</span>
+                            <?php esc_html_e( 'Your payment is processed securely by the provider. We never store card details.', 'business-builder' ); ?>
+                        </p>
                     </fieldset>
+                <?php elseif ( ! empty( $bb_pay['enabled'] )) : ?>
+                    <div class="bb-payment-unconfigured" role="alert">
+                        <?php esc_html_e( 'Payment is required for this appointment, but no payment method is available yet. Please contact us to complete your booking.', 'business-builder' ); ?>
+                    </div>
                 <?php endif; ?>
 
             </div>

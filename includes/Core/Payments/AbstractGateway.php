@@ -112,6 +112,53 @@ abstract class AbstractGateway implements PaymentGatewayInterface {
     }
 
     /**
+     * Default browser-return URL (status page, keyed by public reference).
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    public function get_return_url( PaymentTransaction $transaction ): string {
+
+        return add_query_arg(
+            array(
+                'bb_checkout' => 'return',
+                'bb_ref'      => $transaction->public_ref,
+            ),
+            home_url( '/' )
+        );
+    }
+
+    /**
+     * Default cancel URL (status page, keyed by public reference).
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    public function get_cancel_url( PaymentTransaction $transaction ): string {
+
+        return add_query_arg(
+            array(
+                'bb_checkout' => 'cancel',
+                'bb_ref'      => $transaction->public_ref,
+            ),
+            home_url( '/' )
+        );
+    }
+
+    /**
+     * Default webhook handling: delegate to verify_payment().
+     *
+     * @param array<string, mixed>  $payload  Raw payload.
+     * @param array<string, string> $headers  Headers (lowercase keys).
+     * @param string                $raw_body Raw body.
+     * @return PaymentResult
+     */
+    public function handle_webhook( array $payload, array $headers, string $raw_body ): PaymentResult {
+
+        return $this->verify_payment( $payload );
+    }
+
+    /**
      * Read this gateway's stored settings for the current site.
      *
      * @return array<string, mixed>

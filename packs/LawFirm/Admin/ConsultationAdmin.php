@@ -55,6 +55,10 @@ class ConsultationAdmin {
         add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'list_columns' ));
         add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_list_column' ), 10, 2 );
         add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_action' ) );
+
+        /* Broaden the Consultation Requests list search across payment/meta. */
+        add_action( 'pre_get_posts', array( $this, 'extend_admin_search' ) );
+        add_filter( 'get_search_query', array( $this, 'search_placeholder_value' ) );
     }
 
     /**
@@ -408,5 +412,127 @@ class ConsultationAdmin {
                 'consultation:' . $id . ':payment:paid:manual'
             )
         );
+    }
+
+    /**
+     * Extend the admin list search for consultation requests.
+     *
+     * Adds a broad OR match across the public reference, customer name,
+     * email, phone, practice area, payment reference, payment status and
+     * consultation status. Practice-area searches also resolve the term so
+     * a match on the taxonomy name works (Arabic included).
+     *
+     * @param \WP_Query $query Query.
+     */
+    public function extend_admin_search( $query ): void {
+
+        $is_admin = is_admin() || (bool) apply_filters( 'bb_consultation_search_force', false );
+        $is_query = ( $query instanceof \WP_Query );
+
+        if ( ! $is_admin || ! $is_query ) {
+            return;
+        }
+
+        $post_type = $query->get( 'post_type' );
+
+        if ( self::POST_TYPE !== $post_type ) {
+            return;
+        }
+
+        $raw_term = (string) $query->get( 's' );
+        $trimmed  = trim( $raw_term );
+
+        if ( '' === $trimmed ) {
+            return;
+        }
+
+        $term = sanitize_text_field( wp_unslash( $raw_term ) );
+
+        /*
+         * Remove WordPress's default content search clause. Otherwise the
+         * built-in `s` match runs as an AND with our meta_query and every
+         * row that lacks a post_title/post_content match is dropped, even
+         * when it matches a reference/email/payment field.
+         */
+        $query->set( 's', '' );
+
+        $meta_keys = array(
+            'public_reference',
+            'name',
+            'email',
+            'phone',
+            'practice_area',
+            'practice_area_id',
+            'payment_reference',
+            'payment_status',
+            'status',
+        );
+
+        $meta_query = array( 'relation' => 'OR' );
+
+        foreach ( $meta_keys as $short ) {
+            $meta_query[] = array(
+                'key'     => ConsultationMeta::key( $short ),
+                'value'   => $term,
+                'compare' => 'LIKE',
+            );
+        }
+
+        $terms = get_terms(
+            array(
+                'taxonomy'   => ConsultationMeta::practice_area_taxonomy(),
+                'hide_empty' => false,
+                'search'     => $term,
+            )
+        );
+
+        $term_ids   = array();
+        $terms_ok   = ( ! is_wp_error( $terms ) );
+
+        if ( $terms_ok ) {
+            foreach ( $terms as $found ) {
+                $term_ids[] = (int) $found->term_id;
+            }
+        }
+
+        $has_terms = ( count( $term_ids ) > 0 );
+
+        if ( $has_terms ) {
+
+            $id_query = array( 'relation' => 'OR' );
+
+            foreach ( $term_ids as $tid ) {
+                $id_query[] = array(
+                    'key'   => ConsultationMeta::key( 'practice_area_id' ),
+                    'value' => (string) $tid,
+                );
+            }
+
+            $meta_query = array(
+                'relation' => 'OR',
+                $meta_query,
+                $id_query,
+            );
+        }
+
+        $existing    = $query->get( 'meta_query' );
+        $has_existing = ( is_array( $existing ) && count( $existing ) > 0 );
+
+        if ( $has_existing ) {
+            $query->set( 'meta_query', array( 'relation' => 'AND', $existing, $meta_query ) );
+        } else {
+            $query->set( 'meta_query', $meta_query );
+        }
+    }
+
+    /**
+     * Keep the search box showing the raw term.
+     *
+     * @param string $term Term.
+     * @return string
+     */
+    public function search_placeholder_value( $term ) {
+
+        return $term;
     }
 }

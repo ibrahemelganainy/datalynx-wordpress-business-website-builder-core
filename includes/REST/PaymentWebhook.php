@@ -158,8 +158,16 @@ class PaymentWebhook {
             );
         }
 
+        /*
+         * Pass headers + the RAW body to the gateway so it can perform
+         * cryptographic signature verification (Stripe/PayPal sign the
+         * raw body, not the decoded array).
+         */
+        $headers  = $this->lowercase_headers( $request );
+        $raw_body = (string) $request->get_body();
+
         /* The gateway performs signature/HMAC verification. */
-        $result = $gateway->verify_payment( $payload );
+        $result = $gateway->handle_webhook( $payload, $headers, $raw_body );
 
         if ( ! $result->success ) {
 
@@ -268,6 +276,30 @@ class PaymentWebhook {
             array( 'ok' => true, 'status' => $result->status ),
             200
         );
+    }
+
+    /**
+     * Normalise request headers to lowercase keys for signature checks.
+     *
+     * @param \WP_REST_Request $request Request.
+     * @return array<string, string>
+     */
+    protected function lowercase_headers( \WP_REST_Request $request ): array {
+
+        $out = array();
+
+        foreach ( $request->get_headers() as $name => $values ) {
+
+            $key = strtolower( (string) $name );
+
+            if ( is_array( $values ))  {
+                $out[ $key ] = (string) reset( $values );
+            } else {
+                $out[ $key ] = (string) $values;
+            }
+        }
+
+        return $out;
     }
 
     /**

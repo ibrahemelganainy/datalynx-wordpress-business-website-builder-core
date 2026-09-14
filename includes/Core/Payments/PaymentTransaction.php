@@ -27,7 +27,10 @@ class PaymentTransaction {
         return array(
             'pending',
             'processing',
+            'awaiting_payment',
+            'on_hold',
             'paid',
+            'completed',
             'failed',
             'cancelled',
             'refunded',

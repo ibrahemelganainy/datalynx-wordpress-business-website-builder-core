@@ -25,7 +25,7 @@ final class TransactionStatus {
      *
      * @var string[]
      */
-    private const FINAL_STATUSES = array( 'paid', 'refunded', 'cancelled', 'expired' );
+    private const FINAL_STATUSES = array( 'paid', 'completed', 'refunded', 'cancelled', 'expired' );
 
     /**
      * Allowed transitions: from => [to, to, ...].
@@ -33,13 +33,16 @@ final class TransactionStatus {
      * @var array<string, string[]>
      */
     private const TRANSITIONS = array(
-        'pending'    => array( 'processing', 'paid', 'failed', 'cancelled', 'expired' ),
-        'processing' => array( 'paid', 'failed', 'cancelled', 'expired' ),
-        'failed'     => array( 'pending' ),
-        'paid'       => array( 'refunded' ),
-        'refunded'   => array(),
-        'cancelled'  => array(),
-        'expired'    => array(),
+        'pending'          => array( 'processing', 'awaiting_payment', 'on_hold', 'paid', 'completed', 'failed', 'cancelled', 'expired' ),
+        'processing'       => array( 'awaiting_payment', 'on_hold', 'paid', 'completed', 'failed', 'cancelled', 'expired' ),
+        'awaiting_payment' => array( 'on_hold', 'paid', 'completed', 'failed', 'cancelled', 'expired' ),
+        'on_hold'          => array( 'paid', 'completed', 'failed', 'cancelled', 'expired' ),
+        'failed'           => array( 'pending' ),
+        'paid'             => array( 'completed', 'refunded' ),
+        'completed'        => array( 'refunded' ),
+        'refunded'         => array(),
+        'cancelled'        => array(),
+        'expired'          => array(),
     );
 
     /**
@@ -156,13 +159,16 @@ final class TransactionStatus {
         $status = sanitize_key( $status );
 
         $labels = array(
-            'pending'    => __( 'Pending', 'business-builder' ),
-            'processing' => __( 'Processing', 'business-builder' ),
-            'paid'       => __( 'Paid', 'business-builder' ),
-            'failed'     => __( 'Failed', 'business-builder' ),
-            'cancelled'  => __( 'Cancelled', 'business-builder' ),
-            'refunded'   => __( 'Refunded', 'business-builder' ),
-            'expired'    => __( 'Expired', 'business-builder' ),
+            'pending'          => __( 'Pending', 'business-builder' ),
+            'processing'       => __( 'Processing', 'business-builder' ),
+            'awaiting_payment' => __( 'Awaiting Payment', 'business-builder' ),
+            'on_hold'          => __( 'On Hold', 'business-builder' ),
+            'paid'             => __( 'Paid', 'business-builder' ),
+            'completed'        => __( 'Completed', 'business-builder' ),
+            'failed'           => __( 'Failed', 'business-builder' ),
+            'cancelled'        => __( 'Cancelled', 'business-builder' ),
+            'refunded'         => __( 'Refunded', 'business-builder' ),
+            'expired'          => __( 'Expired', 'business-builder' ),
         );
 
         /**

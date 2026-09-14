@@ -1,0 +1,191 @@
+/**
+ * Business Builder Core - Frontend: Payment selection component
+ * -------------------------------------------------------
+ * Shared, polished payment-method picker used by the consultation and
+ * appointment (booking) forms. Enterprise-quality, accessible, responsive
+ * and RTL/LTR safe.
+ *
+ * Classes:
+ *   .bb-payment-methods / .bb-payment-legend
+ *   .bb-payment-grid / .bb-payment-option
+ *   .bb-payment-option-body / .bb-payment-logo / .bb-payment-option-text
+ *   .bb-payment-option-name / .bb-payment-option-desc / .bb-payment-check
+ *   .bb-payment-secure / .bb-payment-unconfigured
+ */
+
+.bb-template .bb-payment-methods {
+  margin: 18px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.bb-template .bb-payment-legend {
+  padding: 0;
+  margin: 0 0 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.bb-template .bb-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.bb-template .bb-payment-option {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  border-radius: 14px;
+  border: 1.5px solid rgba(15, 23, 42, 0.14);
+  background: #fff;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.bb-template .bb-payment-option:hover {
+  border-color: rgba(29, 78, 216, 0.45);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+.bb-template .bb-payment-radio {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.bb-template .bb-payment-option-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 44px 14px 16px;
+  border-radius: 14px;
+}
+
+/* Selected state */
+.bb-template .bb-payment-option:has(.bb-payment-radio:checked) {
+  border-color: #1d4ed8;
+  background: rgba(29, 78, 216, 0.04);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+.bb-template .bb-payment-check {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  border: 2px solid rgba(15, 23, 42, 0.25);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.bb-template
+  .bb-payment-option:has(.bb-payment-radio:checked)
+  .bb-payment-check {
+  border-color: #1d4ed8;
+  background: #1d4ed8;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+/* Keyboard focus ring (accessible) */
+.bb-template .bb-payment-radio:focus-visible + .bb-payment-option-body,
+.bb-template .bb-payment-option:focus-within {
+  outline: none;
+}
+
+.bb-template .bb-payment-option:focus-within {
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
+}
+
+.bb-template .bb-payment-logo {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.bb-template .bb-payment-logo img {
+  max-width: 32px;
+  max-height: 32px;
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+.bb-template .bb-payment-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bb-template .bb-payment-option-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.bb-template .bb-payment-option-desc {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #64748b;
+}
+
+.bb-template .bb-payment-secure {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.bb-template .bb-payment-secure-icon {
+  font-size: 0.9rem;
+}
+
+.bb-template .bb-payment-unconfigured {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fff7ed;
+  border: 1px solid #f0a82f;
+  color: #8a5a00;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* RTL/LTR safety: keep the check indicator on the text-start side. */
+.bb-rtl .bb-template .bb-payment-option-body,
+[dir="rtl"] .bb-template .bb-payment-option-body {
+  padding: 14px 16px 14px 44px;
+}
+
+.bb-rtl .bb-template .bb-payment-check,
+[dir="rtl"] .bb-template .bb-payment-check {
+  right: auto;
+  left: 16px;
+}
+
+/* Responsive: single column on small screens. */
+@media (max-width: 560px) {
+  .bb-template .bb-payment-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

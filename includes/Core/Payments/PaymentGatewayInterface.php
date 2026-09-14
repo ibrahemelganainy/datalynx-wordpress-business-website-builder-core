@@ -132,4 +132,36 @@ interface PaymentGatewayInterface {
      * @return PaymentResult Verification result.
      */
     public function verify_payment( array $payload ): PaymentResult;
+
+    /**
+     * Absolute URL the provider sends the customer to after a successful
+     * payment (the browser return, NOT the webhook). Empty for manual
+     * gateways. Only the public transaction reference is included.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    public function get_return_url( PaymentTransaction $transaction ): string;
+
+    /**
+     * Absolute URL the provider sends the customer to when they cancel.
+     * Empty for manual gateways.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    public function get_cancel_url( PaymentTransaction $transaction ): string;
+
+    /**
+     * Handle a provider webhook payload, returning a verification result.
+     *
+     * Default implementation delegates to verify_payment(); gateways with
+     * a distinct webhook signature scheme override this.
+     *
+     * @param array<string, mixed> $payload   Raw payload.
+     * @param array<string, string> $headers  Request headers (lowercase keys).
+     * @param string               $raw_body  Raw request body (for signatures).
+     * @return PaymentResult Verification result.
+     */
+    public function handle_webhook( array $payload, array $headers, string $raw_body ): PaymentResult;
 }

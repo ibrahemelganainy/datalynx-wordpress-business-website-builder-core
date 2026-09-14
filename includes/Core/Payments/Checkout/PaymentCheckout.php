@@ -179,6 +179,40 @@ class PaymentCheckout {
                     'message'     => $message,
                 );
 
+            case 'reference':
+
+                /*
+                 * Reference-number gateways (e.g. Fawry): the customer pays
+                 * offline/online with a provider reference. The transaction
+                 * moves to "awaiting_payment" and is only settled by a
+                 * verified callback/webhook — never by the browser.
+                 */
+                $reference = isset( $result['reference'] ) ? (string) $result['reference'] : '';
+
+                if ( '' !== $reference ) {
+                    $transaction = $this->payments->record_status_change(
+                        $transaction->id,
+                        'awaiting_payment',
+                        $reference
+                    ) ?? $transaction;
+                }
+
+                $this->audit->record(
+                    'payment.checkout_reference',
+                    'payment',
+                    $transaction->id,
+                    array( 'gateway' => $gateway->get_id() )
+                );
+
+                return array(
+                    'type'        => 'reference',
+                    'reference'   => $reference,
+                    'transaction' => $transaction,
+                    'message'     => '' !== $message
+                        ? $message
+                        : __( 'Pay using the reference number shown and keep it safe.', 'business-builder' ),
+                );
+
             case 'manual':
 
                 $this->audit->record(

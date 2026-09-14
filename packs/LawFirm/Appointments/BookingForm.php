@@ -131,7 +131,28 @@ class BookingForm {
         $result = $this->availability->create( $data );
 
         if ( is_wp_error( $result ) ) {
-            $this->redirect( $redirect, 'taken' );
+
+            /*
+             * Map each validation failure to an ACCURATE status flag. The
+             * old code collapsed every error into "taken", so a past date,
+             * an off-hours time or a weekend wrongly told the customer the
+             * slot was taken. Only a genuine clash is reported as "taken".
+             */
+            $code = $result->get_error_code();
+
+            $map = array(
+                'bb_slot_taken'      => 'taken',
+                'bb_invalid_date'    => 'invalid_date',
+                'bb_invalid_time'    => 'invalid_time',
+                'bb_past_date'       => 'past_date',
+                'bb_outside_hours'   => 'outside_hours',
+                'bb_non_working_day' => 'closed',
+                'bb_blocked_date'    => 'closed',
+            );
+
+            $flag = isset( $map[ $code ] ) ? $map[ $code ] : 'error';
+
+            $this->redirect( $redirect, $flag );
         }
 
         $appointment_id = (int) $result;
@@ -182,7 +203,7 @@ class BookingForm {
                     exit;
                 }
 
-                if ( 'manual' === $type ) {
+                if ( 'manual' === $type || 'reference' === $type ) {
                     $this->redirect( $redirect, 'pending' );
                 }
 

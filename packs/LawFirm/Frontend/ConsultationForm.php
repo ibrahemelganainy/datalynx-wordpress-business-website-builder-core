@@ -142,7 +142,7 @@ class ConsultationForm {
                     exit;
                 }
 
-                if ( 'manual' === $type ) {
+                if ( 'manual' === $type || 'reference' === $type ) {
                     $this->notify( $data );
                     $this->redirect_with( $redirect, 'pending' );
                 }

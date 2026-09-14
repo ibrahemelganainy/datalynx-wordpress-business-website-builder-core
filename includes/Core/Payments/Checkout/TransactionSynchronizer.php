@@ -138,13 +138,16 @@ class TransactionSynchronizer {
         $status = sanitize_key( $status );
 
         $map = array(
-            'paid'       => 'paid',
-            'pending'    => 'pending',
-            'processing' => 'processing',
-            'failed'     => 'failed',
-            'cancelled'  => 'cancelled',
-            'refunded'   => 'refunded',
-            'expired'    => 'expired',
+            'paid'             => 'paid',
+            'completed'        => 'paid',
+            'pending'          => 'pending',
+            'processing'       => 'processing',
+            'awaiting_payment' => 'awaiting_payment',
+            'on_hold'          => 'on_hold',
+            'failed'           => 'failed',
+            'cancelled'        => 'cancelled',
+            'refunded'         => 'refunded',
+            'expired'          => 'expired',
         );
 
         return $map[ $status ] ?? $status;

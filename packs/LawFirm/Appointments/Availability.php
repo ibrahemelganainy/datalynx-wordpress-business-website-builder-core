@@ -260,6 +260,27 @@ class Availability {
             return new \WP_Error( 'bb_invalid_time', __( 'Please choose a valid time slot.', 'business-builder' ) );
         }
 
+        /*
+         * Accurate validation reasons. These guards run BEFORE the slot
+         * check so a customer never sees a misleading "slot taken" when the
+         * real problem is a past date, off-hours time or a non-working day.
+         */
+        if ( ! $this->is_future( $date )) {
+            return new \WP_Error( 'bb_past_date', __( 'Please choose a date in the future.', 'business-builder' ));
+        }
+
+        if ( ! $this->in_working_hours( $start )) {
+            return new \WP_Error( 'bb_outside_hours', __( 'That time is outside the available booking hours.', 'business-builder' ));
+        }
+
+        if ( ! $this->is_working_day( $date )) {
+            return new \WP_Error( 'bb_non_working_day', __( 'The selected day is not available for bookings.', 'business-builder' ));
+        }
+
+        if ( in_array( $date, $this->blocked_dates(), true )) {
+            return new \WP_Error( 'bb_blocked_date', __( 'The selected day is not available for bookings.', 'business-builder' ));
+        }
+
         /* Acquire a site-scoped lock so concurrent requests cannot race. */
         $lock_key = 'bb_appt_lock_' . md5( $date . '|' . $start . '|' . $lawyer_id );
         $locked = $this->acquire_lock( $lock_key );
@@ -372,6 +393,16 @@ class Availability {
             'posts_per_page' => -1,
             'no_found_rows'  => true,
             'fields'         => 'ids',
+            /*
+             * Availability is time-sensitive: never serve a cached result.
+             * Without this, a query cached before an appointment is created
+             * (or cancelled) in the same request would hide the change and
+             * a genuinely free slot could be reported as taken (or vice
+             * versa). This is the fix for the false "slot taken" report.
+             */
+            'cache_results'          => false,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
             'meta_query'     => array(
                 array(
                     'key'     => AppointmentMeta::key( 'date' ),
@@ -464,6 +495,47 @@ class Availability {
     }
 
     /**
+     * Whether a Y-m-d date is today or later, in the site timezone.
+     *
+     * @param string $date Y-m-d.
+     * @return bool
+     */
+    public function is_future( string $date ): bool {
+
+        if ( ! $this->is_valid_date( $date ) ) {
+            return false;
+        }
+
+        /* current_time( 'Y-m-d' ) is site-local, matching the stored format. */
+        $today = (string) current_time( 'Y-m-d' );
+
+        return $date >= $today;
+    }
+
+    /**
+     * Whether a start time falls within the configured working hours.
+     *
+     * @param string $time H:i (or H:i:s).
+     * @return bool
+     */
+    public function in_working_hours( string $time ): bool {
+
+        $time = $this->normalize_time( $time );
+
+        if ( '' === $time ) {
+            return false;
+        }
+
+        list( $work_start, $work_end ) = $this->working_hours();
+
+        $start = $this->to_minutes( $time );
+        $end   = $start + $this->slot_minutes();
+
+        return $start >= $this->to_minutes( $work_start )
+            && $end <= $this->to_minutes( $work_end );
+    }
+
+    /**
      * Whether a date is a working day.
      *
      * @param string $date Y-m-d.
@@ -471,13 +543,19 @@ class Availability {
      */
     public function is_working_day( string $date ): bool {
 
-        $ts = strtotime( $date . ' 12:00:00' );
+        /*
+         * Derive the weekday purely from the Y-m-d string. Using
+         * strtotime()+gmdate() shifts the day when the PHP default
+         * timezone differs from UTC, which could mark a working day as
+         * a weekend (and vice versa). DateTimeImmutable avoids that.
+         */
+        $dt = \DateTimeImmutable::createFromFormat( '!Y-m-d', $date );
 
-        if ( false === $ts ) {
+        if ( false === $dt ) {
             return false;
         }
 
-        return in_array( (int) gmdate( 'w', $ts ), $this->working_days(), true );
+        return in_array( (int) $dt->format( 'w' ), $this->working_days(), true );
     }
 
     /**
@@ -507,7 +585,12 @@ class Availability {
 
         $time = trim( $time );
 
-        if ( ! preg_match( '/^(\d{1,2}):(\d{2})$/', $time, $m ) ) {
+        /*
+         * Browsers may submit <input type="time"> as HH:MM OR HH:MM:SS
+         * (seconds are dropped when the field has no step attribute).
+         * Accept both so a valid slot is never rejected as invalid.
+         */
+        if ( ! preg_match( '/^(\d{1,2}):(\d{2})(?::\d{2})?$/', $time, $m ) ) {
             return '';
         }
 

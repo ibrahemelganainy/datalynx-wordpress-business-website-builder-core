@@ -150,28 +150,58 @@ $bb_status = isset( $_GET['bb_consult'] )
                 </p>
 
                 <?php if ( ! empty( $bb_gateways )) : ?>
-                    <fieldset class="bb-consultation-payment-methods">
-                        <legend class="bb-consultation-payment-legend">
+                    <fieldset class="bb-payment-methods" role="radiogroup">
+                        <legend class="bb-payment-legend">
                             <?php esc_html_e( 'Payment Method', 'business-builder' ); ?>
                         </legend>
 
-                        <?php $bb_first = true; ?>
-                        <?php foreach ( $bb_gateways as $bb_gw_id => $bb_gw ) : ?>
-                            <label class="bb-consultation-payment-method">
-                                <input
-                                    type="radio"
-                                    name="bb_payment_gateway"
-                                    value="<?php echo esc_attr( (string) $bb_gw_id ); ?>"
-                                    <?php checked( $bb_first ); ?>
-                                />
-                                <span class="bb-consultation-payment-method-name"><?php echo esc_html( $bb_gw->get_name() ); ?></span>
-                                <?php if ( '' !== $bb_gw->get_description() ) : ?>
-                                    <span class="bb-consultation-payment-method-desc"><?php echo esc_html( $bb_gw->get_description() ); ?></span>
-                                <?php endif; ?>
-                            </label>
-                            <?php $bb_first = false; ?>
-                        <?php endforeach; ?>
+                        <div class="bb-payment-grid">
+                            <?php $bb_first = true; ?>
+                            <?php foreach ( $bb_gateways as $bb_gw_id => $bb_gw ) : ?>
+                                <?php $bb_logo = $bb_gw->get_logo_url(); ?>
+                                <label class="bb-payment-option" data-gateway="<?php echo esc_attr( (string) $bb_gw_id ); ?>">
+                                    <input
+                                        class="bb-payment-radio"
+                                        type="radio"
+                                        name="bb_payment_gateway"
+                                        value="<?php echo esc_attr( (string) $bb_gw_id ); ?>"
+                                        <?php checked( $bb_first ); ?>
+                                    />
+                                    <span class="bb-payment-option-body">
+                                        <?php if ( '' !== $bb_logo ) : ?>
+                                            <span class="bb-payment-logo">
+                                                <img src="<?php echo esc_url( $bb_logo ); ?>" alt="<?php echo esc_attr( $bb_gw->get_name() ); ?>" loading="lazy" width="38" height="38" />
+                                            </span>
+                                        <?php endif; ?>
+                                        <span class="bb-payment-option-text">
+                                            <span class="bb-payment-option-name"><?php echo esc_html( $bb_gw->get_name() ); ?></span>
+                                            <?php if ( '' !== $bb_gw->get_description() ) : ?>
+                                                <span class="bb-payment-option-desc"><?php echo esc_html( $bb_gw->get_description() ); ?></span>
+                                            <?php endif; ?>
+                                        </span>
+                                        <span class="bb-payment-check" aria-hidden="true"></span>
+                                    </span>
+                                </label>
+                                <?php $bb_first = false; ?>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <p class="bb-payment-secure">
+                            <span class="bb-payment-secure-icon" aria-hidden="true">🔒</span>
+                            <?php esc_html_e( 'Your payment is processed securely by the provider. We never store card details.', 'business-builder' ); ?>
+                        </p>
                     </fieldset>
+                <?php elseif ( ! empty( $bb_pay['enabled'] )) : ?>
+                    <?php
+                    /*
+                     * Payment is required by this section but no gateway is
+                     * enabled+configured. Show an explicit configuration
+                     * notice instead of failing silently or offering nothing.
+                     */
+                    ?>
+                    <div class="bb-payment-unconfigured" role="alert">
+                        <?php esc_html_e( 'Payment is required for this consultation, but no payment method is available yet. Please contact us to complete your request.', 'business-builder' ); ?>
+                    </div>
                 <?php endif; ?>
 
             </div>

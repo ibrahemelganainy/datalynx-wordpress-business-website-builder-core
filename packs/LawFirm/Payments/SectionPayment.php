@@ -76,7 +76,7 @@ class SectionPayment {
             : array();
 
         $allowed   = $this->payments->resolve_gateways( $selected );
-        $available = $this->ready_gateways( $allowed );
+        $available = $this->ready_gateways( $allowed, $currency );
 
         /*
          * Payment cannot actually run without at least one ready gateway;
@@ -162,9 +162,10 @@ class SectionPayment {
      * Filter a gateway set down to the ones that can actually be used.
      *
      * @param array<string, PaymentGatewayInterface> $gateways Candidate gateways.
+     * @param string                                 $currency Currency code.
      * @return array<string, PaymentGatewayInterface>
      */
-    protected function ready_gateways( array $gateways ): array {
+    protected function ready_gateways( array $gateways, string $currency = '' ): array {
 
         $out = array();
 
@@ -184,10 +185,33 @@ class SectionPayment {
                 continue;
             }
 
+            /* A gateway that does not support the currency cannot be offered. */
+            if ( '' !== $currency && ! self::gateway_supports_currency( $gateway, $currency )) {
+                continue;
+            }
+
             $out[ $id ] = $gateway;
         }
 
         return $out;
+    }
+
+    /**
+     * Whether a gateway supports a currency (empty support list = any).
+     *
+     * @param PaymentGatewayInterface $gateway  Gateway.
+     * @param string                  $currency Currency code.
+     * @return bool
+     */
+    public static function gateway_supports_currency( PaymentGatewayInterface $gateway, string $currency ): bool {
+
+        $supported = $gateway->get_supported_currencies();
+
+        if ( empty( $supported ))  {
+            return true;
+        }
+
+        return in_array( strtoupper( $currency ), array_map( 'strtoupper', $supported ), true );
     }
 
     /**
