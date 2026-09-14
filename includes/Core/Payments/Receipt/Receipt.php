@@ -75,6 +75,24 @@ final class Receipt {
     public readonly string $description;
 
     /**
+     * Public reference of the paid-for object (consultation / appointment).
+     *
+     * Empty when the transaction is not linked to an object. This is a
+     * public, non-sequential reference — never an internal id.
+     */
+    public readonly string $object_reference;
+
+    /**
+     * Human label of the object type (e.g. "Consultation").
+     */
+    public readonly string $object_label;
+
+    /**
+     * Provider/gateway transaction id (never a credential).
+     */
+    public readonly string $gateway_reference;
+
+    /**
      * Whether the receipt represents a settled payment.
      */
     public readonly bool $is_paid;
@@ -96,9 +114,12 @@ final class Receipt {
      * @param string $status_label   Status label.
      * @param string $created_at     Created timestamp.
      * @param string $updated_at     Updated timestamp.
-     * @param string $description    Description.
-     * @param bool   $is_paid        Settled.
-     * @param string $site_name      Site name.
+     * @param string $description        Description.
+     * @param string $object_reference   Public object reference (CNS-/APT-).
+     * @param string $object_label       Object type label.
+     * @param string $gateway_reference  Provider transaction id.
+     * @param bool   $is_paid            Settled.
+     * @param string $site_name          Site name.
      */
     private function __construct(
         string $reference,
@@ -111,35 +132,45 @@ final class Receipt {
         string $created_at,
         string $updated_at,
         string $description,
+        string $object_reference,
+        string $object_label,
+        string $gateway_reference,
         bool $is_paid,
         string $site_name
     ) {
-        $this->reference      = $reference;
-        $this->gateway_name   = $gateway_name;
-        $this->amount         = $amount;
-        $this->currency       = $currency;
-        $this->amount_display = $amount_display;
-        $this->status         = $status;
-        $this->status_label   = $status_label;
-        $this->created_at     = $created_at;
-        $this->updated_at     = $updated_at;
-        $this->description    = $description;
-        $this->is_paid        = $is_paid;
-        $this->site_name      = $site_name;
+        $this->reference         = $reference;
+        $this->gateway_name      = $gateway_name;
+        $this->amount            = $amount;
+        $this->currency          = $currency;
+        $this->amount_display    = $amount_display;
+        $this->status            = $status;
+        $this->status_label      = $status_label;
+        $this->created_at        = $created_at;
+        $this->updated_at        = $updated_at;
+        $this->description       = $description;
+        $this->object_reference  = $object_reference;
+        $this->object_label      = $object_label;
+        $this->gateway_reference = $gateway_reference;
+        $this->is_paid           = $is_paid;
+        $this->site_name         = $site_name;
     }
 
     /**
      * Build a receipt from a transaction.
      *
-     * @param PaymentTransaction $transaction Transaction.
-     * @param string             $gateway_name Human gateway name.
-     * @param string             $description  Optional description.
+     * @param PaymentTransaction $transaction       Transaction.
+     * @param string             $gateway_name      Human gateway name.
+     * @param string             $description       Optional description.
+     * @param string             $object_reference  Optional object reference.
+     * @param string             $object_label      Optional object label.
      * @return self
      */
     public static function from_transaction(
         PaymentTransaction $transaction,
         string $gateway_name,
-        string $description = ''
+        string $description = '',
+        string $object_reference = '',
+        string $object_label = ''
     ): self {
 
         $status = sanitize_key( $transaction->status );
@@ -150,6 +181,19 @@ final class Receipt {
 
         if ( '' === $description ) {
             $description = self::default_description( $transaction );
+        }
+
+        /*
+         * Resolve the paid-for object's public reference when the caller
+         * did not pass one. Only the public reference is ever surfaced; the
+         * internal post id is not part of the receipt.
+         */
+        if ( '' === $object_reference ) {
+            $object_reference = self::object_reference( $transaction );
+        }
+
+        if ( '' === $object_label && '' !== $transaction->object_type ) {
+            $object_label = self::object_label( $transaction->object_type );
         }
 
         return new self(
@@ -163,9 +207,54 @@ final class Receipt {
             $transaction->created_at,
             $transaction->updated_at,
             $description,
+            sanitize_text_field( $object_reference ),
+            sanitize_text_field( $object_label ),
+            sanitize_text_field( $transaction->reference ),
             'paid' === $status,
             wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES )
         );
+    }
+
+    /**
+     * Public reference of the paid-for object (consultation / appointment).
+     *
+     * Reads ONLY the public reference meta; never the post id.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    private static function object_reference( PaymentTransaction $transaction ): string {
+
+        $object_id = $transaction->object_id > 0
+            ? $transaction->object_id
+            : $transaction->consultation_id;
+
+        if ( $object_id <= 0 ) {
+            return '';
+        }
+
+        $type = '' !== $transaction->object_type ? $transaction->object_type : 'consultation';
+
+        $meta_key = ( 'appointment' === $type )
+            ? '_bb_appointment_public_reference'
+            : '_bb_consultation_public_reference';
+
+        return (string) get_post_meta( $object_id, $meta_key, true );
+    }
+
+    /**
+     * Human label for an object type.
+     *
+     * @param string $type Object type.
+     * @return string
+     */
+    private static function object_label( string $type ): string {
+
+        if ( 'appointment' === sanitize_key( $type )) {
+            return __( 'Appointment', 'business-builder' );
+        }
+
+        return __( 'Consultation', 'business-builder' );
     }
 
     /**
@@ -202,9 +291,12 @@ final class Receipt {
             'status_label'   => $this->status_label,
             'created_at'     => $this->created_at,
             'updated_at'     => $this->updated_at,
-            'description'    => $this->description,
-            'is_paid'        => $this->is_paid,
-            'site_name'      => $this->site_name,
+            'description'       => $this->description,
+            'object_reference'  => $this->object_reference,
+            'object_label'      => $this->object_label,
+            'gateway_reference' => $this->gateway_reference,
+            'is_paid'           => $this->is_paid,
+            'site_name'         => $this->site_name,
         );
     }
 }

@@ -9,6 +9,7 @@
  */
 
 use BusinessBuilderCore\Packs\LawFirm\Frontend\ConsultationForm;
+use BusinessBuilderCore\Core\Payments\Currencies;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -16,8 +17,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $bb_areas = ConsultationForm::practice_areas();
 
+/*
+ * Section payment configuration resolved by the render callback. When
+ * payment is payable, the customer must choose a gateway and pay before
+ * the request is confirmed; the fee/currency/gateways are always the
+ * server-resolved values, never client input.
+ */
+$bb_pay        = isset( $bb_payment ) && is_array( $bb_payment ) ? $bb_payment : array();
+$bb_payable    = ! empty( $bb_pay['payable'] );
+$bb_fee        = isset( $bb_pay['fee'] ) ? (string) $bb_pay['fee'] : '';
+$bb_currency   = isset( $bb_pay['currency'] ) ? (string) $bb_pay['currency'] : '';
+$bb_gateways   = isset( $bb_pay['available'] ) && is_array( $bb_pay['available'] ) ? $bb_pay['available'] : array();
+$bb_section_id = isset( $bb_section_id ) ? (string) $bb_section_id : '';
+$bb_page_id    = isset( $bb_page_id ) ? (int) $bb_page_id : 0;
+
 $bb_status = isset( $_GET['bb_consult'] )
     ? sanitize_key( wp_unslash( $_GET['bb_consult'] ) )
+    : '';
 
 
 ?>
@@ -27,6 +43,14 @@ $bb_status = isset( $_GET['bb_consult'] )
     <?php if ( 'success' === $bb_status ) : ?>
         <div class="bb-consultation-notice bb-consultation-success">
             <?php esc_html_e( 'Thank you. Your consultation request has been received and our team will contact you shortly.', 'business-builder' ); ?>
+        </div>
+    <?php elseif ( 'pending' === $bb_status ) : ?>
+        <div class="bb-consultation-notice bb-consultation-success">
+            <?php esc_html_e( 'Your request was received. Please complete the payment below to confirm your consultation.', 'business-builder' ); ?>
+        </div>
+    <?php elseif ( 'payment_error' === $bb_status ) : ?>
+        <div class="bb-consultation-notice bb-consultation-error">
+            <?php esc_html_e( 'Your request was received, but the payment could not be started. Please choose a payment method and try again.', 'business-builder' ); ?>
         </div>
     <?php elseif ( 'error' === $bb_status ) : ?>
         <div class="bb-consultation-notice bb-consultation-error">
@@ -45,6 +69,9 @@ $bb_status = isset( $_GET['bb_consult'] )
             name="action"
             value="<?php echo esc_attr( ConsultationForm::action_name() ); ?>"
         />
+
+        <input type="hidden" name="bb_page_id" value="<?php echo esc_attr( (string) $bb_page_id ); ?>" />
+        <input type="hidden" name="bb_section_id" value="<?php echo esc_attr( $bb_section_id ); ?>" />
 
         <?php
         wp_nonce_field(
@@ -98,9 +125,68 @@ $bb_status = isset( $_GET['bb_consult'] )
             <textarea name="bb_message" id="bb_message" rows="5" required></textarea>
         </p>
 
+        <?php if ( $bb_payable ) : ?>
+
+            <?php
+            /*
+             * Payment block. Shown only when this section requires payment
+             * AND at least one enabled + configured gateway is available for
+             * it. The fee/currency are the server-resolved values; the
+             * gateway set is limited to the ones allowed for this section.
+             */
+            ?>
+            <div class="bb-consultation-payment" id="bb-consultation-payment">
+
+                <h3 class="bb-consultation-payment-title">
+                    <?php esc_html_e( 'Consultation Fee', 'business-builder' ); ?>
+                </h3>
+
+                <p class="bb-consultation-payment-amount">
+                    <?php echo esc_html( Currencies::format( (float) $bb_fee, $bb_currency, true ) ); ?>
+                </p>
+
+                <p class="bb-consultation-payment-note">
+                    <?php esc_html_e( 'Payment is required to confirm this consultation.', 'business-builder' ); ?>
+                </p>
+
+                <?php if ( ! empty( $bb_gateways )) : ?>
+                    <fieldset class="bb-consultation-payment-methods">
+                        <legend class="bb-consultation-payment-legend">
+                            <?php esc_html_e( 'Payment Method', 'business-builder' ); ?>
+                        </legend>
+
+                        <?php $bb_first = true; ?>
+                        <?php foreach ( $bb_gateways as $bb_gw_id => $bb_gw ) : ?>
+                            <label class="bb-consultation-payment-method">
+                                <input
+                                    type="radio"
+                                    name="bb_payment_gateway"
+                                    value="<?php echo esc_attr( (string) $bb_gw_id ); ?>"
+                                    <?php checked( $bb_first ); ?>
+                                />
+                                <span class="bb-consultation-payment-method-name"><?php echo esc_html( $bb_gw->get_name() ); ?></span>
+                                <?php if ( '' !== $bb_gw->get_description() ) : ?>
+                                    <span class="bb-consultation-payment-method-desc"><?php echo esc_html( $bb_gw->get_description() ); ?></span>
+                                <?php endif; ?>
+                            </label>
+                            <?php $bb_first = false; ?>
+                        <?php endforeach; ?>
+                    </fieldset>
+                <?php endif; ?>
+
+            </div>
+
+        <?php endif; ?>
+
         <p class="bb-consultation-submit">
             <button type="submit" class="bb-primary-button">
-                <?php esc_html_e( 'Request a Consultation', 'business-builder' ); ?>
+                <?php
+                if ( $bb_payable ) {
+                    esc_html_e( 'Continue to Payment', 'business-builder' );
+                } else {
+                    esc_html_e( 'Request a Consultation', 'business-builder' );
+                }
+                ?>
             </button>
         </p>
 

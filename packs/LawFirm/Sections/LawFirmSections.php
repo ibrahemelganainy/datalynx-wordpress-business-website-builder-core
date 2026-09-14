@@ -456,6 +456,13 @@ class LawFirmSections {
         $bb_payment    = \BusinessBuilderCore\Packs\LawFirm\Payments\SectionPaymentFactory::for_appointment( $settings );
         $bb_section_id = isset( $section['id'] ) ? sanitize_text_field( (string) $section['id'] ) : '';
 
+        /* Page id: the submit handler re-reads this section's saved meta. */
+        $bb_page_id = (int) get_the_ID();
+
+        if ( $bb_page_id <= 0 ) {
+            $bb_page_id = (int) get_queried_object_id();
+        }
+
         $template = BB_CORE_PATH . 'templates/booking-form.php';
 
         if ( file_exists( $template ) ) {
@@ -486,6 +493,17 @@ class LawFirmSections {
          */
         $bb_payment    = \BusinessBuilderCore\Packs\LawFirm\Payments\SectionPaymentFactory::for_consultation( $settings );
         $bb_section_id = isset( $section['id'] ) ? sanitize_text_field( (string) $section['id'] ) : '';
+
+        /*
+         * The page id lets the submit handler re-read THIS section's saved
+         * payment configuration server-side. It is not sensitive: the form
+         * only ever posts ids, never fees/currencies/gateways.
+         */
+        $bb_page_id = (int) get_the_ID();
+
+        if ( $bb_page_id <= 0 ) {
+            $bb_page_id = (int) get_queried_object_id();
+        }
 
         $template = BB_CORE_PATH . 'templates/consultation-form.php';
 

@@ -331,6 +331,12 @@ class Availability {
             'location'        => isset( $data['location'] ) ? sanitize_text_field( (string) $data['location'] ) : '',
             'meeting_url'     => isset( $data['meeting_url'] ) ? esc_url_raw( (string) $data['meeting_url'] ) : '',
             'payment_status'  => isset( $data['payment_status'] ) ? sanitize_key( (string) $data['payment_status'] ) : 'not_required',
+            /*
+             * Every appointment gets a secure, non-sequential public
+             * reference (never the post id) so the customer can look it up
+             * on the private status page without enumerating records.
+             */
+            'public_reference' => \BusinessBuilderCore\Core\Payments\Transaction\Reference::appointment(),
             'created'         => current_time( 'mysql' ),
             'updated'         => current_time( 'mysql' ),
         );

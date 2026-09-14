@@ -3,6 +3,7 @@
 namespace BusinessBuilderCore\Packs\LawFirm\Frontend;
 
 use BusinessBuilderCore\Packs\LawFirm\PostTypes\ConsultationMeta;
+use BusinessBuilderCore\Packs\LawFirm\Appointments\AppointmentMeta;
 use BusinessBuilderCore\Core\Payments\PaymentManager;
 use BusinessBuilderCore\Core\Payments\PaymentTransaction;
 use BusinessBuilderCore\Core\Payments\Transaction\Reference;
@@ -165,7 +166,122 @@ class StatusPage {
             return $this->summary_from_consultation( $reference );
         }
 
+        /* Appointment reference (APT-): resolve the appointment. */
+        $apt_prefix = Reference::APPOINTMENT_PREFIX . '-';
+        $is_apt     = 0 === strpos( $reference, $apt_prefix );
+
+        if ( $is_apt ) {
+            return $this->summary_from_appointment( $reference );
+        }
+
         return null;
+    }
+
+    /**
+     * Summary built from an appointment reference.
+     *
+     * Mirrors the consultation summary: only non-sensitive public fields
+     * are shown, and the customer can only look up their own reference.
+     *
+     * @param string $reference Public appointment reference.
+     * @return string|null
+     */
+    protected function summary_from_appointment( string $reference ): ?string {
+
+        $post_id = $this->find_appointment_by_reference( $reference );
+
+        if ( $post_id <= 0 ) {
+            return null;
+        }
+
+        $status = (string) get_post_meta( $post_id, AppointmentMeta::key( 'status' ), true );
+
+        if ( '' === $status ) {
+            $status = AppointmentMeta::default_status();
+        }
+
+        $payment_state = (string) get_post_meta( $post_id, AppointmentMeta::key( 'payment_status' ), true );
+
+        if ( '' === $payment_state ) {
+            $payment_state = 'not_required';
+        }
+
+        $rows = array(
+            __( 'Reference', 'business-builder' )    => $reference,
+            __( 'Appointment Status', 'business-builder' ) => AppointmentMeta::status_label( $status ),
+            __( 'Payment Status', 'business-builder' ) => ConsultationMeta::payment_label( $payment_state ),
+        );
+
+        $date  = (string) get_post_meta( $post_id, AppointmentMeta::key( 'date' ), true );
+        $start = (string) get_post_meta( $post_id, AppointmentMeta::key( 'start' ), true );
+
+        if ( '' !== $date ) {
+            $when = $date . ( '' !== $start ? ' ' . $start : '' );
+            $rows[ __( 'Appointment Date', 'business-builder' ) ] = $when;
+        }
+
+        /*
+         * When paid, surface a receipt link. The receipt endpoint is
+         * keyed by the PAYMENT (transaction) reference, so we resolve the
+         * settled transaction for this appointment.
+         */
+        $receipt_ref = ( 'paid' === $payment_state )
+            ? $this->paid_transaction_ref( 'appointment', $post_id )
+            : '';
+
+        return $this->summary( $rows, $reference, '' !== $receipt_ref, $receipt_ref );
+    }
+
+    /**
+     * Find an appointment id by its public reference meta.
+     *
+     * @param string $reference Public reference.
+     * @return int
+     */
+    protected function find_appointment_by_reference( string $reference ): int {
+
+        $query = new \WP_Query(
+            array(
+                'post_type'              => 'bb_appointment',
+                'post_status'            => 'publish',
+                'posts_per_page'         => 1,
+                'fields'                 => 'ids',
+                'no_found_rows'          => true,
+                'ignore_sticky_posts'    => true,
+                'update_post_term_cache' => false,
+                'meta_query'             => array(
+                    array(
+                        'key'   => '_bb_appointment_public_reference',
+                        'value' => $reference,
+                    ),
+                ),
+            )
+        );
+
+        return isset( $query->posts[0] ) ? (int) $query->posts[0] : 0;
+    }
+
+    /**
+     * The public reference of a settled transaction for a related object.
+     *
+     * @param string $object_type Object type.
+     * @param int    $object_id   Object id.
+     * @return string
+     */
+    protected function paid_transaction_ref( string $object_type, int $object_id ): string {
+
+        $transactions = $this->payments->transactions_for_object( $object_type, $object_id );
+
+        foreach ( $transactions as $row ) {
+
+            $status = isset( $row['status'] ) ? (string) $row['status'] : '';
+
+            if ( 'paid' === $status && ! empty( $row['public_ref'] )) {
+                return (string) $row['public_ref'];
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -193,7 +309,7 @@ class StatusPage {
             __( 'Date', 'business-builder' )        => $transaction->created_at,
         );
 
-        return $this->summary( $rows, $transaction->public_ref, 'paid' === $transaction->status );
+        return $this->summary( $rows, $transaction->public_ref, 'paid' === $transaction->status, $transaction->public_ref );
     }
 
     /**
@@ -233,7 +349,11 @@ class StatusPage {
             $rows[ __( 'Practice Area', 'business-builder' ) ] = $practice_area;
         }
 
-        return $this->summary( $rows, $reference, 'paid' === $payment_state );
+        $receipt_ref = ( 'paid' === $payment_state )
+            ? $this->paid_transaction_ref( 'consultation', $post_id )
+            : '';
+
+        return $this->summary( $rows, $reference, 'paid' === $payment_state, $receipt_ref );
     }
 
     /**
@@ -270,25 +390,27 @@ class StatusPage {
     /**
      * Build the escaped summary markup.
      *
-     * @param array<string, string> $rows       Label => value rows.
-     * @param string                $reference  Public reference.
-     * @param bool                  $is_paid    Settled.
-     * @return string
-     */
-    protected function summary( array $rows, string $reference, bool $is_paid ): string {
+      * @param array<string, string> $rows        Label => value rows.
+      * @param string                $reference   Public reference.
+      * @param bool                  $is_paid     Settled.
+      * @param string                $receipt_ref Transaction reference for the receipt link.
+      * @return string
+      */
+     protected function summary( array $rows, string $reference, bool $is_paid, string $receipt_ref = '' ): string {
 
-        $rows_html = '';
+         $rows_html = '';
 
-        foreach ( $rows as $label => $value ) {
-            $rows_html .= '<tr><th scope="row">' . esc_html( (string) $label ) . '</th>'
-                . '<td>' . esc_html( (string) $value ) . '</td></tr>';
-        }
+         foreach ( $rows as $label => $value ) {
+             $rows_html .= '<tr><th scope="row">' . esc_html( (string) $label ) . '</th>'
+                 . '<td>' . esc_html( (string) $value ) . '</td></tr>';
+         }
 
+         $receipt = '';
 
-        $receipt = '';
-
-        if ( $is_paid ) {
-            $receipt_url = add_query_arg( 'bb_ref', $reference, home_url( '/' ) );
+         if ( $is_paid ) {
+             /* The receipt endpoint is keyed by the payment (transaction) ref. */
+             $link_ref    = '' !== $receipt_ref ? $receipt_ref : $reference;
+             $receipt_url = add_query_arg( 'bb_ref', $link_ref, home_url( '/' ) );
             $receipt     = '<p class="bb-status-receipt"><a class="bb-primary-button" href="'
                 . esc_url( $receipt_url )
                 . '">' . esc_html__( 'View Receipt', 'business-builder' ) . '</a></p>';

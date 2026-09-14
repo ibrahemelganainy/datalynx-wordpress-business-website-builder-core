@@ -553,3 +553,16 @@
     position: static;
   }
 }
+/*
+ * Fix: the "Configure gateway" button had no visible effect.
+ *
+ * The config panel is toggled by adding/removing the HTML `hidden`
+ * attribute (see assets/js/admin/payment-settings.js). Because
+ * `.bb-gateway-fields` sets `display: flex`, the browser's default
+ * `[hidden] { display: none }` rule was overridden and the panel stayed
+ * visible no matter what the button did. This higher-specificity rule
+ * restores the expected show/hide behaviour.
+ */
+.bb-gateway-fields[hidden] {
+  display: none;
+}

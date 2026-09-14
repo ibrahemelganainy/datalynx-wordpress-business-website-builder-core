@@ -4,6 +4,11 @@ namespace BusinessBuilderCore\Packs\LawFirm\Frontend;
 
 use BusinessBuilderCore\Packs\LawFirm\Sections\LawFirmQueries;
 use BusinessBuilderCore\Packs\LawFirm\PostTypes\ConsultationMeta;
+use BusinessBuilderCore\Packs\LawFirm\Payments\PaymentFlow;
+use BusinessBuilderCore\Packs\LawFirm\Payments\SectionPaymentFactory;
+use BusinessBuilderCore\Core\Payments\PaymentManager;
+use BusinessBuilderCore\Core\Payments\Checkout\PaymentCheckout;
+use BusinessBuilderCore\Core\Audit\AuditLog;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -107,9 +112,137 @@ class ConsultationForm {
             $this->redirect_with( $redirect, 'error' );
         }
 
+        $post_id = (int) $post_id;
+
+        /*
+         * Payment gate: when the owning section requires payment, the
+         * request is NOT confirmed yet. We resolve the section config from
+         * its SAVED meta (never from the browser), start the checkout and
+         * send the customer to the gateway. Only a server-verified
+         * callback/webhook later marks it paid.
+         */
+        $config = $this->section_payment_config();
+
+        if ( is_array( $config ) && ! empty( $config['payable'] )) {
+
+            $this->apply_pending_payment_meta( $post_id, $config );
+
+            $gateway = isset( $_POST['bb_payment_gateway'] )
+                ? sanitize_key( wp_unslash( $_POST['bb_payment_gateway'] ))
+                : '';
+
+            if ( '' !== $gateway ) {
+
+                $result = $this->start_payment( $post_id, $config, $gateway, $data );
+
+                $type = isset( $result['type'] ) ? (string) $result['type'] : '';
+
+                if ( 'redirect' === $type && ! empty( $result['url'] )) {
+                    wp_redirect( (string) $result['url'] );
+                    exit;
+                }
+
+                if ( 'manual' === $type ) {
+                    $this->notify( $data );
+                    $this->redirect_with( $redirect, 'pending' );
+                }
+
+                /* Gateway unavailable: keep the pending request payable. */
+                $this->redirect_with( $redirect, 'payment_error' );
+            }
+
+            /* Payment required but no gateway chosen yet: show the pay step. */
+            $this->redirect_with( $redirect, 'pending' );
+        }
+
         $this->notify( $data );
 
         $this->redirect_with( $redirect, 'success' );
+    }
+
+    /**
+     * Resolve this submission's section payment configuration.
+     *
+     * The form posts a page id + section id (both opaque to the client);
+     * the fee, currency and allowed gateways are re-read from the section's
+     * saved meta so the browser can never influence them.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function section_payment_config(): ?array {
+
+        $page_id = isset( $_POST['bb_page_id'] ) ? absint( wp_unslash( $_POST['bb_page_id'] )) : 0;
+
+        $section_id = isset( $_POST['bb_section_id'] )
+            ? sanitize_text_field( wp_unslash( $_POST['bb_section_id'] ))
+            : '';
+
+        if ( $page_id <= 0 || '' === $section_id ) {
+            return null;
+        }
+
+        return SectionPaymentFactory::resolve_stored_section(
+            $page_id,
+            $section_id,
+            'consultation',
+            'consultation'
+        );
+    }
+
+    /**
+     * Record the pending-payment state on a consultation.
+     *
+     * @param int                 $post_id Consultation id.
+     * @param array<string,mixed> $config  Resolved section config.
+     */
+    private function apply_pending_payment_meta( int $post_id, array $config ): void {
+
+        update_post_meta( $post_id, ConsultationMeta::key( 'payment_required' ), '1' );
+        update_post_meta( $post_id, ConsultationMeta::key( 'payment_amount' ), (string) $config['fee'] );
+        update_post_meta( $post_id, ConsultationMeta::key( 'payment_currency' ), (string) $config['currency'] );
+        update_post_meta( $post_id, ConsultationMeta::key( 'payment_status' ), 'pending' );
+
+        /*
+         * A payment-pending request is not a confirmed consultation yet:
+         * keep it in the pending request state until payment is verified.
+         */
+        update_post_meta( $post_id, ConsultationMeta::key( 'status' ), 'pending' );
+    }
+
+    /**
+     * Start the checkout for a consultation through the existing engine.
+     *
+     * @param int                 $post_id Consultation id.
+     * @param array<string,mixed> $config  Resolved section config.
+     * @param string              $gateway Chosen gateway id.
+     * @param array               $data    Submitted data (for label/email).
+     * @return array<string, mixed> Checkout result.
+     */
+    private function start_payment( int $post_id, array $config, string $gateway, array $data ): array {
+
+        $payments = new PaymentManager();
+
+        $flow = new PaymentFlow(
+            new PaymentCheckout( $payments, new AuditLog() ),
+            $payments,
+            new AuditLog()
+        );
+
+        $label = __( 'Legal Consultation', 'business-builder' );
+
+        if ( ! empty( $data['practice_area'] )) {
+            /* translators: %s: practice area name */
+            $label = sprintf( __( 'Legal Consultation — %s', 'business-builder' ), (string) $data['practice_area'] );
+        }
+
+        return $flow->start(
+            'consultation',
+            $post_id,
+            $config,
+            $gateway,
+            $label,
+            isset( $data['email'] ) ? (string) $data['email'] : ''
+        );
     }
 
     /**

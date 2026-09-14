@@ -85,13 +85,29 @@ class ReceiptRenderer {
     protected function rows( Receipt $receipt ): array {
 
         $rows = array(
-            __( 'Reference', 'business-builder' )   => $receipt->reference,
             __( 'Description', 'business-builder' ) => $receipt->description,
-            __( 'Payment Method', 'business-builder' ) => $receipt->gateway_name,
-            __( 'Amount', 'business-builder' )      => $receipt->amount_display,
-            __( 'Status', 'business-builder' )      => $receipt->status_label,
-            __( 'Date', 'business-builder' )        => $receipt->created_at,
         );
+
+        /* The paid-for object's public reference (consultation/appointment). */
+        if ( '' !== $receipt->object_reference ) {
+            $label = '' !== $receipt->object_label
+                ? $receipt->object_label
+                : __( 'Service', 'business-builder' );
+
+            /* translators: %s: object type label (e.g. Consultation). */
+            $rows[ sprintf( __( '%s Number', 'business-builder' ), $label ) ] = $receipt->object_reference;
+        }
+
+        $rows[ __( 'Payment Reference', 'business-builder' ) ] = $receipt->reference;
+        $rows[ __( 'Payment Method', 'business-builder' ) ]    = $receipt->gateway_name;
+
+        if ( '' !== $receipt->gateway_reference ) {
+            $rows[ __( 'Gateway Transaction ID', 'business-builder' ) ] = $receipt->gateway_reference;
+        }
+
+        $rows[ __( 'Amount', 'business-builder' ) ] = $receipt->amount_display;
+        $rows[ __( 'Status', 'business-builder' ) ] = $receipt->status_label;
+        $rows[ __( 'Date', 'business-builder' ) ]   = $receipt->created_at;
 
         /**
          * Filter the receipt rows (label => value).

@@ -66,6 +66,26 @@ if ( ! function_exists( 'add_filter' ) ) {
     function add_filter( $h, $c, $p = 10, $a = 1 ) { return true; }
 }
 
+if ( ! function_exists( 'apply_filters' ) ) {
+    function apply_filters( $h, $value ) { return $value; }
+}
+
+if ( ! function_exists( 'get_option' ) ) {
+    function get_option( $n, $d = false ) { return $d; }
+}
+
+if ( ! function_exists( 'update_option' ) ) {
+    function update_option( $n, $v, $a = null ) { return true; }
+}
+
+if ( ! function_exists( 'delete_option' ) ) {
+    function delete_option( $n ) { return true; }
+}
+
+if ( ! function_exists( 'do_action' ) ) {
+    function do_action( $h ) { return null; }
+}
+
 if ( ! function_exists( 'register_post_type' ) ) {
     function register_post_type( $t, $a = array() ) { return true; }
 }
@@ -83,6 +103,15 @@ if ( ! function_exists( 'wp_parse_args' ) ) {
     }
 }
 if ( ! function_exists( 'admin_url' ) ) {     function admin_url( $path = '' ) { return 'https://example.com/wp-admin/' . $path; } } if ( ! function_exists( 'home_url' ) ) {     function home_url( $path = '' ) { return 'https://example.com/' . $path; } } if ( ! function_exists( 'wp_get_referer' ) ) {     function wp_get_referer() { return ''; } } if ( ! function_exists( 'add_query_arg' ) ) {     function add_query_arg( $k, $v, $url ) { return $url; } } if ( ! function_exists( 'remove_query_arg' ) ) {     function remove_query_arg( $k, $url ) { return $url; } }
+
+/*
+ * LawFirmSections::register() builds the payment field schema, which
+ * needs the currency catalogue and the gateway registry. Register the
+ * plugin autoloader so those classes resolve (mirrors the plugin boot)
+ * instead of fatalling on a missing class.
+ */
+require_once $root . '/includes/Core/Autoloader.php';
+\BusinessBuilderCore\Core\Autoloader::register();
 
 require_once $root . '/includes/Builder/SectionRegistry.php';
 require_once $root . '/packs/LawFirm/Sections/LawFirmQueries.php';

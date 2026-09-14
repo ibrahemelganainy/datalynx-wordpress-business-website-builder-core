@@ -5,6 +5,10 @@ namespace BusinessBuilderCore\Packs\LawFirm\Appointments;
 use BusinessBuilderCore\Core\Notifications\NotificationManager;
 use BusinessBuilderCore\Core\Notifications\Notification;
 use BusinessBuilderCore\Core\Audit\AuditLog;
+use BusinessBuilderCore\Packs\LawFirm\Payments\PaymentFlow;
+use BusinessBuilderCore\Packs\LawFirm\Payments\SectionPaymentFactory;
+use BusinessBuilderCore\Core\Payments\PaymentManager;
+use BusinessBuilderCore\Core\Payments\Checkout\PaymentCheckout;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -110,6 +114,19 @@ class BookingForm {
             $this->redirect( $redirect, 'error' );
         }
 
+        /*
+         * Resolve this section's payment configuration from its SAVED meta
+         * (never from the browser). When payable, the appointment is created
+         * as pending-payment and the customer is sent to the gateway; the
+         * slot is still reserved because "pending" blocks re-booking.
+         */
+        $config  = $this->section_payment_config();
+        $payable = is_array( $config ) && ! empty( $config['payable'] );
+
+        if ( $payable ) {
+            $data['payment_status'] = 'pending';
+        }
+
         /* Server-side slot validation + creation (double-booking safe). */
         $result = $this->availability->create( $data );
 
@@ -146,7 +163,116 @@ class BookingForm {
             )
         );
 
+        if ( $payable ) {
+
+            $this->apply_pending_payment_meta( $appointment_id, $config );
+
+            $gateway = isset( $_POST['bb_payment_gateway'] )
+                ? sanitize_key( wp_unslash( $_POST['bb_payment_gateway'] ))
+                : '';
+
+            if ( '' !== $gateway ) {
+
+                $payment = $this->start_payment( $appointment_id, $config, $gateway, $data );
+
+                $type = isset( $payment['type'] ) ? (string) $payment['type'] : '';
+
+                if ( 'redirect' === $type && ! empty( $payment['url'] )) {
+                    wp_redirect( (string) $payment['url'] );
+                    exit;
+                }
+
+                if ( 'manual' === $type ) {
+                    $this->redirect( $redirect, 'pending' );
+                }
+
+                $this->redirect( $redirect, 'payment_error' );
+            }
+
+            /* Payment required but no gateway chosen yet. */
+            $this->redirect( $redirect, 'pending' );
+        }
+
         $this->redirect( $redirect, 'success' );
+    }
+
+    /**
+     * Resolve this submission's section payment configuration.
+     *
+     * The booking form posts a page id + section id; the fee, currency and
+     * allowed gateways are re-read from the section's saved meta so the
+     * browser can never influence them.
+     *
+     * @return array<string, mixed>|null
+     */
+    protected function section_payment_config(): ?array {
+
+        $page_id = isset( $_POST['bb_page_id'] ) ? absint( wp_unslash( $_POST['bb_page_id'] )) : 0;
+
+        $section_id = isset( $_POST['bb_section_id'] )
+            ? sanitize_text_field( wp_unslash( $_POST['bb_section_id'] ))
+            : '';
+
+        if ( $page_id <= 0 || '' === $section_id ) {
+            return null;
+        }
+
+        return SectionPaymentFactory::resolve_stored_section(
+            $page_id,
+            $section_id,
+            'booking',
+            'appointment'
+        );
+    }
+
+    /**
+     * Record the pending-payment state on an appointment.
+     *
+     * @param int                 $appointment_id Appointment id.
+     * @param array<string,mixed> $config         Resolved section config.
+     */
+    protected function apply_pending_payment_meta( int $appointment_id, array $config ): void {
+
+        update_post_meta( $appointment_id, AppointmentMeta::key( 'payment_required' ), '1' );
+        update_post_meta( $appointment_id, AppointmentMeta::key( 'payment_amount' ), (string) $config['fee'] );
+        update_post_meta( $appointment_id, AppointmentMeta::key( 'payment_currency' ), (string) $config['currency'] );
+        update_post_meta( $appointment_id, AppointmentMeta::key( 'payment_status' ), 'pending' );
+    }
+
+    /**
+     * Start the checkout for an appointment through the existing engine.
+     *
+     * @param int                 $appointment_id Appointment id.
+     * @param array<string,mixed> $config         Resolved section config.
+     * @param string              $gateway        Chosen gateway id.
+     * @param array               $data           Submitted data.
+     * @return array<string, mixed> Checkout result.
+     */
+    protected function start_payment( int $appointment_id, array $config, string $gateway, array $data ): array {
+
+        $payments = new PaymentManager();
+
+        $flow = new PaymentFlow(
+            new PaymentCheckout( $payments, new AuditLog() ),
+            $payments,
+            new AuditLog()
+        );
+
+        $label = __( 'Appointment Booking', 'business-builder' );
+
+        if ( ! empty( $data['type'] )) {
+            /* translators: %s: appointment type label */
+            $label = sprintf( __( 'Appointment Booking — %s', 'business-builder' ), AppointmentMeta::type_label( (string) $data['type'] ));
+        }
+
+        return $flow->start(
+            'appointment',
+            $appointment_id,
+            $config,
+            $gateway,
+            $label,
+            isset( $data['client_email'] ) ? (string) $data['client_email'] : ''
+        );
     }
 
     /**

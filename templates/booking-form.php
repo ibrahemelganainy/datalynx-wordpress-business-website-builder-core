@@ -14,6 +14,7 @@ use BusinessBuilderCore\Packs\LawFirm\Appointments\BookingForm;
 use BusinessBuilderCore\Packs\LawFirm\Appointments\AppointmentMeta;
 use BusinessBuilderCore\Packs\LawFirm\Appointments\Availability;
 use BusinessBuilderCore\Packs\LawFirm\PostTypes\ConsultationMeta;
+use BusinessBuilderCore\Core\Payments\Currencies;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -35,10 +36,25 @@ $bb_status = isset( $_GET['bb_booking'] )
     : '';
 
 $bb_status_messages = array(
-    'success' => __( 'Your appointment request has been received. We will confirm it shortly.', 'business-builder' ),
-    'taken'   => __( 'Sorry, that time slot was just taken. Please choose another slot.', 'business-builder' ),
-    'error'   => __( 'Sorry, your request could not be submitted. Please check the required fields.', 'business-builder' ),
+    'success'       => __( 'Your appointment request has been received. We will confirm it shortly.', 'business-builder' ),
+    'taken'         => __( 'Sorry, that time slot was just taken. Please choose another slot.', 'business-builder' ),
+    'pending'       => __( 'Your appointment was held. Please complete the payment below to confirm it.', 'business-builder' ),
+    'payment_error' => __( 'Your appointment was held, but the payment could not be started. Please choose a payment method and try again.', 'business-builder' ),
+    'error'         => __( 'Sorry, your request could not be submitted. Please check the required fields.', 'business-builder' ),
 );
+
+/*
+ * Section payment configuration resolved by the render callback. When
+ * payable, the customer must choose a gateway and pay before the booking
+ * is confirmed; the fee/currency/gateways are the server-resolved values.
+ */
+$bb_pay        = isset( $bb_payment ) && is_array( $bb_payment ) ? $bb_payment : array();
+$bb_payable    = ! empty( $bb_pay['payable'] );
+$bb_fee        = isset( $bb_pay['fee'] ) ? (string) $bb_pay['fee'] : '';
+$bb_currency   = isset( $bb_pay['currency'] ) ? (string) $bb_pay['currency'] : '';
+$bb_gateways   = isset( $bb_pay['available'] ) && is_array( $bb_pay['available'] ) ? $bb_pay['available'] : array();
+$bb_section_id = isset( $bb_section_id ) ? (string) $bb_section_id : '';
+$bb_page_id    = isset( $bb_page_id ) ? (int) $bb_page_id : 0;
 
 $bb_area_terms = get_terms(
     array(
@@ -68,6 +84,8 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ) ) {
     >
 
         <input type="hidden" name="action" value="<?php echo esc_attr( BookingForm::action_name() ); ?>" />
+        <input type="hidden" name="bb_page_id" value="<?php echo esc_attr( (string) $bb_page_id ); ?>" />
+        <input type="hidden" name="bb_section_id" value="<?php echo esc_attr( $bb_section_id ); ?>" />
         <?php wp_nonce_field( BookingForm::nonce_action(), BookingForm::nonce_field() ); ?>
 
         <div class="bb-booking-grid">
@@ -138,9 +156,60 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ) ) {
             <textarea name="bb_notes" id="bb_notes" rows="4"></textarea>
         </p>
 
+        <?php if ( $bb_payable ) : ?>
+
+            <div class="bb-booking-payment" id="bb-booking-payment">
+
+                <h3 class="bb-booking-payment-title">
+                    <?php esc_html_e( 'Appointment Fee', 'business-builder' ); ?>
+                </h3>
+
+                <p class="bb-booking-payment-amount">
+                    <?php echo esc_html( Currencies::format( (float) $bb_fee, $bb_currency, true ) ); ?>
+                </p>
+
+                <p class="bb-booking-payment-note">
+                    <?php esc_html_e( 'Payment is required to confirm this appointment.', 'business-builder' ); ?>
+                </p>
+
+                <?php if ( count( $bb_gateways ) > 0 ) : ?>
+                    <fieldset class="bb-booking-payment-methods">
+                        <legend class="bb-booking-payment-legend">
+                            <?php esc_html_e( 'Payment Method', 'business-builder' ); ?>
+                        </legend>
+
+                        <?php $bb_first = true; ?>
+                        <?php foreach ( $bb_gateways as $bb_gw_id => $bb_gw ) : ?>
+                            <label class="bb-booking-payment-method">
+                                <input
+                                    type="radio"
+                                    name="bb_payment_gateway"
+                                    value="<?php echo esc_attr( (string) $bb_gw_id ); ?>"
+                                    <?php checked( $bb_first ); ?>
+                                />
+                                <span class="bb-booking-payment-method-name"><?php echo esc_html( $bb_gw->get_name() ); ?></span>
+                                <?php if ( '' !== $bb_gw->get_description() ) : ?>
+                                    <span class="bb-booking-payment-method-desc"><?php echo esc_html( $bb_gw->get_description() ); ?></span>
+                                <?php endif; ?>
+                            </label>
+                            <?php $bb_first = false; ?>
+                        <?php endforeach; ?>
+                    </fieldset>
+                <?php endif; ?>
+
+            </div>
+
+        <?php endif; ?>
+
         <p class="bb-booking-submit">
             <button type="submit" class="bb-primary-button">
-                <?php esc_html_e( 'Book Appointment', 'business-builder' ); ?>
+                <?php
+                if ( $bb_payable ) {
+                    esc_html_e( 'Continue to Payment', 'business-builder' );
+                } else {
+                    esc_html_e( 'Book Appointment', 'business-builder' );
+                }
+                ?>
             </button>
         </p>
 
