@@ -64,9 +64,10 @@ class PaymentFlow {
      * @param string $gateway_id  Chosen gateway id (from the form).
      * @param string $label       Human label for the transaction.
      * @param string $email       Customer email (optional).
+     * @param array  $billing     Customer name/phone (optional; gateways like Paymob require it).
      * @return array<string, mixed> Result: ['type'=>'redirect'|'manual'|'error', ...].
      */
-    public function start( string $object_type, int $object_id, array $config, string $gateway_id, string $label = '', string $email = '' ): array {
+    public function start( string $object_type, int $object_id, array $config, string $gateway_id, string $label = '', string $email = '', array $billing = array() ): array {
 
         $object_type = sanitize_key( $object_type );
         $object_id   = absint( $object_id );
@@ -98,6 +99,7 @@ class PaymentFlow {
                 'currency'    => $currency,
                 'label'       => $label,
                 'email'       => $email,
+                'billing'     => $billing,
             )
         );
 

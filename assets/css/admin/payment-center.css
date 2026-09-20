@@ -566,3 +566,125 @@
 .bb-gateway-fields[hidden] {
   display: none;
 }
+/*
+ * Webhook URL field (read-only) + copy button on each gateway card.
+ *
+ * The URL is generated per site (from the site's own home URL) and shown
+ * above the gateway's webhook/secret field. It is never a secret, so it is
+ * safe to display in cleartext.
+ */
+.bb-gateway-field-webhook .bb-webhook-copy {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.bb-gateway-field-webhook .bb-webhook-url {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  background: #f6f7f7;
+  color: #1f2937;
+  cursor: text;
+}
+
+.bb-gateway-field-webhook .bb-webhook-copy-button {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* The copy icon. */
+.bb-gateway-field-webhook .bb-copy-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.bb-gateway-field-webhook .bb-copy-icon svg {
+  display: block;
+}
+
+/*
+ * Tooltip bubble (shown on hover / keyboard focus). Dark rounded bubble
+ * with a small arrow, matching the payment center's tooltips.
+ */
+.bb-gateway-field-webhook .bb-copy-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%) translateY(4px);
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: #1f2937;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.28);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+
+/* Arrow */
+.bb-gateway-field-webhook .bb-copy-tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1f2937;
+}
+
+.bb-gateway-field-webhook .bb-webhook-copy-button:hover .bb-copy-tip,
+.bb-gateway-field-webhook .bb-webhook-copy-button:focus-visible .bb-copy-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* The green check is hidden until the copy succeeds. */
+.bb-gateway-field-webhook .bb-copy-tip-check {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: #22c55e;
+  line-height: 0;
+}
+
+.bb-gateway-field-webhook .bb-webhook-copy-button.is-copied .bb-copy-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.bb-gateway-field-webhook .bb-webhook-copy-button.is-copied .bb-copy-tip-check {
+  display: inline-flex;
+}
+
+/* Copied icon state: tint the icon green to reinforce success. */
+.bb-gateway-field-webhook .bb-webhook-copy-button.is-copied {
+  border-color: #1a7f37;
+  color: #1a7f37;
+  background: #e6f6ec;
+}
+
+/* RTL: keep the input/button order natural. */
+.bb-rtl .bb-gateway-field-webhook .bb-webhook-copy {
+  flex-direction: row-reverse;
+}

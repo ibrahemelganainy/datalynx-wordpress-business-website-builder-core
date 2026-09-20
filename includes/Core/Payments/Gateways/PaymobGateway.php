@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ))  {
  *   1. Auth:        POST /api/auth/tokens                -> auth token
  *   2. Order:       POST /api/ecommerce/orders           -> order id
  *   3. Payment key: POST /api/acceptance/payment_keys    -> payment token
- *   4. Redirect:    {iframe}/acceptance/iframes/{id}?payment_token={token}
+ *   4. Redirect:    https://accept.paymob.com/api/acceptance/iframes/{iframe_id}?payment_token={token}
  *   5. Callback:    transaction processed callback + HMAC verification
  *
  * Amounts are sent in the smallest currency unit (cents/piasters).
@@ -42,8 +42,26 @@ class PaymobGateway extends AbstractApiGateway {
         return true;
     }
 
+    /**
+     * Paymob requires a full billing_data block to build a payment key.
+     */
+    public function needs_billing(): bool {
+        return true;
+    }
+
+    /**
+     * The currencies this Paymob INTEGRATION can actually settle.
+     *
+     * Paymob validate the payment key against the integration's own
+     * currency and return "400 Invalid currency sent" for anything else, so
+     * the declared list MUST match the integration. Declaring a currency the
+     * integration cannot settle would make Paymob look selectable on a site
+     * whose currency it then rejects at checkout (a confusing failure).
+     *
+     * @return string[]
+     */
     public function get_supported_currencies(): array {
-        return array( 'EGP', 'USD', 'AED', 'SAR' );
+        return array( 'EGP' );
     }
 
     public function get_settings_schema(): array {
@@ -84,6 +102,31 @@ class PaymobGateway extends AbstractApiGateway {
      * @return array<string, mixed>
      */
     public function create_payment( PaymentTransaction $transaction ): array {
+
+        /*
+         * Paymob rejects a payment key whose currency does not match the
+         * integration ("400 Invalid currency sent"). Validate this FIRST so
+         * the administrator gets a clear configuration error instead of a
+         * raw API failure.
+         */
+        $paymob_currency = strtoupper( (string) $transaction->currency );
+
+        if ( 'EGP' !== $paymob_currency ) {
+            $this->log_debug( 'currency not supported by integration', array( 'currency' => $paymob_currency ) );
+
+            if ( current_user_can( 'manage_options' ) ) {
+                return $this->unavailable(
+                    sprintf(
+                        /* translators: 1: chosen currency, 2: supported currency */
+                        __( 'Paymob integration supports %2$s but the site currency is %1$s. Please set Site Currency to %2$s in Payment Settings.', 'business-builder' ),
+                        $paymob_currency,
+                        'EGP'
+                    )
+                );
+            }
+
+            return $this->unavailable( __( 'This payment method is not available for the current currency. Please choose another payment method.', 'business-builder' ) );
+        }
 
         $auth = $this->auth_token();
 
@@ -139,19 +182,7 @@ class PaymobGateway extends AbstractApiGateway {
                 'order_id'       => $order_id,
                 'currency'       => $transaction->currency,
                 'integration_id' => (int) $integration_id,
-                'billing_data'   => array(
-                    'first_name'   => 'NA',
-                    'last_name'    => 'NA',
-                    'phone_number' => 'NA',
-                    'email'        => 'NA',
-                    'country'      => 'NA',
-                    'city'         => 'NA',
-                    'street'       => 'NA',
-                    'state'        => 'NA',
-                    'building'     => 'NA',
-                    'floor'        => 'NA',
-                    'apartment'    => 'NA',
-                ),
+                'billing_data'   => $this->billing_data( $transaction ),
             )
         );
 
@@ -167,7 +198,14 @@ class PaymobGateway extends AbstractApiGateway {
             return $this->unavailable( __( 'Paymob did not return a payment token.', 'business-builder' ) );
         }
 
-        $url = $this->iframe_base() . '/acceptance/iframes/' . rawurlencode( $iframe_id ) . '?payment_token=' . rawurlencode( $token );
+        /*
+         * Paymob's hosted iframe lives under /api/acceptance/iframes/ — the
+         * /api/ segment is REQUIRED (without it Paymob returns a 404). The
+         * iframe id comes from the gateway settings (Paymob dashboard ->
+         * Developers -> Iframe), never hardcoded, and is distinct from the
+         * Integration ID.
+         */
+        $url = $this->iframe_base() . '/api/acceptance/iframes/' . rawurlencode( $iframe_id ) . '?payment_token=' . rawurlencode( $token );
 
         return array(
             'type'      => 'redirect',
@@ -343,6 +381,79 @@ class PaymobGateway extends AbstractApiGateway {
     }
 
     /**
+     * Build the Paymob billing_data block.
+     *
+     * Paymob validates these fields: email must be a valid address,
+     * phone_number must be digits only, and country must be a 2-letter
+     * ISO code. The literal "NA" used previously is rejected by Paymob's
+     * Payment Key endpoint (the usual cause of a payment that "could not
+     * be started"), so we send the customer's real data from the saved
+     * transaction meta and fall back to valid placeholders only when a
+     * value is genuinely unavailable.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return array<string, string>
+     */
+    protected function billing_data( PaymentTransaction $transaction ): array {
+
+        $meta = is_array( $transaction->meta ) ? $transaction->meta : array();
+
+        $email = isset( $meta['email'] ) ? (string) $meta['email'] : '';
+        $name  = isset( $meta['name'] ) ? (string) $meta['name'] : '';
+        $phone = isset( $meta['phone'] ) ? (string) $meta['phone'] : '';
+
+        /*
+         * Prefer the explicit first/last name collected by the dynamic
+         * billing form (bb_billing_first_name / bb_billing_last_name). When
+         * only a full name is available, split it; default to "NA" (which
+         * Paymob accepts for names) only when nothing is present.
+         */
+        $first = isset( $meta['first_name'] ) ? trim( (string) $meta['first_name'] ) : '';
+        $last  = isset( $meta['last_name'] ) ? trim( (string) $meta['last_name'] ) : '';
+
+        if ( '' === $first && '' === $last && '' !== trim( $name )) {
+            $parts = preg_split( '/\s+/', trim( $name ));
+            $first = ( is_array( $parts ) && isset( $parts[0] ) && '' !== $parts[0] ) ? $parts[0] : '';
+            $last  = ( is_array( $parts ) && isset( $parts[1] ) && '' !== $parts[1] ) ? $parts[1] : '';
+        }
+
+        if ( '' === $first ) {
+            $first = 'NA';
+        }
+
+        if ( '' === $last ) {
+            /* Paymob requires a non-empty last name; mirror a single name. */
+            $last = ( 'NA' === $first ) ? 'NA' : $first;
+        }
+
+        /* Phone must be digits only. */
+        $phone = preg_replace( '/[^0-9]/', '', $phone );
+
+        if ( '' === $phone ) {
+            $phone = '0000';
+        }
+
+        if ( '' === $email || ! is_email( $email )) {
+            /* Paymob requires a syntactically valid email. */
+            $email = 'customer@example.com';
+        }
+
+        return array(
+            'first_name'   => $first,
+            'last_name'    => $last,
+            'phone_number' => $phone,
+            'email'        => $email,
+            'country'      => 'EG',
+            'city'         => 'NA',
+            'street'       => 'NA',
+            'state'        => 'NA',
+            'building'     => 'NA',
+            'floor'        => 'NA',
+            'apartment'    => 'NA',
+        );
+    }
+
+    /**
      * API base host.
      *
      * @return string
@@ -386,15 +497,41 @@ class PaymobGateway extends AbstractApiGateway {
 
         $body = is_array( $result['body'] ) ? $result['body'] : array();
 
+        /* Pull Paymob's own human reason when present (message/detail/errors). */
+        $reason = '';
+
+        if ( isset( $body['message'] ) && is_scalar( $body['message'] )) {
+            $reason = (string) $body['message'];
+        } elseif ( isset( $body['detail'] ) && is_scalar( $body['detail'] )) {
+            $reason = (string) $body['detail'];
+        } elseif ( isset( $body['errors'] )) {
+            $reason = (string) wp_json_encode( $body['errors'] );
+        }
+
         $this->log_debug(
             'paymob ' . $stage . ' failed',
             array(
                 'http'      => (int) $result['status'],
-                'message'   => isset( $body['message'] ) ? (string) $body['message'] : '',
-                'detail'    => isset( $body['detail'] ) ? (string) $body['detail'] : '',
+                'reason'    => $reason,
                 'transport' => (string) $result['error'],
             )
         );
+
+        /*
+         * Generic, safe customer message. The detailed reason is sent to
+         * the debug log (above) so the administrator can diagnose the
+         * exact Paymob rejection without exposing internals to visitors.
+         * Administrators additionally see the reason inline when the
+         * current user can manage options.
+         */
+        if ( current_user_can( 'manage_options' ) && '' !== $reason ) {
+            return sprintf(
+                /* translators: 1: stage, 2: provider reason */
+                __( 'Paymob %1$s failed: %2$s', 'business-builder' ),
+                $stage,
+                $reason
+            );
+        }
 
         return __( 'We could not start the payment with Paymob. Please try another payment method.', 'business-builder' );
     }

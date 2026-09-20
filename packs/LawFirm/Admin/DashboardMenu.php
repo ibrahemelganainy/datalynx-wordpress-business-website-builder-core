@@ -126,10 +126,19 @@ class DashboardMenu {
      */
     protected function screen_titles(): array {
 
-        return array(
-            'bb-law-firm-payments'      => __( 'Payment Settings', 'business-builder' ),
-            'bb-law-firm-notifications' => __( 'Notifications & Activity', 'business-builder' ),
+        $titles = array(
+            'bb-law-firm-payments'         => __( 'Payment Settings', 'business-builder' ),
+            'bb-law-firm-payment-logs'     => __( 'Payment Logs', 'business-builder' ),
+            'bb-law-firm-manual-payments'  => __( 'Manual Payments', 'business-builder' ),
+            'bb-law-firm-notifications'    => __( 'Notifications & Activity', 'business-builder' ),
         );
+
+        /**
+         * Filter the LawFirm dashboard submenu titles.
+         *
+         * @param array<string, string> $titles slug => title.
+         */
+        return apply_filters( 'bb_law_firm_screen_titles', $titles );
     }
 
     /**

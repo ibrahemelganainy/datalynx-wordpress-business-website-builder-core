@@ -144,16 +144,30 @@ class PaymentCallback {
 
         $payload = $this->collect_payload( $request );
 
+        /*
+         * Resolve the transaction for THIS browser return.
+         *
+         * Order matters. Different gateways identify a return differently
+         * (Stripe sends session_id, PayPal sends token, others echo a
+         * merchant/order reference). We therefore resolve by the
+         * gateway-independent PUBLIC reference we always place on the
+         * return URL (bb_ref) FIRST, and only fall back to the provider
+         * reference / hint. This keeps the callback gateway-neutral and
+         * means a return always lands on the correct transaction even when
+         * the provider's verify_payment() cannot (yet) return a reference
+         * (e.g. the browser return arrives before the provider's final
+         * state, or the payment is still pending).
+         */
+        $transaction = $this->resolve_by_hint( $request );
+
+        /*
+         * Verify with the provider. This is never trusted to resolve the
+         * transaction on its own, and a failure NEVER marks paid.
+         */
         $result = $gateway->verify_payment( $payload );
 
-        $reference = $result->reference;
-
-        $transaction = '' !== $reference
-            ? $this->payments->find_by_reference( $reference )
-            : null;
-
-        if ( null === $transaction ) {
-            $transaction = $this->resolve_by_hint( $request );
+        if ( null === $transaction && '' !== $result->reference ) {
+            $transaction = $this->payments->find_by_reference( $result->reference );
         }
 
         if ( null === $transaction ) {
@@ -168,7 +182,14 @@ class PaymentCallback {
             return $this->redirect_home( 'error' );
         }
 
-        $transaction = $this->synchronizer->apply( $transaction, $result );
+        /*
+         * Only advance the state when the provider actually verified the
+         * payment. A pending/failed verification leaves the transaction
+         * untouched and the customer sees the accurate pending state.
+         */
+        if ( $result->success ) {
+            $transaction = $this->synchronizer->apply( $transaction, $result );
+        }
 
         if ( $result->success && 'paid' === $transaction->status ) {
             $this->notify_paid( $transaction );
@@ -222,7 +243,7 @@ class PaymentCallback {
 
         $hint = '';
 
-        foreach ( array( 'bb_ref', 'merchant_reference', 'merchant_ref', 'order' ) as $key ) {
+        foreach ( array( 'bb_ref', 'merchant_reference', 'merchant_ref', 'merchant_order_id', 'order' ) as $key ) {
 
             $value = $request->get_param( $key );
 
@@ -236,7 +257,37 @@ class PaymentCallback {
             return null;
         }
 
-        return $this->payments->find_by_public_ref( $hint );
+        /*
+         * Prefer the CPT-backed store (the authoritative source since
+         * Phase F), then fall back to the legacy option store so both eras
+         * of transactions resolve. This is per-site: an option/CPT lookup
+         * only ever sees the current blog's data, so one site's callback
+         * cannot resolve another site's transaction on Multisite.
+         */
+        $transaction = $this->payments->store()->find_by_public_ref( $hint );
+
+        if ( null === $transaction ) {
+            $transaction = $this->payments->find_by_public_ref( $hint );
+        }
+
+        if ( null === $transaction ) {
+            return null;
+        }
+
+        /*
+         * Guard against a cross-gateway reference being replayed on this
+         * route: the transaction must belong to the gateway named in the
+         * URL, so a crafted /callback/{other}?...bb_ref=<txn> cannot be
+         * used to probe or advance another gateway's payment.
+         */
+        $route_gateway = (string) $request->get_param( 'gateway' );
+        $route_gateway = sanitize_key( $route_gateway );
+
+        if ( '' !== $route_gateway && $transaction->gateway !== $route_gateway ) {
+            return null;
+        }
+
+        return $transaction;
     }
 
     /**
@@ -257,8 +308,17 @@ class PaymentCallback {
                 ),
                 '',
                 '',
-                $transaction->object_id,
-                'payment:' . $transaction->gateway . ':' . $transaction->public_ref
+                (int) $transaction->object_id,
+                'payment:' . $transaction->gateway . ':' . $transaction->public_ref,
+                array(
+                    'category'    => 'payment',
+                    'entity_type' => $transaction->object_type,
+                    'entity_id'   => (int) $transaction->object_id,
+                    'reference'   => $transaction->public_ref,
+                    'amount'      => $transaction->amount,
+                    'currency'    => $transaction->currency,
+                    'gateway'     => $transaction->gateway,
+                )
             )
         );
     }
@@ -272,7 +332,7 @@ class PaymentCallback {
      */
     protected function redirect_home( string $status, string $public_ref = '' ): \WP_REST_Response {
 
-        $url = home_url( '/' );
+        $url = $this->return_base();
 
         $url = add_query_arg( 'bb_checkout', sanitize_key( $status ), $url );
 
@@ -285,5 +345,36 @@ class PaymentCallback {
         $response->header( 'Location', $url );
 
         return $response;
+    }
+
+    /**
+     * Where to send the customer after the callback is processed.
+     *
+     * Prefers the page the customer started on (bb_origin), validating it
+     * against the current site host so this cannot become an open redirect.
+     * Falls back to the site home.
+     *
+     * @return string
+     */
+    protected function return_base(): string {
+
+        $origin = '';
+
+        if ( isset( $_GET['bb_origin'] ) ) {
+            $origin = sanitize_text_field( wp_unslash( $_GET['bb_origin'] ) );
+        }
+
+        if ( '' === $origin ) {
+            return home_url( '/' );
+        }
+
+        /* Only accept a local path (no scheme/host) to avoid open redirects. */
+        $is_path = ( 0 === strpos( $origin, '/' ) && false === strpos( $origin, '//' ) );
+
+        if ( ! $is_path ) {
+            return home_url( '/' );
+        }
+
+        return home_url( $origin );
     }
 }

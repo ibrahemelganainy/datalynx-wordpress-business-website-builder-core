@@ -410,7 +410,7 @@ class StatusPage {
          if ( $is_paid ) {
              /* The receipt endpoint is keyed by the payment (transaction) ref. */
              $link_ref    = '' !== $receipt_ref ? $receipt_ref : $reference;
-             $receipt_url = add_query_arg( 'bb_ref', $link_ref, home_url( '/' ) );
+             $receipt_url = \BusinessBuilderCore\Packs\LawFirm\Frontend\ReceiptRoute::url( $link_ref );
             $receipt     = '<p class="bb-status-receipt"><a class="bb-primary-button" href="'
                 . esc_url( $receipt_url )
                 . '">' . esc_html__( 'View Receipt', 'business-builder' ) . '</a></p>';

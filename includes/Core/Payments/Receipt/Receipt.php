@@ -103,6 +103,29 @@ final class Receipt {
     public readonly string $site_name;
 
     /**
+     * Public absolute URL of the business logo (empty when none is set).
+     */
+    public readonly string $logo_url;
+
+    /**
+     * Customer name shown on the receipt (may be empty).
+     */
+    public readonly string $customer_name;
+
+    /**
+     * Object type slug ('consultation' | 'appointment').
+     */
+    public readonly string $object_type;
+
+    /**
+     * Extra labelled rows (e.g. Lawyer, Appointment Date for appointments;
+     * Practice Area for consultations). Label => value, already safe.
+     *
+     * @var array<int, array{label: string, value: string}>
+     */
+    public readonly array $extra_rows;
+
+    /**
      * Constructor (use from_transaction()).
      *
      * @param string $reference      Public reference.
@@ -135,8 +158,12 @@ final class Receipt {
         string $object_reference,
         string $object_label,
         string $gateway_reference,
-        bool $is_paid,
-        string $site_name
+        bool   $is_paid,
+        string $site_name,
+        string $logo_url,
+        string $customer_name,
+        string $object_type,
+        array  $extra_rows
     ) {
         $this->reference         = $reference;
         $this->gateway_name      = $gateway_name;
@@ -153,6 +180,10 @@ final class Receipt {
         $this->gateway_reference = $gateway_reference;
         $this->is_paid           = $is_paid;
         $this->site_name         = $site_name;
+        $this->logo_url          = $logo_url;
+        $this->customer_name     = $customer_name;
+        $this->object_type       = $object_type;
+        $this->extra_rows        = $extra_rows;
     }
 
     /**
@@ -196,6 +227,8 @@ final class Receipt {
             $object_label = self::object_label( $transaction->object_type );
         }
 
+        $is_paid = in_array( $status, array( 'paid', 'completed' ), true );
+
         return new self(
             $transaction->public_ref,
             sanitize_text_field( $gateway_name ),
@@ -203,16 +236,173 @@ final class Receipt {
             $transaction->currency,
             $amount_display,
             $status,
-            TransactionStatus::label( $status ),
+            self::receipt_status_label( $status ),
             $transaction->created_at,
             $transaction->updated_at,
             $description,
             sanitize_text_field( $object_reference ),
             sanitize_text_field( $object_label ),
             sanitize_text_field( $transaction->reference ),
-            'paid' === $status,
-            wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES )
+            $is_paid,
+            wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ),
+            self::logo_url(),
+            self::customer_name( $transaction ),
+            sanitize_key( $transaction->object_type ),
+            self::extra_rows( $transaction )
         );
+    }
+
+    /**
+     * The business logo URL (from the site settings), or ''.
+     *
+     * @return string
+     */
+    private static function logo_url(): string {
+
+        if ( ! class_exists( '\BusinessBuilderCore\Settings\SiteSettings' )) {
+            return '';
+        }
+
+        $settings = new \BusinessBuilderCore\Settings\SiteSettings();
+        $logo_id  = (int) $settings->get( 'logo_id', 0 );
+
+        if ( $logo_id <= 0 ) {
+            return '';
+        }
+
+        $url = wp_get_attachment_image_url( $logo_id, 'medium' );
+
+        return is_string( $url ) ? $url : '';
+    }
+
+    /**
+     * The customer name recorded with the transaction, or ''.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    private static function customer_name( PaymentTransaction $transaction ): string {
+
+        $meta = is_array( $transaction->meta ) ? $transaction->meta : array();
+
+        $name = isset( $meta['name'] ) ? (string) $meta['name'] : '';
+        $name = trim( $name );
+
+        if ( $name === '' ) {
+            $first = isset( $meta['first_name'] ) ? (string) $meta['first_name'] : '';
+            $last  = isset( $meta['last_name'] ) ? (string) $meta['last_name'] : '';
+            $sep   = chr( 32 );
+            $name  = trim( $first . $sep . $last );
+        }
+
+        return sanitize_text_field( $name );
+    }
+
+    /**
+     * Extra receipt rows relevant to the object type.
+     *
+     * Appointments show the lawyer, appointment date and time; consultations
+     * show the practice area. Values come from the object's OWN meta and are
+     * sanitized here; nothing private (phone/email/message) is ever included.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return array<int, array{label: string, value: string}>
+     */
+    private static function extra_rows( PaymentTransaction $transaction ): array {
+
+        $rows = array();
+
+        /*
+         * The customer-supplied MANUAL transaction reference (wallet /
+         * InstaPay / bank transfer) lives on the transaction meta. Show it on
+         * the receipt whenever present, independent of the related object.
+         */
+        $meta       = is_array( $transaction->meta ) ? $transaction->meta : array();
+        $manual_ref = isset( $meta['manual_reference'] ) ? (string) $meta['manual_reference'] : '';
+
+        if ( '' !== $manual_ref ) {
+            $rows[] = array(
+                'label' => __( 'Transaction Reference', 'business-builder' ),
+                'value' => sanitize_text_field( $manual_ref ),
+            );
+        }
+
+        $object_id = $transaction->object_id > 0
+            ? $transaction->object_id
+            : $transaction->consultation_id;
+
+        if ( $object_id <= 0 ) {
+            return $rows;
+        }
+
+        $type = '' !== $transaction->object_type ? sanitize_key( $transaction->object_type ) : 'consultation';
+
+        if ( 'appointment' === $type ) {
+
+            $lawyer_id = (int) get_post_meta( $object_id, '_bb_appointment_lawyer_id', true );
+
+            if ( $lawyer_id > 0 ) {
+                $lawyer = get_the_title( $lawyer_id );
+
+                if ( is_string( $lawyer ) && '' !== $lawyer ) {
+                    $rows[] = array(
+                        'label' => __( 'Lawyer', 'business-builder' ),
+                        'value' => sanitize_text_field( $lawyer ),
+                    );
+                }
+            }
+
+            $date  = (string) get_post_meta( $object_id, '_bb_appointment_date', true );
+            $start = (string) get_post_meta( $object_id, '_bb_appointment_start', true );
+
+            if ( '' !== $date ) {
+                $rows[] = array(
+                    'label' => __( 'Appointment Date', 'business-builder' ),
+                    'value' => sanitize_text_field( $date ),
+                );
+            }
+
+            if ( '' !== $start ) {
+                $rows[] = array(
+                    'label' => __( 'Appointment Time', 'business-builder' ),
+                    'value' => sanitize_text_field( $start ),
+                );
+            }
+
+            return $rows;
+        }
+
+        $area = (string) get_post_meta( $object_id, '_bb_consultation_practice_area', true );
+
+        if ( '' !== $area ) {
+            $rows[] = array(
+                'label' => __( 'Practice Area', 'business-builder' ),
+                'value' => sanitize_text_field( $area ),
+            );
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Customer-facing status label for the receipt.
+     *
+     * Manual / offline payments that await an administrator are labelled
+     * "Pending Manual Verification" so a receipt NEVER implies a payment is
+     * settled when it is not.
+     *
+     * @param string $status Transaction status slug.
+     * @return string
+     */
+    private static function receipt_status_label( string $status ): string {
+
+        $status = sanitize_key( $status );
+
+        if ( in_array( $status, array( 'on_hold', 'awaiting_payment', 'processing' ), true )) {
+            return __( 'Pending Manual Verification', 'business-builder' );
+        }
+
+        return TransactionStatus::label( $status );
     }
 
     /**
@@ -297,6 +487,10 @@ final class Receipt {
             'gateway_reference' => $this->gateway_reference,
             'is_paid'           => $this->is_paid,
             'site_name'         => $this->site_name,
+            'logo_url'          => $this->logo_url,
+            'customer_name'     => $this->customer_name,
+            'object_type'       => $this->object_type,
+            'extra_rows'        => $this->extra_rows,
         );
     }
 }

@@ -70,4 +70,30 @@ class InstaPayGateway extends AbstractGateway {
             __( 'InstaPay payments are verified manually by an administrator.', 'business-builder' )
         );
     }
+
+    /**
+     * The InstaPay details the administrator configured, as safe public rows.
+     *
+     * @return array<string, mixed>
+     */
+    public function get_public_instructions(): array {
+
+        $rows = array();
+
+        $address = (string) $this->get_setting( 'instapay_address', '' );
+
+        if ( $address !== '' ) {
+            $rows[] = array(
+                'label' => __( 'InstaPay Address', 'business-builder' ),
+                'value' => $address,
+                'copy'  => true,
+            );
+        }
+
+        return array(
+            'rows'         => $rows,
+            'instructions' => (string) $this->get_setting( 'instructions', '' ),
+            'icon'         => 'instapay',
+        );
+    }
 }

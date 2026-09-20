@@ -165,11 +165,40 @@ abstract class AbstractApiGateway extends AbstractGateway {
             ? wp_remote_post( $url, $args )
             : wp_remote_get( $url, $args );
 
-        if ( is_wp_error( $response ) ) {
+        if ( is_wp_error( $response )) {
 
-            $this->log_debug( 'transport error', array( 'url' => $this->redact_url( $url ), 'error' => $response->get_error_message() ) );
+            $message = $response->get_error_message();
 
-            return array( 'status' => 0, 'body' => array(), 'error' => $response->get_error_message(), 'raw' => '' );
+            /*
+             * Distinguish a TRANSPORT failure (WordPress could not reach
+             * ANY host: no cURL / OpenSSL transport) from a provider
+             * rejection. "the server cannot make outbound HTTPS requests"
+             * is the single most common cause of every API gateway
+             * failing at once, and must be reported as such.
+             */
+            $is_ssl       = ( false !== stripos( $message, 'ssl' ) || false !== stripos( $message, 'certificate' ) || false !== stripos( $message, 'cafile' ) );
+            $is_transport = ( $is_ssl || false !== stripos( $message, 'transport' ) || false !== stripos( $message, 'curl' ) );
+
+            $code = 'gateway_request_failed';
+
+            if ( $is_ssl ) {
+                $code = 'ssl_verification_failed';
+            } elseif ( $is_transport ) {
+                $code = 'transport_unavailable';
+            }
+
+            $this->log_debug(
+                'transport error',
+                array( 'url' => $this->redact_url( $url ), 'error' => $message, 'transport_unavailable' => $is_transport ? 'yes' : 'no' )
+            );
+
+            return array(
+                'status' => 0,
+                'body'   => array(),
+                'error'  => $message,
+                'raw'    => '',
+                'code'   => $code,
+            );
         }
 
         $status = (int) wp_remote_retrieve_response_code( $response );

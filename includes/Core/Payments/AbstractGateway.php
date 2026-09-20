@@ -31,6 +31,26 @@ abstract class AbstractGateway implements PaymentGatewayInterface {
     }
 
     /**
+     * Default: no billing block required (overridden by gateways that
+     * need billing_data, e.g. Paymob).
+     */
+    public function needs_billing(): bool {
+        return false;
+    }
+
+    /**
+     * Default: no public instructions (automatic gateways redirect the
+     * customer to the provider). Manual gateways override this to expose
+     * the administrator's configured payment details as safe, labelled
+     * rows (never secrets).
+     *
+     * @return array<string, mixed>
+     */
+    public function get_public_instructions(): array {
+        return array();
+    }
+
+    /**
      * Default description (empty => the card shows only the name).
      */
     public function get_description(): string {
@@ -112,20 +132,63 @@ abstract class AbstractGateway implements PaymentGatewayInterface {
     }
 
     /**
-     * Default browser-return URL (status page, keyed by public reference).
+     * Default browser-return URL: the REST callback that VERIFIES the payment.
+     *
+     * This points at the plugin's callback route
+     * (/business-builder/v1/payment/callback/{gateway}) so the incoming
+     * return payload is actually processed server-side before the customer
+     * is sent back to the site. The URL is built with rest_url(), which
+     * adapts to ANY permalink structure (pretty /wp-json/ OR ?rest_route=),
+     * so it never breaks when permalinks change.
      *
      * @param PaymentTransaction $transaction Transaction.
      * @return string
      */
     public function get_return_url( PaymentTransaction $transaction ): string {
 
-        return add_query_arg(
-            array(
-                'bb_checkout' => 'return',
-                'bb_ref'      => $transaction->public_ref,
-            ),
-            home_url( '/' )
+        return $this->callback_url( $transaction, 'return' );
+    }
+
+    /**
+     * Build a browser-return / cancel URL that lands on the REST callback.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @param string             $hint        'return'|'cancel' (informational).
+     * @return string
+     */
+    protected function callback_url( PaymentTransaction $transaction, string $hint ): string {
+
+        $path = '/business-builder/v1/payment/callback/' . sanitize_key( $this->get_id() );
+
+        $args = array(
+            'bb_outcome' => sanitize_key( $hint ),
+            'bb_ref'     => $transaction->public_ref,
         );
+
+        /*
+         * Carry the page the customer started from so the callback can send
+         * them back to the SAME page (where the checkout message renders)
+         * instead of a generic home URL. Only the path is kept (safe).
+         */
+        $origin = isset( $transaction->meta['origin'] ) ? (string) $transaction->meta['origin'] : '';
+
+        if ( '' !== $origin ) {
+            $args['bb_origin'] = $origin;
+        }
+
+        /*
+         * Build the absolute callback URL through rest_url(), which adapts
+         * to the site's permalink structure (pretty /wp-json/ OR the
+         * ?rest_route= fallback) and always resolves on the CURRENT site's
+         * host/subdirectory. This is gateway-independent: every gateway
+         * uses the same helper, so no gateway's routing can break another's.
+         *
+         * rest_url() already appends the route with the correct separator,
+         * so the extra args are appended with add_query_arg().
+         */
+        $base = rest_url( $path );
+
+        return add_query_arg( $args, $base );
     }
 
     /**
@@ -136,13 +199,7 @@ abstract class AbstractGateway implements PaymentGatewayInterface {
      */
     public function get_cancel_url( PaymentTransaction $transaction ): string {
 
-        return add_query_arg(
-            array(
-                'bb_checkout' => 'cancel',
-                'bb_ref'      => $transaction->public_ref,
-            ),
-            home_url( '/' )
-        );
+        return $this->callback_url( $transaction, 'cancel' );
     }
 
     /**

@@ -257,8 +257,17 @@ class PaymentWebhook {
                 ),
                 '',
                 '',
-                $transaction->consultation_id,
-                'payment:' . $gateway_id . ':' . $result->reference
+                (int) $transaction->consultation_id,
+                'payment:' . $gateway_id . ':' . $result->reference,
+                array(
+                    'category'    => 'payment',
+                    'entity_type' => $transaction->object_type,
+                    'entity_id'   => (int) $transaction->object_id,
+                    'reference'   => $transaction->public_ref,
+                    'amount'      => $transaction->amount,
+                    'currency'    => $transaction->currency,
+                    'gateway'     => $gateway_id,
+                )
             )
         );
 

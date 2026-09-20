@@ -23,4 +23,10 @@
 @import url("frontend/section-consultation-form.css");
 /* Shared frontend payment selection component (consultation + booking). */
 @import url("frontend/section-payment.css");
+/* Dynamic billing form (shown only for gateways needing billing_data). */
+@import url("frontend/billing-form.css");
+/* Separate payment step page (billing + Pay) for billing gateways. */
+@import url("frontend/payment-step.css");
+/* Consultation & Appointment status lookup section. */
+@import url("frontend/status-lookup.css");
 @import url("frontend/section-lawyer-profile.css");

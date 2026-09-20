@@ -39,6 +39,7 @@ class LawFirmSections {
         $this->register_faq();
         $this->register_consultation();
         $this->register_booking();
+        $this->register_lookup();
 
         add_action( 'bb_render_section_lawyers', array( $this, 'render_lawyers_section' ), 10, 3 );
         add_action( 'bb_render_section_legal_services', array( $this, 'render_legal_services_section' ), 10, 3 );
@@ -440,6 +441,78 @@ class LawFirmSections {
     }
 
     /**
+     * Consultation & Appointment Lookup section.
+     *
+     * Registered through the existing SectionRegistry so it appears in the
+     * Page Builder Meta Box like every other section. The frontend lets a
+     * customer verify their own record with reference + phone number.
+     */
+    protected function register_lookup(): void {
+
+        $this->registry->register(
+            'status_lookup',
+            array(
+                'name'        => 'Status Lookup',
+                'label'       => __( 'Consultation & Appointment Lookup', 'business-builder' ),
+                'description' => __( 'Let customers check their own consultation or appointment status using their reference number and phone number.', 'business-builder' ),
+                'category'    => 'law-firm',
+                'icon'        => 'dashicons-search',
+                'supports'    => array( 'title', 'description' ),
+                'settings'    => array(
+                    'show_consultation'    => array(
+                        'type'        => 'checkbox',
+                        'label'       => __( 'Allow Consultation Lookup', 'business-builder' ),
+                        'default'     => true,
+                        'description' => __( 'Show the "Consultation" option in the lookup form.', 'business-builder' ),
+                    ),
+                    'show_appointment'     => array(
+                        'type'        => 'checkbox',
+                        'label'       => __( 'Allow Appointment Lookup', 'business-builder' ),
+                        'default'     => true,
+                        'description' => __( 'Show the "Appointment" option in the lookup form.', 'business-builder' ),
+                    ),
+                    'show_payment_details' => array(
+                        'type'        => 'checkbox',
+                        'label'       => __( 'Show Payment Details', 'business-builder' ),
+                        'default'     => true,
+                        'description' => __( 'Display payment status, method and references in the result.', 'business-builder' ),
+                    ),
+                    'show_receipt_button'  => array(
+                        'type'        => 'checkbox',
+                        'label'       => __( 'Show Receipt Button', 'business-builder' ),
+                        'default'     => true,
+                        'description' => __( 'Offer a "View Receipt" link when a payment exists.', 'business-builder' ),
+                    ),
+                ),
+                'content'     => $this->heading_fields(),
+                'render'      => array( $this, 'render_lookup_section' ),
+            )
+        );
+    }
+
+    /**
+     * Render the Consultation & Appointment Lookup section.
+     *
+     * @param array $section  Section data.
+     * @param array $settings Section settings.
+     * @param array $content  Section content.
+     */
+    public function render_lookup_section( array $section, array $settings, array $content ): void {
+
+        echo '<div class="bb-section-inner">';
+
+        $this->render_heading( $content );
+
+        $template = BB_CORE_PATH . 'templates/status-lookup.php';
+
+        if ( file_exists( $template ) ) {
+            include $template;
+        }
+
+        echo '</div>';
+    }
+
+    /**
      * Render the appointment booking section.
      *
      * @param array $section  Section data.
@@ -493,7 +566,6 @@ class LawFirmSections {
          */
         $bb_payment    = \BusinessBuilderCore\Packs\LawFirm\Payments\SectionPaymentFactory::for_consultation( $settings );
         $bb_section_id = isset( $section['id'] ) ? sanitize_text_field( (string) $section['id'] ) : '';
-
         /*
          * The page id lets the submit handler re-read THIS section's saved
          * payment configuration server-side. It is not sensitive: the form

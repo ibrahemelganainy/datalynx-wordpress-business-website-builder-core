@@ -74,6 +74,7 @@ class PaymentManager {
         $this->register_gateway( new \BusinessBuilderCore\Core\Payments\Gateways\BankTransferGateway() );
         $this->register_gateway( new \BusinessBuilderCore\Core\Payments\Gateways\WalletGateway() );
         $this->register_gateway( new \BusinessBuilderCore\Core\Payments\Gateways\InstaPayGateway() );
+        $this->register_gateway( new \BusinessBuilderCore\Core\Payments\Gateways\XPayGateway() );
 
         /**
          * Allow gateways/extensions to register additional gateways.

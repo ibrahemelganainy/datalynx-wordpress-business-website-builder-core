@@ -9,6 +9,7 @@ use BusinessBuilderCore\Packs\LawFirm\Payments\SectionPaymentFactory;
 use BusinessBuilderCore\Core\Payments\PaymentManager;
 use BusinessBuilderCore\Core\Payments\Checkout\PaymentCheckout;
 use BusinessBuilderCore\Core\Audit\AuditLog;
+use BusinessBuilderCore\Packs\LawFirm\Frontend\BillingPage;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -114,6 +115,31 @@ class ConsultationForm {
 
         $post_id = (int) $post_id;
 
+        /* Dashboard notification: a new consultation request arrived. */
+        $dash_ref = (string) get_post_meta( $post_id, ConsultationMeta::key( 'public_reference' ), true );
+
+        ( new \BusinessBuilderCore\Core\Notifications\NotificationManager() )->dispatch(
+            new \BusinessBuilderCore\Core\Notifications\Notification(
+                'consultation.new',
+                sprintf(
+                    /* translators: %s: customer name */
+                    __( 'New consultation request from %s', 'business-builder' ),
+                    $data['name']
+                ),
+                $data['practice_area'],
+                '',
+                $post_id,
+                'consultation:' . $post_id . ':new',
+                array(
+                    'category'    => 'consultation',
+                    'entity_type' => 'consultation',
+                    'entity_id'   => $post_id,
+                    'reference'   => $dash_ref,
+                    'customer'    => (string) $data['name'],
+                )
+            )
+        );
+
         /*
          * Payment gate: when the owning section requires payment, the
          * request is NOT confirmed yet. We resolve the section config from
@@ -133,6 +159,21 @@ class ConsultationForm {
 
             if ( '' !== $gateway ) {
 
+                /*
+                 * Gateways that require extra billing details (Paymob) are
+                 * collected on a SEPARATE payment step page. On the first
+                 * submit we send the customer there instead of starting the
+                 * payment; only the billing-step submit actually starts the
+                 * gateway. Every other gateway is unchanged (direct flow).
+                 */
+                $billing_step = isset( $_POST['bb_pay_step'] )
+                    ? sanitize_key( wp_unslash( $_POST['bb_pay_step'] ))
+                    : '';
+
+                if ( in_array( $gateway, self::billing_gateways(), true ) && 'billing' !== $billing_step ) {
+                    $this->redirect_to_payment_step( $post_id, $config, $gateway, $data );
+                }
+
                 $result = $this->start_payment( $post_id, $config, $gateway, $data );
 
                 $type = isset( $result['type'] ) ? (string) $result['type'] : '';
@@ -143,12 +184,47 @@ class ConsultationForm {
                 }
 
                 if ( 'manual' === $type || 'reference' === $type ) {
+
+                    /*
+                     * Manual gateway: record the customer's transaction
+                     * reference (and optional receipt) and place the payment
+                     * on hold for admin verification. Never marked paid here.
+                     */
+                    if ( 'manual' === $type ) {
+                        \BusinessBuilderCore\Packs\LawFirm\Payments\ManualPaymentSubmission::submit(
+                            'consultation',
+                            $post_id,
+                            $gateway,
+                            $_POST,
+                            isset( $result['transaction'] ) && $result['transaction'] instanceof \BusinessBuilderCore\Core\Payments\PaymentTransaction ? $result['transaction'] : null
+                        );
+                    }
+
+                    $pending_ref = '';
+
+                    if ( isset( $result['transaction'] ) && $result['transaction'] instanceof \BusinessBuilderCore\Core\Payments\PaymentTransaction ) {
+                        $pending_ref = (string) $result['transaction']->public_ref;
+                    }
+
                     $this->notify( $data );
-                    $this->redirect_with( $redirect, 'pending' );
+                    $this->redirect_with( $redirect, 'pending', $pending_ref );
                 }
 
-                /* Gateway unavailable: keep the pending request payable. */
-                $this->redirect_with( $redirect, 'payment_error' );
+                /*
+                 * Gateway unavailable / failed to start: log the STRUCTURED
+                 * code (sanitized, no secrets) for the administrator, and
+                 * keep the pending request payable so the customer can retry
+                 * with another method. The customer sees the REAL reason.
+                 */
+                $this->log_payment_failure( $gateway, $result );
+
+                $this->redirect_with(
+                    $redirect,
+                    'payment_error',
+                    '',
+                    $this->user_failure_reason( $gateway, $result ),
+                    isset( $result['code'] ) ? (string) $result['code'] : ''
+                );
             }
 
             /* Payment required but no gateway chosen yet: show the pay step. */
@@ -161,6 +237,42 @@ class ConsultationForm {
     }
 
     /**
+     * Redirect the customer to the separate Paymob payment step page.
+     *
+     * The consultation already exists with pending-payment status; this
+     * step only collects the billing details and, on submit, starts the
+     * gateway. The redirect carries the public reference + the same page /
+     * section ids so the step can re-resolve the SAME saved configuration.
+     *
+     * @param int    $post_id Consultation id.
+     * @param array  $config  Resolved section config.
+     * @param string $gateway Chosen gateway id.
+     * @param array  $data    Submitted data.
+     */
+    private function redirect_to_payment_step( int $post_id, array $config, string $gateway, array $data ): void {
+
+        $ref = (string) get_post_meta( $post_id, ConsultationMeta::key( 'public_reference' ), true );
+
+        /*
+         * Snapshot the resolved payment context on the pending consultation
+         * and mint a one-time token. The dedicated billing page loads this
+         * snapshot (never the browser) so the amount/currency/gateways can
+         * not be tampered with, and only the holder of the token can pay.
+         */
+        $context = array(
+            'gateway'  => sanitize_key( $gateway ),
+            'fee'      => isset( $config['fee'] ) ? (string) $config['fee'] : '',
+            'currency' => isset( $config['currency'] ) ? (string) $config['currency'] : '',
+            'gateways' => isset( $config['gateways'] ) && is_array( $config['gateways'] ) ? $config['gateways'] : array(),
+        );
+
+        $token = BillingPage::store_pending( 'consultation', $post_id, $context );
+
+        wp_safe_redirect( BillingPage::url( $ref, $token ) );
+        exit;
+    }
+
+    /**
      * Resolve this submission's section payment configuration.
      *
      * The form posts a page id + section id (both opaque to the client);
@@ -169,13 +281,33 @@ class ConsultationForm {
      *
      * @return array<string, mixed>|null
      */
-    private function section_payment_config(): ?array {
+    /**
+     * The page id posted by the form (opaque to the browser).
+     *
+     * @return int
+     */
+    private function posted_page_id(): int {
 
-        $page_id = isset( $_POST['bb_page_id'] ) ? absint( wp_unslash( $_POST['bb_page_id'] )) : 0;
+        return isset( $_POST['bb_page_id'] ) ? absint( wp_unslash( $_POST['bb_page_id'] )) : 0;
+    }
 
-        $section_id = isset( $_POST['bb_section_id'] )
+    /**
+     * The section id posted by the form (opaque to the browser).
+     *
+     * @return string
+     */
+    private function posted_section_id(): string {
+
+        return isset( $_POST['bb_section_id'] )
             ? sanitize_text_field( wp_unslash( $_POST['bb_section_id'] ))
             : '';
+    }
+
+    private function section_payment_config(): ?array {
+
+        $page_id = $this->posted_page_id();
+
+        $section_id = $this->posted_section_id();
 
         if ( $page_id <= 0 || '' === $section_id ) {
             return null;
@@ -235,14 +367,138 @@ class ConsultationForm {
             $label = sprintf( __( 'Legal Consultation — %s', 'business-builder' ), (string) $data['practice_area'] );
         }
 
+        /*
+         * Billing details are only collected for gateways that need them
+         * (currently Paymob). Other gateways ignore these POST fields
+         * entirely, so their flow is unchanged.
+         */
+        $billing = $this->collect_billing( $gateway, $data );
+
+        /*
+         * Always record the originating page path so the gateway callback
+         * can return the customer to the SAME page (permalink-agnostic).
+         */
+        $billing['origin'] = $this->origin_path();
+
         return $flow->start(
             'consultation',
             $post_id,
             $config,
             $gateway,
             $label,
-            isset( $data['email'] ) ? (string) $data['email'] : ''
+            isset( $billing['email'] ) && '' !== $billing['email']
+                ? (string) $billing['email']
+                : ( isset( $data['email'] ) ? (string) $data['email'] : '' ),
+            $billing
         );
+    }
+
+    /**
+     * The local path of the page the form was submitted from.
+     *
+     * @return string
+     */
+    private function origin_path(): string {
+
+        $referer = wp_get_referer();
+
+        if ( ! $referer ) {
+            return '/';
+        }
+
+        $path = (string) wp_parse_url( $referer, PHP_URL_PATH );
+
+        return '' !== $path ? $path : '/';
+    }
+
+    /**
+     * Collect billing details for a gateway that requires them.
+     *
+     * Returns an empty array for every gateway other than the ones that
+     * declare a billing requirement (Paymob), so non-billing gateways are
+     * completely unaffected. The values are re-sanitized here; the browser
+     * is never trusted.
+     *
+     * @param string $gateway Chosen gateway id.
+     * @param array  $data     Already-collected form data (fallback source).
+     * @return array<string, string>
+     */
+    private function collect_billing( string $gateway, array $data ): array {
+
+        if ( ! in_array( $gateway, self::billing_gateways(), true )) {
+            return array();
+        }
+
+        $first = isset( $_POST['bb_billing_first_name'] )
+            ? sanitize_text_field( wp_unslash( $_POST['bb_billing_first_name'] ))
+            : '';
+
+        $last = isset( $_POST['bb_billing_last_name'] )
+            ? sanitize_text_field( wp_unslash( $_POST['bb_billing_last_name'] ))
+            : '';
+
+        $email = isset( $_POST['bb_billing_email'] )
+            ? sanitize_email( wp_unslash( $_POST['bb_billing_email'] ))
+            : '';
+
+        $phone = isset( $_POST['bb_billing_phone'] )
+            ? sanitize_text_field( wp_unslash( $_POST['bb_billing_phone'] ))
+            : '';
+
+        /* Fall back to the main form fields when the billing block was blank. */
+        if ( '' === $first && '' === $last && ! empty( $data['name'] )) {
+            $first = (string) $data['name'];
+        }
+
+        if ( '' === $email && ! empty( $data['email'] )) {
+            $email = (string) $data['email'];
+        }
+
+        if ( '' === $phone && ! empty( $data['phone'] )) {
+            $phone = (string) $data['phone'];
+        }
+
+        return array(
+            'first_name' => $first,
+            'last_name'  => $last,
+            'name'       => trim( $first . ' ' . $last ),
+            'email'      => $email,
+            'phone'      => $phone,
+            'country'    => 'EG',
+        );
+    }
+
+    /**
+     * Gateway ids that require a billing_data block.
+     *
+     * @return string[]
+     */
+    private static function billing_gateways(): array {
+
+        /*
+         * Derive the set from each gateway's own contract instead of
+         * hard-coding "paymob". Any gateway that declares needs_billing()
+         * (currently Paymob, and any future one) is routed through the
+         * shared billing step; every other gateway keeps its direct flow.
+         * This keeps the routing gateway-independent.
+         */
+        $ids = array();
+
+        $manager = new PaymentManager();
+
+        foreach ( $manager->gateways() as $id => $gateway ) {
+
+            if ( $gateway->needs_billing() ) {
+                $ids[] = sanitize_key( (string) $id );
+            }
+        }
+
+        /**
+         * Filter the gateways that require billing details.
+         *
+         * @param string[] $ids Gateway ids.
+         */
+        return apply_filters( 'bb_payment_billing_gateways', $ids );
     }
 
     /**
@@ -456,7 +712,7 @@ class ConsultationForm {
      * @param string $url    Redirect base URL.
      * @param string $status 'success' or 'error'.
      */
-    private function redirect_with( string $url, string $status ): void {
+    private function redirect_with( string $url, string $status, string $reference = '', string $reason = '', string $code = '' ): void {
 
         $url = add_query_arg(
             'bb_consult',
@@ -464,10 +720,106 @@ class ConsultationForm {
             remove_query_arg( 'bb_consult', $url )
         );
 
+        /*
+         * Carry the public reference so the customer can open their receipt
+         * / status page right after submitting (never an internal id).
+         */
+        if ( '' !== $reference ) {
+            $url = add_query_arg( 'bb_ref', sanitize_text_field( $reference ), $url );
+        }
+
+        /*
+         * Carry the REAL, user-safe failure reason so the form can explain
+         * what went wrong instead of a generic message.
+         */
+        if ( '' !== $reason ) {
+            $url = add_query_arg( 'bb_pay_reason', sanitize_text_field( $reason ), $url );
+        }
+
+        if ( '' !== $code ) {
+            $url = add_query_arg( 'bb_pay_code', sanitize_key( $code ), $url );
+        }
+
         $url .= '#bb-consultation-form';
 
         wp_safe_redirect( $url );
         exit;
+    }
+
+    /**
+     * Log a structured payment-start failure for the administrator.
+     *
+     * Records the structured code + gateway to the plugin's debug log ONLY
+     * when WP_DEBUG_LOG is on, and to the audit trail otherwise. No secrets,
+     * no request bodies, no customer PII are written.
+     *
+     * @param string $gateway Chosen gateway id.
+     * @param array  $result  Checkout result.
+     */
+    private function user_failure_reason( string $gateway, array $result ): string {
+
+        $code = isset( $result['code'] ) ? sanitize_key( (string) $result['code'] ) : '';
+
+        $gateway_obj = ( new \BusinessBuilderCore\Core\Payments\PaymentManager() )->gateway( $gateway );
+        $name        = $gateway_obj instanceof \BusinessBuilderCore\Core\Payments\PaymentGatewayInterface
+            ? $gateway_obj->get_name()
+            : $gateway;
+
+        $messages = array(
+            'gateway_disabled'        => __( 'This payment method is currently disabled. Please choose another, or contact us.', 'business-builder' ),
+            'gateway_not_configured'  => __( 'This payment method is not set up yet. Please choose another, or contact us so we can help.', 'business-builder' ),
+            'invalid_amount'          => __( 'The amount is not valid. Please contact us so we can correct it.', 'business-builder' ),
+            'invalid_currency'        => __( 'The selected payment method does not support this site currency. Please choose another method, or contact us.', 'business-builder' ),
+            'transport_unavailable'   => __( 'Our server could not reach the payment provider. Please try again shortly, or choose another method.', 'business-builder' ),
+            'ssl_verification_failed' => __( 'Our server could not securely reach the payment provider. Please try again shortly, or choose another method.', 'business-builder' ),
+            'redirect_missing'        => __( 'The payment provider did not return a checkout link. Please try again, or choose another method.', 'business-builder' ),
+        );
+
+        if ( isset( $messages[ $code ] )) {
+            return $messages[ $code ];
+        }
+
+        /*
+         * Fall back to a generic message that still names the gateway. The
+         * provider's own (sanitized) reason, when present, is more useful
+         * than nothing.
+         */
+        $provider = isset( $result['message'] ) ? (string) $result['message'] : '';
+
+        if ( '' !== $provider ) {
+            /* translators: 1: gateway name, 2: provider reason */
+            return sprintf( __( '%1$s could not be started: %2$s', 'business-builder' ), $name, $provider );
+        }
+
+        /* translators: %s: gateway name */
+        return sprintf( __( '%s could not be started. Please try another payment method or contact us.', 'business-builder' ), $name );
+    }
+
+    /**
+     * Log a structured payment-start failure for the administrator.
+     *
+     * @param string $gateway Chosen gateway id.
+     * @param array  $result  Checkout result.
+     */
+    private function log_payment_failure( string $gateway, array $result ): void {
+
+        $code    = isset( $result['code'] ) ? sanitize_key( (string) $result['code'] ) : 'gateway_error';
+        $message = isset( $result['message'] ) ? (string) $result['message'] : '';
+
+        if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+            error_log(
+                '[bb-payment checkout] gateway=' . sanitize_key( $gateway )
+                . ' code=' . $code
+                . ' reason=' . sanitize_text_field( $message )
+            );
+        }
+
+        ( new \BusinessBuilderCore\Core\Audit\AuditLog() )->record(
+            'payment.checkout_failed',
+            'payment',
+            0,
+            array( 'gateway' => sanitize_key( $gateway ), 'code' => $code )
+        );
     }
 
     /**

@@ -1,0 +1,165 @@
+/**
+ * Business Builder Core - Frontend: Dynamic billing form
+ * -------------------------------------------------------
+ * Styles for templates/partials/billing-form.php (shown only for gateways
+ * that require billing_data, e.g. Paymob).
+ *
+ * Classes:
+ *   .bb-billing (animated show/hide)
+ *   .bb-billing-title / .bb-billing-hint
+ *   .bb-billing-grid / .bb-billing-field
+ *   .bb-billing-input :focus states
+ *   .bb-billing-error (inline validation message)
+ */
+
+.bb-template .bb-billing {
+  margin-top: 18px;
+  padding: 20px 20px 4px;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: linear-gradient(180deg, #fbfcfe 0%, #f6f8fb 100%);
+}
+
+/*
+ * Show/hide animation. The element carries the `hidden` attribute by
+ * default; when JS removes it we animate in. `[hidden]` is enforced with
+ * display:none so it never flashes before JS runs.
+ */
+.bb-template .bb-billing[hidden] {
+  display: none;
+}
+
+.bb-template .bb-billing.is-revealing {
+  animation: bb-billing-slide-down 0.28s ease both;
+}
+
+.bb-template .bb-billing.is-hiding {
+  animation: bb-billing-fade-up 0.2s ease both;
+}
+
+@keyframes bb-billing-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bb-billing-fade-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-template .bb-billing.is-revealing,
+  .bb-template .bb-billing.is-hiding {
+    animation: none;
+  }
+}
+
+.bb-template .bb-billing-title {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bb-template .bb-billing-hint {
+  margin: 0 0 16px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.bb-template .bb-billing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 18px;
+}
+
+.bb-template .bb-billing-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.bb-template .bb-billing-field label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #0f172a;
+}
+
+.bb-template .bb-billing-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1.5px solid rgba(15, 23, 42, 0.16);
+  border-radius: 11px;
+  background: #fff;
+  color: #1f2937;
+  font: inherit;
+  line-height: 1.5;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.bb-template .bb-billing-input::placeholder {
+  color: #9aa4b2;
+}
+
+.bb-template .bb-billing-input:hover {
+  border-color: rgba(15, 23, 42, 0.28);
+}
+
+.bb-template .bb-billing-input:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.14);
+}
+
+/* Invalid state (set by JS). */
+.bb-template .bb-billing-input[aria-invalid="true"] {
+  border-color: #d63638;
+  background: #fff9f9;
+}
+
+.bb-template .bb-billing-input[aria-invalid="true"]:focus {
+  border-color: #d63638;
+  box-shadow: 0 0 0 4px rgba(214, 54, 56, 0.14);
+}
+
+.bb-template .bb-billing-error {
+  display: none;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #b32d2e;
+}
+
+.bb-template .bb-billing-error.is-visible {
+  display: block;
+  animation: bb-billing-fade-up 0.16s ease reverse both;
+}
+
+/* Responsive: single column on small screens. */
+@media (max-width: 560px) {
+  .bb-template .bb-billing {
+    padding: 18px 16px 2px;
+  }
+
+  .bb-template .bb-billing-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

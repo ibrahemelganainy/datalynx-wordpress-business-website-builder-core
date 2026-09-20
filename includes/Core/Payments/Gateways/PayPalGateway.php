@@ -314,7 +314,27 @@ class PayPalGateway extends AbstractApiGateway {
         $body = is_array( $result['body'] ) ? $result['body'] : array();
 
         if ( 200 !== (int) $result['status'] ) {
+
             $this->paypal_error( 'oauth', $result );
+
+            /*
+             * A status of 0 means WordPress could not reach PayPal at all
+             * (no HTTP transport / TLS) - which is NOT a credentials problem.
+             * Reporting it as "authentication failed" sends the administrator
+             * chasing the wrong cause, so distinguish it explicitly.
+             */
+            if ( 0 === (int) $result['status'] ) {
+                $this->set_last_error(
+                    sprintf(
+                        /* translators: %s: transport error message */
+                        __( 'PayPal could not be reached from this server (%s). Ensure the cURL and OpenSSL PHP extensions are enabled AND a CA bundle is configured (curl.cainfo / openssl.cafile) in php.ini.', 'business-builder' ),
+                        (string) $result['error']
+                    )
+                );
+
+                return '';
+            }
+
             $this->set_last_error( __( 'PayPal authentication failed. Please check the Client ID and Secret.', 'business-builder' ) );
             return '';
         }

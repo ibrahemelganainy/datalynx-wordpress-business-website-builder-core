@@ -92,6 +92,38 @@ interface PaymentGatewayInterface {
     public function is_manual(): bool;
 
     /**
+     * Whether the customer must supply billing details (name/email/phone)
+     * before this gateway can start a payment.
+     *
+     * Gateways that need a full billing_data block (e.g. Paymob) return
+     * true so the customer is routed through the shared billing step. Every
+     * other gateway keeps its direct flow. This is declared by the gateway
+     * itself, so no gateway is ever special-cased by id elsewhere in the
+     * codebase.
+     *
+     * @return bool
+     */
+    public function needs_billing(): bool;
+
+    /**
+     * Public, non-sensitive payment instructions for the CUSTOMER.
+     *
+     * For manual/offline gateways this returns the administrator's real
+     * configured details (wallet number, InstaPay address, bank account,
+     * IBAN, etc.) as labelled rows plus optional free-text instructions.
+     * It NEVER returns secrets.
+     *
+     * Automatic (API) gateways return an empty array.
+     *
+     * @return array{
+     *     rows?: array<int, array{label: string, value: string, copy?: bool}>,
+     *     instructions?: string,
+     *     icon?: string
+     * }
+     */
+    public function get_public_instructions(): array;
+
+    /**
      * Whether the operator has supplied enough configuration to use it.
      *
      * @return bool

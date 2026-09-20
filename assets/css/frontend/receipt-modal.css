@@ -1,0 +1,108 @@
+/**
+ * Business Builder Core — In-page receipt modal.
+ * The receipt styles themselves come from ReceiptRenderer's scoped styles;
+ * this file only provides the overlay + panel chrome.
+ */
+
+body.bb-receipt-open {
+  overflow: hidden;
+}
+
+.bb-receipt-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3vh 16px;
+  overflow-y: auto;
+}
+
+.bb-receipt-modal[hidden] {
+  display: none !important;
+}
+
+.bb-receipt-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.62);
+  backdrop-filter: blur(2px);
+}
+
+.bb-receipt-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: auto;
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
+  animation: bbReceiptIn 0.22s ease both;
+}
+
+@keyframes bbReceiptIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-receipt-modal-panel {
+    animation: none;
+  }
+}
+
+.bb-receipt-modal-close {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 8px;
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.bb-receipt-modal-close:hover {
+  background: rgba(15, 23, 42, 0.16);
+}
+
+.bb-receipt-modal-body {
+  max-height: none;
+}
+
+.bb-receipt-modal-reopen {
+  margin: 12px 0 4px;
+  text-align: center;
+}
+
+/* The receipt's own action row is hidden inside the modal — the modal
+ * provides Print / Save via the receipt's own buttons which remain. */
+.bb-receipt-modal .bb-receipt {
+  margin: 0 auto;
+}
+
+@media (max-width: 560px) {
+  .bb-receipt-modal {
+    padding: 12px 8px;
+  }
+
+  .bb-receipt-modal-panel {
+    padding: 8px;
+    border-radius: 12px;
+  }
+}

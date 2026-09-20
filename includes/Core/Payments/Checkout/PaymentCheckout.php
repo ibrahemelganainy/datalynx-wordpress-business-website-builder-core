@@ -62,6 +62,7 @@ class PaymentCheckout {
         if ( false === $valid ) {
             return array(
                 'type'    => 'error',
+                'code'    => 'invalid_request',
                 'message' => implode( ' ', $request->errors ),
             );
         }
@@ -69,20 +70,29 @@ class PaymentCheckout {
         $gateway = $this->payments->gateway( $request->gateway );
 
         if ( ! $gateway instanceof PaymentGatewayInterface ) {
-            return $this->error( __( 'The selected payment method is not available.', 'business-builder' ) );
+            return $this->error( 'gateway_unknown', __( 'The selected payment method is not available.', 'business-builder' ) );
         }
 
         /* The gateway must be enabled AND fully configured. */
         $enabled = $this->payments->is_gateway_enabled( $gateway->get_id() );
 
         if ( false === $enabled ) {
-            return $this->error( __( 'The selected payment method is not enabled.', 'business-builder' ) );
+            return $this->error( 'gateway_disabled', __( 'The selected payment method is not enabled.', 'business-builder' ) );
         }
 
         $configured = $gateway->is_configured();
 
         if ( false === $configured ) {
-            return $this->error( __( 'The selected payment method is not configured yet.', 'business-builder' ) );
+            return $this->error( 'gateway_not_configured', __( 'The selected payment method is not configured yet.', 'business-builder' ) );
+        }
+
+        /* Validate the amount + currency before touching the gateway. */
+        if ( '' === $request->amount || (float) $request->amount <= 0 ) {
+            return $this->error( 'invalid_amount', __( 'A valid amount is required to continue.', 'business-builder' ) );
+        }
+
+        if ( '' === $request->currency ) {
+            return $this->error( 'invalid_currency', __( 'A currency is required to continue.', 'business-builder' ) );
         }
 
         $transaction = $this->create_transaction( $request, $gateway );
@@ -91,7 +101,44 @@ class PaymentCheckout {
 
         $type = isset( $result['type'] ) ? (string) $result['type'] : 'unavailable';
 
-        return $this->handle_result( $transaction, $gateway, $type, $result );
+        $handled = $this->handle_result( $transaction, $gateway, $type, $result );
+
+        /*
+         * If the gateway could not start the payment, the transaction must
+         * NOT be left in an orphaned "pending" state: record it as failed
+         * (with the structured code + a sanitized provider reason) so the
+         * administrator can see exactly why, and no phantom pending payment
+         * accumulates in the dashboard.
+         */
+        if ( isset( $handled['type'] ) && 'error' === $handled['type'] && $transaction->id > 0 ) {
+
+            $code = isset( $handled['code'] ) ? sanitize_key( (string) $handled['code'] ) : 'gateway_request_failed';
+            $meta = is_array( $transaction->meta ) ? $transaction->meta : array();
+
+            $meta['failure_code']   = $code;
+            $meta['failure_reason'] = isset( $handled['message'] ) ? sanitize_text_field( (string) $handled['message'] ) : '';
+            $meta['failed_at']      = current_time( 'mysql' );
+
+            $failed = $this->payments->store()->find( $transaction->id );
+
+            if ( $failed instanceof PaymentTransaction ) {
+                $failed->meta   = $meta;
+                $failed->status = 'failed';
+                $failed         = $this->payments->persist( $failed );
+
+                /* Surface the failed transaction to the caller too. */
+                $handled['transaction'] = $failed;
+            }
+
+            $this->audit->record(
+                'payment.checkout_failed',
+                'payment',
+                $transaction->id,
+                array( 'gateway' => $gateway->get_id(), 'code' => $code )
+            );
+        }
+
+        return $handled;
     }
 
     /**
@@ -117,6 +164,11 @@ class PaymentCheckout {
                     array(
                         'label'      => $request->label,
                         'email'      => $request->email,
+                        'name'       => isset( $request->billing['name'] ) ? $request->billing['name'] : '',
+                        'first_name' => isset( $request->billing['first_name'] ) ? $request->billing['first_name'] : '',
+                        'last_name'  => isset( $request->billing['last_name'] ) ? $request->billing['last_name'] : '',
+                        'phone'      => isset( $request->billing['phone'] ) ? $request->billing['phone'] : '',
+                        'origin'     => isset( $request->billing['origin'] ) ? $request->billing['origin'] : '',
                         'created_by' => 'checkout',
                     )
                 ),
@@ -152,7 +204,7 @@ class PaymentCheckout {
                 $url = isset( $result['url'] ) ? (string) $result['url'] : $gateway->get_payment_url( $transaction );
 
                 if ( '' === $url ) {
-                    return $this->error( __( 'The payment provider could not be reached. Please try again.', 'business-builder' ) );
+                    return $this->error( 'redirect_missing', __( 'The payment provider could not be reached. Please try again.', 'business-builder' ) );
                 }
 
                 $has_reference = ! empty( $result['reference'] );
@@ -238,6 +290,7 @@ class PaymentCheckout {
                  * surface the honest provider message.
                  */
                 return $this->error(
+                    'gateway_request_failed',
                     '' !== $message
                         ? $message
                         : __( 'This payment method is not available right now. Please choose another.', 'business-builder' ),
@@ -249,14 +302,16 @@ class PaymentCheckout {
     /**
      * Build an error result.
      *
-     * @param string            $message     Message.
+     * @param string                  $code        Structured error code.
+     * @param string                  $message     Human message.
      * @param PaymentTransaction|null $transaction Transaction (optional).
      * @return array<string, mixed>
      */
-    protected function error( string $message, ?PaymentTransaction $transaction = null ): array {
+    protected function error( string $code, string $message, ?PaymentTransaction $transaction = null ): array {
 
         return array(
             'type'        => 'error',
+            'code'        => sanitize_key( $code ),
             'message'     => $message,
             'transaction' => $transaction,
         );

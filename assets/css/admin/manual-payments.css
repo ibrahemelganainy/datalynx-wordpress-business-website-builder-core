@@ -1,0 +1,268 @@
+/**
+ * Business Builder Core — Manual Payments review screen.
+ * Uses the dashboard visual language. RTL-safe.
+ */
+
+.bb-manual-payments .bb-mp-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.bb-manual-payments .bb-mp-empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 22px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  color: #166534;
+  font-weight: 600;
+}
+
+.bb-manual-payments .bb-mp-empty .dashicons {
+  color: #16a34a;
+}
+
+.bb-manual-payments .bb-mp-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.bb-manual-payments .bb-mp-card {
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+}
+
+.bb-manual-payments .bb-mp-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  background: #0f172a;
+  color: #fff;
+}
+
+.bb-manual-payments .bb-mp-head-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bb-manual-payments .bb-mp-ref {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.bb-manual-payments .bb-mp-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.bb-manual-payments .bb-mp-amount {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.bb-manual-payments .bb-mp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  background: #e5e7eb;
+  margin: 0;
+}
+
+.bb-manual-payments .bb-mp-field {
+  background: #fff;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bb-manual-payments .bb-mp-field dt {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.bb-manual-payments .bb-mp-field dd {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.bb-manual-payments .bb-mp-field code {
+  font-size: 0.85rem;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+
+.bb-manual-payments .bb-mp-txref {
+  background: #eef2ff;
+  color: #1d4ed8;
+}
+
+.bb-manual-payments .bb-mp-proof-thumb {
+  display: block;
+  max-width: 120px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  margin-bottom: 6px;
+}
+
+.bb-manual-payments .bb-mp-proof-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.bb-manual-payments .bb-mp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px 18px;
+  background: #f8fafc;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.bb-manual-payments .bb-mp-form {
+  display: inline-flex;
+}
+
+.bb-manual-payments .bb-mp-reject summary {
+  cursor: pointer;
+}
+
+.bb-manual-payments .bb-mp-reject-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 10px;
+  background: #fff;
+  max-width: 420px;
+}
+
+.bb-manual-payments .bb-mp-reject-form label {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.bb-manual-payments .bb-mp-reject-form textarea {
+  width: 100%;
+}
+
+/* RTL safety */
+.bb-rtl.bb-manual-payments .bb-mp-card-head {
+  direction: rtl;
+}
+/* Payment proof: larger, clickable inline preview on the review screen. */
+.bb-manual-payments .bb-mp-proof-preview {
+  display: inline-block;
+  line-height: 0;
+}
+
+.bb-manual-payments .bb-mp-proof-thumb {
+  display: block;
+  max-width: 180px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bb-manual-payments .bb-mp-proof-preview:hover .bb-mp-proof-thumb {
+  transform: scale(1.02);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.16);
+}
+
+/* Payment Logs screen */
+.bb-pl-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 14px 0 18px;
+}
+
+.bb-pl-filters input[type="search"] {
+  min-width: 240px;
+}
+
+.bb-pl-table code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+}
+
+.bb-pl-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.bb-pl-status-paid,
+.bb-pl-status-completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.bb-pl-status-failed,
+.bb-pl-status-cancelled,
+.bb-pl-status-expired {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.bb-pl-status-on_hold,
+.bb-pl-status-awaiting_payment,
+.bb-pl-status-processing {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.bb-pl-reason {
+  display: inline-block;
+  color: #991b1b;
+  font-size: 0.82rem;
+}
+
+/* Customer-facing payment error block */
+.bb-consultation-error-code code,
+.bb-booking-error-code code {
+  font-size: 0.78rem;
+  background: rgba(15, 23, 42, 0.06);
+  padding: 2px 6px;
+  border-radius: 5px;
+}

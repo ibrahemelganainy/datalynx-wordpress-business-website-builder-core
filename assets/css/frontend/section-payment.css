@@ -189,3 +189,185 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ------------------------------------------------------------------
+ * Manual payment instructions (wallet / InstaPay / bank transfer)
+ * Shown under the selected manual gateway. Reuses the same visual
+ * language as the payment option cards (radius, spacing, palette).
+ * ------------------------------------------------------------------ */
+
+.bb-template .bb-manual-instructions {
+  margin: 14px 0 0;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: #f8fafc;
+}
+
+.bb-template .bb-manual-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.bb-template .bb-manual-icon {
+  flex: 0 0 auto;
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.bb-template .bb-manual-title {
+  margin: 0 0 2px;
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.bb-template .bb-manual-note {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.bb-template .bb-manual-rows {
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.bb-template .bb-manual-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.bb-template .bb-manual-row-label {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.bb-template .bb-manual-row-value {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bb-template .bb-manual-value {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a;
+  word-break: break-all;
+}
+
+.bb-template .bb-manual-copy {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(29, 78, 216, 0.3);
+  background: rgba(29, 78, 216, 0.06);
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.bb-template .bb-manual-copy:hover {
+  background: rgba(29, 78, 216, 0.12);
+}
+
+.bb-template .bb-manual-help {
+  margin: 12px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.bb-template .bb-manual-help p {
+  margin: 0 0 6px;
+}
+
+.bb-template .bb-manual-fields {
+  margin-top: 14px;
+  display: grid;
+  gap: 14px;
+}
+
+.bb-template .bb-manual-field {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bb-template .bb-manual-field label {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.bb-template .bb-manual-input,
+.bb-template .bb-manual-file {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1.5px solid rgba(15, 23, 42, 0.16);
+  border-radius: 11px;
+  font: inherit;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bb-template .bb-manual-input:focus,
+.bb-template .bb-manual-file:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.14);
+}
+
+.bb-template .bb-manual-input[aria-invalid="true"] {
+  border-color: #d63638;
+  background: #fff9f9;
+}
+
+.bb-template .bb-manual-error {
+  font-size: 0.78rem;
+  color: #b32d2e;
+  min-height: 1em;
+}
+
+.bb-template .bb-manual-hint {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+.bb-template .bb-manual-verified {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #8a5a00;
+}
+
+.bb-template .bb-manual-verified-icon {
+  font-size: 0.9rem;
+}
+
+/* RTL: keep spacing balanced. */
+.bb-rtl .bb-template .bb-manual-row,
+[dir="rtl"] .bb-template .bb-manual-row {
+  flex-direction: row;
+}

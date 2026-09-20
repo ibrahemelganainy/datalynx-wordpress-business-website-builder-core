@@ -53,6 +53,14 @@ final class CheckoutRequest {
     public readonly string $email;
 
     /**
+     * Optional non-sensitive billing details (name/phone) used by gateways
+     * that require a full billing block (e.g. Paymob). Never card data.
+     *
+     * @var array<string, string>
+     */
+    public readonly array $billing;
+
+    /**
      * Free-form validation errors (empty when valid).
      *
      * @var string[]
@@ -69,6 +77,7 @@ final class CheckoutRequest {
      * @param string   $currency    Currency.
      * @param string   $label       Label.
      * @param string   $email       Email.
+     * @param array    $billing     Billing details (name/phone).
      * @param string[] $errors      Errors.
      */
     private function __construct(
@@ -79,6 +88,7 @@ final class CheckoutRequest {
         string $currency,
         string $label,
         string $email,
+        array $billing,
         array $errors
     ) {
         $this->object_type = $object_type;
@@ -88,6 +98,7 @@ final class CheckoutRequest {
         $this->currency    = $currency;
         $this->label       = $label;
         $this->email       = $email;
+        $this->billing     = $billing;
         $this->errors      = $errors;
     }
 
@@ -133,9 +144,35 @@ final class CheckoutRequest {
             ? sanitize_email( (string) $input['email'] )
             : '';
 
+        $billing = isset( $input['billing'] ) && is_array( $input['billing'] )
+            ? self::normalize_billing( $input['billing'] )
+            : array();
+
         $errors = self::validate( $object_type, $object_id, $gateway, $amount, $currency );
 
-        return new self( $object_type, $object_id, $gateway, $amount, $currency, $label, $email, $errors );
+        return new self( $object_type, $object_id, $gateway, $amount, $currency, $label, $email, $billing, $errors );
+    }
+
+    /**
+     * Normalize the optional billing block to safe scalar strings.
+     *
+     * @param array $billing Raw billing input.
+     * @return array<string, string>
+     */
+    private static function normalize_billing( array $billing ): array {
+
+        $clean = array();
+
+        foreach ( array( 'first_name', 'last_name', 'name', 'phone', 'email', 'country', 'city', 'origin' ) as $key ) {
+
+            $value = isset( $billing[ $key ] ) && is_scalar( $billing[ $key ] )
+                ? (string) $billing[ $key ]
+                : '';
+
+            $clean[ $key ] = sanitize_text_field( $value );
+        }
+
+        return $clean;
     }
 
     /**

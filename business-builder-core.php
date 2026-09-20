@@ -69,6 +69,13 @@ register_deactivation_hook(
 
 function bb_core_run(): void {
 
+    /*
+     * Self-heal HTTPS transport for payment gateways: point cURL at an
+     * existing CA bundle when php.ini has none, so a server without a
+     * configured curl.cainfo can still reach PayPal/Stripe/Paymob.
+     */
+    BusinessBuilderCore\Core\Payments\HttpTransport::register();
+
     $plugin = new BusinessBuilderCore\Core\Plugin();
 
     $plugin->run();

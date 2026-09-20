@@ -539,12 +539,27 @@ class PaymentSettingsAdmin {
 
         $schema = $gateway->get_settings_schema();
 
+        /*
+         * A webhook URL block is shown for every automatic (non-manual)
+         * gateway. It is placed ABOVE the gateway's own webhook/secret field
+         * when one exists (e.g. the PayPal "Webhook ID"), otherwise it is
+         * shown as the first field of the card.
+         */
+        $show_webhook  = ! $gateway->is_manual();
+        $webhook_key   = $this->webhook_anchor_key( $schema );
+        $webhook_done  = false;
+
         foreach ( $schema as $key => $field ) {
 
             $key = sanitize_key( (string) $key );
 
             if ( '' === $key ) {
                 continue;
+            }
+
+            if ( $show_webhook && $key === $webhook_key && ! $webhook_done ) {
+                $this->render_webhook_url_field( $gateway_id );
+                $webhook_done = true;
             }
 
             $type     = isset( $field['type'] ) ? (string) $field['type'] : 'text';
@@ -634,6 +649,125 @@ class PaymentSettingsAdmin {
             <?php
         }
     }
+
+    /**
+     * The gateway setting key a webhook URL block should sit above.
+     *
+     * PayPal exposes a "Webhook ID" field; for other providers the block
+     * is anchored to their webhook/secret field so it stays grouped with
+     * the verification input. Falls back to the first field.
+     *
+     * @param array<string, array<string, mixed>> $schema Settings schema.
+     * @return string
+     */
+    protected function webhook_anchor_key( array $schema ): string {
+
+        $preferred = array( 'webhook_id', 'webhook_secret', 'hmac_secret', 'security_key' );
+
+        foreach ( $preferred as $candidate ) {
+
+            if ( array_key_exists( $candidate, $schema )) {
+                return $candidate;
+            }
+        }
+
+        /* Fall back to the first schema key so the block still appears. */
+        $keys = array_keys( $schema );
+
+        return isset( $keys[0] ) ? (string) $keys[0] : '';
+    }
+
+    /**
+     * The absolute webhook URL for a gateway on THIS site.
+     *
+     * The domain comes from the site's own settings (home_url), never a
+     * hard-coded host, so it follows the client's real domain and stays
+     * correct per-site on Multisite.
+     *
+     * @param string $gateway_id Gateway id.
+     * @return string
+     */
+    protected function webhook_url( string $gateway_id ): string {
+
+        $gateway_id = sanitize_key( $gateway_id );
+
+        $path = '/business-builder/v1/payment/webhook/' . $gateway_id;
+
+        /*
+         * Use the REST URL helper so the correct permalink form (?rest_route=
+         * or /wp-json/) is produced for the site's configuration.
+         */
+        if ( function_exists( 'rest_url' )) {
+            return rest_url( $path );
+        }
+
+        return esc_url_raw( home_url( '/wp-json' . $path ) );
+    }
+
+    /**
+     * Render the read-only webhook URL field with a copy button.
+     *
+     * @param string $gateway_id Gateway id.
+     */
+    protected function render_webhook_url_field( string $gateway_id ): void {
+
+        $url      = $this->webhook_url( $gateway_id );
+        $field_id = 'bb_gw_' . sanitize_key( $gateway_id ) . '_webhook_url';
+
+        ?>
+        <div class="bb-gateway-field bb-gateway-field-webhook">
+
+            <label for="<?php echo esc_attr( $field_id ); ?>">
+                <?php esc_html_e( 'Webhook URL', 'business-builder' ); ?>
+            </label>
+
+            <div class="bb-webhook-copy">
+                <input
+                    type="text"
+                    id="<?php echo esc_attr( $field_id ); ?>"
+                    class="bb-webhook-url"
+                    value="<?php echo esc_attr( $url ); ?>"
+                    readonly
+                    onfocus="this.select();"
+                    onclick="this.select();"
+                    aria-readonly="true"
+                />
+
+                <button
+                    type="button"
+                    class="button bb-webhook-copy-button"
+                    data-bb-copy-target="<?php echo esc_attr( $field_id ); ?>"
+                    data-bb-copy-label="<?php echo esc_attr__( 'Copied', 'business-builder' ); ?>"
+                    data-bb-copy-tip="<?php echo esc_attr__( 'Copy to clipboard', 'business-builder' ); ?>"
+                    aria-label="<?php echo esc_attr__( 'Copy webhook URL to clipboard', 'business-builder' ); ?>"
+                >
+                    <span class="bb-copy-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" focusable="false">
+                            <path d="M8 3h9a2 2 0 0 1 2 2v11a1 1 0 1 1-2 0V5H8a1 1 0 0 1 0-2z"/>
+                            <rect x="4" y="7" width="12" height="14" rx="2"/>
+                        </svg>
+                    </span>
+                    <span class="bb-copy-tip" role="tooltip">
+                        <span class="bb-copy-tip-text" data-bb-tip-default="<?php echo esc_attr__( 'Copy to clipboard', 'business-builder' ); ?>" data-bb-tip-copied="<?php echo esc_attr__( 'Copied', 'business-builder' ); ?>">
+                            <?php esc_html_e( 'Copy to clipboard', 'business-builder' ); ?>
+                        </span>
+                        <span class="bb-copy-tip-check" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                <path d="M20 6 9 17l-5-5"/>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+            </div>
+
+            <p class="description">
+                <?php esc_html_e( 'Copy this link and paste it into your payment provider\'s dashboard (Webhooks / Callback URL) so payment confirmations reach your site.', 'business-builder' ); ?>
+            </p>
+
+        </div>
+        <?php
+    }
+
 
     /**
      * Handle the save.

@@ -68,6 +68,40 @@ class WalletGateway extends AbstractGateway {
         );
     }
 
+    /**
+     * The wallet details the administrator configured, as safe public rows.
+     *
+     * @return array<string, mixed>
+     */
+    public function get_public_instructions(): array {
+
+        $rows = array();
+
+        $provider = (string) $this->get_setting( 'wallet_provider', '' );
+        $number   = (string) $this->get_setting( 'wallet_number', '' );
+
+        if ( $provider !== '' ) {
+            $rows[] = array(
+                'label' => __( 'Wallet Provider', 'business-builder' ),
+                'value' => $provider,
+            );
+        }
+
+        if ( $number !== '' ) {
+            $rows[] = array(
+                'label' => __( 'Wallet Number', 'business-builder' ),
+                'value' => $number,
+                'copy'  => true,
+            );
+        }
+
+        return array(
+            'rows'         => $rows,
+            'instructions' => (string) $this->get_setting( 'instructions', '' ),
+            'icon'         => 'wallet',
+        );
+    }
+
     public function verify_payment( array $payload ): PaymentResult {
 
         return new PaymentResult(

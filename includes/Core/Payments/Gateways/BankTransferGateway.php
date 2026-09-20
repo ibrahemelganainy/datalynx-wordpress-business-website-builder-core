@@ -90,4 +90,41 @@ class BankTransferGateway extends AbstractGateway {
             __( 'Bank transfer payments are verified manually by an administrator.', 'business-builder' )
         );
     }
+
+    /**
+     * The bank details the administrator configured, as safe public rows.
+     *
+     * @return array<string, mixed>
+     */
+    public function get_public_instructions(): array {
+
+        $rows = array();
+
+        $fields = array(
+            'bank_name'      => __( 'Bank Name', 'business-builder' ),
+            'account_name'   => __( 'Account Holder', 'business-builder' ),
+            'account_number' => __( 'Account Number / IBAN', 'business-builder' ),
+        );
+
+        foreach ( $fields as $key => $label ) {
+
+            $value = (string) $this->get_setting( $key, '' );
+
+            if ( $value === '' ) {
+                continue;
+            }
+
+            $rows[] = array(
+                'label' => $label,
+                'value' => $value,
+                'copy'  => true,
+            );
+        }
+
+        return array(
+            'rows'         => $rows,
+            'instructions' => (string) $this->get_setting( 'instructions', '' ),
+            'icon'         => 'bank',
+        );
+    }
 }

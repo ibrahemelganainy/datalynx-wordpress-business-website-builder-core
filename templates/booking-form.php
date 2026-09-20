@@ -7,6 +7,10 @@
  * enforced server-side by the Availability service; the slot list here is
  * a convenience only.
  *
+ * Billing details (Paymob) are NOT collected here — they are collected on
+ * the dedicated /paymob-billing/ page, which the handler redirects to when
+ * a billing gateway is selected.
+ *
  * @package BusinessBuilderCore
  */
 
@@ -16,7 +20,7 @@ use BusinessBuilderCore\Packs\LawFirm\Appointments\Availability;
 use BusinessBuilderCore\Packs\LawFirm\PostTypes\ConsultationMeta;
 use BusinessBuilderCore\Core\Payments\Currencies;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ))  {
     exit;
 }
 
@@ -43,7 +47,7 @@ $bb_status_messages = array(
     'past_date'     => __( 'Please choose a date in the future.', 'business-builder' ),
     'outside_hours' => __( 'That time is outside our booking hours. Please choose another time.', 'business-builder' ),
     'closed'        => __( 'We are not taking bookings on the selected day. Please choose another day.', 'business-builder' ),
-    'pending'       => __( 'Your appointment was held. Please complete the payment below to confirm it.', 'business-builder' ),
+    'pending'       => __( 'Your appointment was held and is awaiting payment verification. You will receive a confirmation once an administrator verifies your payment.', 'business-builder' ),
     'payment_error' => __( 'Your appointment was held, but the payment could not be started. Please choose a payment method and try again.', 'business-builder' ),
     'error'         => __( 'Sorry, your request could not be submitted. Please check the required fields.', 'business-builder' ),
 );
@@ -68,7 +72,7 @@ $bb_area_terms = get_terms(
     )
 );
 
-if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ) ) {
+if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ))  {
     $bb_area_terms = array();
 }
 
@@ -76,9 +80,58 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ) ) {
 
 <div class="bb-booking" id="bb-booking-form">
 
-    <?php if ( '' !== $bb_status && isset( $bb_status_messages[ $bb_status ] ) ) : ?>
-        <div class="bb-booking-notice bb-booking-<?php echo esc_attr( $bb_status ); ?>">
-            <?php echo esc_html( $bb_status_messages[ $bb_status ] ); ?>
+    <?php
+    /*
+     * Payment state flags (see the consultation template). The callback
+     * redirects back with bb_checkout=paid|pending (+ the public bb_ref), so
+     * the SAME page shows the success state and the receipt on screen.
+     */
+    $bb_checkout_state = isset( $_GET['bb_checkout'] ) ? sanitize_key( wp_unslash( $_GET['bb_checkout'] )) : '';
+    $bb_raw_apt_ref    = isset( $_GET['bb_ref'] ) ? wp_unslash( $_GET['bb_ref'] ) : '';
+    $bb_apt_ref        = sanitize_text_field( (string) $bb_raw_apt_ref );
+
+    if ( 'paid' === $bb_checkout_state ) {
+        $bb_show_state = 'paid';
+    } elseif ( 'pending' === $bb_status || 'pending' === $bb_checkout_state ) {
+        $bb_show_state = 'pending';
+    } else {
+        $bb_show_state = $bb_status;
+    }
+    ?>
+
+    <?php if ( 'paid' === $bb_show_state ) : ?>
+        <div class="bb-booking-notice bb-booking-paid">
+            <p><?php esc_html_e( 'Payment received. Your appointment is confirmed — your receipt is shown below.', 'business-builder' ); ?></p>
+            <?php if ( '' !== $bb_apt_ref ) : ?>
+                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-auto data-bb-receipt-ref="<?php echo esc_attr( $bb_apt_ref ); ?>">
+                    <?php esc_html_e( 'View Receipt', 'business-builder' ); ?>
+                </button>
+            <?php endif; ?>
+        </div>
+    <?php elseif ( 'payment_error' === $bb_show_state ) : ?>
+        <?php
+        $bb_pay_reason = isset( $_GET['bb_pay_reason'] ) ? sanitize_text_field( wp_unslash( $_GET['bb_pay_reason'] )) : '';
+        $bb_pay_code   = isset( $_GET['bb_pay_code'] ) ? sanitize_key( wp_unslash( $_GET['bb_pay_code'] )) : '';
+        ?>
+        <div class="bb-booking-notice bb-booking-payment_error">
+            <p><strong><?php esc_html_e( 'The payment could not be started.', 'business-builder' ); ?></strong></p>
+            <?php if ( '' !== $bb_pay_reason ) : ?>
+                <p><?php echo esc_html( $bb_pay_reason ); ?></p>
+            <?php else : ?>
+                <p><?php esc_html_e( 'Please choose another payment method, or contact us so we can help.', 'business-builder' ); ?></p>
+            <?php endif; ?>
+            <?php if ( '' !== $bb_pay_code ) : ?>
+                <p class="bb-booking-error-code"><code><?php echo esc_html( $bb_pay_code ); ?></code></p>
+            <?php endif; ?>
+        </div>
+    <?php elseif ( '' !== $bb_show_state && isset( $bb_status_messages[ $bb_show_state ] )) : ?>
+        <div class="bb-booking-notice bb-booking-<?php echo esc_attr( $bb_show_state ); ?>">
+            <?php echo esc_html( $bb_status_messages[ $bb_show_state ] ); ?>
+            <?php if ( 'pending' === $bb_show_state && '' !== $bb_apt_ref ) : ?>
+                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-ref="<?php echo esc_attr( $bb_apt_ref ); ?>">
+                    <?php esc_html_e( 'View Receipt', 'business-builder' ); ?>
+                </button>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 
@@ -193,6 +246,7 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ) ) {
                                     type="radio"
                                     name="bb_payment_gateway"
                                     value="<?php echo esc_attr( (string) $bb_gw_id ); ?>"
+                                    data-bb-manual-toggle
                                     <?php checked( $bb_first ); ?>
                                 />
                                 <span class="bb-payment-option-body">
@@ -214,8 +268,34 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ) ) {
                         <?php endforeach; ?>
                         </div>
 
+                        <?php
+                        /*
+                         * Per-gateway manual instructions (wallet / InstaPay /
+                         * bank transfer). Revealed by JS only while its option
+                         * is selected; shows the REAL configured details.
+                         */
+                        $bb_manual_tpl = BB_CORE_PATH . 'templates/partials/manual-payment-instructions.php';
+
+                        if ( $bb_manual_tpl !== '' ) {
+                            foreach ( $bb_gateways as $bb_gw_id => $bb_gw ) {
+
+                                if ( ! $bb_gw->is_manual() ) {
+                                    continue;
+                                }
+
+                                $bb_manual_gateway  = $bb_gw;
+                                $bb_manual_gw_id    = (string) $bb_gw_id;
+                                $bb_manual_amount   = $bb_fee;
+                                $bb_manual_currency = $bb_currency;
+                                $bb_manual_uid      = 'booking-' . sanitize_key( (string) $bb_gw_id );
+
+                                include $bb_manual_tpl;
+                            }
+                        }
+                        ?>
+
                         <p class="bb-payment-secure">
-                            <span class="bb-payment-secure-icon" aria-hidden="true">🔒</span>
+                            <span class="bb-payment-secure-icon" aria-hidden="true">&#128274;</span>
                             <?php esc_html_e( 'Your payment is processed securely by the provider. We never store card details.', 'business-builder' ); ?>
                         </p>
                     </fieldset>

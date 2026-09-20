@@ -17,8 +17,12 @@ use BusinessBuilderCore\Packs\LawFirm\Taxonomies\FaqCategory;
 use BusinessBuilderCore\Packs\LawFirm\Frontend\LawyerProfile;
 use BusinessBuilderCore\Packs\LawFirm\Frontend\ConsultationForm;
 use BusinessBuilderCore\Packs\LawFirm\Frontend\StatusPage;
+use BusinessBuilderCore\Packs\LawFirm\Frontend\BillingPage;
+use BusinessBuilderCore\Packs\LawFirm\Frontend\LookupHandler;
 use BusinessBuilderCore\Packs\LawFirm\Admin\ConsultationAdmin;
 use BusinessBuilderCore\Packs\LawFirm\Admin\PaymentSettingsAdmin;
+use BusinessBuilderCore\Packs\LawFirm\Admin\PaymentLogsAdmin;
+use BusinessBuilderCore\Packs\LawFirm\Admin\ManualPaymentsAdmin;
 use BusinessBuilderCore\Packs\LawFirm\Admin\DashboardAdmin;
 use BusinessBuilderCore\Packs\LawFirm\Admin\DashboardStats;
 use BusinessBuilderCore\Packs\LawFirm\Admin\DashboardMenu;
@@ -59,11 +63,21 @@ class LawFirmPack {
 
     protected StatusPage $status_page;
 
+    protected BillingPage $billing_page;
+
+    protected \BusinessBuilderCore\Packs\LawFirm\Frontend\ReceiptRoute $receipt_route;
+
+    protected LookupHandler $lookup_handler;
+
     protected Consultation $consultation;
 
     protected ConsultationAdmin $consultation_admin;
 
     protected PaymentSettingsAdmin $payment_settings_admin;
+
+    protected ManualPaymentsAdmin $manual_payments_admin;
+
+    protected PaymentLogsAdmin $payment_logs_admin;
 
     protected DashboardAdmin $dashboard_admin;
 
@@ -143,6 +157,18 @@ class LawFirmPack {
 
         $this->status_page = new StatusPage( $payment_manager );
 
+        $this->billing_page = new BillingPage();
+
+        $this->receipt_route = new \BusinessBuilderCore\Packs\LawFirm\Frontend\ReceiptRoute(
+            new \BusinessBuilderCore\Core\Payments\Receipt\ReceiptPage(
+                $payment_manager,
+                new \BusinessBuilderCore\Core\Payments\Receipt\ReceiptRenderer(),
+                $audit_log
+            )
+        );
+
+        $this->lookup_handler = new LookupHandler( $payment_manager );
+
         $this->consultation = new Consultation();
 
         $this->consultation_admin = new ConsultationAdmin(
@@ -155,6 +181,15 @@ class LawFirmPack {
             $audit_log,
             $site_settings
         );
+
+        $this->manual_payments_admin = new ManualPaymentsAdmin(
+            $payment_manager,
+            new \BusinessBuilderCore\Core\Payments\Checkout\TransactionSynchronizer( $payment_manager, $audit_log ),
+            $notification_manager,
+            $audit_log
+        );
+
+        $this->payment_logs_admin = new PaymentLogsAdmin( $payment_manager );
 
         $this->dashboard_menu = new DashboardMenu();
 
@@ -226,6 +261,12 @@ class LawFirmPack {
 
         $this->status_page->register();
 
+        $this->billing_page->register();
+
+        $this->receipt_route->register();
+
+        $this->lookup_handler->register();
+
         $this->consultation->register();
 
         $this->consultation_admin->register();
@@ -244,7 +285,15 @@ class LawFirmPack {
          * the screens must be registered before the menu is built.
          */
         $this->payment_settings_admin->attach_screen( $this->dashboard_menu );
+        $this->payment_logs_admin->attach_screen( $this->dashboard_menu );
+        $this->manual_payments_admin->attach_screen( $this->dashboard_menu );
+
+        /* Register the Payment Logs screen assets. */
+        $this->payment_logs_admin->register();
         $this->notifications_admin->attach_screen( $this->dashboard_menu );
+
+        /* Register the manual payment review actions (approve / reject). */
+        $this->manual_payments_admin->register();
 
         $this->dashboard_admin->register();
 
@@ -293,7 +342,7 @@ class LawFirmPack {
      */
     public function maybe_flush_rewrite_rules(): void {
 
-        $version = '1';
+        $version = '2';
 
         if ( get_option( 'bb_lawfirm_rewrite_version' ) === $version ) {
             return;

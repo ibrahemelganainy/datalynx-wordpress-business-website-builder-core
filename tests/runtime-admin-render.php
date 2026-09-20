@@ -15,7 +15,10 @@ foreach ( glob( $root . 'includes/Core/Payments/Gateways/*.php' ) as $f ) { requ
 require_once $root . 'includes/Settings/SiteSettings.php';
 require_once $root . 'packs/LawFirm/PostTypes/ConsultationMeta.php';
 require_once $root . 'packs/LawFirm/Admin/PaymentSettingsAdmin.php';
+require_once $root . 'packs/LawFirm/Admin/DashboardMenu.php';
+require_once $root . 'packs/LawFirm/Admin/DashboardStats.php';
 require_once $root . 'packs/LawFirm/Admin/DashboardAdmin.php';
+require_once $root . 'packs/LawFirm/Admin/ManualPaymentsAdmin.php';
 
 use BusinessBuilderCore\Core\Payments\PaymentManager;
 use BusinessBuilderCore\Core\Notifications\NotificationManager;
@@ -23,6 +26,9 @@ use BusinessBuilderCore\Core\Audit\AuditLog;
 use BusinessBuilderCore\Settings\SiteSettings;
 use BusinessBuilderCore\Packs\LawFirm\Admin\PaymentSettingsAdmin;
 use BusinessBuilderCore\Packs\LawFirm\Admin\DashboardAdmin;
+use BusinessBuilderCore\Packs\LawFirm\Admin\DashboardStats;
+use BusinessBuilderCore\Packs\LawFirm\Admin\DashboardMenu;
+use BusinessBuilderCore\Packs\LawFirm\Admin\ManualPaymentsAdmin;
 
 $admins = get_users( array( 'role' => 'administrator', 'number' => 1, 'blog_id' => 2 ) );
 switch_to_blog( 2 );
@@ -50,14 +56,32 @@ echo 'masks secret (no raw SK-LIVE-9876): ' . var_export( false === strpos( $out
 echo 'shows masked (****9876): ' . var_export( false !== strpos( $out, '9876' ), true ) . PHP_EOL;
 echo 'gateway_settings field present: ' . var_export( false !== strpos( $out, 'gateway_settings' ), true ) . PHP_EOL;
 
-$dash = new DashboardAdmin( $nm );
+$dash = new DashboardAdmin( new DashboardStats( $pm ), $nm, new DashboardMenu() );
 ob_start();
 $dash->render_page();
 $d = ob_get_clean();
 
 echo 'Dashboard rendered: ' . ( strlen( $d ) > 200 ? 'yes' : 'NO' ) . PHP_EOL;
 echo 'has Consultation Requests shortcut: ' . var_export( false !== strpos( $d, 'bb_consultation' ), true ) . PHP_EOL;
-echo 'has Payment Settings shortcut: ' . var_export( false !== strpos( $d, 'business-builder-payments' ), true ) . PHP_EOL;
+
+echo '--- Payment logs screen ---' . PHP_EOL;
+$pl = new \BusinessBuilderCore\Packs\LawFirm\Admin\PaymentLogsAdmin( $pm );
+ob_start();
+$pl->render_page();
+$po = ob_get_clean();
+echo 'PaymentLogs rendered: ' . ( strlen( $po ) > 100 ? 'yes' : 'NO' ) . PHP_EOL;
+echo 'has Payment Logs heading: ' . var_export( false !== strpos( $po, 'Payment Logs' ), true ) . PHP_EOL;
+echo 'has gateway filter: ' . var_export( false !== strpos( $po, 'bb_pl_gateway' ), true ) . PHP_EOL;
+
+echo '--- Manual payments screen ---' . PHP_EOL;
+$mp = new ManualPaymentsAdmin( $pm, new \BusinessBuilderCore\Core\Payments\Checkout\TransactionSynchronizer( $pm, $au ), $nm, $au );
+ob_start();
+$mp->render_page();
+$mo = ob_get_clean();
+echo 'ManualPayments rendered: ' . ( strlen( $mo ) > 100 ? 'yes' : 'NO' ) . PHP_EOL;
+echo 'has awaiting-verification heading: ' . var_export( false !== strpos( $mo, 'Manual Payments' ), true ) . PHP_EOL;
+echo 'has approve action: ' . var_export( false !== strpos( $mo, 'bb_manual_payment_approve' ), true ) . PHP_EOL;
+echo 'has reject action: ' . var_export( false !== strpos( $mo, 'bb_manual_payment_reject' ), true ) . PHP_EOL;
 
 /* Restore. */
 $ss->update( array( 'require_consultation_payment' => 0, 'consultation_fee' => '', 'consultation_currency' => 'USD' ) );

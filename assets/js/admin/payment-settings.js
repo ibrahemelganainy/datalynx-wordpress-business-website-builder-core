@@ -27,7 +27,89 @@
 	initGatewayToggles( root );
 	initConfigToggles( root );
 	initCurrencyCombobox( root );
+	initWebhookCopy( root );
 	initUnsavedGuard( root );
+	}
+
+	/**
+	 * Copy-to-clipboard for the read-only webhook URL fields.
+	 *
+	 * Uses the async Clipboard API where available and falls back to
+	 * selecting the input + execCommand for older browsers / non-secure
+	 * origins. No secrets are ever placed in these fields.
+	 *
+	 * @param {HTMLElement} root Payment center root.
+	 */
+	function initWebhookCopy( root ) {
+	var buttons = root.querySelectorAll( '[data-bb-copy-target]' );
+
+	for ( var i = 0; i < buttons.length; i++ ) {
+	buttons[ i ].addEventListener( 'click', onCopy );
+	}
+
+	function onCopy( event ) {
+	var button = event.currentTarget;
+	var targetId = button.getAttribute( 'data-bb-copy-target' );
+	var input = targetId ? document.getElementById( targetId ) : null;
+
+	if ( ! input ) {
+	return;
+	}
+
+	var value = input.value;
+	var tipText = button.querySelector( '.bb-copy-tip-text' );
+	var copiedLabel = button.getAttribute( 'data-bb-copy-label' ) || 'Copied';
+	var resetTimer = null;
+
+	/*
+	 * Reflect the copied state on the button only (never overwrite the
+	 * button's child nodes, which hold the icon + tooltip markup).
+	 */
+	function markCopied() {
+	button.classList.add( 'is-copied' );
+
+	if ( tipText ) {
+	 tipText.textContent = copiedLabel;
+	}
+
+	if ( resetTimer ) {
+	window.clearTimeout( resetTimer );
+	}
+
+	resetTimer = window.setTimeout( function () {
+	button.classList.remove( 'is-copied' );
+
+	var original = button.getAttribute( 'data-bb-copy-tip' );
+
+	if ( tipText && original ) {
+	tipText.textContent = original;
+	}
+	}, 1800 );
+	}
+
+	function fallbackCopy() {
+	/* Select the read-only value so execCommand('copy') has a target. */
+	input.focus();
+	input.select();
+	input.setSelectionRange( 0, value.length );
+
+		try {
+		document.execCommand( 'copy' );
+	markCopied();
+	} catch ( e ) {
+	/* Selection is left in place so the user can copy manually. */
+	}
+	}
+
+	if ( navigator.clipboard && navigator.clipboard.writeText ) {
+		navigator.clipboard.writeText( value ).then(
+	markCopied,
+	fallbackCopy
+	);
+	} else {
+	fallbackCopy();
+	}
+	}
 	}
 
 	function initGatewayToggles( root ) {

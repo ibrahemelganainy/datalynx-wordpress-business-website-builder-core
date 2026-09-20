@@ -1,0 +1,270 @@
+/**
+ * Business Builder Core — Notifications & Activity centre.
+ * Enterprise admin styling consistent with the dashboard. RTL-safe.
+ */
+
+.bb-notification-center {
+  --nc-gap: 18px;
+}
+
+/* Header bell + live count */
+.bb-notification-center .bb-nc-bell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #1d4ed8;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.bb-notification-center .bb-nc-bell .dashicons {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.bb-notification-center .bb-nc-bell-count.is-active {
+  color: #b91c1c;
+}
+
+/* Toolbar: filters + search */
+.bb-notification-center .bb-nc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 14px 0 18px;
+}
+
+.bb-notification-center .bb-nc-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bb-notification-center .bb-nc-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #fff;
+  color: #334155;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.bb-notification-center .bb-nc-filter:hover {
+  border-color: #1d4ed8;
+  color: #1d4ed8;
+}
+
+.bb-notification-center .bb-nc-filter.is-active {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #fff;
+}
+
+.bb-notification-center .bb-nc-filter-count {
+  display: inline-flex;
+  min-width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.bb-notification-center .bb-nc-search {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.bb-notification-center .bb-nc-search input[type="search"],
+.bb-notification-center .bb-nc-search select {
+  min-height: 34px;
+  border-radius: 8px;
+}
+
+.bb-notification-center .bb-nc-search input[type="search"] {
+  min-width: 240px;
+}
+
+/* Body layout */
+.bb-notification-center .bb-nc-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--nc-gap);
+  align-items: start;
+}
+
+.bb-notification-center .bb-nc-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bb-notification-center .bb-nc-day {
+  margin: 14px 0 4px;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 800;
+}
+
+/* Notification item */
+.bb-notification-center .bb-nc-item {
+  display: flex;
+  gap: 14px;
+  padding: 16px 18px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.bb-notification-center .bb-nc-item.is-unread {
+  border-inline-start: 4px solid #1d4ed8;
+  background: #fbfcff;
+}
+
+.bb-notification-center .bb-nc-item-icon {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 20px;
+}
+
+.bb-notification-center .bb-nc-payment .bb-nc-item-icon {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.bb-notification-center .bb-nc-appointment .bb-nc-item-icon {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.bb-notification-center .bb-nc-consultation .bb-nc-item-icon {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.bb-notification-center .bb-nc-item-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bb-notification-center .bb-nc-item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bb-notification-center .bb-nc-item-title {
+  font-size: 0.98rem;
+  color: #0f172a;
+}
+
+.bb-notification-center .bb-nc-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #1d4ed8;
+  flex: 0 0 auto;
+}
+
+.bb-notification-center .bb-nc-item-time {
+  margin-inline-start: auto;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.bb-notification-center .bb-nc-item-msg {
+  margin: 6px 0 0;
+  font-size: 0.88rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.bb-notification-center .bb-nc-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.bb-notification-center .bb-nc-ref {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  background: #f1f5f9;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: #0f172a;
+}
+
+.bb-notification-center .bb-nc-amount {
+  font-weight: 800;
+  color: #047857;
+  font-size: 0.86rem;
+}
+
+.bb-notification-center .bb-nc-gateway {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-transform: capitalize;
+}
+
+.bb-notification-center .bb-nc-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.bb-notification-center .bb-nc-item-actions .bb-btn {
+  text-decoration: none;
+}
+
+/* RTL refinements */
+.bb-rtl.bb-notification-center .bb-nc-item.is-unread {
+  border-inline-start: 4px solid #1d4ed8;
+}
+
+.bb-rtl.bb-notification-center .bb-nc-item-time {
+  margin-inline-start: auto;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .bb-notification-center .bb-nc-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .bb-notification-center .bb-nc-search input[type="search"] {
+    min-width: 0;
+    width: 100%;
+  }
+}

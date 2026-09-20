@@ -1,0 +1,349 @@
+/**
+ * Business Builder Core - Frontend: Status Lookup section
+ * -------------------------------------------------------
+ * Styles for templates/status-lookup.php. Keeps the LawFirm frontend design
+ * language; RTL/LTR safe and responsive.
+ */
+
+.bb-template .bb-lookup {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.bb-template .bb-lookup-form {
+  padding: 28px 26px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
+}
+
+.bb-template .bb-lookup-types {
+  margin: 0 0 18px;
+  padding: 0;
+  border: 0;
+}
+
+.bb-template .bb-lookup-legend {
+  padding: 0;
+  margin: 0 0 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.bb-template .bb-lookup-tabs {
+  display: inline-flex;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 12px;
+  background: #f1f5f9;
+}
+
+.bb-template .bb-lookup-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.bb-template .bb-lookup-tab input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.bb-template .bb-lookup-tab span {
+  display: inline-block;
+  padding: 9px 18px;
+  border-radius: 9px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #475569;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.bb-template .bb-lookup-tab input:checked + span {
+  background: #fff;
+  color: #1d4ed8;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+}
+
+.bb-template .bb-lookup-tab input:focus-visible + span {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+.bb-template .bb-lookup-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 18px;
+}
+
+.bb-template .bb-lookup-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bb-template .bb-lookup-field label {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #0f172a;
+}
+
+.bb-template .bb-lookup-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1.5px solid rgba(15, 23, 42, 0.16);
+  border-radius: 11px;
+  font: inherit;
+  background: #fff;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.bb-template .bb-lookup-field input:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.14);
+}
+
+.bb-template .bb-lookup-field input[aria-invalid="true"] {
+  border-color: #d63638;
+  background: #fff9f9;
+}
+
+.bb-template .bb-lookup-error {
+  display: none;
+  font-size: 0.78rem;
+  color: #b32d2e;
+}
+
+.bb-template .bb-lookup-error.is-visible {
+  display: block;
+}
+
+.bb-template .bb-lookup-submit {
+  margin: 20px 0 0;
+}
+
+.bb-template .bb-lookup-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  border: 0;
+  font: inherit;
+}
+
+.bb-template .bb-lookup-spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  animation: bb-lookup-spin 0.7s linear infinite;
+}
+
+.bb-template .bb-lookup-button.is-loading .bb-lookup-spinner {
+  display: inline-block;
+}
+
+@keyframes bb-lookup-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-template .bb-lookup-spinner {
+    animation: none;
+  }
+}
+
+.bb-template .bb-lookup-notice {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.bb-template .bb-lookup-notice.is-error {
+  background: #fcf0f0;
+  border: 1px solid #b32d2e;
+  color: #8a2424;
+}
+
+/* ---- Result card ---- */
+
+.bb-template .bb-lookup-result {
+  margin-top: 22px;
+  padding: 26px 26px 20px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
+  animation: bb-lookup-in 0.3s ease both;
+}
+
+@keyframes bb-lookup-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bb-template .bb-lookup-result-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.bb-template .bb-lookup-result-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.bb-template .bb-lookup-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #eef2ff;
+  color: #1d4ed8;
+}
+
+.bb-template .bb-lookup-badge.is-paid {
+  background: #e6f6ec;
+  color: #1a7f37;
+}
+
+.bb-template .bb-lookup-badge.is-pending {
+  background: #fff4e5;
+  color: #a15c00;
+}
+
+.bb-template .bb-lookup-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+}
+
+.bb-template .bb-lookup-table th,
+.bb-template .bb-lookup-table td {
+  padding: 9px 6px;
+  text-align: start;
+  border-bottom: 1px solid #eef1f5;
+  vertical-align: top;
+  font-size: 0.9rem;
+}
+
+.bb-template .bb-lookup-table th {
+  width: 45%;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.bb-template .bb-lookup-table td {
+  color: #0f172a;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+/* ---- Timeline ---- */
+
+.bb-template .bb-lookup-timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 16px 0 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.bb-template .bb-lookup-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.bb-template .bb-lookup-step-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid #cbd5e1;
+  font-size: 0.7rem;
+  color: #fff;
+}
+
+.bb-template .bb-lookup-step.is-done {
+  color: #1a7f37;
+  font-weight: 700;
+}
+
+.bb-template .bb-lookup-step.is-done .bb-lookup-step-dot {
+  background: #1a7f37;
+  border-color: #1a7f37;
+}
+
+.bb-template .bb-lookup-receipt {
+  margin: 16px 0 0;
+}
+
+.bb-template .bb-lookup-receipt a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+.bb-template .bb-lookup-receipt a:hover {
+  text-decoration: underline;
+}
+
+/* RTL: keep the label/value alignment natural. */
+.bb-rtl .bb-template .bb-lookup-table th,
+.bb-rtl .bb-template .bb-lookup-table td,
+[dir="rtl"] .bb-template .bb-lookup-table th,
+[dir="rtl"] .bb-template .bb-lookup-table td {
+  text-align: right;
+}
+
+/* Responsive. */
+@media (max-width: 640px) {
+  .bb-template .bb-lookup-form,
+  .bb-template .bb-lookup-result {
+    padding: 20px 18px;
+  }
+
+  .bb-template .bb-lookup-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

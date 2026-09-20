@@ -146,11 +146,15 @@ class ReceiptPage {
             return $this->not_found();
         }
 
-        if ( 'paid' !== $transaction->status ) {
-            /*
-             * A receipt exists only for settled payments. Do not reveal
-             * whether the reference exists for a non-paid transaction.
-             */
+        /*
+         * A receipt is shown for a settled payment (paid/completed) AND for
+         * a manual/offline payment that is awaiting admin verification
+         * (on_hold / awaiting_payment). The status label reflects the REAL
+         * state — a manual payment is NEVER shown as "Paid".
+         */
+        $receipt_states = array( 'paid', 'completed', 'on_hold', 'awaiting_payment' );
+
+        if ( ! in_array( $transaction->status, $receipt_states, true )) {
             return $this->not_found();
         }
 

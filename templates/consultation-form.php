@@ -20,7 +20,7 @@ $bb_areas = ConsultationForm::practice_areas();
 /*
  * Section payment configuration resolved by the render callback. When
  * payment is payable, the customer must choose a gateway and pay before
- * the request is confirmed; the fee/currency/gateways are always the
+ * the request is confirmed; the fee / currency / gateway set are always the
  * server-resolved values, never client input.
  */
 $bb_pay        = isset( $bb_payment ) && is_array( $bb_payment ) ? $bb_payment : array();
@@ -31,28 +31,78 @@ $bb_gateways   = isset( $bb_pay['available'] ) && is_array( $bb_pay['available']
 $bb_section_id = isset( $bb_section_id ) ? (string) $bb_section_id : '';
 $bb_page_id    = isset( $bb_page_id ) ? (int) $bb_page_id : 0;
 
-$bb_status = isset( $_GET['bb_consult'] )
-    ? sanitize_key( wp_unslash( $_GET['bb_consult'] ) )
-    : '';
-
+$bb_raw_status = isset( $_GET['bb_consult'] ) ? wp_unslash( $_GET['bb_consult'] ) : '';
+$bb_status     = sanitize_key( (string) $bb_raw_status );
 
 ?>
 
 <div class="bb-consultation" id="bb-consultation-form">
 
-    <?php if ( 'success' === $bb_status ) : ?>
+    <?php
+    /*
+     * Payment state flags. The gateway callback redirects back with
+     * bb_checkout=paid|pending and (when known) the public bb_ref, so the
+     * SAME page can show the success state AND the receipt on screen — with
+     * no navigation to a generic ?bb_ref= page.
+     */
+    $bb_checkout_state = isset( $_GET['bb_checkout'] ) ? sanitize_key( wp_unslash( $_GET['bb_checkout'] )) : '';
+    $bb_raw_ref        = isset( $_GET['bb_ref'] ) ? wp_unslash( $_GET['bb_ref'] ) : '';
+    $bb_receipt_ref    = sanitize_text_field( (string) $bb_raw_ref );
+
+    if ( 'payment_error' === $bb_status ) {
+        $bb_state = 'payment_error';
+    } elseif ( 'pending' === $bb_status || 'pending' === $bb_checkout_state ) {
+        $bb_state = 'pending';
+    } elseif ( 'paid' === $bb_checkout_state ) {
+        $bb_state = 'paid';
+    } else {
+        $bb_state = $bb_status;
+    }
+    ?>
+
+    <?php if ( 'paid' === $bb_state ) : ?>
+        <div class="bb-consultation-notice bb-consultation-success">
+            <p><?php esc_html_e( 'Payment received. Your consultation is confirmed — your receipt is shown below.', 'business-builder' ); ?></p>
+            <?php if ( '' !== $bb_receipt_ref ) : ?>
+                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-auto data-bb-receipt-ref="<?php echo esc_attr( $bb_receipt_ref ); ?>">
+                    <?php esc_html_e( 'View Receipt', 'business-builder' ); ?>
+                </button>
+            <?php endif; ?>
+        </div>
+    <?php elseif ( 'pending' === $bb_state ) : ?>
+        <div class="bb-consultation-notice bb-consultation-success">
+            <p><?php esc_html_e( 'Your request was received and is awaiting payment verification. You will receive a confirmation once an administrator verifies your payment.', 'business-builder' ); ?></p>
+            <?php if ( '' !== $bb_receipt_ref ) : ?>
+                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-ref="<?php echo esc_attr( $bb_receipt_ref ); ?>">
+                    <?php esc_html_e( 'View Receipt', 'business-builder' ); ?>
+                </button>
+            <?php endif; ?>
+        </div>
+    <?php elseif ( 'success' === $bb_state ) : ?>
         <div class="bb-consultation-notice bb-consultation-success">
             <?php esc_html_e( 'Thank you. Your consultation request has been received and our team will contact you shortly.', 'business-builder' ); ?>
         </div>
-    <?php elseif ( 'pending' === $bb_status ) : ?>
-        <div class="bb-consultation-notice bb-consultation-success">
-            <?php esc_html_e( 'Your request was received. Please complete the payment below to confirm your consultation.', 'business-builder' ); ?>
-        </div>
-    <?php elseif ( 'payment_error' === $bb_status ) : ?>
+    <?php elseif ( 'payment_error' === $bb_state ) : ?>
+        <?php
+        /*
+         * Show the REAL reason (from the structured checkout result) plus a
+         * clear next step — never a single opaque message.
+         */
+        $bb_pay_reason = isset( $_GET['bb_pay_reason'] ) ? sanitize_text_field( wp_unslash( $_GET['bb_pay_reason'] )) : '';
+        $bb_pay_code   = isset( $_GET['bb_pay_code'] ) ? sanitize_key( wp_unslash( $_GET['bb_pay_code'] )) : '';
+        ?>
         <div class="bb-consultation-notice bb-consultation-error">
-            <?php esc_html_e( 'Your request was received, but the payment could not be started. Please choose a payment method and try again.', 'business-builder' ); ?>
+            <p><strong><?php esc_html_e( 'The payment could not be started.', 'business-builder' ); ?></strong></p>
+            <?php if ( '' !== $bb_pay_reason ) : ?>
+                <p><?php echo esc_html( $bb_pay_reason ); ?></p>
+            <?php else : ?>
+                <p><?php esc_html_e( 'Please choose another payment method, or contact us so we can help.', 'business-builder' ); ?></p>
+            <?php endif; ?>
+            <?php if ( '' !== $bb_pay_code ) : ?>
+                <p class="bb-consultation-error-code"><code><?php echo esc_html( $bb_pay_code ); ?></code></p>
+            <?php endif; ?>
         </div>
-    <?php elseif ( 'error' === $bb_status ) : ?>
+    <?php elseif ( 'error' === $bb_state ) : ?>
         <div class="bb-consultation-notice bb-consultation-error">
             <?php esc_html_e( 'Sorry, your request could not be sent. Please check the required fields and try again.', 'business-builder' ); ?>
         </div>
@@ -165,6 +215,7 @@ $bb_status = isset( $_GET['bb_consult'] )
                                         type="radio"
                                         name="bb_payment_gateway"
                                         value="<?php echo esc_attr( (string) $bb_gw_id ); ?>"
+                                        data-bb-manual-toggle
                                         <?php checked( $bb_first ); ?>
                                     />
                                     <span class="bb-payment-option-body">
@@ -186,11 +237,38 @@ $bb_status = isset( $_GET['bb_consult'] )
                             <?php endforeach; ?>
                         </div>
 
+                        <?php
+                        /*
+                         * Per-gateway manual instructions. Rendered for every
+                         * manual gateway and revealed by JS only while its
+                         * option is selected, so the customer sees the REAL
+                         * configured wallet / InstaPay / bank details plus the
+                         * transaction-reference and receipt-upload fields.
+                         */
+                        $bb_manual_tpl = BB_CORE_PATH . 'templates/partials/manual-payment-instructions.php';
+
+                        foreach ( $bb_gateways as $bb_gw_id => $bb_gw ) {
+
+                            if ( ! $bb_gw->is_manual() ) {
+                                continue;
+                            }
+
+                            $bb_manual_gateway  = $bb_gw;
+                            $bb_manual_gw_id    = (string) $bb_gw_id;
+                            $bb_manual_amount   = $bb_fee;
+                            $bb_manual_currency = $bb_currency;
+                            $bb_manual_uid      = 'consultation-' . sanitize_key( (string) $bb_gw_id );
+
+                            include $bb_manual_tpl;
+                        }
+                        ?>
+
                         <p class="bb-payment-secure">
                             <span class="bb-payment-secure-icon" aria-hidden="true">🔒</span>
                             <?php esc_html_e( 'Your payment is processed securely by the provider. We never store card details.', 'business-builder' ); ?>
                         </p>
                     </fieldset>
+
                 <?php elseif ( ! empty( $bb_pay['enabled'] )) : ?>
                     <?php
                     /*

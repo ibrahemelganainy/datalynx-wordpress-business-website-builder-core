@@ -153,6 +153,84 @@ class Plugin {
                 'nonce' => wp_create_nonce( 'bb_page_builder_ajax' ),
             )
         );
+
+        /*
+         * Front-end payment billing behaviour: reveals the billing form
+         * only for gateways that require it (e.g. Paymob) and validates it
+         * client-side. Vanilla JS, no dependencies.
+         */
+        wp_enqueue_script(
+            'bb-payment-billing',
+            BB_CORE_URL . 'assets/js/frontend/payment-billing.js',
+            array(),
+            BB_CORE_VERSION,
+            true
+        );
+
+        /*
+         * Front-end manual payment instructions: reveals the selected
+         * manual gateway's REAL configured details (wallet / InstaPay / bank)
+         * and validates the transaction reference. Vanilla JS.
+         */
+        wp_enqueue_script(
+            'bb-manual-payment',
+            BB_CORE_URL . 'assets/js/frontend/manual-payment.js',
+            array(),
+            BB_CORE_VERSION,
+            true
+        );
+
+        /*
+         * Front-end in-page receipt modal: shows the receipt on the SAME
+         * screen after payment (no navigation to a generic ?bb_ref= page).
+         */
+        wp_enqueue_style(
+            'bb-receipt-modal',
+            BB_CORE_URL . 'assets/css/frontend/receipt-modal.css',
+            array(),
+            BB_CORE_VERSION
+        );
+
+        wp_enqueue_script(
+            'bb-receipt-modal',
+            BB_CORE_URL . 'assets/js/frontend/receipt-modal.js',
+            array(),
+            BB_CORE_VERSION,
+            true
+        );
+
+        wp_localize_script(
+            'bb-receipt-modal',
+            'BBReceipt',
+            array(
+                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                'action'  => 'bb_receipt_inline',
+                'nonce'   => wp_create_nonce( 'bb_receipt_inline' ),
+                'label'   => __( 'Payment receipt', 'business-builder' ),
+                'loading' => __( 'Loading receipt…', 'business-builder' ),
+                'error'   => __( 'The receipt could not be loaded.', 'business-builder' ),
+            )
+        );
+
+        /*
+         * Front-end consultation / appointment status lookup behaviour
+         * (AJAX to admin-ajax.php with a nonce).
+         */
+        wp_enqueue_script(
+            'bb-status-lookup',
+            BB_CORE_URL . 'assets/js/frontend/status-lookup.js',
+            array(),
+            BB_CORE_VERSION,
+            true
+        );
+
+        wp_localize_script(
+            'bb-status-lookup',
+            'BBLookup',
+            array(
+                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+            )
+        );
     }
 
     /**

@@ -221,17 +221,48 @@ check( 'receipt html leaks no api key string', false === stripos( $html, 'api_ke
 
 echo "== 8. Appointment public reference on creation ==\n";
 
+/* Register the CPT (as a real request would) so the slot query works. */
+( new \BusinessBuilderCore\Packs\LawFirm\Appointments\Appointment() )->register_post_type();
+
 $availability = new \BusinessBuilderCore\Packs\LawFirm\Appointments\Availability();
 
-$appt_id = $availability->create(
-    array(
-        'client_name'  => 'Test Client',
-        'client_phone' => '0100000',
-        'date'         => gmdate( 'Y-m-d', strtotime( '+3 days' ) ),
-        'start'        => '10:00',
-        'type'         => 'consultation',
-    )
-);
+/*
+ * Find a working day AND a genuinely free slot, so the assertion is not
+ * broken by appointments left behind by other test runs (pollution).
+ */
+$appt_date = '';
+$appt_time = '';
+
+for ( $i = 1; $i <= 21; $i++ ) {
+
+    $candidate = gmdate( 'Y-m-d', strtotime( "+$i days" ));
+
+    if ( ! $availability->is_working_day( $candidate )) {
+        continue;
+    }
+
+    $day_slots = $availability->slots_for_date( $candidate, 0 );
+
+    foreach ( $day_slots as $slot ) {
+        if ( ! empty( $slot['available'] )) {
+            $appt_date = $candidate;
+            $appt_time = (string) $slot['start'];
+            break 2;
+        }
+    }
+}
+
+$appt_id = ( '' === $appt_time )
+    ? new \WP_Error( 'bb_no_free_slot', 'no free slot found in the test window' )
+    : $availability->create(
+        array(
+            'client_name'  => 'Test Client',
+            'client_phone' => '0100000',
+            'date'         => $appt_date,
+            'start'        => $appt_time,
+            'type'         => 'consultation',
+        )
+    );
 
 if ( is_wp_error( $appt_id )) {
     check( 'appointment created', false );
