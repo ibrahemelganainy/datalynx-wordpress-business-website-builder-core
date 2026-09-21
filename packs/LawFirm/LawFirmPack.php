@@ -344,22 +344,52 @@ class LawFirmPack {
 
         $version = '2';
 
-        if ( get_option( 'bb_lawfirm_rewrite_version' ) === $version ) {
-            return;
-        }
-
+        /*
+         * The STORED REWRITE RULES are the source of truth: they decide
+         * whether /lawyers/{slug}/ resolves. Never trust the version
+         * option to mean the rules are healthy - a previously recorded
+         * version must not prevent a needed repair. Inspect the actual
+         * rules first, then use the version option ONLY to skip the
+         * (costly) flush when they already look correct.
+         */
         $rules = get_option( 'rewrite_rules' );
 
-        $needs_flush = ! is_array( $rules )
-            || ! preg_grep( '/bb_lawyer/', array_keys( $rules ) ) ;
+        /*
+         * Detect the pack's permalinks via the QUERY VAR in each rule's
+         * TARGET, not the regex key. WordPress stores a CPT single as:
+         *   key   => "lawyers/([^/]+)(?:/([0-9]+))?/?$"
+         *   value => "index.php?bb_lawyer=$matches[1]&page=$matches[2]"
+         * so "bb_lawyer" only ever appears in the VALUE. Grepping the
+         * KEYS (the previous behaviour) always reported the rules as
+         * missing, so the flush fired on every request and never
+         * recognised a healthy rule set.
+         */
+        $bb_query_vars = array( 'bb_lawyer', 'bb_legal_service', 'bb_practice_area' );
+        $bb_has_rules  = false;
 
+        if ( is_array( $rules ) ) {
+            foreach ( $rules as $bb_rule_target ) {
+                foreach ( $bb_query_vars as $bb_var ) {
+                    if ( false !== strpos( (string) $bb_rule_target, $bb_var ) ) {
+                        $bb_has_rules = true;
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        $needs_flush = ! $bb_has_rules;
         if ( ! $needs_flush ) {
 
             /*
-             * Rules already look correct - record the version so we
-             * never re-check on a future request.
+             * Rules already look correct - record the version so we can
+             * short-circuit future requests cheaply. Kept separate from
+             * the check above so a stale/wrong version can never block a
+             * needed repair.
              */
-            update_option( 'bb_lawfirm_rewrite_version', $version );
+            if ( get_option( 'bb_lawfirm_rewrite_version' ) !== $version ) {
+                update_option( 'bb_lawfirm_rewrite_version', $version );
+            }
 
             return;
         }

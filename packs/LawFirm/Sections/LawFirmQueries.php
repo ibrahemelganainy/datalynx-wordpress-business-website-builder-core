@@ -55,36 +55,40 @@ class LawFirmQueries {
             ? absint( $settings['limit'] )
             : 0;
 
+        $direction = ( ! empty( $settings['order'] ) && 'desc' === $settings['order'] ) ? 'DESC' : 'ASC';
+
         $args = array(
             'post_type'      => $post_type,
             'post_status'    => 'publish',
             'posts_per_page' => $limit > 0 ? $limit : -1,
             'no_found_rows'  => true,
-            'orderby'        => 'meta_value_num',
-            'meta_key'       => $order_meta,
-            'order'          => 'ASC',
+            /*
+             * Order by the display-order meta via a NAMED clause rather than
+             * a bare meta_key. A bare meta_key makes WordPress INNER JOIN
+             * the meta table, which silently DROPS any record that has never
+             * been given a display order. The named-clause form keeps those
+             * records (ordered last) so a freshly created item always shows.
+             */
+            'orderby'        => array(
+                'order_clause' => $direction,
+                'date'         => 'DESC',
+            ),
         );
 
-        /*
-         * The order meta key may be empty for records that have
-         * never been sorted. Order by it when present, but fall
-         * back to date so unsorted records still appear.
-         */
         $args['meta_query'] = array(
-            'relation' => 'OR',
-            array(
-                'key'     => $order_meta,
-                'compare' => 'EXISTS',
-            ),
-            array(
-                'key'     => $order_meta,
-                'compare' => 'NOT EXISTS',
+            'relation'     => 'AND',
+            'order_clause' => array(
+                'relation' => 'OR',
+                array(
+                    'key'     => $order_meta,
+                    'compare' => 'EXISTS',
+                ),
+                array(
+                    'key'     => $order_meta,
+                    'compare' => 'NOT EXISTS',
+                ),
             ),
         );
-
-        if ( ! empty( $settings['order'] ) && 'desc' === $settings['order'] ) {
-            $args['order'] = 'DESC';
-        }
 
         return $args;
     }
@@ -107,10 +111,10 @@ class LawFirmQueries {
         }
 
         if ( ! isset( $args['meta_query'] ) || ! is_array( $args['meta_query'] ) ) {
-            $args['meta_query'] = array();
+            $args['meta_query'] = array( 'relation' => 'AND' );
         }
 
-        $args['meta_query'][] = array(
+        $args['meta_query']['featured_clause'] = array(
             'key'     => $meta_key,
             'value'   => '1',
             'compare' => '=',
@@ -171,7 +175,47 @@ class LawFirmQueries {
 
         $this->apply_practice_area( $args, $settings );
 
+        /*
+         * Status gate: only ACTIVE lawyers are listed. A lawyer with no
+         * status meta yet is treated as active (matches get_status()'s
+         * default), so existing records are never hidden unexpectedly.
+         */
+        $this->apply_active_only( $args );
+
         return get_posts( $args );
+    }
+
+    /**
+     * Restrict a lawyer query to active records (status = active or unset).
+     *
+     * Uses meta_query only (no per-post meta lookups), so listing many
+     * lawyers never becomes an N+1 query.
+     *
+     * @param array $args Query args (by reference).
+     */
+    private function apply_active_only( array &$args ): void {
+
+        if ( ! isset( $args['meta_query'] ) || ! is_array( $args['meta_query'] )) {
+            $args['meta_query'] = array( 'relation' => 'AND' );
+        }
+
+        /*
+         * A lawyer is "active" when the status meta is exactly 'active' OR
+         * absent (the same default get_status() applies), so existing
+         * records are never hidden unexpectedly.
+         */
+        $args['meta_query']['status_clause'] = array(
+            'relation' => 'OR',
+            array(
+                'key'     => '_bb_lawyer_status',
+                'value'   => 'active',
+                'compare' => '=',
+            ),
+            array(
+                'key'     => '_bb_lawyer_status',
+                'compare' => 'NOT EXISTS',
+            ),
+        );
     }
 
     /**

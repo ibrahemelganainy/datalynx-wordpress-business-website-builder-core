@@ -22,9 +22,26 @@ foreach ( $q->posts as $p ) {
         . PHP_EOL;
 }
 
-/* Check rewrite rules contain bb_lawyer. */
+/*
+ * Check rewrite rules contain the bb_lawyer query var.
+ *
+ * WordPress stores a CPT single as key="lawyers/([^/]+).../" and
+ * value="index.php?bb_lawyer=$matches[1]", so the query var lives in the
+ * VALUE, not the key. Grepping the KEYS always returned false even when
+ * the rules were healthy - scan the targets (values) instead.
+ */
 $rules = get_option( 'rewrite_rules' );
-$has_rules = is_array( $rules ) && (bool) preg_grep( '/bb_lawyer/', array_keys( $rules ) );
+$has_rules = false;
+
+if ( is_array( $rules ) ) {
+    foreach ( $rules as $rule_target ) {
+        if ( false !== strpos( (string) $rule_target, 'bb_lawyer' ) ) {
+            $has_rules = true;
+            break;
+        }
+    }
+}
+
 echo 'rewrite_rules has bb_lawyer: ' . var_export( $has_rules, true ) . PHP_EOL;
 
 restore_current_blog();

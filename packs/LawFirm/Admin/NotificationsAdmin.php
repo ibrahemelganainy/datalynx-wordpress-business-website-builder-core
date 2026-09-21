@@ -257,6 +257,9 @@ class NotificationsAdmin {
             'payment.receipt_viewed'    => __( 'Receipt viewed', 'business-builder' ),
             'payment.callback_unknown'  => __( 'Unknown payment callback', 'business-builder' ),
             'payment.checkout_failed'   => __( 'Payment checkout failed', 'business-builder' ),
+            'lawyer.created'            => __( 'Lawyer created', 'business-builder' ),
+            'lawyer.updated'            => __( 'Lawyer updated', 'business-builder' ),
+            'lawyer.status_changed'     => __( 'Lawyer status changed', 'business-builder' ),
         );
 
         if ( isset( $labels[ $action ] )) {
@@ -485,6 +488,7 @@ class NotificationsAdmin {
             'appointment'    => __( 'Appointments', 'business-builder' ),
             'payment'        => __( 'Payments', 'business-builder' ),
             'manual_payment' => __( 'Manual Payments', 'business-builder' ),
+            'lawyer'         => __( 'Lawyers', 'business-builder' ),
             'system'         => __( 'System', 'business-builder' ),
         );
 

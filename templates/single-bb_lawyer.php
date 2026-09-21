@@ -22,8 +22,9 @@ get_header();
 
 $bb_lawyer_id = get_the_ID();
 $bb_lawyer = $bb_lawyer_id ? LawyerProfile::get_data( $bb_lawyer_id ) : array();
+$bb_is_available = $bb_lawyer_id ? LawyerProfile::is_active( (int) $bb_lawyer_id ) : false;
 
-if ( empty( $bb_lawyer ) ) {
+if ( empty( $bb_lawyer ) || ! $bb_is_available ) {
     get_footer();
     return;
 }
@@ -174,19 +175,32 @@ $bb_initial = $bb_lawyer['name'] !== ''
                         </div>
                     <?php endif; ?>
 
-                    <?php if ( '' !== $bb_lawyer['linkedin'] || '' !== $bb_lawyer['facebook'] || '' !== $bb_lawyer['x'] ) : ?>
+                    <?php
+                    /*
+                     * Only treat a stored social value as a link when it is a
+                     * real URL. A bare handle saved before save-time validation
+                     * must not become a dead "http://handle" link.
+                     */
+                    $bb_social = array(
+                        'linkedin' => \BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields::is_external_url( (string) $bb_lawyer['linkedin'] ) ? (string) $bb_lawyer['linkedin'] : '',
+                        'facebook' => \BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields::is_external_url( (string) $bb_lawyer['facebook'] ) ? (string) $bb_lawyer['facebook'] : '',
+                        'x'        => \BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields::is_external_url( (string) $bb_lawyer['x'] ) ? (string) $bb_lawyer['x'] : '',
+                    );
+                    ?>
+
+                    <?php if ( '' !== $bb_social['linkedin'] || '' !== $bb_social['facebook'] || '' !== $bb_social['x'] ) : ?>
                         <div class="bb-lawyer-profile-socials">
 
-                            <?php if ( '' !== $bb_lawyer['linkedin'] ) : ?>
-                                <a href="<?php echo esc_url( $bb_lawyer['linkedin'] ); ?>" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                            <?php if ( '' !== $bb_social['linkedin'] ) : ?>
+                                <a href="<?php echo esc_url( $bb_social['linkedin'] ); ?>" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                             <?php endif; ?>
 
-                            <?php if ( '' !== $bb_lawyer['facebook'] ) : ?>
-                                <a href="<?php echo esc_url( $bb_lawyer['facebook'] ); ?>" target="_blank" rel="noopener noreferrer">Facebook</a>
+                            <?php if ( '' !== $bb_social['facebook'] ) : ?>
+                                <a href="<?php echo esc_url( $bb_social['facebook'] ); ?>" target="_blank" rel="noopener noreferrer">Facebook</a>
                             <?php endif; ?>
 
-                            <?php if ( '' !== $bb_lawyer['x'] ) : ?>
-                                <a href="<?php echo esc_url( $bb_lawyer['x'] ); ?>" target="_blank" rel="noopener noreferrer">X</a>
+                            <?php if ( '' !== $bb_social['x'] ) : ?>
+                                <a href="<?php echo esc_url( $bb_social['x'] ); ?>" target="_blank" rel="noopener noreferrer">X</a>
                             <?php endif; ?>
 
                         </div>

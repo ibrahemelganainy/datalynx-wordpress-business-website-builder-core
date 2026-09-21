@@ -810,7 +810,14 @@ class LawFirmSections {
                 echo '<p><a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a></p>';
             }
 
-            if ( $linkedin ) {
+            /*
+             * Only render the social "Profile" link when the stored value is a
+             * real URL. A bare handle (legacy data saved before save-time
+             * validation) would otherwise become a dead "http://handle" link.
+             */
+            $linkedin_is_url = $linkedin && \BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields::is_external_url( (string) $linkedin );
+
+            if ( $linkedin_is_url ) {
                 echo '<p><a href="' . esc_url( $linkedin ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Profile', 'business-builder' ) . '</a></p>';
             }
 

@@ -22,6 +22,97 @@ class Lawyer {
             'init',
             array( $this, 'register_post_type' )
         );
+
+        add_filter(
+            'manage_bb_lawyer_posts_columns',
+            array( $this, 'add_status_column' )
+        );
+
+        add_action(
+            'manage_bb_lawyer_posts_custom_column',
+            array( $this, 'render_status_column' ),
+            10,
+            2
+        );
+
+        add_action(
+            'admin_head',
+            array( $this, 'admin_styles' )
+        );
+    }
+
+    /**
+     * Minimal status-badge styling on Lawyer admin screens only.
+     *
+     * Inline (not a new stylesheet) so Phase 4 stays surgical and never
+     * touches the shared admin bundle. Scoped to the Lawyer list screen.
+     */
+    public function admin_styles(): void {
+
+        $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+        if ( ! $screen || 'bb_lawyer' !== $screen->post_type ) {
+            return;
+        }
+
+        echo '<style>'
+            . '.bb-status{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;}'
+            . '.bb-status-active{background:#e5f5ea;color:#166534;border:1px solid #b7e0c2;}'
+            . '.bb-status-inactive{background:#f1f5f9;color:#475569;border:1px solid #d5dbe3;}'
+            . '</style>';
+    }
+
+    /**
+     * Add a Status column to the Lawyer list table.
+     *
+     * The status is a plain, safely-escapable label, so it renders as text
+     * (never as a link), which keeps the admin list free of any dead action.
+     *
+     * @param array<string, string> $columns Existing columns.
+     * @return array<string, string>
+     */
+    public function add_status_column( array $columns ): array {
+
+        $new = array();
+
+        foreach ( $columns as $key => $label ) {
+
+            $new[ $key ] = $label;
+
+            /* Insert Status right after the title. */
+            if ( 'title' === $key ) {
+                $new['bb_lawyer_status'] = __( 'Status', 'business-builder' );
+            }
+        }
+
+        return $new;
+    }
+
+    /**
+     * Render the Status column value.
+     *
+     * @param string $column  Column key.
+     * @param int    $post_id Lawyer post ID.
+     */
+    public function render_status_column( string $column, int $post_id ): void {
+
+        if ( 'bb_lawyer_status' !== $column ) {
+            return;
+        }
+
+        $status  = LawyerFields::get_status( $post_id );
+        $labels  = LawyerFields::statuses();
+        $label   = isset( $labels[ $status ] ) ? $labels[ $status ] : $status;
+        $visible = '1' === (string) get_post_meta( $post_id, '_bb_lawyer_show_on_website', true );
+
+        $class = 'active' === $status ? 'bb-status-active' : 'bb-status-inactive';
+
+        echo '<span class="bb-status ' . esc_attr( $class ) . '">' . esc_html( $label ) . '</span>';
+
+        /* Make the visibility control explicit without changing its meaning. */
+        if ( 'active' === $status && ! $visible ) {
+            echo '<br /><span class="description">' . esc_html__( 'Hidden on website', 'business-builder' ) . '</span>';
+        }
     }
 
     /**

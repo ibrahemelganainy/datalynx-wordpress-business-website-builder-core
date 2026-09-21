@@ -131,6 +131,29 @@ class LawyerProfile {
     }
 
     /**
+     * Whether a lawyer should be shown on the website.
+     *
+     * Combines the WordPress post status with the Lawyer status + visibility
+     * controls, so a profile is only public when it is published AND active
+     * AND marked to show on the website.
+     *
+     * @param int $post_id Lawyer post ID.
+     * @return bool
+     */
+    public static function is_active( int $post_id ): bool {
+
+        if ( 'publish' !== get_post_status( $post_id )) {
+            return false;
+        }
+
+        if ( ! class_exists( '\BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields' )) {
+            return true;
+        }
+
+        return \BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields::is_active( $post_id );
+    }
+
+    /**
      * Get all view-model data for a lawyer.
      *
      * Keeps the template free of meta-key knowledge so the data
@@ -160,6 +183,9 @@ class LawyerProfile {
             'id'             => $post_id,
             'name'           => $post->post_title,
             'permalink'      => get_permalink( $post_id ),
+            'status'         => class_exists( '\BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields' )
+                ? \BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields::get_status( $post_id )
+                : 'active',
             'photo_id'       => (int) get_post_thumbnail_id( $post_id ),
             'title'          => (string) get_post_meta( $post_id, '_bb_lawyer_title', true ),
             'experience'     => (string) get_post_meta( $post_id, '_bb_lawyer_experience', true ),

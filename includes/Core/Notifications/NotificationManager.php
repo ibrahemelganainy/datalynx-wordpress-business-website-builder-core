@@ -256,6 +256,11 @@ class NotificationManager {
             return 'consultation';
         }
 
+        /* Lawyer profile events form their own group (professional data). */
+        if ( 0 === strpos( $event, 'lawyer' )) {
+            return 'lawyer';
+        }
+
         return 'system';
     }
 
