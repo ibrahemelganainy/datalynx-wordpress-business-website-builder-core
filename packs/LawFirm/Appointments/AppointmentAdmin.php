@@ -103,20 +103,16 @@ class AppointmentAdmin {
         $end = (string) get_post_meta( $id, AppointmentMeta::key( 'end' ), true );
         $status = (string) get_post_meta( $id, AppointmentMeta::key( 'status' ), true );
         $type = (string) get_post_meta( $id, AppointmentMeta::key( 'type' ), true );
-        $lawyer_id = (int) get_post_meta( $id, AppointmentMeta::key( 'lawyer_id' ), true );
         $notes = (string) get_post_meta( $id, AppointmentMeta::key( 'notes' ), true );
 
         if ( '' === $status ) {
             $status = AppointmentMeta::default_status();
         }
 
-        $lawyer_name = $lawyer_id > 0 ? get_the_title( $lawyer_id ) : __( 'No preference', 'business-builder' );
-
         echo '<table class="widefat striped">';
         $this->row( __( 'Client', 'business-builder' ), (string) get_post_meta( $id, AppointmentMeta::key( 'client_name' ), true ) );
         $this->row( __( 'Phone', 'business-builder' ), (string) get_post_meta( $id, AppointmentMeta::key( 'client_phone' ), true ) );
         $this->row( __( 'Email', 'business-builder' ), (string) get_post_meta( $id, AppointmentMeta::key( 'client_email' ), true ) );
-        $this->row( __( 'Lawyer', 'business-builder' ), (string) $lawyer_name );
         $this->row( __( 'Practice Area', 'business-builder' ), (string) get_post_meta( $id, AppointmentMeta::key( 'practice_area' ), true ) );
         $this->row( __( 'Type', 'business-builder' ), AppointmentMeta::type_label( $type ) );
         $this->row( __( 'Date', 'business-builder' ), $date );
@@ -312,7 +308,6 @@ class AppointmentAdmin {
 
         $new['title']           = __( 'Appointment', 'business-builder' );
         $new['bb_appt_client']  = __( 'Client', 'business-builder' );
-        $new['bb_appt_lawyer']  = __( 'Lawyer', 'business-builder' );
         $new['bb_appt_when']    = __( 'Date / Time', 'business-builder' );
         $new['bb_appt_status']  = __( 'Status', 'business-builder' );
         $new['bb_appt_payment'] = __( 'Payment', 'business-builder' );
@@ -366,22 +361,6 @@ class AppointmentAdmin {
                 if ( '' !== $phone ) {
                     echo '<br /><span class="description">' . esc_html( $phone ) . '</span>';
                 }
-                break;
-
-            case 'bb_appt_lawyer':
-                $lawyer_id = (int) get_post_meta( $post_id, AppointmentMeta::key( 'lawyer_id' ), true );
-
-                if ( $lawyer_id > 0 && get_post( $lawyer_id )) {
-                    $link = get_edit_post_link( $lawyer_id );
-                    $name = get_the_title( $lawyer_id );
-
-                    echo $link
-                        ? '<a href="' . esc_url( $link ) . '">' . esc_html( $name ) . '</a>'
-                        : esc_html( $name );
-                    break;
-                }
-
-                echo '<em>' . esc_html__( 'No preference', 'business-builder' ) . '</em>';
                 break;
 
             case 'bb_appt_when':
@@ -441,7 +420,7 @@ class AppointmentAdmin {
      * Extend the admin list search for appointments.
      *
      * Adds a broad OR match across the public reference, client name/phone/
-     * email, lawyer, appointment type and payment status so an administrator
+     * email, appointment type and payment status so an administrator
      * can find a booking by any operational field (mirrors the consultation
      * list search). Respects existing meta queries.
      *

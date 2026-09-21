@@ -51,7 +51,7 @@ check( 'HH:MM:SS accepted (browser seconds)', '09:30' === $av->normalize_time( '
 check( 'garbage rejected', '' === $av->normalize_time( 'nope' ) );
 
 echo "== zero appointments => all slots free ==\n";
-$slots = $av->slots_for_date( $date, 0 );
+$slots = $av->slots_for_date( $date );
 check( 'slots generated for a working day', count( $slots ) > 0 );
 
 $any_taken = false;
@@ -70,7 +70,7 @@ $appt_id = is_wp_error( $r ) ? 0 : (int) $r;
 
 echo "== slot now blocks ==\n";
 if ( $appt_id ) {
-    check( 'occupied slot is now taken', ! $av->is_slot_free( $date, $first, 0 ) );
+    check( 'occupied slot is now taken', ! $av->is_slot_free( $date, $first ) );
 }
 
 echo "== accurate error codes ==\n";

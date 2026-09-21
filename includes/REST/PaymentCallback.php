@@ -193,6 +193,20 @@ class PaymentCallback {
 
         if ( $result->success && 'paid' === $transaction->status ) {
             $this->notify_paid( $transaction );
+        } elseif ( ! $result->success && 'failed' === sanitize_key( (string) $result->status )) {
+            /*
+             * A provider that EXPLICITLY reports a failed payment is
+             * surfaced as a notification + activity record. A merely
+             * pending/unknown verification is NOT treated as a failure, so
+             * this never raises a false alarm. The transaction itself is
+             * advanced through the synchronizer so the state stays accurate.
+             */
+            $failed = $this->synchronizer->apply(
+                $transaction,
+                new PaymentResult( false, 'failed', (string) $result->reference, (string) $result->message )
+            );
+
+            $this->notify_failed( $failed );
         }
 
         $status = 'paid' === $transaction->status ? 'paid' : 'pending';
@@ -311,13 +325,52 @@ class PaymentCallback {
                 (int) $transaction->object_id,
                 'payment:' . $transaction->gateway . ':' . $transaction->public_ref,
                 array(
-                    'category'    => 'payment',
-                    'entity_type' => $transaction->object_type,
-                    'entity_id'   => (int) $transaction->object_id,
-                    'reference'   => $transaction->public_ref,
-                    'amount'      => $transaction->amount,
-                    'currency'    => $transaction->currency,
-                    'gateway'     => $transaction->gateway,
+                    'category'     => 'payment',
+                    'entity_type'  => $transaction->object_type,
+                    'entity_id'    => (int) $transaction->object_id,
+                    'entity_label' => (string) $transaction->object_type,
+                    'reference'    => (string) $transaction->public_ref,
+                    'payment_ref'  => (string) $transaction->public_ref,
+                    'amount'       => (string) $transaction->amount,
+                    'currency'     => (string) $transaction->currency,
+                    'gateway'      => (string) $transaction->gateway,
+                    'actionable'   => false,
+                )
+            )
+        );
+    }
+
+    /**
+     * Dispatch a "payment failed" notification/activity record.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     */
+    protected function notify_failed( PaymentTransaction $transaction ): void {
+
+        $this->notifications->dispatch(
+            new Notification(
+                'payment.failed',
+                __( 'Payment failed', 'business-builder' ),
+                sprintf(
+                    /* translators: 1: gateway, 2: public reference */
+                    __( 'The payment via %1$s for %2$s did not complete.', 'business-builder' ),
+                    $transaction->gateway,
+                    $transaction->public_ref
+                ),
+                '',
+                (int) $transaction->object_id,
+                'payment:failed:' . $transaction->gateway . ':' . $transaction->public_ref,
+                array(
+                    'category'     => 'payment',
+                    'entity_type'  => $transaction->object_type,
+                    'entity_id'    => (int) $transaction->object_id,
+                    'entity_label' => (string) $transaction->object_type,
+                    'reference'    => (string) $transaction->public_ref,
+                    'payment_ref'  => (string) $transaction->public_ref,
+                    'amount'       => (string) $transaction->amount,
+                    'currency'     => (string) $transaction->currency,
+                    'gateway'      => (string) $transaction->gateway,
+                    'actionable'   => true,
                 )
             )
         );

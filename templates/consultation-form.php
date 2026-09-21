@@ -78,7 +78,13 @@ $bb_page_id    = isset( $bb_page_id ) ? (int) $bb_page_id : 0;
         </div>
     <?php elseif ( 'success' === $bb_state ) : ?>
         <div class="bb-consultation-notice bb-consultation-success">
-            <?php esc_html_e( 'Thank you. Your consultation request has been received and our team will contact you shortly.', 'business-builder' ); ?>
+            <p><?php esc_html_e( 'Thank you. Your consultation request has been received and our team will contact you shortly.', 'business-builder' ); ?></p>
+            <?php if ( '' !== $bb_receipt_ref ) : ?>
+                <p><?php esc_html_e( 'This service is free of charge. Your invoice is shown below.', 'business-builder' ); ?></p>
+                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-auto data-bb-receipt-ref="<?php echo esc_attr( $bb_receipt_ref ); ?>">
+                    <?php esc_html_e( 'View Invoice', 'business-builder' ); ?>
+                </button>
+            <?php endif; ?>
         </div>
     <?php elseif ( 'payment_error' === $bb_state ) : ?>
         <?php

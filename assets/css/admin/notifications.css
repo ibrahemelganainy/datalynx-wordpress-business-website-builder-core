@@ -268,3 +268,57 @@
     width: 100%;
   }
 }
+
+/* ------------------------------------------------------------------
+ * Manual-payment group + custom date range (this phase).
+ * Minimal additions only — the full visual overhaul is a separate task.
+ * ------------------------------------------------------------------ */
+
+.bb-notification-center .bb-nc-filter.is-active {
+  font-weight: 800;
+}
+
+/* The Manual Payments group uses the payment colour family. */
+.bb-notification-center .bb-nc-item.bb-nc-manual_payment {
+  border-inline-start: 3px solid #d97706;
+}
+
+/* Custom date range inputs sit inline with the search controls. */
+.bb-notification-center .bb-nc-search .bb-nc-range input[type="date"] {
+  min-height: 32px;
+}
+
+/* Missing related entity: an honest, muted note (never a dead link). */
+.bb-notification-center .bb-nc-missing {
+  color: #b32d2e;
+  font-weight: 600;
+}
+
+.bb-notification-center .bb-nc-customer {
+  color: #334155;
+  font-weight: 600;
+}
+
+/* Pagination */
+.bb-notification-center .bb-nc-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0 4px;
+}
+
+.bb-notification-center .bb-nc-pagination .bb-btn.is-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.bb-notification-center .bb-nc-pageof {
+  font-weight: 700;
+  color: #475569;
+}
+
+/* Activity timeline: reference + actor + time on one row. */
+.bb-notification-center .bb-activity-ref {
+  margin-inline-start: 8px;
+}

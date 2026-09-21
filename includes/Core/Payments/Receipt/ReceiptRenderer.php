@@ -22,17 +22,28 @@ class ReceiptRenderer {
      */
     public function render( Receipt $receipt ): string {
 
-        $status_class = $receipt->is_paid
-            ? 'is-paid'
-            : ( 'failed' === $receipt->status || 'cancelled' === $receipt->status || 'expired' === $receipt->status
-                ? 'is-failed'
-                : 'is-pending' );
+        $status_class = $receipt->is_free
+            ? 'is-free'
+            : ( $receipt->is_paid
+                ? 'is-paid'
+                : ( 'failed' === $receipt->status || 'cancelled' === $receipt->status || 'expired' === $receipt->status
+                    ? 'is-failed'
+                    : 'is-pending' ) );
 
         $site_name = $receipt->site_name;
 
         $type_label = ( 'appointment' === $receipt->object_type )
             ? __( 'Appointment', 'business-builder' )
             : __( 'Consultation', 'business-builder' );
+
+        /*
+         * A free service is billed as an INVOICE (nothing was charged); a
+         * paid/pending one is a RECEIPT. The wording follows the real state
+         * so a free document never reads as a payment confirmation.
+         */
+        $doc_title = $receipt->is_free
+            ? __( 'INVOICE', 'business-builder' )
+            : __( 'PAYMENT RECEIPT', 'business-builder' );
 
         $payment_rows = $this->payment_rows( $receipt );
 
@@ -49,13 +60,15 @@ class ReceiptRenderer {
                     <?php endif; ?>
                     <div class="bb-receipt-brand-text">
                         <span class="bb-receipt-business"><?php echo esc_html( $site_name ); ?></span>
-                        <span class="bb-receipt-doc-title"><?php esc_html_e( 'PAYMENT RECEIPT', 'business-builder' ); ?></span>
+                        <span class="bb-receipt-doc-title"><?php echo esc_html( $doc_title ); ?></span>
                     </div>
                 </div>
             </div>
 
             <div class="bb-receipt-banner <?php echo esc_attr( $status_class ); ?>">
-                <span class="bb-receipt-banner-status"><?php echo esc_html( strtoupper( $receipt->status_label ) ); ?></span>
+                <span class="bb-receipt-banner-status">
+                    <?php echo esc_html( $receipt->is_free ? __( 'FREE', 'business-builder' ) : strtoupper( $receipt->status_label ) ); ?>
+                </span>
                 <?php if ( '' !== $receipt->receipt_number ) : ?>
                     <span class="bb-receipt-banner-no">
                         <span class="bb-receipt-banner-no-label"><?php esc_html_e( 'Receipt No:', 'business-builder' ); ?></span>
@@ -137,7 +150,9 @@ class ReceiptRenderer {
             </div>
 
             <div class="bb-receipt-section">
-                <h3 class="bb-receipt-section-title"><?php esc_html_e( 'Payment Information', 'business-builder' ); ?></h3>
+                <h3 class="bb-receipt-section-title">
+                    <?php echo esc_html( $receipt->is_free ? __( 'Billing Summary', 'business-builder' ) : __( 'Payment Information', 'business-builder' ) ); ?>
+                </h3>
                 <div class="bb-receipt-rows">
                     <?php foreach ( $payment_rows as $label => $value ) : ?>
                         <?php if ( '' === (string) $value ) { continue; } ?>
@@ -165,15 +180,19 @@ class ReceiptRenderer {
             <?php endif; ?>
 
             <p class="bb-receipt-note">
-                <?php esc_html_e( 'Please keep this receipt for your records.', 'business-builder' ); ?>
+                <?php if ( $receipt->is_free ) : ?>
+                    <?php esc_html_e( 'This service is provided free of charge. No payment is required — please keep this invoice for your records.', 'business-builder' ); ?>
+                <?php else : ?>
+                    <?php esc_html_e( 'Please keep this receipt for your records.', 'business-builder' ); ?>
+                <?php endif; ?>
             </p>
 
             <p class="bb-receipt-actions">
                 <button type="button" class="bb-receipt-btn bb-receipt-print" data-bb-receipt-print>
-                    <?php esc_html_e( 'Print Receipt', 'business-builder' ); ?>
+                    <?php echo esc_html( $receipt->is_free ? __( 'Print Invoice', 'business-builder' ) : __( 'Print Receipt', 'business-builder' ) ); ?>
                 </button>
                 <button type="button" class="bb-receipt-btn bb-receipt-download" data-bb-receipt-download>
-                    <?php esc_html_e( 'Save Receipt', 'business-builder' ); ?>
+                    <?php echo esc_html( $receipt->is_free ? __( 'Save Invoice', 'business-builder' ) : __( 'Save Receipt', 'business-builder' ) ); ?>
                 </button>
             </p>
         </div>
@@ -292,6 +311,25 @@ class ReceiptRenderer {
 
         $rows = array();
 
+        if ( $receipt->is_free ) {
+
+            /*
+             * A free service has no payment method, no amount and no
+             * currency. State that plainly instead of a fake "—" method.
+             */
+            $rows[ __( 'Payment Method', 'business-builder' ) ] = __( 'None (free service)', 'business-builder' );
+            $rows[ __( 'Amount', 'business-builder' ) ]         = __( 'Free (no payment required)', 'business-builder' );
+
+            if ( '' !== $receipt->reference ) {
+                $rows[ __( 'Invoice Reference', 'business-builder' ) ] = $receipt->reference;
+            }
+
+            $rows[ __( 'Status', 'business-builder' ) ] = __( 'Free of Charge', 'business-builder' );
+            $rows[ __( 'Date', 'business-builder' ) ]   = $receipt->created_at;
+
+            return apply_filters( 'bb_payment_receipt_payment_rows', $rows, $receipt );
+        }
+
         $rows[ __( 'Payment Method', 'business-builder' ) ] = $receipt->gateway_name;
 
         if ( '' !== $receipt->reference ) {
@@ -322,10 +360,24 @@ class ReceiptRenderer {
             $rows[ __( 'Gateway Reference', 'business-builder' ) ] = $receipt->gateway_reference;
         }
 
-        $rows[ __( 'Amount', 'business-builder' ) ]   = $receipt->amount_display;
-        $rows[ __( 'Currency', 'business-builder' ) ] = $receipt->currency;
-        $rows[ __( 'Payment Date', 'business-builder' ) ] = $receipt->created_at;
-        $rows[ __( 'Status', 'business-builder' ) ]   = $receipt->status_label;
+        if ( $receipt->is_free ) {
+
+            /*
+             * A free invoice shows no monetary amount — "Free" is stated
+             * explicitly so the document never implies a charge was made.
+             */
+            $rows[ __( 'Amount', 'business-builder' ) ] = __( 'Free (no payment required)', 'business-builder' );
+            $rows[ __( 'Date', 'business-builder' ) ]   = $receipt->created_at;
+            $rows[ __( 'Status', 'business-builder' ) ] = __( 'Free of Charge', 'business-builder' );
+
+        } else {
+
+            $rows[ __( 'Amount', 'business-builder' ) ]   = $receipt->amount_display;
+            $rows[ __( 'Currency', 'business-builder' ) ] = $receipt->currency;
+            $rows[ __( 'Payment Date', 'business-builder' ) ] = $receipt->created_at;
+            $rows[ __( 'Status', 'business-builder' ) ]   = $receipt->status_label;
+
+        }
 
         /**
          * Filter the receipt PAYMENT rows (label => value).
@@ -366,6 +418,7 @@ class ReceiptRenderer {
             . '.bb-receipt-banner.is-paid .bb-receipt-banner-status{background:#dcfce7;color:#166534;}'
             . '.bb-receipt-banner.is-pending .bb-receipt-banner-status{background:#fef3c7;color:#92400e;}'
             . '.bb-receipt-banner.is-failed .bb-receipt-banner-status{background:#fee2e2;color:#991b1b;}'
+            . '.bb-receipt-banner.is-free .bb-receipt-banner-status{background:#e0f2fe;color:#075985;}'
             . '.bb-receipt-banner-no{display:inline-flex;align-items:baseline;gap:8px;}'
             . '.bb-receipt-banner-no-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#64748b;font-weight:700;}'
             . '.bb-receipt-banner-no-value{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.98rem;font-weight:800;color:#0f172a;}'
@@ -412,6 +465,7 @@ class ReceiptRenderer {
             . '.bb-receipt-banner.is-paid .bb-receipt-banner-status{background:#fff!important;color:#166534!important;border:1px solid #166534;}'
             . '.bb-receipt-banner.is-pending .bb-receipt-banner-status{background:#fff!important;color:#92400e!important;border:1px solid #92400e;}'
             . '.bb-receipt-banner.is-failed .bb-receipt-banner-status{background:#fff!important;color:#991b1b!important;border:1px solid #991b1b;}'
+            . '.bb-receipt-banner.is-free .bb-receipt-banner-status{background:#fff!important;color:#075985!important;border:1px solid #075985;}'
             . 'header,footer,nav,.bb-header-bar,.bb-footer-bar,.bb-section-heading[data-bb-nav],'
             . '.wp-admin-bar,.bb-page-controls,.bb-pay-step-back{display:none!important;}'
             . '}'

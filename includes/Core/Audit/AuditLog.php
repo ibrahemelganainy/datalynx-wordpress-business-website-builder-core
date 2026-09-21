@@ -60,6 +60,13 @@ class AuditLog {
             'context'   => $context,
             'user_id'   => $user instanceof \WP_User ? (int) $user->ID : 0,
             'user'      => $user instanceof \WP_User ? (string) $user->user_login : '',
+            'user_name' => $user instanceof \WP_User ? (string) $user->display_name : '',
+            /*
+             * A public reference carried through from the caller (e.g. the
+             * CNS-/APT-/TXN- reference) so the activity timeline can show
+             * WHAT was acted on, not just the action name.
+             */
+            'reference' => isset( $context['reference'] ) ? sanitize_text_field( (string) $context['reference'] ) : '',
             'time'      => time(),
         );
 
@@ -85,6 +92,118 @@ class AuditLog {
         }
 
         return array_slice( array_reverse( $log ), 0, max( 1, $limit ) );
+    }
+
+    /**
+     * Filter audit entries for the activity timeline.
+     *
+     * Reuses the same storage; adds category + reference filtering so the
+     * Notifications & Activity page can show a real timeline alongside the
+     * notifications without a second log.
+     *
+     * @param string $category 'all' | consultation | appointment | payment | system.
+     * @param string $search   Free-text (action/reference/user).
+     * @param int    $days     Day window (0 = all).
+     * @param int    $limit    Max entries.
+     * @param int    $offset   Entries to skip (pagination).
+     * @return array<int, array<string, mixed>>
+     */
+    public function query( string $category = 'all', string $search = '', int $days = 0, int $limit = 50, int $offset = 0 ): array {
+
+        $log = get_option( self::OPTION_NAME, array() );
+
+        if ( ! is_array( $log ) ) {
+            return array();
+        }
+
+        $items  = array_reverse( $log );
+        $needle = strtolower( trim( $search ) );
+        $cutoff = $days > 0 ? time() - ( $days * DAY_IN_SECONDS ) : 0;
+        $offset = max( 0, $offset );
+
+        $out     = array();
+        $skipped = 0;
+
+        foreach ( $items as $entry ) {
+
+            if ( ! is_array( $entry )) {
+                continue;
+            }
+
+            if ( ! self::matches_category( $entry, $category )) {
+                continue;
+            }
+
+            if ( $cutoff > 0 && (int) ( $entry['time'] ?? 0 ) < $cutoff ) {
+                continue;
+            }
+
+            if ( '' !== $needle ) {
+                $haystack = strtolower(
+                    (string) ( $entry['action'] ?? '' ) . ' '
+                    . (string) ( $entry['object'] ?? '' ) . ' '
+                    . (string) ( $entry['reference'] ?? '' ) . ' '
+                    . (string) ( $entry['user_name'] ?? '' )
+                );
+
+                if ( false === strpos( $haystack, $needle )) {
+                    continue;
+                }
+            }
+
+            if ( $skipped < $offset ) {
+                $skipped++;
+                continue;
+            }
+
+            $out[] = $entry;
+
+            if ( count( $out ) >= max( 1, $limit )) {
+                break;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Whether an audit entry belongs to a filter category.
+     *
+     * @param array  $entry    Entry.
+     * @param string $category Category filter.
+     * @return bool
+     */
+    public static function matches_category( array $entry, string $category ): bool {
+
+        $category = sanitize_key( $category );
+
+        if ( '' === $category || 'all' === $category ) {
+            return true;
+        }
+
+        $action = isset( $entry['action'] ) ? sanitize_key( (string) $entry['action'] ) : '';
+        $object = isset( $entry['object'] ) ? sanitize_key( (string) $entry['object'] ) : '';
+
+        if ( 'payment' === $category ) {
+            return 0 === strpos( $action, 'payment' ) || 'payment' === $object;
+        }
+
+        if ( 'consultation' === $category ) {
+            return 0 === strpos( $action, 'consultation' ) || 'consultation' === $object;
+        }
+
+        if ( 'appointment' === $category ) {
+            return 0 === strpos( $action, 'appointment' ) || 'appointment' === $object;
+        }
+
+        /* 'system' is everything that is not one of the business categories. */
+        if ( 'system' === $category ) {
+            return ! self::matches_category( $entry, 'payment' )
+                && ! self::matches_category( $entry, 'consultation' )
+                && ! self::matches_category( $entry, 'appointment' );
+        }
+
+        return false;
     }
 
     /**

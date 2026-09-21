@@ -217,8 +217,6 @@ class LookupHandler {
         $status = (string) get_post_meta( $post_id, AppointmentMeta::key( 'status' ), true );
         $status = '' !== $status ? $status : AppointmentMeta::default_status();
 
-        $lawyer_id = (int) get_post_meta( $post_id, AppointmentMeta::key( 'lawyer_id' ), true );
-
         $date  = (string) get_post_meta( $post_id, AppointmentMeta::key( 'date' ), true );
         $start = (string) get_post_meta( $post_id, AppointmentMeta::key( 'start' ), true );
 
@@ -228,7 +226,6 @@ class LookupHandler {
             'customer'    => (string) get_post_meta( $post_id, AppointmentMeta::key( 'client_name' ), true ),
             'status'      => AppointmentMeta::status_label( $status ),
             'status_key'  => $status,
-            'lawyer'      => $lawyer_id > 0 ? get_the_title( $lawyer_id ) : '',
             'date'        => $date,
             'time'        => trim( $start ),
             'submitted'   => (string) get_post_meta( $post_id, AppointmentMeta::key( 'created' ), true ),

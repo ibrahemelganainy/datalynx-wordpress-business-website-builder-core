@@ -169,25 +169,40 @@ final class ManualPaymentSubmission {
         /* Dashboard notification: a manual payment needs verification. */
         $entity_ref = (string) get_post_meta( $object_id, $meta_key . 'public_reference', true );
 
+        /*
+         * The related-object reference (CNS-/APT-) is carried for CONTEXT;
+         * the transaction reference (TXN-…) is carried separately as
+         * payment_ref so the "View Receipt" action always resolves to the
+         * real receipt (never a dead link). The customer name/amount let the
+         * notification center show the same facts as the review queue.
+         */
+        $payment_ref = isset( $transaction->public_ref ) ? (string) $transaction->public_ref : '';
+        $customer    = self::customer_context( $object_type, $object_id, $meta_key );
+
         ( new \BusinessBuilderCore\Core\Notifications\NotificationManager() )->dispatch(
             new \BusinessBuilderCore\Core\Notifications\Notification(
                 'payment.manual_submitted',
+                __( 'Manual payment requires verification', 'business-builder' ),
                 sprintf(
-                    /* translators: 1: gateway, 2: object type */
-                    __( 'Manual %1$s payment submitted for %2$s', 'business-builder' ),
-                    $gateway->get_name(),
+                    /* translators: %s: related object type (Consultation/Appointment) */
+                    __( 'A manual payment was submitted for a %s and is awaiting verification.', 'business-builder' ),
                     $object_type
                 ),
-                $reference,
                 '',
                 $object_id,
                 'payment:manual:' . $object_id . ':' . $reference,
                 array(
-                    'category'    => 'payment',
-                    'entity_type' => $object_type,
-                    'entity_id'   => $object_id,
-                    'reference'   => $entity_ref,
-                    'gateway'     => $gateway_id,
+                    'category'     => 'manual_payment',
+                    'entity_type'  => $object_type,
+                    'entity_id'    => $object_id,
+                    'entity_label' => $object_type,
+                    'reference'    => $entity_ref,
+                    'payment_ref'  => $payment_ref,
+                    'gateway'      => $gateway_id,
+                    'amount'       => isset( $transaction->amount ) ? (string) $transaction->amount : '',
+                    'currency'     => isset( $transaction->currency ) ? (string) $transaction->currency : '',
+                    'customer'     => isset( $customer['name'] ) ? (string) $customer['name'] : '',
+                    'actionable'   => true,
                 )
             )
         );

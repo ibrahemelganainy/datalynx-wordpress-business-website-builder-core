@@ -21,6 +21,8 @@
 @import url("frontend/section-faq.css");
 @import url("frontend/section-consultation.css");
 @import url("frontend/section-consultation-form.css");
+/* Appointment booking form (availability summary + booking fields). */
+@import url("frontend/section-booking-form.css");
 /* Shared frontend payment selection component (consultation + booking). */
 @import url("frontend/section-payment.css");
 /* Dynamic billing form (shown only for gateways needing billing_data). */

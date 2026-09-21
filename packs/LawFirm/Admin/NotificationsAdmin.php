@@ -233,6 +233,132 @@ class NotificationsAdmin {
     }
 
     /**
+     * Human, translatable label for a raw audit action slug.
+     *
+     * Keeps the stored slugs stable (they are the data contract) while the
+     * activity timeline shows a readable, localized title.
+     *
+     * @param string $action Audit action slug.
+     * @return string
+     */
+    public static function activity_label( string $action ): string {
+
+        $action = sanitize_key( $action );
+
+        $labels = array(
+            'consultation.created'      => __( 'Consultation created', 'business-builder' ),
+            'consultation.status_changed' => __( 'Consultation status changed', 'business-builder' ),
+            'appointment.created'       => __( 'Appointment created', 'business-builder' ),
+            'payment.status_synced'     => __( 'Payment status synchronized', 'business-builder' ),
+            'payment.manual_submitted'  => __( 'Manual payment submitted', 'business-builder' ),
+            'payment.manual_approved'   => __( 'Manual payment approved', 'business-builder' ),
+            'payment.manual_rejected'   => __( 'Manual payment rejected', 'business-builder' ),
+            'payment.manually_verified' => __( 'Payment verified manually', 'business-builder' ),
+            'payment.receipt_viewed'    => __( 'Receipt viewed', 'business-builder' ),
+            'payment.callback_unknown'  => __( 'Unknown payment callback', 'business-builder' ),
+            'payment.checkout_failed'   => __( 'Payment checkout failed', 'business-builder' ),
+        );
+
+        if ( isset( $labels[ $action ] )) {
+            return $labels[ $action ];
+        }
+
+        /* Fallback: humanize "foo.bar_baz" => "Foo bar baz". */
+        $human = str_replace( array( '.', '_' ), ' ', $action );
+        $human = trim( $human );
+
+        return '' !== $human ? ucfirst( $human ) : __( 'Activity', 'business-builder' );
+    }
+
+    /**
+     * Validate a Y-m-d date string ('' when invalid).
+     *
+     * @param string $value Candidate date.
+     * @return string
+     */
+    protected static function parse_ymd( string $value ): string {
+
+        $value = trim( $value );
+
+        if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value ) ) {
+            return '';
+        }
+
+        $parts = explode( '-', $value );
+
+        if ( ! checkdate( (int) $parts[1], (int) $parts[2], (int) $parts[0] ) ) {
+            return '';
+        }
+
+        return $value;
+    }
+
+    /**
+     * Unix timestamp for the START of a local Y-m-d day.
+     *
+     * Uses the site timezone so the custom range matches what an
+     * administrator sees, not UTC.
+     *
+     * @param string $date Y-m-d.
+     * @return int
+     */
+    protected static function day_start( string $date ): int {
+
+        $ts = strtotime( $date . ' 00:00:00' );
+
+        return false !== $ts ? $ts : 0;
+    }
+
+    /**
+     * Unix timestamp for the END of a local Y-m-d day (inclusive).
+     *
+     * @param string $date Y-m-d.
+     * @return int
+     */
+    protected static function day_end( string $date ): int {
+
+        $ts = strtotime( $date . ' 23:59:59' );
+
+        return false !== $ts ? $ts : 0;
+    }
+
+    /**
+     * Direct edit URL for a post of a given type, or '' when it is gone.
+     *
+     * Points at the REAL edit screen for the exact record (never a bare
+     * list), and returns '' when the post no longer exists so callers never
+     * render a dead link.
+     *
+     * Public wrapper used by the dashboard widget.
+     *
+     * @param string $post_type Post type.
+     * @param int    $post_id   Post id.
+     * @return string
+     */
+    public static function edit_url_for( string $post_type, int $post_id ): string {
+
+        return self::entity_edit_url( $post_type, $post_id );
+    }
+
+    /**
+     * Direct edit URL for a post of a given type, or '' when it is gone.
+     *
+     * @param string $post_type Post type.
+     * @param int    $post_id   Post id.
+     * @return string
+     */
+    protected static function entity_edit_url( string $post_type, int $post_id ): string {
+
+        if ( $post_id <= 0 || ! get_post( $post_id ) instanceof \WP_Post ) {
+            return '';
+        }
+
+        $url = get_edit_post_link( $post_id, 'raw' );
+
+        return is_string( $url ) ? $url : '';
+    }
+
+    /**
      * Safe JSON view of one stored notification row.
      *
      * @param array<string, mixed> $item Row.
@@ -240,15 +366,26 @@ class NotificationsAdmin {
      */
     protected function serialize_item( array $item ): array {
 
-        $time = (int) ( $item['time'] ?? 0 );
-        $type = isset( $item['entity_type'] ) ? (string) $item['entity_type'] : '';
+        $time      = (int) ( $item['time'] ?? 0 );
+        $type      = isset( $item['entity_type'] ) ? (string) $item['entity_type'] : '';
+        $entity_id = isset( $item['entity_id'] ) ? (int) $item['entity_id'] : 0;
+        $category  = isset( $item['category'] ) && '' !== (string) $item['category']
+            ? (string) $item['category']
+            : NotificationManager::category_for( (string) ( $item['event'] ?? '' ) );
 
+        /*
+         * The polled action URL points at the REAL record when it still
+         * exists; a deleted entity yields no URL so the JS never renders a
+         * dead link.
+         */
         $url = '';
 
-        if ( 'appointment' === $type ) {
-            $url = admin_url( 'edit.php?post_type=bb_appointment' );
-        } elseif ( 'consultation' === $type ) {
-            $url = admin_url( 'edit.php?post_type=bb_consultation' );
+        if ( $entity_id > 0 ) {
+            if ( 'appointment' === $type ) {
+                $url = self::entity_edit_url( 'bb_appointment', $entity_id );
+            } elseif ( 'consultation' === $type ) {
+                $url = self::entity_edit_url( 'bb_consultation', $entity_id );
+            }
         }
 
         $timeago = '';
@@ -264,10 +401,14 @@ class NotificationsAdmin {
         return array(
             'id'        => sanitize_text_field( (string) ( $item['id'] ?? '' ) ),
             'event'     => sanitize_key( (string) ( $item['event'] ?? '' ) ),
-            'category'  => NotificationManager::category_for( (string) ( $item['event'] ?? '' ) ),
+            'category'  => $category,
             'subject'   => sanitize_text_field( (string) ( $item['subject'] ?? '' ) ),
             'message'   => sanitize_text_field( (string) ( $item['message'] ?? '' ) ),
             'reference' => sanitize_text_field( (string) ( $item['reference'] ?? '' ) ),
+            'amount'    => sanitize_text_field( (string) ( $item['amount'] ?? '' ) ),
+            'currency'  => sanitize_text_field( (string) ( $item['currency'] ?? '' ) ),
+            'gateway'   => sanitize_key( (string) ( $item['gateway'] ?? '' ) ),
+            'customer'  => sanitize_text_field( (string) ( $item['customer'] ?? '' ) ),
             'time'      => $time,
             'timeago'   => $timeago,
             'url'       => $url,
@@ -287,27 +428,64 @@ class NotificationsAdmin {
         $raw_cat  = isset( $_GET['bb_nf_cat'] ) ? wp_unslash( $_GET['bb_nf_cat'] ) : 'all';
         $raw_q    = isset( $_GET['bb_nf_q'] ) ? wp_unslash( $_GET['bb_nf_q'] ) : '';
         $raw_days = isset( $_GET['bb_nf_days'] ) ? wp_unslash( $_GET['bb_nf_days'] ) : 0;
+        $raw_from = isset( $_GET['bb_nf_from'] ) ? wp_unslash( $_GET['bb_nf_from'] ) : '';
+        $raw_to   = isset( $_GET['bb_nf_to'] ) ? wp_unslash( $_GET['bb_nf_to'] ) : '';
 
         $category = sanitize_key( (string) $raw_cat );
         $search   = sanitize_text_field( (string) $raw_q );
         $days     = absint( $raw_days );
+        $raw_page = isset( $_GET['bb_nf_page'] ) ? absint( wp_unslash( $_GET['bb_nf_page'] )) : 1;
+        $paged    = max( 1, $raw_page );
 
         if ( '' === $category ) {
             $category = 'all';
         }
 
-        $feed   = $this->notifications->query( $category, $search, $days, 100 );
+        /*
+         * Optional CUSTOM date range (bb_nf_from / bb_nf_to, Y-m-d). Invalid
+         * or partial values are ignored so a malformed range never hides the
+         * whole feed. The range is expressed as timestamps for the manager.
+         */
+        $range     = array();
+        $from_disp = '';
+        $to_disp   = '';
+
+        $from_date = self::parse_ymd( (string) $raw_from );
+        $to_date   = self::parse_ymd( (string) $raw_to );
+
+        if ( '' !== $from_date ) {
+            $from_disp = $from_date;
+            $range['from'] = self::day_start( $from_date );
+        }
+
+        if ( '' !== $to_date ) {
+            $to_disp = $to_date;
+            $range['to'] = self::day_end( $to_date );
+        }
+
+        /*
+         * Pagination: the page never loads the entire history at once. The
+         * per-page size is fixed (light-weight) and the offset is derived
+         * from the requested page.
+         */
+        $per_page = 20;
+        $offset   = ( $paged - 1 ) * $per_page;
+
+        $feed   = $this->notifications->query( $category, $search, $days, $per_page, $offset, $range );
         $unread = $this->notifications->unread_count();
+        $total  = $this->notifications->count( $category, $search, $days, $range );
+        $pages  = (int) ceil( $total / $per_page );
 
         $rtl_class = is_rtl() ? ' bb-rtl' : ' bb-ltr';
 
         $categories = array(
-            'all'          => __( 'All', 'business-builder' ),
-            'consultation' => __( 'Consultations', 'business-builder' ),
-            'appointment'  => __( 'Appointments', 'business-builder' ),
-            'payment'      => __( 'Payments', 'business-builder' ),
-            'system'       => __( 'System', 'business-builder' ),
-            'unread'       => __( 'Unread', 'business-builder' ),
+            'all'            => __( 'All', 'business-builder' ),
+            'unread'         => __( 'Unread', 'business-builder' ),
+            'consultation'   => __( 'Consultations', 'business-builder' ),
+            'appointment'    => __( 'Appointments', 'business-builder' ),
+            'payment'        => __( 'Payments', 'business-builder' ),
+            'manual_payment' => __( 'Manual Payments', 'business-builder' ),
+            'system'         => __( 'System', 'business-builder' ),
         );
 
         $windows = array(
@@ -346,14 +524,17 @@ class NotificationsAdmin {
                 <nav class="bb-nc-filters" aria-label="<?php echo esc_attr__( 'Filter notifications', 'business-builder' ); ?>">
                     <?php foreach ( $categories as $cat_key => $cat_label ) : ?>
                         <?php
-                        $cat_url = add_query_arg(
-                            array(
-                                'page'       => self::PAGE_SLUG,
-                                'bb_nf_cat'  => $cat_key,
-                                'bb_nf_q'    => $search,
-                                'bb_nf_days' => $days,
-                            ),
-                            $admin_root
+                        $cat_url = remove_query_arg(
+                            'bb_nf_page',
+                            add_query_arg(
+                                array(
+                                    'page'       => self::PAGE_SLUG,
+                                    'bb_nf_cat'  => $cat_key,
+                                    'bb_nf_q'    => $search,
+                                    'bb_nf_days' => $days,
+                                ),
+                                $admin_root
+                            )
                         );
 
                         $cat_is = ( $category === $cat_key );
@@ -384,6 +565,14 @@ class NotificationsAdmin {
                             </option>
                         <?php endforeach; ?>
                     </select>
+                    <label class="bb-nc-range">
+                        <span class="screen-reader-text"><?php esc_html_e( 'From date', 'business-builder' ); ?></span>
+                        <input type="date" name="bb_nf_from" value="<?php echo esc_attr( $from_disp ); ?>" aria-label="<?php echo esc_attr__( 'From date', 'business-builder' ); ?>" />
+                    </label>
+                    <label class="bb-nc-range">
+                        <span class="screen-reader-text"><?php esc_html_e( 'To date', 'business-builder' ); ?></span>
+                        <input type="date" name="bb_nf_to" value="<?php echo esc_attr( $to_disp ); ?>" aria-label="<?php echo esc_attr__( 'To date', 'business-builder' ); ?>" />
+                    </label>
                     <button type="submit" class="bb-btn bb-btn-ghost"><?php esc_html_e( 'Search', 'business-builder' ); ?></button>
                 </form>
             </div>
@@ -434,6 +623,39 @@ class NotificationsAdmin {
                         endforeach;
                         ?>
                     <?php endif; ?>
+
+                    <?php if ( $pages > 1 ) : ?>
+                        <nav class="bb-nc-pagination" aria-label="<?php echo esc_attr__( 'Notifications pagination', 'business-builder' ); ?>">
+                            <?php
+                            $page_base = add_query_arg(
+                                array(
+                                    'page'       => self::PAGE_SLUG,
+                                    'bb_nf_cat'  => $category,
+                                    'bb_nf_q'    => $search,
+                                    'bb_nf_days' => $days,
+                                    'bb_nf_from' => $from_disp,
+                                    'bb_nf_to'   => $to_disp,
+                                ),
+                                $admin_root
+                            );
+
+                            $prev_url = add_query_arg( 'bb_nf_page', max( 1, $paged - 1 ), $page_base );
+                            $next_url = add_query_arg( 'bb_nf_page', min( $pages, $paged + 1 ), $page_base );
+                            ?>
+                            <a class="bb-btn bb-btn-ghost<?php echo $paged <= 1 ? ' is-disabled' : ''; ?>" href="<?php echo esc_url( $prev_url ); ?>"><?php esc_html_e( 'Previous', 'business-builder' ); ?></a>
+                            <span class="bb-nc-pageof">
+                                <?php
+                                printf(
+                                    /* translators: 1: current page, 2: total pages */
+                                    esc_html__( 'Page %1$d of %2$d', 'business-builder' ),
+                                    (int) $paged,
+                                    (int) $pages
+                                );
+                                ?>
+                            </span>
+                            <a class="bb-btn bb-btn-ghost<?php echo $paged >= $pages ? ' is-disabled' : ''; ?>" href="<?php echo esc_url( $next_url ); ?>"><?php esc_html_e( 'Next', 'business-builder' ); ?></a>
+                        </nav>
+                    <?php endif; ?>
                 </div>
 
                 <aside class="bb-nc-side">
@@ -453,18 +675,31 @@ class NotificationsAdmin {
                         <?php else : ?>
                             <ul class="bb-activity-list">
                                 <?php foreach ( $audit_recent as $entry ) : ?>
+                                    <?php
+                                    $entry_action = isset( $entry['action'] ) ? (string) $entry['action'] : '';
+                                    $entry_time   = isset( $entry['time'] ) ? (int) $entry['time'] : 0;
+                                    $entry_ref    = isset( $entry['reference'] ) ? (string) $entry['reference'] : '';
+
+                                    /* Prefer the display name; fall back to the login. */
+                                    $entry_user = '';
+
+                                    if ( isset( $entry['user_name'] ) && '' !== (string) $entry['user_name'] ) {
+                                        $entry_user = (string) $entry['user_name'];
+                                    } elseif ( isset( $entry['user'] ) && '' !== (string) $entry['user'] ) {
+                                        $entry_user = (string) $entry['user'];
+                                    }
+
+                                    $entry_when = $entry_time > 0 ? date_i18n( 'Y-m-d H:i', $entry_time ) : '';
+                                    ?>
                                     <li class="bb-activity-item">
-                                        <strong><?php echo esc_html( (string) ( $entry['action'] ?? '' ) ); ?></strong>
-                                        <?php if ( isset( $entry['user'] ) && '' !== (string) $entry['user'] ) : ?>
-                                            <span class="bb-activity-meta"><?php echo esc_html( (string) $entry['user'] ); ?></span>
+                                        <strong><?php echo esc_html( self::activity_label( $entry_action ) ); ?></strong>
+                                        <?php if ( '' !== $entry_ref ) : ?>
+                                            <span class="bb-activity-ref"><code><?php echo esc_html( $entry_ref ); ?></code></span>
                                         <?php endif; ?>
-                                        <span class="bb-activity-time">
-                                            <?php
-                                            $entry_time = isset( $entry['time'] ) ? (int) $entry['time'] : 0;
-                                            $entry_when = $entry_time > 0 ? date_i18n( 'Y-m-d H:i', $entry_time ) : '';
-                                            echo esc_html( $entry_when );
-                                            ?>
-                                        </span>
+                                        <?php if ( '' !== $entry_user ) : ?>
+                                            <span class="bb-activity-meta"><?php echo esc_html( $entry_user ); ?></span>
+                                        <?php endif; ?>
+                                        <span class="bb-activity-time"><?php echo esc_html( $entry_when ); ?></span>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
@@ -489,9 +724,11 @@ class NotificationsAdmin {
         $subject   = isset( $item['subject'] ) ? (string) $item['subject'] : '';
         $message   = isset( $item['message'] ) ? (string) $item['message'] : '';
         $reference = isset( $item['reference'] ) ? (string) $item['reference'] : '';
+        $payment_ref = isset( $item['payment_ref'] ) ? (string) $item['payment_ref'] : '';
         $amount    = isset( $item['amount'] ) ? (string) $item['amount'] : '';
         $currency  = isset( $item['currency'] ) ? (string) $item['currency'] : '';
         $gateway   = isset( $item['gateway'] ) ? (string) $item['gateway'] : '';
+        $customer  = isset( $item['customer'] ) ? (string) $item['customer'] : '';
         $read      = ! empty( $item['read'] );
         $time      = (int) ( $item['time'] ?? 0 );
         $id        = (string) ( $item['id'] ?? '' );
@@ -501,38 +738,61 @@ class NotificationsAdmin {
             : NotificationManager::category_for( $event );
 
         $type = isset( $item['entity_type'] ) ? (string) $item['entity_type'] : '';
+        $entity_id = isset( $item['entity_id'] ) ? (int) $item['entity_id'] : 0;
+
+        /* Has the related entity been deleted? Then no dead action is shown. */
+        $entity_missing = false;
+
+        if ( 'consultation' === $type || 'appointment' === $type ) {
+            $post_type = ( 'appointment' === $type ) ? 'bb_appointment' : 'bb_consultation';
+            $entity_missing = $entity_id <= 0 || ! get_post( $entity_id ) instanceof \WP_Post;
+        }
 
         $icons = array(
-            'payment'      => 'dashicons-money-alt',
-            'appointment'  => 'dashicons-calendar-alt',
-            'consultation' => 'dashicons-phone',
-            'system'       => 'dashicons-admin-generic',
+            'payment'        => 'dashicons-money-alt',
+            'manual_payment' => 'dashicons-clipboard',
+            'appointment'    => 'dashicons-calendar-alt',
+            'consultation'   => 'dashicons-phone',
+            'system'         => 'dashicons-admin-generic',
         );
 
         $icon = isset( $icons[ $category ] ) ? $icons[ $category ] : 'dashicons-bell';
 
-        /* Record URL (direct navigation; never an enumerable bare id). */
-        $record_url = '';
+        /*
+         * Actions must resolve to REAL records. The entity filter links show
+         * the exact record when it still exists; when it has been deleted we
+         * show an honest message instead of a dead link, and the action is
+         * dropped entirely rather than pointing at a non-existent page.
+         */
+        $record_url   = '';
         $record_label = __( 'View', 'business-builder' );
 
-        if ( 'appointment' === $type ) {
-            $record_url   = admin_url( 'edit.php?post_type=bb_appointment' );
-            $record_label = __( 'View Appointment', 'business-builder' );
-        } elseif ( 'consultation' === $type ) {
-            $record_url   = admin_url( 'edit.php?post_type=bb_consultation' );
-            $record_label = __( 'View Consultation', 'business-builder' );
-        } elseif ( 'payment' === $category ) {
-            $record_url   = admin_url( 'edit.php?post_type=bb_payment' );
-            $record_label = __( 'View Payment', 'business-builder' );
+        if ( ! $entity_missing && $entity_id > 0 ) {
+
+            if ( 'appointment' === $type ) {
+                $record_url   = self::entity_edit_url( 'bb_appointment', $entity_id );
+                $record_label = __( 'View Appointment', 'business-builder' );
+            } elseif ( 'consultation' === $type ) {
+                $record_url   = self::entity_edit_url( 'bb_consultation', $entity_id );
+                $record_label = __( 'View Consultation', 'business-builder' );
+            }
         }
 
+        /*
+         * The receipt link uses the PAYMENT reference (TXN-…). For events
+         * that carry only an object reference (a free invoice), that
+         * reference is used instead — both are resolved by ReceiptPage.
+         */
+        $receipt_ref = '' !== $payment_ref ? $payment_ref : $reference;
         $receipt_url = '';
 
-        if ( 'payment' === $category && '' !== $reference ) {
-            $receipt_url = \BusinessBuilderCore\Packs\LawFirm\Frontend\ReceiptRoute::url( $reference );
+        $is_payment_event = ( 'payment' === $category || 'manual_payment' === $category );
+
+        if ( $is_payment_event && '' !== $receipt_ref ) {
+            $receipt_url = \BusinessBuilderCore\Packs\LawFirm\Frontend\ReceiptRoute::url( $receipt_ref );
         }
 
-/*
+        /*
          * A manual payment awaiting verification links straight to the
          * review queue so an administrator can approve/reject in one step.
          */
@@ -540,6 +800,12 @@ class NotificationsAdmin {
 
         if ( 'payment.manual_submitted' === $event ) {
             $review_url = admin_url( 'admin.php?page=bb-law-firm-manual-payments' );
+        }
+
+        /* "View Payment" for a payment event without a resolvable record. */
+        if ( '' === $record_url && '' === $review_url && 'payment' === $category && ! $entity_missing && $entity_id > 0 ) {
+            $record_url   = self::entity_edit_url( $type, $entity_id );
+            $record_label = __( 'View Payment', 'business-builder' );
         }
 
         $read_class = $read ? 'is-read' : 'is-unread';
@@ -590,6 +856,17 @@ class NotificationsAdmin {
                     <?php if ( '' !== $gateway ) : ?>
                         <span class="bb-nc-gateway"><?php echo esc_html( ucfirst( $gateway ) ); ?></span>
                     <?php endif; ?>
+                    <?php if ( '' !== $customer ) : ?>
+                        <span class="bb-nc-customer"><?php echo esc_html( $customer ); ?></span>
+                    <?php endif; ?>
+                    <?php if ( $entity_missing ) : ?>
+                        <span class="bb-nc-missing">
+                            <?php
+                            /* translators: %s: related entity type (consultation/appointment) */
+                            echo esc_html( sprintf( __( 'Related %s is no longer available.', 'business-builder' ), $type ) );
+                            ?>
+                        </span>
+                    <?php endif; ?>
                 </div>
 
                 <div class="bb-nc-item-actions">
@@ -605,7 +882,7 @@ class NotificationsAdmin {
 
                     <?php if ( '' !== $receipt_url ) : ?>
                         <a class="bb-btn bb-btn-ghost" href="<?php echo esc_url( $receipt_url ); ?>">
-                            <?php esc_html_e( 'View Receipt', 'business-builder' ); ?>
+                            <?php echo esc_html( '' !== $payment_ref ? __( 'View Receipt', 'business-builder' ) : __( 'View Invoice', 'business-builder' ) ); ?>
                         </a>
                     <?php endif; ?>
 

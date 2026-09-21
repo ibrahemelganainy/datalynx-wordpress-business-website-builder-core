@@ -531,11 +531,26 @@ class ManualPaymentsAdmin {
             );
         }
 
+        /*
+         * The related-object reference (CNS-/APT-) is carried for CONTEXT;
+         * the transaction reference is stored separately as payment_ref so
+         * the receipt action always resolves. The reviewer's display name is
+         * recorded so the activity trail can attribute the action to a user.
+         */
+        $object_reference = self::object_reference( $transaction );
+
+        $reviewer = wp_get_current_user();
+        $reviewer_name = $reviewer instanceof \WP_User && $reviewer->ID > 0
+            ? (string) $reviewer->display_name
+            : '';
+
         $message = $reason;
 
         if ( '' !== $reason ) {
             /* translators: %s: rejection reason */
             $message = sprintf( __( 'Reason: %s', 'business-builder' ), $reason );
+        } elseif ( 'approved' === $decision ) {
+            $message = __( 'The manual payment was verified and confirmed.', 'business-builder' );
         }
 
         $this->notifications->dispatch(
@@ -547,16 +562,43 @@ class ManualPaymentsAdmin {
                 (int) $transaction->object_id,
                 'payment:manual:' . $decision . ':' . $transaction->id,
                 array(
-                    'category'    => 'payment',
-                    'entity_type' => $transaction->object_type,
-                    'entity_id'   => (int) $transaction->object_id,
-                    'reference'   => $transaction->public_ref,
-                    'amount'      => $transaction->amount,
-                    'currency'    => $transaction->currency,
-                    'gateway'     => $transaction->gateway,
+                    'category'     => 'manual_payment',
+                    'entity_type'  => $transaction->object_type,
+                    'entity_id'    => (int) $transaction->object_id,
+                    'entity_label' => $entity_label,
+                    'reference'    => $object_reference,
+                    'payment_ref'  => (string) $transaction->public_ref,
+                    'amount'       => (string) $transaction->amount,
+                    'currency'     => (string) $transaction->currency,
+                    'gateway'      => (string) $transaction->gateway,
+                    'user'         => $reviewer_name,
+                    'actionable'   => false,
                 )
             )
         );
+    }
+
+    /**
+     * The public reference of the related consultation/appointment.
+     *
+     * Reads ONLY the public reference meta; never the internal post id.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    protected static function object_reference( PaymentTransaction $transaction ): string {
+
+        $object_id = (int) $transaction->object_id;
+
+        if ( $object_id <= 0 ) {
+            return '';
+        }
+
+        $meta_key = ( 'appointment' === $transaction->object_type )
+            ? '_bb_appointment_public_reference'
+            : '_bb_consultation_public_reference';
+
+        return (string) get_post_meta( $object_id, $meta_key, true );
     }
 
     /**
@@ -980,12 +1022,6 @@ class ManualPaymentsAdmin {
             if ( '' !== $date ) {
                 $when = '' !== $start ? $date . chr( 32 ) . $start : $date;
                 $context['extras'][ __( 'Appointment Date', 'business-builder' ) ] = $when;
-            }
-
-            $lawyer_id = (int) get_post_meta( $object_id, AppointmentMeta::key( 'lawyer_id' ), true );
-
-            if ( $lawyer_id > 0 ) {
-                $context['extras'][ __( 'Lawyer', 'business-builder' ) ] = (string) get_the_title( $lawyer_id );
             }
 
             return $context;

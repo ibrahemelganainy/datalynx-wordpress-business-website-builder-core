@@ -580,3 +580,46 @@
   margin-inline-start: 0;
   margin-inline-end: auto;
 }
+
+/* ------------------------------------------------------------------
+ * Notifications widget (dashboard sidebar) — same source as the
+ * Notifications & Activity page. Minimal styling only.
+ * ------------------------------------------------------------------ */
+.bb-dashboard .bb-notifications-widget .bb-badge-unread {
+  background: #dc2626;
+  color: #fff;
+}
+
+.bb-dashboard .bb-notif-widget-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bb-dashboard .bb-notif-widget-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bb-dashboard .bb-notif-widget-item.is-unread .bb-notif-widget-title {
+  font-weight: 800;
+}
+
+.bb-dashboard .bb-notif-widget-title {
+  color: #0f172a;
+}
+
+.bb-dashboard .bb-notif-widget-time {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.bb-dashboard .bb-notif-widget-action {
+  align-self: flex-start;
+  font-weight: 700;
+  color: #1d4ed8;
+  text-decoration: none;
+}

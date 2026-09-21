@@ -241,7 +241,7 @@ for ( $i = 1; $i <= 21; $i++ ) {
         continue;
     }
 
-    $day_slots = $availability->slots_for_date( $candidate, 0 );
+    $day_slots = $availability->slots_for_date( $candidate );
 
     foreach ( $day_slots as $slot ) {
         if ( ! empty( $slot['available'] )) {

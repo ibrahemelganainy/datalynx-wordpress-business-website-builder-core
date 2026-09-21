@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Meta keys (all prefixed _bb_appointment_):
  *   client_name, client_phone, client_email,
- *   lawyer_id, consultation_id, practice_area,
+ *   consultation_id, practice_area,
  *   date (Y-m-d), start (H:i), end (H:i), timezone,
  *   type, notes, status, location, meeting_url,
  *   payment_status, created, updated

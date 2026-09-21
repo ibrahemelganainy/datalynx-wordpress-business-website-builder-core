@@ -75,7 +75,6 @@ function make_record( string $type, string $ref ): int {
         update_post_meta( $id, '_bb_appointment_public_reference', $ref );
         update_post_meta( $id, '_bb_appointment_client_name', 'John Appt' );
         update_post_meta( $id, '_bb_appointment_client_phone', '+202222' );
-        update_post_meta( $id, '_bb_appointment_lawyer_id', 0 );
     } else {
         update_post_meta( $id, '_bb_consultation_public_reference', $ref );
         update_post_meta( $id, '_bb_consultation_name', 'Jane Cons' );

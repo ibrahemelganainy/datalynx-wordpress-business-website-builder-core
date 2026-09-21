@@ -243,7 +243,12 @@ class ConsultationForm {
 
         $this->notify( $data );
 
-        $this->redirect_with( $redirect, 'success' );
+        /*
+         * Free service: redirect with the OBJECT reference so the form can
+         * show a full invoice (clearly marked "Free") for the customer's
+         * records, exactly like a paid request shows its receipt.
+         */
+        $this->redirect_with( $redirect, 'success', $dash_ref );
     }
 
     /**

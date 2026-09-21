@@ -27,7 +27,7 @@ $av = new Availability();
 $date = gmdate( 'Y-m-d', strtotime( 'next monday' ) );
 echo 'test date: ' . $date . PHP_EOL;
 
-$slots = $av->slots_for_date( $date, 0 );
+$slots = $av->slots_for_date( $date );
 echo 'slots generated: ' . count( $slots ) . PHP_EOL;
 
 $first = $slots[0]['start'] ?? '';
@@ -47,19 +47,19 @@ $r3 = $av->create( array( 'client_name' => 'Test Client C', 'date' => $date, 'st
 echo 'book #3 (other slot): ' . ( is_wp_error( $r3 ) ? 'ERROR ' . $r3->get_error_code() : 'created id=' . $r3 ) . PHP_EOL;
 
 /* 4. Slot list now marks the first as booked. */
-$slots2 = $av->slots_for_date( $date, 0 );
+$slots2 = $av->slots_for_date( $date );
 $first_state = 'n/a';
 foreach ( $slots2 as $s ) { if ( $s['start'] === $first ) { $first_state = $s['available'] ? 'available' : 'booked(' . $s['reason'] . ')'; } }
 echo 'first slot now: ' . $first_state . PHP_EOL;
 
 /* 5. is_slot_free directly. */
-echo 'is_slot_free(first): ' . var_export( $av->is_slot_free( $date, $first, 0 ), true ) . PHP_EOL;
-echo 'is_slot_free(second): ' . var_export( $av->is_slot_free( $date, $second, 0 ), true ) . PHP_EOL;
+echo 'is_slot_free(first): ' . var_export( $av->is_slot_free( $date, $first ), true ) . PHP_EOL;
+echo 'is_slot_free(second): ' . var_export( $av->is_slot_free( $date, $second ), true ) . PHP_EOL;
 
 /* 6. Cancelling frees the slot. */
 if ( ! is_wp_error( $r1 ) ) {
     update_post_meta( $r1, AppointmentMeta::key( 'status' ), 'cancelled' );
-    echo 'after cancel is_slot_free(first): ' . var_export( $av->is_slot_free( $date, $first, 0 ), true ) . PHP_EOL;
+    echo 'after cancel is_slot_free(first): ' . var_export( $av->is_slot_free( $date, $first ), true ) . PHP_EOL;
 }
 
 /* 7. Invalid inputs rejected. */

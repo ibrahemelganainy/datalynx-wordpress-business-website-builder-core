@@ -2290,6 +2290,8 @@ jQuery(function ($) {
             let html =
                 '<div ' +
                 'class="bb-multicheck-field" ' +
+                'id="' +
+                escapeAttribute( fieldId ) + '" ' +
                 'data-bb-field-key="' +
                 escapeAttribute( fieldKey ) +
                 '" ' +

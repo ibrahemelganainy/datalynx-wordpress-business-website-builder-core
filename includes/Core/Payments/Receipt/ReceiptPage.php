@@ -142,7 +142,27 @@ class ReceiptPage {
 
         $transaction = $this->find( $reference );
 
+        /*
+         * No PAYMENT matches — try a FREE invoice instead. A consultation or
+         * appointment that did not require payment still renders a full
+         * invoice (clearly marked "Free"), looked up by its OBJECT reference
+         * (CNS-… / APT-…). This is gated exactly like a paid receipt: the
+         * reference shape is validated and the caller is rate-limited above.
+         */
         if ( ! $transaction instanceof PaymentTransaction ) {
+            $free = $this->free_invoice_for_reference( $reference );
+
+            if ( $free instanceof Receipt ) {
+                $this->audit->record(
+                    'invoice.free_viewed',
+                    'payment',
+                    0,
+                    array( 'reference' => $reference )
+                );
+
+                return $this->renderer->render( $free );
+            }
+
             return $this->not_found();
         }
 
@@ -170,6 +190,106 @@ class ReceiptPage {
         );
 
         return $this->renderer->render( $receipt );
+    }
+
+    /**
+     * Build a FREE invoice from an object reference, when one matches.
+     *
+     * Only a consultation/appointment that genuinely did NOT require payment
+     * is eligible, which keeps this honest: a paid service is always shown
+     * through its transaction (with the REAL paid amount), never as "free".
+     *
+     * @param string $reference Object public reference (CNS-… / APT-…).
+     * @return Receipt|null
+     */
+    protected function free_invoice_for_reference( string $reference ): ?Receipt {
+
+        $reference = Reference::normalize( $reference );
+
+        if ( '' === $reference ) {
+            return null;
+        }
+
+        $prefix = strtoupper( substr( $reference, 0, 3 ) );
+
+        if ( 'CNS' !== $prefix && 'APT' !== $prefix ) {
+            return null;
+        }
+
+        $object_type = ( 'APT' === $prefix ) ? 'appointment' : 'consultation';
+
+        $meta_key = ( 'appointment' === $object_type )
+            ? '_bb_appointment_public_reference'
+            : '_bb_consultation_public_reference';
+
+        $post_type = ( 'appointment' === $object_type ) ? 'bb_appointment' : 'bb_consultation';
+
+        /*
+         * Find the object by its public reference — scoped to the current
+         * site so a multisite installation never leaks across blogs.
+         */
+        $found = get_posts(
+            array(
+                'post_type'              => $post_type,
+                'post_status'            => 'publish',
+                'posts_per_page'         => 1,
+                'fields'                 => 'ids',
+                'no_found_rows'          => true,
+                'cache_results'          => false,
+                'update_post_meta_cache' => false,
+                'update_post_term_cache' => false,
+                'meta_query'             => array(
+                    array(
+                        'key'     => $meta_key,
+                        'value'   => $reference,
+                        'compare' => '=',
+                    ),
+                ),
+            )
+        );
+
+        if ( empty( $found ) ) {
+            return null;
+        }
+
+        $object_id = (int) $found[0];
+
+        /*
+         * Only a service that required NO payment is shown as a free invoice.
+         * A paid service is resolved above through its transaction, so this
+         * guard prevents a paid booking being mislabelled as "free" if it is
+         * ever reached by its object reference.
+         */
+        if ( $this->required_payment( $object_id, $object_type ) ) {
+            return null;
+        }
+
+        return Receipt::from_object( $object_id, $object_type );
+    }
+
+    /**
+     * Whether the given object required payment.
+     *
+     * Reads the object's payment meta: a pending/paid payment_status means
+     * payment was required; "not_required" (or empty) means the service was
+     * free. This mirrors the value the form handlers record on creation.
+     *
+     * @param int    $object_id   Object post id.
+     * @param string $object_type 'consultation' | 'appointment'.
+     * @return bool
+     */
+    protected function required_payment( int $object_id, string $object_type ): bool {
+
+        $prefix = ( 'appointment' === $object_type ) ? '_bb_appointment_' : '_bb_consultation_';
+
+        $status = (string) get_post_meta( $object_id, $prefix . 'payment_status', true );
+        $status = sanitize_key( $status );
+
+        if ( '' === $status || 'not_required' === $status ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

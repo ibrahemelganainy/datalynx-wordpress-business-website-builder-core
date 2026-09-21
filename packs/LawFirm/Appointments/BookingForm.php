@@ -102,7 +102,6 @@ class BookingForm {
             'client_name'     => isset( $_POST['bb_client_name'] ) ? wp_unslash( $_POST['bb_client_name'] ) : '',
             'client_phone'    => isset( $_POST['bb_client_phone'] ) ? wp_unslash( $_POST['bb_client_phone'] ) : '',
             'client_email'    => isset( $_POST['bb_client_email'] ) ? wp_unslash( $_POST['bb_client_email'] ) : '',
-            'lawyer_id'       => isset( $_POST['bb_lawyer_id'] ) ? absint( $_POST['bb_lawyer_id'] ) : 0,
             'practice_area'   => isset( $_POST['bb_practice_area'] ) ? wp_unslash( $_POST['bb_practice_area'] ) : '',
             'type'            => isset( $_POST['bb_type'] ) ? wp_unslash( $_POST['bb_type'] ) : 'consultation',
             'date'            => isset( $_POST['bb_date'] ) ? wp_unslash( $_POST['bb_date'] ) : '',
@@ -128,8 +127,24 @@ class BookingForm {
             $data['payment_status'] = 'pending';
         }
 
+        /*
+         * Enforce THIS section's availability schedule (days, hours, slot
+         * length, per-day cap), re-read from the section's saved meta so the
+         * browser can never widen the window. When the section cannot be
+         * resolved the service falls back to the site defaults.
+         */
+        $availability_svc = $this->availability;
+        $section_avail    = AvailabilityFactory::resolve_stored_section(
+            $this->posted_page_id(),
+            $this->posted_section_id()
+        );
+
+        if ( null !== $section_avail ) {
+            $availability_svc = $this->availability->with_config( $section_avail );
+        }
+
         /* Server-side slot validation + creation (double-booking safe). */
-        $result = $this->availability->create( $data );
+        $result = $availability_svc->create( $data );
 
         if ( is_wp_error( $result ) ) {
 
@@ -142,18 +157,25 @@ class BookingForm {
             $code = $result->get_error_code();
 
             $map = array(
-                'bb_slot_taken'      => 'taken',
-                'bb_invalid_date'    => 'invalid_date',
-                'bb_invalid_time'    => 'invalid_time',
-                'bb_past_date'       => 'past_date',
-                'bb_outside_hours'   => 'outside_hours',
-                'bb_non_working_day' => 'closed',
-                'bb_blocked_date'    => 'closed',
+                'bb_slot_taken'        => 'taken',
+                'bb_day_full'          => 'day_full',
+                'bb_duplicate_booking' => 'duplicate',
+                'bb_invalid_date'      => 'invalid_date',
+                'bb_invalid_time'      => 'invalid_time',
+                'bb_past_date'         => 'past_date',
+                'bb_outside_hours'     => 'outside_hours',
+                'bb_non_working_day'   => 'closed',
+                'bb_blocked_date'      => 'closed',
             );
 
             $flag = isset( $map[ $code ] ) ? $map[ $code ] : 'error';
 
-            $this->redirect( $redirect, $flag );
+            /*
+             * Carry the attempted date so the form can compute and show the
+             * NEXT available slot for the customer, instead of leaving them
+             * to guess which days/times are free.
+             */
+            $this->redirect( $redirect, $flag, '', '', '', (string) $data['date'] );
         }
 
         $appointment_id = (int) $result;
@@ -279,7 +301,12 @@ class BookingForm {
             $this->redirect( $redirect, 'pending' );
         }
 
-        $this->redirect( $redirect, 'success' );
+        /*
+         * Free service: redirect with the OBJECT reference so the form can
+         * show a full invoice (clearly marked "Free") for the customer's
+         * records, exactly like a paid request shows its receipt.
+         */
+        $this->redirect( $redirect, 'success', $appt_ref );
     }
 
     /**
@@ -537,10 +564,16 @@ class BookingForm {
      */
     protected function valid( array $data ): bool {
 
+        /*
+         * A phone number is REQUIRED: it is the same-day duplicate guard's
+         * verification method, so a booking without one cannot be checked
+         * against an existing appointment for the same day. An email stays
+         * optional.
+         */
         return '' !== trim( (string) $data['client_name'] )
             && '' !== trim( (string) $data['date'] )
             && '' !== trim( (string) $data['start'] )
-            && ( '' !== trim( (string) $data['client_phone'] ) || '' !== trim( (string) $data['client_email'] ) );
+            && '' !== trim( (string) $data['client_phone'] );
     }
 
     /**
@@ -549,7 +582,7 @@ class BookingForm {
      * @param string $url    Redirect base.
      * @param string $status Status.
      */
-    protected function redirect( string $url, string $status, string $reference = '', string $reason = '', string $code = '' ): void {
+    protected function redirect( string $url, string $status, string $reference = '', string $reason = '', string $code = '', string $try_date = '' ): void {
 
         $url = add_query_arg(
             'bb_booking',
@@ -559,6 +592,11 @@ class BookingForm {
 
         if ( '' !== $reference ) {
             $url = add_query_arg( 'bb_ref', sanitize_text_field( $reference ), $url );
+        }
+
+        /* Carry the attempted date so the form can suggest the next slot. */
+        if ( '' !== $try_date ) {
+            $url = add_query_arg( 'bb_try_date', sanitize_text_field( $try_date ), $url );
         }
 
         /* Carry the real, user-safe failure reason so the form explains it. */

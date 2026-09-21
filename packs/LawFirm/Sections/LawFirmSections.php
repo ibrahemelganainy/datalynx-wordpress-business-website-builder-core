@@ -424,6 +424,18 @@ class LawFirmSections {
      */
     protected function register_booking(): void {
 
+        /*
+         * Booking settings = the structured availability schedule (days,
+         * hours, per-day cap, appointment length) PLUS the shared payment
+         * schema. Availability lives on the section so an administrator can
+         * run different schedules on different pages without touching site
+         * settings.
+         */
+        $settings = array_merge(
+            $this->availability_fields(),
+            $this->payment_fields( 'appointment' )
+        );
+
         $this->registry->register(
             'booking',
             array(
@@ -433,10 +445,84 @@ class LawFirmSections {
                 'category'    => 'law-firm',
                 'icon'        => 'dashicons-calendar-alt',
                 'supports'    => array( 'title', 'description' ),
-                'settings'    => $this->payment_fields( 'appointment' ),
+                'settings'    => $settings,
                 'content'     => $this->heading_fields(),
                 'render'      => array( $this, 'render_booking_section' ),
             )
+        );
+    }
+
+    /**
+     * Structured availability settings for the appointment booking section.
+     *
+     * Lets an administrator declare, per booking section:
+     *   - which weekdays accept appointments (multi-select),
+     *   - the daily start / end time window,
+     *   - the length of each appointment (slot) in minutes,
+     *   - an optional buffer between appointments,
+     *   - the maximum number of bookings allowed per day.
+     *
+     * Values are plain strings/numbers/arrays so the generic schema editor
+     * renders them with no bespoke UI. Empty values fall back to the site
+     * defaults inside the Availability service.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    protected function availability_fields(): array {
+
+        return array(
+            'availability_days' => array(
+                'type'        => 'multicheck',
+                'label'       => __( 'Available Days', 'business-builder' ),
+                'default'     => array( '1', '2', '3', '4', '5' ),
+                'options'     => array(
+                    '0' => __( 'Sunday', 'business-builder' ),
+                    '1' => __( 'Monday', 'business-builder' ),
+                    '2' => __( 'Tuesday', 'business-builder' ),
+                    '3' => __( 'Wednesday', 'business-builder' ),
+                    '4' => __( 'Thursday', 'business-builder' ),
+                    '5' => __( 'Friday', 'business-builder' ),
+                    '6' => __( 'Saturday', 'business-builder' ),
+                ),
+                'description' => __( 'Days of the week that accept appointments. Leave all unchecked to use the site default.', 'business-builder' ),
+            ),
+            'availability_start' => array(
+                'type'        => 'text',
+                'label'       => __( 'Available From', 'business-builder' ),
+                'default'     => '',
+                'placeholder' => '09:00',
+                'description' => __( 'Daily start time in 24-hour HH:MM format (e.g. 09:00). Empty uses the site default.', 'business-builder' ),
+            ),
+            'availability_end' => array(
+                'type'        => 'text',
+                'label'       => __( 'Available To', 'business-builder' ),
+                'default'     => '',
+                'placeholder' => '17:00',
+                'description' => __( 'Daily end time in 24-hour HH:MM format (e.g. 17:00). Empty uses the site default.', 'business-builder' ),
+            ),
+            'availability_slot' => array(
+                'type'        => 'number',
+                'label'       => __( 'Appointment Length (minutes)', 'business-builder' ),
+                'default'     => 0,
+                'min'         => 0,
+                'step'        => 5,
+                'description' => __( 'Duration of each appointment slot in minutes. Leave 0 to use the site default.', 'business-builder' ),
+            ),
+            'availability_buffer' => array(
+                'type'        => 'number',
+                'label'       => __( 'Buffer Between Appointments (minutes)', 'business-builder' ),
+                'default'     => 0,
+                'min'         => 0,
+                'step'        => 5,
+                'description' => __( 'Gap kept free between two appointments. Leave 0 to use the site default.', 'business-builder' ),
+            ),
+            'availability_max_per_day' => array(
+                'type'        => 'number',
+                'label'       => __( 'Maximum Appointments Per Day', 'business-builder' ),
+                'default'     => 0,
+                'min'         => 0,
+                'description' => __( 'Hard cap on confirmed/pending bookings per day. Leave 0 for no limit.', 'business-builder' ),
+            ),
         );
     }
 
@@ -528,6 +614,15 @@ class LawFirmSections {
         /* Section-scoped payment configuration (see consultation). */
         $bb_payment    = \BusinessBuilderCore\Packs\LawFirm\Payments\SectionPaymentFactory::for_appointment( $settings );
         $bb_section_id = isset( $section['id'] ) ? sanitize_text_field( (string) $section['id'] ) : '';
+
+        /*
+         * Section-scoped availability schedule (days, hours, slot length,
+         * per-day cap). Resolved from this section's settings so the form
+         * can DISPLAY the exact window the server will enforce, and so the
+         * template can offer the next available slot when one is taken.
+         */
+        $bb_availability = \BusinessBuilderCore\Packs\LawFirm\Appointments\AvailabilityFactory::config( $settings );
+        $bb_avail_svc    = ( new \BusinessBuilderCore\Packs\LawFirm\Appointments\Availability() )->with_config( $bb_availability );
 
         /* Page id: the submit handler re-reads this section's saved meta. */
         $bb_page_id = (int) get_the_ID();

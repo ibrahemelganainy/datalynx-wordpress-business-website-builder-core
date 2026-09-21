@@ -120,6 +120,7 @@ class DashboardAdmin {
                 </div>
 
                 <aside class="bb-dashboard-side">
+                    <?php $this->render_notifications_widget(); ?>
                     <?php $this->render_action_center( $actions ); ?>
                     <?php $this->render_activity( $recent, $unread ); ?>
                 </aside>
@@ -128,6 +129,93 @@ class DashboardAdmin {
 
         </div>
         <?php
+    }
+
+    /**
+     * Notifications widget.
+     *
+     * Pulls the recent notification feed from the SAME NotificationManager
+     * the Notifications & Activity page uses — there is no second store.
+     * Shows the unread badge, the latest items with a contextual action and
+     * a "View All" link to the notification centre.
+     */
+    protected function render_notifications_widget(): void {
+
+        $items  = $this->notifications->feed( 5 );
+        $unread = $this->notifications->unread_count();
+        $center = admin_url( 'admin.php?page=bb-law-firm-notifications' );
+
+        echo '<section class="bb-card bb-notifications-widget">';
+        echo '<h2 class="bb-card-title">';
+        echo '<span class="dashicons dashicons-bell"></span> ';
+        echo esc_html__( 'Notifications', 'business-builder' );
+
+        if ( $unread > 0 ) {
+            echo ' <span class="bb-badge bb-badge-unread">' . esc_html( (string) $unread ) . '</span>';
+        }
+
+        echo '</h2>';
+
+        if ( empty( $items ) ) {
+            echo '<div class="bb-empty">';
+            echo '<span class="dashicons dashicons-yes-alt"></span>';
+            echo '<p>' . esc_html__( 'You are all caught up.', 'business-builder' ) . '</p>';
+            echo '</div>';
+            echo '</section>';
+            return;
+        }
+
+        echo '<ul class="bb-notif-widget-list">';
+
+        foreach ( $items as $item ) {
+
+            $subject = isset( $item['subject'] ) ? (string) $item['subject'] : '';
+            $event   = isset( $item['event'] ) ? sanitize_key( (string) $item['event'] ) : '';
+            $time    = isset( $item['time'] ) ? (int) $item['time'] : 0;
+            $type    = isset( $item['entity_type'] ) ? (string) $item['entity_type'] : '';
+            $eid     = isset( $item['entity_id'] ) ? (int) $item['entity_id'] : 0;
+            $read    = ! empty( $item['read'] );
+
+            $timeago = $time > 0
+                ? sprintf(
+                    /* translators: %s: human time diff */
+                    __( '%s ago', 'business-builder' ),
+                    human_time_diff( $time, time() )
+                )
+                : '';
+
+            /* A real, resolvable action — never a dead link. */
+            $action_url   = '';
+            $action_label = __( 'View', 'business-builder' );
+
+            if ( 'payment.manual_submitted' === $event ) {
+                $action_url   = admin_url( 'admin.php?page=bb-law-firm-manual-payments' );
+                $action_label = __( 'Review', 'business-builder' );
+            } elseif ( $eid > 0 && 'appointment' === $type ) {
+                $action_url   = NotificationsAdmin::edit_url_for( 'bb_appointment', $eid );
+                $action_label = __( 'View', 'business-builder' );
+            } elseif ( $eid > 0 && 'consultation' === $type ) {
+                $action_url   = NotificationsAdmin::edit_url_for( 'bb_consultation', $eid );
+                $action_label = __( 'View', 'business-builder' );
+            }
+
+            echo '<li class="bb-notif-widget-item' . ( $read ? ' is-read' : ' is-unread' ) . '">';
+            echo '<span class="bb-notif-widget-title">' . esc_html( $subject ) . '</span>';
+            echo '<span class="bb-notif-widget-time">' . esc_html( $timeago ) . '</span>';
+
+            if ( '' !== $action_url ) {
+                echo '<a class="bb-notif-widget-action" href="' . esc_url( $action_url ) . '">' . esc_html( $action_label ) . '</a>';
+            }
+
+            echo '</li>';
+        }
+
+        echo '</ul>';
+
+        echo '<div class="bb-activity-footer">';
+        echo '<a class="bb-btn bb-btn-ghost" href="' . esc_url( $center ) . '">' . esc_html__( 'View All Notifications', 'business-builder' ) . '</a>';
+        echo '</div>';
+        echo '</section>';
     }
 
     protected function render_kpis( array $kpis ): void {

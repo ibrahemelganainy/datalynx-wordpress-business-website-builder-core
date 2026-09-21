@@ -24,17 +24,6 @@ if ( ! defined( 'ABSPATH' ))  {
     exit;
 }
 
-$bb_lawyers = get_posts(
-    array(
-        'post_type'      => 'bb_lawyer',
-        'post_status'    => 'publish',
-        'posts_per_page' => -1,
-        'no_found_rows'  => true,
-        'orderby'        => 'title',
-        'order'          => 'ASC',
-    )
-);
-
 $bb_status = isset( $_GET['bb_booking'] )
     ? sanitize_key( wp_unslash( $_GET['bb_booking'] ) )
     : '';
@@ -47,6 +36,8 @@ $bb_status_messages = array(
     'past_date'     => __( 'Please choose a date in the future.', 'business-builder' ),
     'outside_hours' => __( 'That time is outside our booking hours. Please choose another time.', 'business-builder' ),
     'closed'        => __( 'We are not taking bookings on the selected day. Please choose another day.', 'business-builder' ),
+    'day_full'      => __( 'That day is fully booked. Please choose another day.', 'business-builder' ),
+    'duplicate'     => __( 'You have already booked an appointment for this day. You can only book one appointment per day.', 'business-builder' ),
     'pending'       => __( 'Your appointment was held and is awaiting payment verification. You will receive a confirmation once an administrator verifies your payment.', 'business-builder' ),
     'payment_error' => __( 'Your appointment was held, but the payment could not be started. Please choose a payment method and try again.', 'business-builder' ),
     'error'         => __( 'Sorry, your request could not be submitted. Please check the required fields.', 'business-builder' ),
@@ -76,9 +67,103 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ))  {
     $bb_area_terms = array();
 }
 
+/*
+ * Resolved availability schedule for THIS section, so the form can show the
+ * exact days and hours the server will enforce, alongside the appointment
+ * length. Falls back to a fresh site-default config when the render callback
+ * did not pass one (e.g. the template is included in isolation).
+ */
+$bb_avail     = isset( $bb_availability ) && $bb_availability instanceof \BusinessBuilderCore\Packs\LawFirm\Appointments\AvailabilityConfig
+    ? $bb_availability
+    : \BusinessBuilderCore\Packs\LawFirm\Appointments\AvailabilityFactory::config( array() );
+
+$bb_avail_svc = isset( $bb_avail_svc ) && $bb_avail_svc instanceof Availability
+    ? $bb_avail_svc
+    : ( new Availability() )->with_config( $bb_avail );
+
+/* Human-readable day names for the schedule summary. */
+$bb_day_labels = array(
+    0 => __( 'Sunday', 'business-builder' ),
+    1 => __( 'Monday', 'business-builder' ),
+    2 => __( 'Tuesday', 'business-builder' ),
+    3 => __( 'Wednesday', 'business-builder' ),
+    4 => __( 'Thursday', 'business-builder' ),
+    5 => __( 'Friday', 'business-builder' ),
+    6 => __( 'Saturday', 'business-builder' ),
+);
+
+$bb_avail_day_names = array();
+
+foreach ( $bb_avail->days() as $bb_day_num ) {
+    if ( isset( $bb_day_labels[ $bb_day_num ] ) ) {
+        $bb_avail_day_names[] = $bb_day_labels[ $bb_day_num ];
+    }
+}
+
+list( $bb_avail_start, $bb_avail_end ) = $bb_avail->hours();
+
+/*
+ * When the previous submission failed because the slot was unavailable,
+ * compute the NEXT available slot to offer the customer instead of leaving
+ * them to guess. Only computed for the relevant states.
+ */
+$bb_next_slot = null;
+
+if ( in_array( $bb_status, array( 'taken', 'outside_hours', 'closed', 'day_full' ), true ) ) {
+
+    $bb_try_raw   = isset( $_GET['bb_try_date'] ) ? wp_unslash( $_GET['bb_try_date'] ) : '';
+    $bb_next_date = sanitize_text_field( (string) $bb_try_raw );
+
+    $bb_from_date = '' !== $bb_next_date && $bb_avail_svc->is_valid_date( $bb_next_date )
+        ? $bb_next_date
+        : (string) current_time( 'Y-m-d' );
+
+    $bb_next_slot = $bb_avail_svc->next_available_slot( $bb_from_date );
+}
+
 ?>
 
 <div class="bb-booking" id="bb-booking-form">
+
+    <?php
+    /*
+     * Prominent availability summary: shows the exact days and time window
+     * the server enforces, plus the appointment length, so a customer knows
+     * when they can book BEFORE choosing a date/time.
+     */
+    $bb_show_avail = ! empty( $bb_avail_day_names );
+    ?>
+
+    <?php if ( $bb_show_avail ) : ?>
+        <div class="bb-booking-availability">
+            <p class="bb-booking-availability-days">
+                <span class="bb-booking-availability-icon" aria-hidden="true">&#128197;</span>
+                <strong><?php esc_html_e( 'Available Days', 'business-builder' ); ?>:</strong>
+                <?php echo esc_html( implode( chr(44) . chr(32), $bb_avail_day_names ) ); ?>
+            </p>
+            <p class="bb-booking-availability-hours">
+                <span class="bb-booking-availability-icon" aria-hidden="true">&#128337;</span>
+                <strong><?php esc_html_e( 'Available Times', 'business-builder' ); ?>:</strong>
+                <?php
+                printf(
+                    /* translators: 1: start time, 2: end time */
+                    esc_html__( 'from %1$s to %2$s', 'business-builder' ),
+                    esc_html( $bb_avail_start ),
+                    esc_html( $bb_avail_end )
+                );
+                ?>
+                <span class="bb-booking-availability-slot">
+                    <?php
+                    printf(
+                        /* translators: %d: appointment length in minutes */
+                        esc_html__( '(%d minutes per appointment)', 'business-builder' ),
+                        (int) $bb_avail->slot()
+                    );
+                    ?>
+                </span>
+            </p>
+        </div>
+    <?php endif; ?>
 
     <?php
     /*
@@ -127,9 +212,28 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ))  {
     <?php elseif ( '' !== $bb_show_state && isset( $bb_status_messages[ $bb_show_state ] )) : ?>
         <div class="bb-booking-notice bb-booking-<?php echo esc_attr( $bb_show_state ); ?>">
             <?php echo esc_html( $bb_status_messages[ $bb_show_state ] ); ?>
+            <?php if ( null !== $bb_next_slot ) : ?>
+                <p class="bb-booking-next-slot">
+                    <strong><?php esc_html_e( 'Next available time', 'business-builder' ); ?>:</strong>
+                    <?php
+                    printf(
+                        /* translators: 1: date, 2: start time, 3: end time */
+                        esc_html__( '%1$s, from %2$s to %3$s', 'business-builder' ),
+                        esc_html( $bb_next_slot['date'] ),
+                        esc_html( $bb_next_slot['start'] ),
+                        esc_html( $bb_next_slot['end'] )
+                    );
+                    ?>
+                </p>
+            <?php endif; ?>
             <?php if ( 'pending' === $bb_show_state && '' !== $bb_apt_ref ) : ?>
                 <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-auto data-bb-receipt-ref="<?php echo esc_attr( $bb_apt_ref ); ?>">
                     <?php esc_html_e( 'View Receipt', 'business-builder' ); ?>
+                </button>
+            <?php elseif ( 'success' === $bb_show_state && '' !== $bb_apt_ref ) : ?>
+                <p><?php esc_html_e( 'This service is free of charge. Your invoice is shown below.', 'business-builder' ); ?></p>
+                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-auto data-bb-receipt-ref="<?php echo esc_attr( $bb_apt_ref ); ?>">
+                    <?php esc_html_e( 'View Invoice', 'business-builder' ); ?>
                 </button>
             <?php endif; ?>
         </div>
@@ -155,25 +259,14 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ))  {
             </p>
 
             <p class="bb-booking-field">
-                <label for="bb_client_phone"><?php esc_html_e( 'Phone', 'business-builder' ); ?></label>
-                <input type="tel" name="bb_client_phone" id="bb_client_phone" />
+                <label for="bb_client_phone"><?php esc_html_e( 'Phone', 'business-builder' ); ?> <span class="bb-required">*</span></label>
+                <input type="tel" name="bb_client_phone" id="bb_client_phone" required />
+                <span class="description"><?php esc_html_e( 'We use your mobile number to prevent double bookings.', 'business-builder' ); ?></span>
             </p>
 
             <p class="bb-booking-field">
                 <label for="bb_client_email"><?php esc_html_e( 'Email', 'business-builder' ); ?></label>
                 <input type="email" name="bb_client_email" id="bb_client_email" />
-            </p>
-
-            <p class="bb-booking-field">
-                <label for="bb_lawyer_id"><?php esc_html_e( 'Preferred Lawyer', 'business-builder' ); ?></label>
-                <select name="bb_lawyer_id" id="bb_lawyer_id">
-                    <option value="0"><?php esc_html_e( 'No preference', 'business-builder' ); ?></option>
-                    <?php foreach ( $bb_lawyers as $bb_lawyer ) : ?>
-                        <option value="<?php echo esc_attr( (string) $bb_lawyer->ID ); ?>">
-                            <?php echo esc_html( $bb_lawyer->post_title ); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
             </p>
 
             <p class="bb-booking-field">
@@ -199,12 +292,12 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ))  {
 
             <p class="bb-booking-field">
                 <label for="bb_date"><?php esc_html_e( 'Date', 'business-builder' ); ?> <span class="bb-required">*</span></label>
-                <input type="date" name="bb_date" id="bb_date" required />
+                <input type="date" name="bb_date" id="bb_date" required value="<?php echo esc_attr( null !== $bb_next_slot ? $bb_next_slot['date'] : '' ); ?>" />
             </p>
 
             <p class="bb-booking-field">
                 <label for="bb_start"><?php esc_html_e( 'Time', 'business-builder' ); ?> <span class="bb-required">*</span></label>
-                <input type="time" name="bb_start" id="bb_start" required />
+                <input type="time" name="bb_start" id="bb_start" required value="<?php echo esc_attr( null !== $bb_next_slot ? $bb_next_slot['start'] : '' ); ?>" />
                 <span class="description"><?php esc_html_e( 'Availability is confirmed when you submit.', 'business-builder' ); ?></span>
             </p>
 

@@ -99,6 +99,15 @@ final class Receipt {
     public readonly bool $is_paid;
 
     /**
+     * Whether the service was free (no payment was required).
+     *
+     * A free service STILL gets a full invoice for the customer's records;
+     * this flag lets the renderer label it clearly as "Free" instead of
+     * implying an amount was charged.
+     */
+    public readonly bool $is_free;
+
+    /**
      * Site name at the time of the receipt.
      */
     public readonly string $site_name;
@@ -184,7 +193,8 @@ final class Receipt {
         string $object_type,
         array  $extra_rows,
         string $proof_url,
-        string $proof_mime
+        string $proof_mime,
+        bool   $is_free = false
     ) {
         $this->reference         = $reference;
         $this->gateway_name      = $gateway_name;
@@ -209,6 +219,7 @@ final class Receipt {
         $this->extra_rows        = $extra_rows;
         $this->proof_url          = $proof_url;
         $this->proof_mime         = $proof_mime;
+        $this->is_free            = $is_free;
     }
 
     /**
@@ -279,6 +290,143 @@ final class Receipt {
             self::proof_url( $transaction ),
             self::proof_mime( $transaction )
         );
+    }
+
+    /**
+     * Build a FREE invoice from a consultation / appointment object.
+     *
+     * A service that does not require payment still needs a full invoice for
+     * the customer's records. This factory builds one from the object's own
+     * meta (the same fields a paid receipt shows) WITHOUT any transaction,
+     * and marks it clearly as "Free" so no amount is ever implied.
+     *
+     * Only public, non-sensitive data is read: the object's public reference,
+     * the customer's name/phone and the object-specific rows (practice area
+     * or appointment date/time). Nothing else from the object is exposed.
+     *
+     * @param int    $object_id  Consultation / appointment post id.
+     * @param string $object_type 'consultation' | 'appointment'.
+     * @return self|null Null when the object cannot be resolved.
+     */
+    public static function from_object( int $object_id, string $object_type ): ?self {
+
+        $object_id   = absint( $object_id );
+        $object_type = sanitize_key( $object_type );
+        $is_appt     = ( 'appointment' === $object_type );
+
+        if ( $object_id <= 0 ) {
+            return null;
+        }
+
+        /* The object must exist and be of the expected type on THIS site. */
+        $post = get_post( $object_id );
+
+        if ( ! $post instanceof \WP_Post ) {
+            return null;
+        }
+
+        $prefix = $is_appt ? '_bb_appointment_' : '_bb_consultation_';
+
+        $public_ref = (string) get_post_meta( $object_id, $prefix . 'public_reference', true );
+
+        if ( '' === $public_ref ) {
+            return null;
+        }
+
+        $name  = (string) get_post_meta( $object_id, $prefix . ( $is_appt ? 'client_name' : 'name' ), true );
+        $phone = (string) get_post_meta( $object_id, $prefix . ( $is_appt ? 'client_phone' : 'phone' ), true );
+        $created = (string) get_post_meta( $object_id, $prefix . 'created', true );
+
+        if ( '' === $created ) {
+            $created = (string) $post->post_date;
+        }
+
+        $type_label = $is_appt
+            ? __( 'Appointment', 'business-builder' )
+            : __( 'Consultation', 'business-builder' );
+
+        /* Human description of the free service. */
+        $description = $is_appt
+            ? __( 'Appointment Booking', 'business-builder' )
+            : __( 'Legal Consultation', 'business-builder' );
+
+        return new self(
+            /* reference: the object's public reference (never the post id). */
+            $public_ref,
+            /* gateway_name: none — the service is free. */
+            __( 'No payment required', 'business-builder' ),
+            /* amount / currency / amount_display: explicitly free. */
+            '0',
+            '',
+            __( 'Free', 'business-builder' ),
+            /* status: a dedicated, honest slug + label. */
+            'free',
+            __( 'Free of Charge', 'business-builder' ),
+            $created,
+            $created,
+            $description,
+            $public_ref,
+            $type_label,
+            /* gateway_reference: none. */
+            '',
+            /* is_paid: never true for a free service. */
+            false,
+            wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ),
+            self::logo_url(),
+            sanitize_text_field( $name ),
+            sanitize_text_field( $phone ),
+            /* receipt_number: derived from the object reference (stable). */
+            Reference::receipt_from_transaction( $public_ref ),
+            $object_type,
+            self::object_extra_rows( $object_id, $object_type ),
+            '',
+            '',
+            /* is_free. */
+            true
+        );
+    }
+
+    /**
+     * Object-specific extra rows read directly from the object's meta.
+     *
+     * Mirrors the transaction path's rows (practice area for a consultation;
+     * appointment date/time for an appointment) so a free invoice shows the
+     * same detail as a paid one.
+     *
+     * @param int    $object_id   Object post id.
+     * @param string $object_type 'consultation' | 'appointment'.
+     * @return array<int, array{label: string, value: string}>
+     */
+    private static function object_extra_rows( int $object_id, string $object_type ): array {
+
+        $rows = array();
+
+        if ( 'appointment' === $object_type ) {
+
+            $date  = (string) get_post_meta( $object_id, '_bb_appointment_date', true );
+            $start = (string) get_post_meta( $object_id, '_bb_appointment_start', true );
+            $end   = (string) get_post_meta( $object_id, '_bb_appointment_end', true );
+
+            if ( '' !== $date ) {
+                $rows[] = array( 'label' => __( 'Appointment Date', 'business-builder' ), 'value' => sanitize_text_field( $date ) );
+            }
+
+            if ( '' !== $start ) {
+                $time_value = trim( $start . ' - ' . $end, ' -' );
+                $time_value = sanitize_text_field( $time_value );
+                $rows[]     = array( 'label' => __( 'Appointment Time', 'business-builder' ), 'value' => $time_value );
+            }
+
+            return $rows;
+        }
+
+        $area = (string) get_post_meta( $object_id, '_bb_consultation_practice_area', true );
+
+        if ( '' !== $area ) {
+            $rows[] = array( 'label' => __( 'Practice Area', 'business-builder' ), 'value' => sanitize_text_field( $area ) );
+        }
+
+        return $rows;
     }
 
     /**
@@ -520,19 +668,6 @@ final class Receipt {
 
         if ( 'appointment' === $type ) {
 
-            $lawyer_id = (int) get_post_meta( $object_id, '_bb_appointment_lawyer_id', true );
-
-            if ( $lawyer_id > 0 ) {
-                $lawyer = get_the_title( $lawyer_id );
-
-                if ( is_string( $lawyer ) && '' !== $lawyer ) {
-                    $rows[] = array(
-                        'label' => __( 'Lawyer', 'business-builder' ),
-                        'value' => sanitize_text_field( $lawyer ),
-                    );
-                }
-            }
-
             $date  = (string) get_post_meta( $object_id, '_bb_appointment_date', true );
             $start = (string) get_post_meta( $object_id, '_bb_appointment_start', true );
 
@@ -667,6 +802,7 @@ final class Receipt {
             'object_label'      => $this->object_label,
             'gateway_reference' => $this->gateway_reference,
             'is_paid'           => $this->is_paid,
+            'is_free'           => $this->is_free,
             'site_name'         => $this->site_name,
             'logo_url'          => $this->logo_url,
             'customer_name'     => $this->customer_name,

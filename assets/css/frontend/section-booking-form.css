@@ -1,0 +1,148 @@
+/**
+ * Business Builder Core - Frontend: Appointment booking form
+ * ---------------------------------------------------------
+ * Styles for templates/booking-form.php.
+ * Classes:
+ *   .bb-booking
+ *     .bb-booking-availability            (prominent days/times summary)
+ *       .bb-booking-availability-days
+ *       .bb-booking-availability-hours
+ *       .bb-booking-availability-slot
+ *     .bb-booking-notice
+ *       .bb-booking-next-slot             (next available time hint)
+ *     .bb-booking-form
+ *       .bb-booking-grid > .bb-booking-field
+ */
+
+.bb-template .bb-booking {
+  --bb-fe-card-bg: #ffffff;
+  --bb-fe-card-border: rgba(15, 23, 42, 0.08);
+  --bb-fe-card-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.bb-template .bb-booking-form {
+  padding: 32px 30px;
+  border-radius: 20px;
+  background: var(--bb-fe-card-bg, #ffffff);
+  border: 1px solid var(--bb-fe-card-border, rgba(15, 23, 42, 0.08));
+  box-shadow: var(--bb-fe-card-shadow, 0 18px 34px rgba(15, 23, 42, 0.06));
+}
+
+.bb-template .bb-booking-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 22px;
+}
+
+.bb-template .bb-booking-field {
+  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bb-template .bb-booking-field label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.bb-template .bb-booking-field input,
+.bb-template .bb-booking-field select,
+.bb-template .bb-booking-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  border-radius: 12px;
+  background: #fff;
+  color: #1f2937;
+  font: inherit;
+  line-height: 1.5;
+}
+
+.bb-template .bb-booking-field input:focus,
+.bb-template .bb-booking-field select:focus,
+.bb-template .bb-booking-field textarea:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+.bb-template .bb-booking-field textarea {
+  resize: vertical;
+}
+
+/* Prominent availability summary shown above the form. */
+.bb-template .bb-booking-availability {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin: 0 0 22px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: #eef4ff;
+  border: 1px solid #c7d9ff;
+  color: #12325f;
+}
+
+.bb-template .bb-booking-availability p {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.bb-template .bb-booking-availability strong {
+  font-weight: 700;
+}
+
+.bb-template .bb-booking-availability-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.bb-template .bb-booking-availability-slot {
+  color: #4b5d78;
+  font-size: 0.86rem;
+}
+
+.bb-template .bb-booking-notice {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* Next-available-slot hint inside an error notice. */
+.bb-template .bb-booking-next-slot {
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(138, 36, 36, 0.35);
+  font-weight: 500;
+}
+
+.bb-template .bb-booking-next-slot strong {
+  font-weight: 700;
+}
+
+.bb-template .bb-booking-submit {
+  margin: 6px 0 0;
+}
+
+.bb-template .bb-booking-submit .bb-primary-button {
+  cursor: pointer;
+  border: 0;
+  font: inherit;
+}
+
+@media (max-width: 640px) {
+  .bb-template .bb-booking-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

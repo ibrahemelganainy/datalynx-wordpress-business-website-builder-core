@@ -37,6 +37,47 @@ class Availability {
     private const DEFAULT_END = '17:00';
     private const DEFAULT_SLOT = 60;   // minutes
     private const DEFAULT_BUFFER = 15; // minutes
+    /**
+     * Optional per-section availability configuration.
+     *
+     * When set, it OVERRIDES the site defaults for every rule (days, hours,
+     * slot, buffer, per-day cap). When null, the service behaves exactly as
+     * before and reads the site settings, so existing callers are unaffected.
+     */
+    private ?AvailabilityConfig $config = null;
+
+    /**
+     * Attach a per-section availability configuration.
+     *
+     * @param AvailabilityConfig $config Resolved section configuration.
+     * @return self
+     */
+    public function with_config( AvailabilityConfig $config ): self {
+
+        $clone         = clone $this;
+        $clone->config = $config;
+
+        return $clone;
+    }
+
+    /**
+     * The current site-wide appointment defaults, in the shape
+     * AvailabilityConfig::from_section() expects. Lets a section inherit any
+     * value it does not set itself.
+     *
+     * @return array<string, mixed>
+     */
+    public function site_defaults(): array {
+
+        return array(
+            'days'   => $this->working_days(),
+            'start'  => $this->working_hours()[0],
+            'end'    => $this->working_hours()[1],
+            'slot'   => $this->slot_minutes(),
+            'buffer' => $this->buffer_minutes(),
+            'max_per_day' => 0,
+        );
+    }
 
     /**
      * Working days (0=Sun .. 6=Sat). Defaults MonÃ¢â‚¬â€œFri.
@@ -44,6 +85,12 @@ class Availability {
      * @return int[]
      */
     public function working_days(): array {
+
+        if ( null !== $this->config ) {
+            $days = array_map( 'absint', $this->config->days() );
+
+            return array_values( array_unique( $days ) );
+        }
 
         $settings = $this->settings();
 
@@ -60,6 +107,10 @@ class Availability {
      * @return string[]
      */
     public function working_hours(): array {
+
+        if ( null !== $this->config ) {
+            return $this->config->hours();
+        }
 
         $settings = $this->settings();
 
@@ -84,6 +135,12 @@ class Availability {
      */
     public function slot_minutes(): int {
 
+        if ( null !== $this->config ) {
+            $slot = $this->config->slot();
+
+            return $slot > 0 ? $slot : self::DEFAULT_SLOT;
+        }
+
         $settings = $this->settings();
         $slot = isset( $settings['appointment_slot'] ) ? absint( $settings['appointment_slot'] ) : self::DEFAULT_SLOT;
 
@@ -97,10 +154,28 @@ class Availability {
      */
     public function buffer_minutes(): int {
 
+        if ( null !== $this->config ) {
+            return max( 0, $this->config->buffer() );
+        }
+
         $settings = $this->settings();
         $buffer = isset( $settings['appointment_buffer'] ) ? absint( $settings['appointment_buffer'] ) : self::DEFAULT_BUFFER;
 
         return max( 0, $buffer );
+    }
+
+    /**
+     * Maximum bookings allowed per day (0 = unlimited).
+     *
+     * @return int
+     */
+    public function max_per_day(): int {
+
+        if ( null !== $this->config ) {
+            return max( 0, $this->config->max_per_day() );
+        }
+
+        return 0;
     }
 
     /**
@@ -133,13 +208,79 @@ class Availability {
     }
 
     /**
+     * Find the next bookable slot on or after a date.
+     *
+     * Scans forward (up to $max_days) across working days, honouring the
+     * configured hours, blocked dates, the per-day cap and existing
+     * bookings, and returns the first free slot as:
+     *
+     *   array( 'date' => 'Y-m-d', 'start' => 'HH:MM', 'end' => 'HH:MM' )
+     *
+     * or null when nothing is available within the horizon. This powers the
+     * "next available time" hint shown after a failed booking attempt.
+     *
+     * @param string $from_date Y-m-d to start searching from.
+     * @param int    $max_days  How far ahead to look (default 60 days).
+     * @return array<string, string>|null
+     */
+    public function next_available_slot( string $from_date, int $max_days = 60 ): ?array {
+
+        $max_days = $max_days > 0 ? $max_days : 60;
+
+        $start_dt = \DateTimeImmutable::createFromFormat( '!Y-m-d', $from_date );
+
+        if ( false === $start_dt ) {
+            $today_str = (string) current_time( 'Y-m-d' );
+            $start_dt  = new \DateTimeImmutable( $today_str );
+        }
+
+        $today = (string) current_time( 'Y-m-d' );
+        $cap   = $this->max_per_day();
+
+        for ( $offset = 0; $offset <= $max_days; $offset++ ) {
+
+            $date = $start_dt->modify( '+' . $offset . ' day' )->format( 'Y-m-d' );
+
+            /* Never offer a slot in the past. */
+            if ( $date < $today ) {
+                continue;
+            }
+
+            if ( ! $this->is_working_day( $date ) ) {
+                continue;
+            }
+
+            if ( in_array( $date, $this->blocked_dates(), true ) ) {
+                continue;
+            }
+
+            /* Skip a day already at (or over) its per-day cap. */
+            if ( $cap > 0 && $this->booked_count_for_date( $date ) >= $cap ) {
+                continue;
+            }
+
+            foreach ( $this->slots_for_date( $date ) as $slot ) {
+
+                if ( ! empty( $slot['available'] ) ) {
+                    return array(
+                        'date'  => $date,
+                        'start' => (string) $slot['start'],
+                        'end'   => (string) $slot['end'],
+                    );
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Generate the slots for a given date.
      *
-     * @param string $date     Y-m-d.
-     * @param int    $lawyer_id Optional lawyer id (0 = none).
+     * @param string $date Y-m-d.
      * @return array<int, array<string, mixed>> Each: ['start','end','available','reason']
      */
-    public function slots_for_date( string $date, int $lawyer_id = 0 ): array {
+    public function slots_for_date( string $date ): array {
 
         if ( ! $this->is_valid_date( $date ) ) {
             return array();
@@ -165,8 +306,8 @@ class Availability {
             return array();
         }
 
-        /* Existing blocking appointments for this date + lawyer. */
-        $taken = $this->booked_ranges( $date, $lawyer_id );
+        /* Existing blocking appointments for this date. */
+        $taken = $this->booked_ranges( $date );
 
         $now = current_time( 'timestamp' );
         $out = array();
@@ -206,15 +347,152 @@ class Availability {
     }
 
     /**
+     * Count blocking appointments already booked on a date.
+     *
+     * Uses the same blocking-status set as booked_ranges() so the per-day
+     * cap counts exactly the appointments that occupy capacity.
+     *
+     * @param string $date Y-m-d.
+     * @return int
+     */
+    public function booked_count_for_date( string $date ): int {
+
+        if ( ! post_type_exists( Appointment::POST_TYPE ) ) {
+            return 0;
+        }
+
+        $ids = get_posts(
+            array(
+                'post_type'              => Appointment::POST_TYPE,
+                'post_status'            => 'publish',
+                'posts_per_page'         => -1,
+                'no_found_rows'          => true,
+                'fields'                 => 'ids',
+                'cache_results'          => false,
+                'update_post_meta_cache' => false,
+                'update_post_term_cache' => false,
+                'meta_query'             => array(
+                    array(
+                        'key'     => AppointmentMeta::key( 'date' ),
+                        'value'   => $date,
+                        'compare' => '=',
+                    ),
+                ),
+            )
+        );
+
+        $count = 0;
+
+        foreach ( $ids as $id ) {
+
+            $status = (string) get_post_meta( $id, AppointmentMeta::key( 'status' ), true );
+
+            if ( in_array( $status, AppointmentMeta::blocking_statuses(), true ) ) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * Normalize a phone number for reliable same-number comparison.
+     *
+     * Keeps digits only (so spaces, dashes, brackets and a leading '+'
+     * never cause a false non-match). A leading international/trunk zero is
+     * NOT stripped here because the local formats vary by country; matching
+     * on the digit-only form is the safest, most predictable rule.
+     *
+     * @param string $phone Raw phone.
+     * @return string Digits-only phone ('' when there are no digits).
+     */
+    public function normalize_phone( string $phone ): string {
+
+        $digits = preg_replace( '/\D+/', '', $phone );
+
+        return is_string( $digits ) ? $digits : '';
+    }
+
+    /**
+     * Find an existing (blocking) appointment for a phone number on a date.
+     *
+     * This is the same-day booking guard: a customer who already holds an
+     * appointment on the chosen day should not be able to book a SECOND one
+     * for that same day. Matching is done on the NORMALIZED phone so
+     * formatting differences do not let a duplicate slip through.
+     *
+     * Only appointments that actually occupy a slot are considered (the
+     * same blocking-status set used everywhere else), so a cancelled or
+     * no-show appointment correctly frees the customer to rebook.
+     *
+     * @param string $date  Y-m-d.
+     * @param string $phone Raw phone number.
+     * @return int Matching appointment id, or 0 when none.
+     */
+    public function existing_booking_for_phone( string $date, string $phone ): int {
+
+        if ( ! post_type_exists( Appointment::POST_TYPE ) ) {
+            return 0;
+        }
+
+        if ( ! $this->is_valid_date( $date ) ) {
+            return 0;
+        }
+
+        $needle = $this->normalize_phone( $phone );
+
+        /* A phone is required for this guard; without one there is no match. */
+        if ( '' === $needle ) {
+            return 0;
+        }
+
+        $ids = get_posts(
+            array(
+                'post_type'              => Appointment::POST_TYPE,
+                'post_status'            => 'publish',
+                'posts_per_page'         => -1,
+                'no_found_rows'          => true,
+                'fields'                 => 'ids',
+                'cache_results'          => false,
+                'update_post_meta_cache' => false,
+                'update_post_term_cache' => false,
+                'meta_query'             => array(
+                    array(
+                        'key'     => AppointmentMeta::key( 'date' ),
+                        'value'   => $date,
+                        'compare' => '=',
+                    ),
+                ),
+            )
+        );
+
+        foreach ( $ids as $id ) {
+
+            $status = (string) get_post_meta( $id, AppointmentMeta::key( 'status' ), true );
+
+            if ( ! in_array( $status, AppointmentMeta::blocking_statuses(), true ) ) {
+                continue;
+            }
+
+            $stored = (string) get_post_meta( $id, AppointmentMeta::key( 'client_phone' ), true );
+
+            if ( $this->normalize_phone( $stored ) === $needle ) {
+                return (int) $id;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
      * Whether a specific slot is free.
      *
-     * @param string $date       Y-m-d.
-     * @param string $start      H:i.
-     * @param int    $lawyer_id  Lawyer id0 = none).
-     * @param int    $ignore_id  Appointment id to ignore (for reschedule).
+     * @param string $date      Y-m-d.
+     * @param string $start     H:i.
+     * @param int    $ignore_id Appointment id to ignore (for reschedule).
      * @return bool
      */
-    public function is_slot_free( string $date, string $start, int $lawyer_id = 0, int $ignore_id = 0 ): bool {
+    public function is_slot_free( string $date, string $start, int $ignore_id = 0 ): bool {
 
         if ( ! $this->is_valid_date( $date ) || '' === $this->normalize_time( $start ) ) {
             return false;
@@ -235,7 +513,7 @@ class Availability {
             return false;
         }
 
-        $taken = $this->booked_ranges( $date, $lawyer_id, $ignore_id );
+        $taken = $this->booked_ranges( $date, $ignore_id );
 
         return ! $this->overlaps_any( $slot_start, $slot_end, $taken, $buffer );
     }
@@ -250,7 +528,6 @@ class Availability {
 
         $date = isset( $data['date'] ) ? (string) $data['date'] : '';
         $start = isset( $data['start'] ) ? $this->normalize_time( (string) $data['start'] ) : '';
-        $lawyer_id = isset( $data['lawyer_id'] ) ? absint( $data['lawyer_id'] ) : 0;
 
         if ( ! $this->is_valid_date( $date ) ) {
             return new \WP_Error( 'bb_invalid_date', __( 'Please choose a valid date.', 'business-builder' ) );
@@ -281,13 +558,42 @@ class Availability {
             return new \WP_Error( 'bb_blocked_date', __( 'The selected day is not available for bookings.', 'business-builder' ));
         }
 
+        /*
+         * Per-day cap. When the section sets a maximum number of bookings
+         * per day, reject once the day is full so a customer is told the day
+         * is booked rather than seeing a misleading "slot taken".
+         */
+        $cap = $this->max_per_day();
+
+        if ( $cap > 0 && $this->booked_count_for_date( $date ) >= $cap ) {
+            return new \WP_Error(
+                'bb_day_full',
+                __( 'That day is fully booked. Please choose another day.', 'business-builder' )
+            );
+        }
+
+        /*
+         * Same-day duplicate guard. A customer cannot hold more than ONE
+         * appointment on the same day; the phone number (normalized) is used
+         * to recognise them. Cancelled / no-show appointments are freed by
+         * the blocking-status rule inside existing_booking_for_phone().
+         */
+        $phone = isset( $data['client_phone'] ) ? (string) $data['client_phone'] : '';
+
+        if ( $this->existing_booking_for_phone( $date, $phone ) > 0 ) {
+            return new \WP_Error(
+                'bb_duplicate_booking',
+                __( 'You have already booked an appointment for this day.', 'business-builder' )
+            );
+        }
+
         /* Acquire a site-scoped lock so concurrent requests cannot race. */
-        $lock_key = 'bb_appt_lock_' . md5( $date . '|' . $start . '|' . $lawyer_id );
+        $lock_key = 'bb_appt_lock_' . md5( $date . '|' . $start );
         $locked = $this->acquire_lock( $lock_key );
 
         try {
 
-            if ( ! $this->is_slot_free( $date, $start, $lawyer_id ) ) {
+            if ( ! $this->is_slot_free( $date, $start ) ) {
                 return new \WP_Error( 'bb_slot_taken', __( 'That time slot is no longer available. Please choose another.', 'business-builder' ) );
             }
 
@@ -339,7 +645,6 @@ class Availability {
             'client_name'     => $name,
             'client_phone'    => isset( $data['client_phone'] ) ? sanitize_text_field( (string) $data['client_phone'] ) : '',
             'client_email'    => isset( $data['client_email'] ) ? sanitize_email( (string) $data['client_email'] ) : '',
-            'lawyer_id'       => isset( $data['lawyer_id'] ) ? absint( $data['lawyer_id'] ) : 0,
             'consultation_id' => isset( $data['consultation_id'] ) ? absint( $data['consultation_id'] ) : 0,
             'practice_area'   => isset( $data['practice_area'] ) ? sanitize_text_field( (string) $data['practice_area'] ) : '',
             'date'            => $date,
@@ -374,14 +679,13 @@ class Availability {
      * ------------------------------------------------------------------ */
 
     /**
-     * Blocking [start_min, end_min] ranges for a date + lawyer.
+     * Blocking [start_min, end_min] ranges for a date.
      *
      * @param string $date      Y-m-d.
-     * @param int    $lawyer_id Lawyer id (0 = none).
      * @param int    $ignore_id Appointment id to ignore.
      * @return array<int, array{0:int,1:int}>
      */
-    private function booked_ranges( string $date, int $lawyer_id, int $ignore_id = 0 ): array {
+    private function booked_ranges( string $date, int $ignore_id = 0 ): array {
 
         if ( ! post_type_exists( Appointment::POST_TYPE ) ) {
             return array();
@@ -411,14 +715,6 @@ class Availability {
                 ),
             ),
         );
-
-        if ( $lawyer_id > 0 ) {
-            $query['meta_query'][] = array(
-                'key'     => AppointmentMeta::key( 'lawyer_id' ),
-                'value'   => $lawyer_id,
-                'compare' => '=',
-            );
-        }
 
         $ids = get_posts( $query );
 

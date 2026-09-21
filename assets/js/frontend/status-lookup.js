@@ -69,10 +69,6 @@
 			rows += row( 'Practice Area', data.practice_area );
 	}
 
-		if ( ! isConsult && data.lawyer ) {
-			rows += row( 'Lawyer', data.lawyer );
-	}
-
 		if ( ! isConsult && data.date ) {
 			rows += row( 'Date', data.date );
 	}

@@ -183,21 +183,31 @@ class NotificationManager {
         $data = is_array( $notification->data() ) ? $notification->data() : array();
 
         $feed[] = array(
-            'id'          => uniqid( 'n', true ),
-            'event'       => $notification->event(),
-            'subject'     => $notification->subject(),
-            'message'     => $notification->message(),
-            'object_id'   => $notification->object_id(),
-            'read'        => false,
-            'time'        => time(),
-            'category'    => isset( $data['category'] ) ? sanitize_key( (string) $data['category'] ) : self::category_for( (string) $notification->event() ),
-            'entity_type' => isset( $data['entity_type'] ) ? sanitize_key( (string) $data['entity_type'] ) : '',
-            'entity_id'   => isset( $data['entity_id'] ) ? absint( $data['entity_id'] ) : (int) $notification->object_id(),
-            'reference'   => isset( $data['reference'] ) ? sanitize_text_field( (string) $data['reference'] ) : '',
-            'amount'      => isset( $data['amount'] ) ? sanitize_text_field( (string) $data['amount'] ) : '',
-            'currency'    => isset( $data['currency'] ) ? sanitize_text_field( (string) $data['currency'] ) : '',
-            'gateway'     => isset( $data['gateway'] ) ? sanitize_key( (string) $data['gateway'] ) : '',
-            'customer'    => isset( $data['customer'] ) ? sanitize_text_field( (string) $data['customer'] ) : '',
+            'id'           => uniqid( 'n', true ),
+            'event'        => $notification->event(),
+            'subject'      => $notification->subject(),
+            'message'      => $notification->message(),
+            'object_id'    => $notification->object_id(),
+            'read'         => false,
+            'time'         => time(),
+            'category'     => isset( $data['category'] ) ? sanitize_key( (string) $data['category'] ) : self::category_for( (string) $notification->event() ),
+            'entity_type'  => isset( $data['entity_type'] ) ? sanitize_key( (string) $data['entity_type'] ) : '',
+            'entity_id'    => isset( $data['entity_id'] ) ? absint( $data['entity_id'] ) : (int) $notification->object_id(),
+            'entity_label' => isset( $data['entity_label'] ) ? sanitize_text_field( (string) $data['entity_label'] ) : '',
+            'reference'    => isset( $data['reference'] ) ? sanitize_text_field( (string) $data['reference'] ) : '',
+            /*
+             * The payment reference (TXN-…) is stored SEPARATELY from the
+             * related-object reference (CNS-/APT-). A receipt/receipt link
+             * must use THIS value, never the object reference, so a manual
+             * payment notification never produces a dead "View Receipt" link.
+             */
+            'payment_ref'  => isset( $data['payment_ref'] ) ? sanitize_text_field( (string) $data['payment_ref'] ) : '',
+            'amount'       => isset( $data['amount'] ) ? sanitize_text_field( (string) $data['amount'] ) : '',
+            'currency'     => isset( $data['currency'] ) ? sanitize_text_field( (string) $data['currency'] ) : '',
+            'gateway'      => isset( $data['gateway'] ) ? sanitize_key( (string) $data['gateway'] ) : '',
+            'customer'     => isset( $data['customer'] ) ? sanitize_text_field( (string) $data['customer'] ) : '',
+            /* Whether this event needs an administrator's attention. */
+            'actionable'   => isset( $data['actionable'] ) ? (bool) $data['actionable'] : self::is_actionable_event( (string) $notification->event() ),
         );
 
         if ( count( $feed ) > self::FEED_LIMIT ) {
@@ -215,7 +225,24 @@ class NotificationManager {
      */
     public static function category_for( string $event ): string {
 
-        $event = sanitize_key( $event );
+        /*
+         * IMPORTANT: normalize to a lowercase string WITHOUT stripping the
+         * separator. sanitize_key() removes the dot, which would turn
+         * "payment.manual_submitted" into "paymentmanual_submitted" and
+         * break the prefix checks below. We keep only the characters that
+         * legitimately appear in event slugs.
+         */
+        $event = strtolower( trim( $event ));
+        $event = (string) preg_replace( '/[^a-z0-9._-]/', '', $event );
+
+        /*
+         * Manual payments are surfaced as their own filter group so an
+         * administrator can single out the verification queue, while still
+         * belonging to the broader payment history.
+         */
+        if ( 0 === strpos( $event, 'payment.manual' )) {
+            return 'manual_payment';
+        }
 
         if ( 0 === strpos( $event, 'payment' )) {
             return 'payment';
@@ -230,6 +257,37 @@ class NotificationManager {
         }
 
         return 'system';
+    }
+
+    /**
+     * Whether an event type represents something that may need attention.
+     *
+     * Notifications that require an action are the ones an administrator
+     * benefits from seeing on the dashboard and as an unread badge; purely
+     * informational state changes still appear in the activity/notification
+     * list but are not treated as "needs attention" by default.
+     *
+     * @param string $event Event slug.
+     * @return bool
+     */
+    public static function is_actionable_event( string $event ): bool {
+
+        $event = strtolower( trim( $event ));
+        $event = (string) preg_replace( '/[^a-z0-9._-]/', '', $event );
+
+        $actionable = array(
+            'consultation.new',
+            'appointment.created',
+            'payment.manual_submitted',
+        );
+
+        /**
+         * Filter which events are treated as actionable notifications.
+         *
+         * @param bool   $actionable Whether the event needs attention.
+         * @param string $event      Event slug.
+         */
+        return (bool) apply_filters( 'bb_notification_is_actionable', in_array( $event, $actionable, true ), $event );
     }
 
     /**
@@ -267,9 +325,20 @@ class NotificationManager {
             return empty( $item['read'] );
         }
 
+        $event = isset( $item['event'] ) ? (string) $item['event'] : '';
+
         $row_category = isset( $item['category'] ) && '' !== (string) $item['category']
             ? (string) $item['category']
-            : self::category_for( isset( $item['event'] ) ? (string) $item['event'] : '' );
+            : self::category_for( $event );
+
+        /*
+         * "Payments" is a SUPER-set that also contains manual payments, so
+         * the Manual Payments group is a strict subset of the payment
+         * history — the two filters never contradict each other.
+         */
+        if ( 'payment' === $category ) {
+            return 'payment' === $row_category || 'manual_payment' === $row_category;
+        }
 
         return $row_category === $category;
     }
@@ -281,17 +350,28 @@ class NotificationManager {
      * @param string $search   Free-text search (reference/customer).
      * @param int    $days     Only items within the last N days (0 = all).
      * @param int    $limit    Max items.
+     * @param int    $offset   Items to skip (pagination).
      * @return array<int, array<string, mixed>>
      */
-    public function query( string $category = '', string $search = '', int $days = 0, int $limit = 100 ): array {
+    public function query( string $category = '', string $search = '', int $days = 0, int $limit = 100, int $offset = 0, array $range = array() ): array {
 
         $items = array_reverse( $this->all() );
 
         $search = trim( $search );
         $cutoff = $days > 0 ? time() - ( $days * DAY_IN_SECONDS ) : 0;
         $needle = strtolower( $search );
+        $offset = max( 0, $offset );
 
-        $out = array();
+        /*
+         * Optional explicit [from, to] window (custom date range). When
+         * present it takes precedence over the day-count window so the two
+         * filters never fight.
+         */
+        $range_from = isset( $range['from'] ) ? (int) $range['from'] : 0;
+        $range_to   = isset( $range['to'] ) ? (int) $range['to'] : 0;
+
+        $out     = array();
+        $skipped = 0;
 
         foreach ( $items as $item ) {
 
@@ -303,7 +383,17 @@ class NotificationManager {
                 continue;
             }
 
-            if ( $cutoff > 0 && (int) ( $item['time'] ?? 0 ) < $cutoff ) {
+            $item_time = (int) ( $item['time'] ?? 0 );
+
+            if ( $cutoff > 0 && $item_time < $cutoff ) {
+                continue;
+            }
+
+            if ( $range_from > 0 && $item_time < $range_from ) {
+                continue;
+            }
+
+            if ( $range_to > 0 && $item_time > $range_to ) {
                 continue;
             }
 
@@ -312,13 +402,22 @@ class NotificationManager {
                     (string) ( $item['subject'] ?? '' ) . ' '
                     . (string) ( $item['message'] ?? '' ) . ' '
                     . (string) ( $item['reference'] ?? '' ) . ' '
+                    . (string) ( $item['payment_ref'] ?? '' ) . ' '
                     . (string) ( $item['amount'] ?? '' ) . ' '
-                    . (string) ( $item['customer'] ?? '' )
+                    . (string) ( $item['gateway'] ?? '' ) . ' '
+                    . (string) ( $item['customer'] ?? '' ) . ' '
+                    . (string) ( $item['event'] ?? '' )
                 );
 
                 if ( false === strpos( $haystack, $needle )) {
                     continue;
                 }
+            }
+
+            /* Skip the page(s) before the requested offset. */
+            if ( $skipped < $offset ) {
+                $skipped++;
+                continue;
             }
 
             $out[] = $item;
@@ -329,6 +428,22 @@ class NotificationManager {
         }
 
         return $out;
+    }
+
+    /**
+     * Count stored notifications matching a category + search.
+     *
+     * Used for pagination without loading the whole matching set into the
+     * page. Reuses query() so the filter rules live in exactly one place.
+     *
+     * @param string $category Category filter.
+     * @param string $search   Search term.
+     * @param int    $days     Day window (0 = all).
+     * @return int
+     */
+    public function count( string $category = '', string $search = '', int $days = 0, array $range = array() ): int {
+
+        return count( $this->query( $category, $search, $days, PHP_INT_MAX, 0, $range ) );
     }
 
     /**

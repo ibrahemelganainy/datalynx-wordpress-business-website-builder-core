@@ -47,11 +47,51 @@ class SectionManager {
             $sections
         );
 
-        return update_post_meta(
+        /*
+         * update_post_meta() returns false both when the write FAILS and
+         * when the new value is identical to the stored one ("no change").
+         * Re-saving an unchanged section is a legitimate, successful action,
+         * so treat "already identical" as success instead of surfacing a
+         * misleading "The section could not be updated." error.
+         */
+        $existing = get_post_meta(
+            $page_id,
+            self::META_KEY,
+            true
+        );
+
+        if ( is_array( $existing ) && $existing === $sections ) {
+            return true;
+        }
+
+        $updated = update_post_meta(
             $page_id,
             self::META_KEY,
             $sections
         );
+
+        /*
+         * update_post_meta() returns the new meta id (truthy) on insert and
+         * true on a real change, false only when it genuinely could not write.
+         * A false result here means the value was NOT saved.
+         */
+        if ( false === $updated ) {
+
+            /*
+             * Distinguish a genuine failure from a benign no-op: if the
+             * stored value now equals what we intended to save, the write is
+             * effectively done (another request may have written it first).
+             */
+            $current = get_post_meta(
+                $page_id,
+                self::META_KEY,
+                true
+            );
+
+            return is_array( $current ) && $current === $sections;
+        }
+
+        return true;
     }
 
     /**

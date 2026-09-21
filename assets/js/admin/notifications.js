@@ -23,7 +23,17 @@
 	var timeline = document.querySelector( '[data-bb-nc-timeline]' );
 
 	if ( ! badge || ! timeline ) {
-		return;
+	return;
+	}
+
+	/*
+	 * Escape a value for use inside an attribute selector.
+	 *
+	 * @param {string} value Raw value.
+	 * @return {string}
+	 */
+	function cssEscape( value ) {
+	return String( value ).replace( /["\\]/g, '\\$&' );
 	}
 
 	var since = parseInt( timeline.getAttribute( 'data-bb-nc-since' ), 10 ) || 0;
@@ -140,10 +150,22 @@
 					since = data.server;
 				}
 
-				if ( Array.isArray( data.items ) && data.items.length > 0 ) {
-					data.items.forEach( function ( item ) {
-						timeline.insertBefore( buildItem( item ), timeline.firstChild );
-					} );
+					if ( Array.isArray( data.items ) && data.items.length > 0 ) {
+				/*
+				 * items arrive newest-first. Insert in REVERSE so the newest
+				 * ends up at the top after prepending, and skip any item
+				 * already rendered (guards against duplicates when the same
+				 * notification is returned more than once).
+				 */
+				for ( var i = data.items.length - 1; i >= 0; i-- ) {
+				var item = data.items[ i ];
+
+					if ( item && item.id && timeline.querySelector( '[data-bb-nc-item="' + cssEscape( item.id ) + '"]' ) ) {
+				continue;
+				}
+
+					timeline.insertBefore( buildItem( item ), timeline.firstChild );
+				}
 				}
 			} )
 			.catch( function () {
