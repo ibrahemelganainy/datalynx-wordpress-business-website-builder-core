@@ -128,7 +128,7 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ))  {
         <div class="bb-booking-notice bb-booking-<?php echo esc_attr( $bb_show_state ); ?>">
             <?php echo esc_html( $bb_status_messages[ $bb_show_state ] ); ?>
             <?php if ( 'pending' === $bb_show_state && '' !== $bb_apt_ref ) : ?>
-                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-ref="<?php echo esc_attr( $bb_apt_ref ); ?>">
+                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-auto data-bb-receipt-ref="<?php echo esc_attr( $bb_apt_ref ); ?>">
                     <?php esc_html_e( 'View Receipt', 'business-builder' ); ?>
                 </button>
             <?php endif; ?>
@@ -139,6 +139,7 @@ if ( is_wp_error( $bb_area_terms ) || ! is_array( $bb_area_terms ))  {
         class="bb-booking-form"
         method="post"
         action="<?php echo esc_url( BookingForm::action_url() ); ?>"
+        enctype="multipart/form-data"
     >
 
         <input type="hidden" name="action" value="<?php echo esc_attr( BookingForm::action_name() ); ?>" />

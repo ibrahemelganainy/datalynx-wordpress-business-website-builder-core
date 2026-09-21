@@ -235,13 +235,23 @@ class BookingForm {
                      * verification. Never marked paid here.
                      */
                     if ( 'manual' === $type ) {
-                        \BusinessBuilderCore\Packs\LawFirm\Payments\ManualPaymentSubmission::submit(
+                        $manual_submitted = \BusinessBuilderCore\Packs\LawFirm\Payments\ManualPaymentSubmission::submit(
                             'appointment',
                             $appointment_id,
                             $gateway,
                             $_POST,
                             isset( $payment['transaction'] ) && $payment['transaction'] instanceof \BusinessBuilderCore\Core\Payments\PaymentTransaction ? $payment['transaction'] : null
                         );
+
+                        if ( ! $manual_submitted ) {
+                            $this->redirect(
+                                $redirect,
+                                'payment_error',
+                                '',
+                                __( 'We could not save your payment submission. Please try again.', 'business-builder' ),
+                                'manual_submission_failed'
+                            );
+                        }
                     }
 
                     $pending_ref = '';

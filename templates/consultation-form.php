@@ -17,13 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $bb_areas = ConsultationForm::practice_areas();
 
+$bb_status = isset( $_GET['bb_consult'] )
+    ? sanitize_key( wp_unslash( $_GET['bb_consult'] ) )
+    : '';
+
 /*
- * Section payment configuration resolved by the render callback. When
- * payment is payable, the customer must choose a gateway and pay before
- * the request is confirmed; the fee / currency / gateway set are always the
- * server-resolved values, never client input.
+ * Payment context injected by LawFirmSections::render_consultation_section().
+ * When absent (e.g. the template is included elsewhere), payment is off.
  */
-$bb_pay        = isset( $bb_payment ) && is_array( $bb_payment ) ? $bb_payment : array();
+$bb_pay        = isset( $bb_payment ) && is_array( $bb_payment ) ? $bb_payment : array( 'enabled' => false, 'payable' => false, 'fee' => '', 'currency' => '', 'available' => array() );
 $bb_payable    = ! empty( $bb_pay['payable'] );
 $bb_fee        = isset( $bb_pay['fee'] ) ? (string) $bb_pay['fee'] : '';
 $bb_currency   = isset( $bb_pay['currency'] ) ? (string) $bb_pay['currency'] : '';
@@ -31,11 +33,7 @@ $bb_gateways   = isset( $bb_pay['available'] ) && is_array( $bb_pay['available']
 $bb_section_id = isset( $bb_section_id ) ? (string) $bb_section_id : '';
 $bb_page_id    = isset( $bb_page_id ) ? (int) $bb_page_id : 0;
 
-$bb_raw_status = isset( $_GET['bb_consult'] ) ? wp_unslash( $_GET['bb_consult'] ) : '';
-$bb_status     = sanitize_key( (string) $bb_raw_status );
-
 ?>
-
 <div class="bb-consultation" id="bb-consultation-form">
 
     <?php
@@ -73,7 +71,7 @@ $bb_status     = sanitize_key( (string) $bb_raw_status );
         <div class="bb-consultation-notice bb-consultation-success">
             <p><?php esc_html_e( 'Your request was received and is awaiting payment verification. You will receive a confirmation once an administrator verifies your payment.', 'business-builder' ); ?></p>
             <?php if ( '' !== $bb_receipt_ref ) : ?>
-                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-ref="<?php echo esc_attr( $bb_receipt_ref ); ?>">
+                <button type="button" class="bb-primary-button bb-notice-receipt-link" data-bb-receipt-open data-bb-receipt-auto data-bb-receipt-ref="<?php echo esc_attr( $bb_receipt_ref ); ?>">
                     <?php esc_html_e( 'View Receipt', 'business-builder' ); ?>
                 </button>
             <?php endif; ?>
@@ -112,6 +110,7 @@ $bb_status     = sanitize_key( (string) $bb_raw_status );
         class="bb-consultation-form"
         method="post"
         action="<?php echo esc_url( ConsultationForm::action_url() ); ?>"
+        enctype="multipart/form-data"
     >
 
         <input

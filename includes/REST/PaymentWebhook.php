@@ -246,23 +246,35 @@ class PaymentWebhook {
         }
 
         /* Notify + audit (both idempotent / scoped). */
+        /* Notify + audit (both idempotent / scoped). */
+        $notify_object_id = $transaction->object_id > 0
+            ? (int) $transaction->object_id
+            : (int) $transaction->consultation_id;
+
+        $notify_type = '' !== $transaction->object_type ? sanitize_key( $transaction->object_type ) : 'consultation';
+
+        $notify_label = ( 'appointment' === $notify_type )
+            ? __( 'appointment', 'business-builder' )
+            : __( 'consultation', 'business-builder' );
+
         $this->notifications->dispatch(
             new Notification(
                 'payment.' . $result->status,
                 sprintf(
-                    /* translators: 1: status, 2: consultation id */
-                    __( 'Payment %1$s for consultation #%2$d', 'business-builder' ),
+                    /* translators: 1: status, 2: entity type, 3: entity reference */
+                    __( 'Payment %1$s for %2$s %3$s', 'business-builder' ),
                     $result->status,
-                    $transaction->consultation_id
+                    $notify_label,
+                    '' !== $transaction->public_ref ? $transaction->public_ref : (string) $notify_object_id
                 ),
                 '',
                 '',
-                (int) $transaction->consultation_id,
+                $notify_object_id,
                 'payment:' . $gateway_id . ':' . $result->reference,
                 array(
                     'category'    => 'payment',
-                    'entity_type' => $transaction->object_type,
-                    'entity_id'   => (int) $transaction->object_id,
+                    'entity_type' => $notify_type,
+                    'entity_id'   => $notify_object_id,
                     'reference'   => $transaction->public_ref,
                     'amount'      => $transaction->amount,
                     'currency'    => $transaction->currency,

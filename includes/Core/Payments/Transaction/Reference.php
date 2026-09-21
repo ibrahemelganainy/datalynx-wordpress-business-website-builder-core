@@ -49,6 +49,11 @@ final class Reference {
     public const APPOINTMENT_PREFIX = 'APT';
 
     /**
+     * Receipt number prefix.
+     */
+    public const RECEIPT_PREFIX = 'RCP';
+
+    /**
      * Non-instantiable utility.
      */
     private function __construct() {
@@ -103,6 +108,52 @@ final class Reference {
     public static function appointment( int $length = self::DEFAULT_LENGTH ): string {
 
         return self::generate( self::APPOINTMENT_PREFIX, $length );
+    }
+
+    /**
+     * A receipt number, e.g. RCP-8F3KQ2M7ZP.
+     *
+     * @param int $length Token length.
+     * @return string
+     */
+    public static function receipt( int $length = self::DEFAULT_LENGTH ): string {
+
+        return self::generate( self::RECEIPT_PREFIX, $length );
+    }
+
+    /**
+     * A stable receipt number derived from a transaction's public reference.
+     *
+     * The receipt number is a DISTINCT concept from the payment reference
+     * (TXN-…). It is derived deterministically from the transaction reference
+     * so the same payment always yields the same receipt number, even before
+     * the number is persisted, and it never changes or breaks the existing
+     * references or URLs.
+     *
+     * @param string $public_ref Public transaction reference (TXN-…).
+     * @return string Receipt number (RCP-…), or '' when no reference is given.
+     */
+    public static function receipt_from_transaction( string $public_ref ): string {
+
+        $public_ref = strtoupper( trim( $public_ref ) );
+
+        if ( '' === $public_ref ) {
+            return '';
+        }
+
+        $tail = $public_ref;
+        if ( false !== strpos( $public_ref, '-' )) {
+            $parts = explode( '-', $public_ref );
+            $tail  = (string) end( $parts );
+        }
+        $tail = is_string( $tail ) ? $tail : '';
+        $tail = preg_replace( '/[^A-Z0-9]/', '', strtoupper( $tail ) );
+
+        if ( '' === $tail ) {
+            $tail = strtoupper( substr( md5( $public_ref ), 0, 8 ) );
+        }
+
+        return self::RECEIPT_PREFIX . '-' . $tail;
     }
 
     /**

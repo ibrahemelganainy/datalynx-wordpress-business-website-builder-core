@@ -204,6 +204,43 @@
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.16);
 }
 
+/* Non-image proof (PDF): file name + type with a view link. */
+.bb-manual-payments .bb-mp-proof-file {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 8px;
+}
+
+.bb-manual-payments .bb-mp-proof-file-name {
+  font-weight: 600;
+  font-size: 0.84rem;
+  word-break: break-all;
+}
+
+.bb-manual-payments .bb-mp-proof-file-type {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+}
+
+/* Invalid / deleted proof states are shown explicitly, never as "missing". */
+.bb-manual-payments .bb-mp-proof-bad {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
 /* Payment Logs screen */
 .bb-pl-filters {
   display: flex;
@@ -265,4 +302,116 @@
   background: rgba(15, 23, 42, 0.06);
   padding: 2px 6px;
   border-radius: 5px;
+}
+
+/* Manual Payments: summary stats (canonical counts, site-scoped). */
+.bb-manual-payments .bb-mp-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 14px 0 18px;
+}
+
+.bb-manual-payments .bb-mp-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 12px;
+  border-inline-start: 4px solid #94a3b8;
+}
+
+.bb-manual-payments .bb-mp-stat-pending { border-inline-start-color: #f59e0b; }
+.bb-manual-payments .bb-mp-stat-approved { border-inline-start-color: #16a34a; }
+.bb-manual-payments .bb-mp-stat-rejected { border-inline-start-color: #dc2626; }
+.bb-manual-payments .bb-mp-stat-total { border-inline-start-color: #0172a; }
+
+.bb-manual-payments .bb-mp-stat-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.bb-manual-payments .bb-mp-stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+}
+
+/* Manual Payments: status filter tabs. */
+.bb-manual-payments .bb-mp-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+
+.bb-manual-payments .bb-mp-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  color: #334155;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.86rem;
+}
+
+.bb-manual-payments .bb-mp-filter:hover,
+.bb-manual-payments .bb-mp-filter:focus {
+  border-color: #0f172a;
+  color: #0f172a;
+}
+
+.bb-manual-payments .bb-mp-filter.is-active {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #fff;
+}
+
+.bb-manual-payments .bb-mp-filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  padding: 0 6px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.bb-manual-payments .bb-mp-filter.is-active .bb-mp-filter-count {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+/* Manual Payments: state-aware cards. */
+.bb-manual-payments .bb-mp-card-approved .bb-mp-card-head {
+  background: #14532d;
+}
+
+.bb-manual-payments .bb-mp-card-rejected .bb-mp-card-head {
+  background: #7f1d1d;
+}
+
+.bb-manual-payments .bb-mp-badge-approved { background: #dcfce7; color: #166534; }
+.bb-manual-payments .bb-mp-badge-rejected { background: #fee2e2; color: #991b1b; }
+
+.bb-manual-payments .bb-mp-reject-reason {
+  margin: 0;
+  padding: 12px 18px;
+  background: #fef2f2;
+  border-bottom: 1px solid #fecaca;
+  color: #991b1b;
+  font-size: 0.88rem;
 }

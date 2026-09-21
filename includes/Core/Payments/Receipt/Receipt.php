@@ -4,6 +4,7 @@ namespace BusinessBuilderCore\Core\Payments\Receipt;
 
 use BusinessBuilderCore\Core\Payments\PaymentTransaction;
 use BusinessBuilderCore\Core\Payments\Currencies;
+use BusinessBuilderCore\Core\Payments\Transaction\Reference;
 use BusinessBuilderCore\Core\Payments\Transaction\TransactionStatus;
 
 defined( 'ABSPATH' ) || exit;
@@ -113,6 +114,16 @@ final class Receipt {
     public readonly string $customer_name;
 
     /**
+     * Customer phone shown on the receipt (may be empty).
+     */
+    public readonly string $customer_phone;
+
+    /**
+     * Human receipt number (e.g. RCP-XXXXXXXX). Canonical per transaction.
+     */
+    public readonly string $receipt_number;
+
+    /**
      * Object type slug ('consultation' | 'appointment').
      */
     public readonly string $object_type;
@@ -124,6 +135,12 @@ final class Receipt {
      * @var array<int, array{label: string, value: string}>
      */
     public readonly array $extra_rows;
+
+    /** Public URL of the uploaded manual-payment proof, if available. */
+    public readonly string $proof_url;
+
+    /** Uploaded proof MIME type, if available. */
+    public readonly string $proof_mime;
 
     /**
      * Constructor (use from_transaction()).
@@ -162,8 +179,12 @@ final class Receipt {
         string $site_name,
         string $logo_url,
         string $customer_name,
+        string $customer_phone,
+        string $receipt_number,
         string $object_type,
-        array  $extra_rows
+        array  $extra_rows,
+        string $proof_url,
+        string $proof_mime
     ) {
         $this->reference         = $reference;
         $this->gateway_name      = $gateway_name;
@@ -182,8 +203,12 @@ final class Receipt {
         $this->site_name         = $site_name;
         $this->logo_url          = $logo_url;
         $this->customer_name     = $customer_name;
+        $this->customer_phone    = $customer_phone;
+        $this->receipt_number    = $receipt_number;
         $this->object_type       = $object_type;
         $this->extra_rows        = $extra_rows;
+        $this->proof_url          = $proof_url;
+        $this->proof_mime         = $proof_mime;
     }
 
     /**
@@ -247,9 +272,79 @@ final class Receipt {
             wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ),
             self::logo_url(),
             self::customer_name( $transaction ),
+            self::customer_phone( $transaction ),
+            self::receipt_number( $transaction ),
             sanitize_key( $transaction->object_type ),
-            self::extra_rows( $transaction )
+            self::extra_rows( $transaction ),
+            self::proof_url( $transaction ),
+            self::proof_mime( $transaction )
         );
+    }
+
+    /**
+     * Resolve the uploaded manual proof from the transaction meta.
+     *
+     * For an authorized dashboard user the link goes through the protected
+     * admin endpoint (capability + nonce checked, cross-site safe); for other
+     * visitors the existing public attachment URL is preserved so a customer
+     * viewing their OWN receipt keeps the current behaviour (no regression).
+     */
+    private static function proof_url( PaymentTransaction $transaction ): string {
+
+        $meta          = is_array( $transaction->meta ) ? $transaction->meta : array();
+        $attachment_id = isset( $meta['proof_attachment_id'] ) ? absint( $meta['proof_attachment_id'] ) : 0;
+        $attachment    = $attachment_id > 0 ? get_post( $attachment_id ) : null;
+
+        if ( ! $attachment instanceof \WP_Post || 'attachment' !== $attachment->post_type ) {
+            return '';
+        }
+
+        if ( self::can_manage_proofs() ) {
+
+            $url = add_query_arg(
+                array(
+                    'action'         => 'bb_manual_payment_proof',
+                    'attachment_id'  => $attachment_id,
+                    'transaction_id' => (int) $transaction->id,
+                ),
+                admin_url( 'admin-post.php' )
+            );
+
+            return (string) wp_nonce_url( $url, 'bb_manual_payment_review' );
+        }
+
+        return (string) wp_get_attachment_url( $attachment_id );
+    }
+
+    /**
+     * Whether the CURRENT user may view private payment proofs on this site.
+     *
+     * Mirrors the LawFirm dashboard capability so Core never needs to depend
+     * on the pack. Defaults to the plain upload_files capability when the
+     * pack's helper is unavailable.
+     *
+     * @return bool
+     */
+    private static function can_manage_proofs(): bool {
+
+        if ( class_exists( '\\BusinessBuilderCore\\Packs\\LawFirm\\Admin\\DashboardMenu' )) {
+            $cap = \BusinessBuilderCore\Packs\LawFirm\Admin\DashboardMenu::capability();
+
+            if ( is_string( $cap ) && '' !== $cap ) {
+                return (bool) current_user_can( $cap );
+            }
+        }
+
+        return (bool) current_user_can( 'upload_files' );
+    }
+
+    /** Resolve the MIME type for the uploaded manual proof. */
+    private static function proof_mime( PaymentTransaction $transaction ): string {
+
+        $meta          = is_array( $transaction->meta ) ? $transaction->meta : array();
+        $attachment_id = isset( $meta['proof_attachment_id'] ) ? absint( $meta['proof_attachment_id'] ) : 0;
+
+        return $attachment_id > 0 ? (string) get_post_mime_type( $attachment_id ) : '';
     }
 
     /**
@@ -278,6 +373,14 @@ final class Receipt {
     /**
      * The customer name recorded with the transaction, or ''.
      *
+     * The transaction meta (populated by the checkout for gateways that
+     * collect billing details) is the first source. When it is empty — as
+     * it is for manual gateways (wallet / InstaPay / bank transfer) and
+     * other gateways that do NOT collect billing details — the canonical
+     * related consultation/appointment record is consulted instead, so the
+     * receipt never shows "—" for a customer name that the admin dashboard
+     * clearly has.
+     *
      * @param PaymentTransaction $transaction Transaction.
      * @return string
      */
@@ -295,7 +398,85 @@ final class Receipt {
             $name  = trim( $first . $sep . $last );
         }
 
+        if ( $name === '' ) {
+            $name = self::object_meta_value( $transaction, 'name' );
+        }
+
         return sanitize_text_field( $name );
+    }
+
+    /**
+     * The customer phone from the transaction, or the canonical object.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    private static function customer_phone( PaymentTransaction $transaction ): string {
+
+        $meta  = is_array( $transaction->meta ) ? $transaction->meta : array();
+        $phone = isset( $meta['phone'] ) ? (string) $meta['phone'] : '';
+        $phone = trim( $phone );
+
+        if ( $phone === '' ) {
+            $phone = self::object_meta_value( $transaction, 'phone' );
+        }
+
+        return sanitize_text_field( $phone );
+    }
+
+    /**
+     * The canonical receipt number for a transaction.
+     *
+     * Reuses a stable value once it has been minted (transaction meta
+     * 'receipt_number') so the same receipt number is always shown for a
+     * given payment; otherwise it is derived deterministically from the
+     * transaction's public reference so it is stable even before the meta
+     * is persisted. This never changes the existing references or URLs.
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @return string
+     */
+    private static function receipt_number( PaymentTransaction $transaction ): string {
+
+        $meta = is_array( $transaction->meta ) ? $transaction->meta : array();
+        $stored = isset( $meta['receipt_number'] ) ? sanitize_text_field( (string) $meta['receipt_number'] ) : '';
+
+        if ( '' !== $stored ) {
+            return $stored;
+        }
+
+        return Reference::receipt_from_transaction( $transaction->public_ref );
+    }
+
+    /**
+     * Read a customer-facing field from the related consultation/appointment.
+     *
+     * The object type decides which meta prefix is used, and the value is
+     * read ONLY from the current site's post (Multisite isolation).
+     *
+     * @param PaymentTransaction $transaction Transaction.
+     * @param string             $field       'name' | 'phone'.
+     * @return string
+     */
+    private static function object_meta_value( PaymentTransaction $transaction, string $field ): string {
+
+        $object_id = $transaction->object_id > 0
+            ? $transaction->object_id
+            : $transaction->consultation_id;
+
+        if ( $object_id <= 0 ) {
+            return '';
+        }
+
+        $type = '' !== $transaction->object_type ? sanitize_key( $transaction->object_type ) : 'consultation';
+
+        if ( 'appointment' === $type ) {
+            $key = ( 'phone' === $field ) ? '_bb_appointment_client_phone' : '_bb_appointment_client_name';
+        } else {
+            $key = ( 'phone' === $field ) ? '_bb_consultation_phone' : '_bb_consultation_name';
+        }
+
+        return (string) get_post_meta( $object_id, $key, true );
     }
 
     /**
@@ -489,8 +670,12 @@ final class Receipt {
             'site_name'         => $this->site_name,
             'logo_url'          => $this->logo_url,
             'customer_name'     => $this->customer_name,
+            'customer_phone'    => $this->customer_phone,
+            'receipt_number'    => $this->receipt_number,
             'object_type'       => $this->object_type,
             'extra_rows'        => $this->extra_rows,
+            'proof_url'         => $this->proof_url,
+            'proof_mime'        => $this->proof_mime,
         );
     }
 }

@@ -121,12 +121,24 @@ class ReceiptRoute {
          * been flushed yet: serve the standalone receipt for a direct
          * ?bb_ref= visit.
          *
-         * This is deliberately suppressed when ?bb_checkout= is present, so
-         * the payment-callback return (which carries bb_checkout + bb_ref)
-         * renders the ORIGIN page normally with its in-page receipt modal —
-         * it must never be replaced by this standalone document.
+         * It is DELIBERATELY suppressed whenever the request carries an
+         * in-page payment/return context flag. That is the case for BOTH:
+         *
+         *   - a gateway return  : ?bb_checkout=paid|pending&bb_ref=…
+         *   - a manual return   : ?bb_consult=pending&bb_ref=… (consultation)
+         *                         ?bb_booking=pending&bb_ref=… (appointment)
+         *
+         * Those requests must render the ORIGINAL consultation/appointment
+         * page — where the in-page receipt modal opens automatically — and
+         * must NEVER be replaced by this standalone document. Only a truly
+         * bare ?bb_ref= (no other payment context) is treated as a direct
+         * receipt visit.
          */
-        if ( ! isset( $_GET['bb_checkout'] ) && isset( $_GET['bb_ref'] )) {
+        $in_page_context = isset( $_GET['bb_checkout'] )
+            || isset( $_GET['bb_consult'] )
+            || isset( $_GET['bb_booking'] );
+
+        if ( ! $in_page_context && isset( $_GET['bb_ref'] )) {
             $candidate = sanitize_text_field( wp_unslash( $_GET['bb_ref'] ));
 
             if ( \BusinessBuilderCore\Core\Payments\Transaction\Reference::is_valid( $candidate )) {

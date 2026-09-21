@@ -228,7 +228,9 @@ class Plugin {
             'bb-status-lookup',
             'BBLookup',
             array(
-                'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
+                'newSearch' => __( 'New Search', 'business-builder' ),
+                'closeLabel' => __( 'Close', 'business-builder' ),
             )
         );
     }

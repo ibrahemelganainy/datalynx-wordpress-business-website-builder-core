@@ -50,8 +50,12 @@
 	 * @param {boolean}     showRcpt Show the receipt link.
 	 */
 	function renderResult( data, target, showPay, showRcpt ) {
-		var isConsult = ( 'appointment' !== data.type );
-		var title     = isConsult ? 'Consultation Details' : 'Appointment Details';
+	var isConsult = ( 'appointment' !== data.type );
+	var title     = isConsult ? 'Consultation Details' : 'Appointment Details';
+
+	var cfg = window.BBLookup || {};
+	var cfgLabelNewSearch = cfg.newSearch || 'New Search';
+	var cfgLabelClose     = cfg.closeLabel || 'Close';
 
 		var rows = '';
 
@@ -140,17 +144,23 @@
 		var badgeClass = paid ? 'is-paid' : 'is-pending';
 		var badgeText  = paid ? 'Paid' : ( data.status || '' );
 
-		target.innerHTML =
-			'<div class="bb-lookup-result-head">' +
-				'<h3 class="bb-lookup-result-title">' + esc( title ) + '</h3>' +
-				'<span class="bb-lookup-badge ' + badgeClass + '">' + esc( badgeText ) + '</span>' +
-			'</div>' +
-			'<table class="bb-lookup-table"><tbody>' + rows + '</tbody></table>' +
+			target.innerHTML =
+		'<div class="bb-lookup-result-head">' +
+		'<h3 class="bb-lookup-result-title">' + esc( title ) + '</h3>' +
+			'<div class="bb-lookup-result-head-right">' +
+		'<span class="bb-lookup-badge ' + badgeClass + '">' + esc( badgeText ) + '</span>' +
+		'</div>' +
+		'</div>' +
+		'<table class="bb-lookup-table"><tbody>' + rows + '</tbody></table>' +
 			timeline +
-			receipt;
+			receipt +
+		'<div class="bb-lookup-result-actions">' +
+		'<button type="button" class="bb-primary-button bb-lookup-new-search" data-bb-lookup-new>' + esc( cfgLabelNewSearch ) + '</button>' +
+		'<button type="button" class="bb-lookup-result-close-text" data-bb-lookup-close>' + esc( cfgLabelClose ) + '</button>' +
+		'</div>';
 
-		target.removeAttribute( 'hidden' );
-	}
+			target.removeAttribute( 'hidden' );
+		}
 
 	/**
 	 * Wire one lookup widget.
@@ -220,9 +230,62 @@
 			}
 	}
 
+		/*
+	 * Result actions: a close (x) button hides the result and a "New
+	 * Search" button resets the widget cleanly so the customer can run
+	 * another lookup without reloading the page. Delegated on the result
+	 * container so it works for every rendered result.
+	 */
+	function closeResult() {
+		target.setAttribute( 'hidden', 'hidden' );
+		target.innerHTML = '';
+	}
+
+	function startNewSearch() {
+	closeResult();
+		setNotice( '' );
+
+	if ( refIn ) {
+	refIn.value = '';
+		setError( refIn, '' );
+	}
+
+	if ( phoneIn ) {
+	phoneIn.value = '';
+		setError( phoneIn, '' );
+	}
+
+	/*
+	 * Bring the (now-empty) form back into view and focus the first
+	 * field so a new query is one keystroke away.
+	 */
+	form.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+
+	if ( refIn ) {
+	refIn.focus();
+	}
+	}
+
+		target.addEventListener( 'click', function ( event ) {
+	var el = event.target.closest ? event.target.closest( '[data-bb-lookup-close], [data-bb-lookup-new]' ) : null;
+
+	if ( ! el ) {
+	return;
+	}
+
+		event.preventDefault();
+
+	if ( el.hasAttribute( 'data-bb-lookup-new' )) {
+	startNewSearch();
+	return;
+	}
+
+	closeResult();
+	} );
+
 	form.addEventListener( 'submit', function ( event ) {
-			event.preventDefault();
-			setNotice( '' );
+		event.preventDefault();
+		setNotice( '' );
 
 			var reference = refIn ? refIn.value.trim() : '';
 			var phone     = phoneIn ? phoneIn.value.trim() : '';

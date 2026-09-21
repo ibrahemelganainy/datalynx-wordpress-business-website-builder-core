@@ -191,13 +191,23 @@ class ConsultationForm {
                      * on hold for admin verification. Never marked paid here.
                      */
                     if ( 'manual' === $type ) {
-                        \BusinessBuilderCore\Packs\LawFirm\Payments\ManualPaymentSubmission::submit(
+                        $manual_submitted = \BusinessBuilderCore\Packs\LawFirm\Payments\ManualPaymentSubmission::submit(
                             'consultation',
                             $post_id,
                             $gateway,
                             $_POST,
                             isset( $result['transaction'] ) && $result['transaction'] instanceof \BusinessBuilderCore\Core\Payments\PaymentTransaction ? $result['transaction'] : null
                         );
+
+                        if ( ! $manual_submitted ) {
+                            $this->redirect_with(
+                                $redirect,
+                                'payment_error',
+                                '',
+                                __( 'We could not save your payment submission. Please try again.', 'business-builder' ),
+                                'manual_submission_failed'
+                            );
+                        }
                     }
 
                     $pending_ref = '';

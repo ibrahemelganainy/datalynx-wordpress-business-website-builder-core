@@ -243,16 +243,42 @@
 	function init() {
 		bind();
 
+		/*
+		 * Automatic post-payment opening. After a gateway return (or a manual
+		 * submission) the ORIGINAL page loads with a success notice that
+		 * carries [data-bb-receipt-auto] and the public reference. We open the
+		 * receipt immediately — preferring an inline receipt already on the
+		 * page, otherwise fetching it by reference. This is what makes the
+		 * customer see their receipt WITHOUT navigating to a separate page.
+		 *
+		 * Guarded so it fires once per page load; the fetch is idempotent on
+		 * the server (read-only), so a refresh simply re-opens the receipt.
+		 */
 		var auto = document.querySelector( '[data-bb-receipt-auto]' );
 
-		if ( auto ) {
-			var inline = document.querySelector( '#bb-payment-receipt' );
+		if ( ! auto ) {
+		return;
+		}
 
-			if ( inline ) {
-				openWith( inline.outerHTML );
-			}
-	}
-	}
+		if ( auto.getAttribute( 'data-bb-receipt-auto-done' )) {
+		return;
+		}
+
+			auto.setAttribute( 'data-bb-receipt-auto-done', '1' );
+
+		var inline = document.querySelector( '#bb-payment-receipt' );
+
+		if ( inline ) {
+		openWith( inline.outerHTML );
+		return;
+		}
+
+		var ref = auto.getAttribute( 'data-bb-receipt-ref' ) || '';
+
+		if ( ref ) {
+		openByRef( ref );
+		}
+		}
 
 	if ( 'loading' === document.readyState ) {
 	document.addEventListener( 'DOMContentLoaded', init );

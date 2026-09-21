@@ -101,9 +101,7 @@ final class ManualPaymentSubmission {
          * The transaction's existing meta bag carries them (no duplicate
          * columns are added to the schema).
          */
-        if ( ! $transaction instanceof PaymentTransaction ) {
-            $transaction = self::find_pending_transaction( $manager, $object_type, $object_id, $gateway_id );
-        }
+        $transaction = self::ensure_transaction( $manager, $transaction, $object_type, $object_id, $gateway_id, $meta_key );
 
         if ( $transaction instanceof PaymentTransaction && $transaction->id > 0 ) {
 
@@ -112,12 +110,49 @@ final class ManualPaymentSubmission {
             $meta['manual_reference']    = $reference;
             $meta['manual_gateway']      = $gateway_id;
             $meta['manual_submitted_at'] = current_time( 'mysql' );
-            $meta['proof_attachment_id'] = (int) $attachment_id;
+
+            /*
+             * Only overwrite the stored proof when a NEW file was actually
+             * received and stored. Otherwise a resubmission without a file
+             * would silently erase a previously uploaded proof.
+             */
+            if ( $attachment_id > 0 ) {
+                $meta['proof_attachment_id'] = (int) $attachment_id;
+            }
+
+            /*
+             * Snapshot the customer's name/phone from the CANONICAL
+             * consultation/appointment record so the receipt can always
+             * show the real customer, even for manual gateways that do not
+             * collect billing details at checkout (this is the same source
+             * the Manual Payments dashboard reads).
+             */
+            $customer = self::customer_context( $object_type, $object_id, $meta_key );
+
+            if ( '' !== $customer['name'] && empty( $meta['name'] )) {
+                $meta['name'] = $customer['name'];
+            }
+
+            if ( '' !== $customer['phone'] && empty( $meta['phone'] )) {
+                $meta['phone'] = $customer['phone'];
+            }
+
+            /* Mint a stable, canonical receipt number once (never a second system). */
+            if ( empty( $meta['receipt_number'] ) && '' !== $transaction->public_ref ) {
+                $meta['receipt_number'] = \BusinessBuilderCore\Core\Payments\Transaction\Reference::receipt_from_transaction( $transaction->public_ref );
+            }
 
             $transaction->meta   = $meta;
             $transaction->status = 'on_hold';
 
-            $manager->persist( $transaction );
+            $transaction = $manager->persist( $transaction );
+
+            /* Keep the related record pointing at the authoritative row. */
+            update_post_meta( $object_id, $meta_key . 'payment_reference', $transaction->public_ref );
+            update_post_meta( $object_id, $meta_key . 'transaction_id', $transaction->id );
+        } else {
+            /* Do not claim a manual payment was accepted without a receipt row. */
+            return false;
         }
 
         ( new AuditLog() )->record(
@@ -161,6 +196,61 @@ final class ManualPaymentSubmission {
     }
 
     /**
+     * Resolve or create the transaction that represents this manual submission.
+     *
+     * Checkout normally creates this row first. This defensive path also
+     * covers integrations that call submit() with an unsaved transaction (or
+     * no transaction at all), preventing a success redirect with no receipt
+     * to look up.
+     *
+     * @param PaymentManager          $manager Payments.
+     * @param PaymentTransaction|null $transaction Candidate transaction.
+     * @param string                  $object_type Object type.
+     * @param int                     $object_id Related object id.
+     * @param string                  $gateway_id Manual gateway id.
+     * @param string                  $meta_key Object meta prefix.
+     * @return PaymentTransaction|null
+     */
+    private static function ensure_transaction( PaymentManager $manager, ?PaymentTransaction $transaction, string $object_type, int $object_id, string $gateway_id, string $meta_key ): ?PaymentTransaction {
+
+        if ( $transaction instanceof PaymentTransaction && $transaction->id > 0 ) {
+            return $transaction;
+        }
+
+        if ( ! $transaction instanceof PaymentTransaction ) {
+            $transaction = self::find_pending_transaction( $manager, $object_type, $object_id, $gateway_id );
+        }
+
+        if ( ! $transaction instanceof PaymentTransaction ) {
+            $transaction = PaymentTransaction::from_array(
+                array(
+                    'public_ref'  => (string) get_post_meta( $object_id, $meta_key . 'payment_reference', true ),
+                    'object_type' => $object_type,
+                    'object_id'   => $object_id,
+                    'gateway'     => $gateway_id,
+                    'amount'      => (string) get_post_meta( $object_id, $meta_key . 'payment_amount', true ),
+                    'currency'    => (string) get_post_meta( $object_id, $meta_key . 'payment_currency', true ),
+                    'status'      => 'pending',
+                )
+            );
+        }
+
+        if ( '' === $transaction->object_type ) {
+            $transaction->object_type = $object_type;
+        }
+
+        if ( $transaction->object_id <= 0 ) {
+            $transaction->object_id = $object_id;
+        }
+
+        if ( '' === $transaction->gateway ) {
+            $transaction->gateway = $gateway_id;
+        }
+
+        return $manager->persist( $transaction );
+    }
+
+    /**
      * The meta key prefix for an object type.
      *
      * @param string $object_type Object type.
@@ -173,6 +263,49 @@ final class ManualPaymentSubmission {
         }
 
         return '_bb_consultation_';
+    }
+
+    /**
+     * Sanitize a customer-supplied transaction reference (allow-list).
+     *
+     * @param mixed $raw Raw value.
+     * @return string
+     */
+    /**
+     * Read the customer's name/phone from the related record.
+     *
+     * Uses the object's OWN meta (the same canonical source the Manual
+     * Payments dashboard reads), so the receipt and the dashboard agree.
+     * Never trusts a browser-supplied name.
+     *
+     * @param string $object_type 'consultation' | 'appointment'.
+     * @param int    $object_id   Record id.
+     * @param string $meta_key    Object meta prefix.
+     * @return array{name: string, phone: string}
+     */
+    public static function customer_context( string $object_type, int $object_id, string $meta_key ): array {
+
+        $context = array(
+            'name'  => '',
+            'phone' => '',
+        );
+
+        if ( $object_id <= 0 ) {
+            return $context;
+        }
+
+        if ( 'appointment' === sanitize_key( $object_type )) {
+            $context['name']  = (string) get_post_meta( $object_id, $meta_key . 'client_name', true );
+            $context['phone'] = (string) get_post_meta( $object_id, $meta_key . 'client_phone', true );
+        } else {
+            $context['name']  = (string) get_post_meta( $object_id, $meta_key . 'name', true );
+            $context['phone'] = (string) get_post_meta( $object_id, $meta_key . 'phone', true );
+        }
+
+        $context['name']  = sanitize_text_field( $context['name'] );
+        $context['phone'] = sanitize_text_field( $context['phone'] );
+
+        return $context;
     }
 
     /**
@@ -207,11 +340,21 @@ final class ManualPaymentSubmission {
      */
     private static function store_receipt( int $object_id, string $prefix ): int {
 
-        if ( ! isset( $_FILES['bb_manual_receipt'] )) {
+        /**
+         * Filter the $_FILES entry used for the receipt upload.
+         *
+         * Production always uses $_FILES['bb_manual_receipt'] (the browser's
+         * multipart upload). The filter exists so automated tests and
+         * integrations can inject a file array without weakening the upload
+         * checks below.
+         *
+         * @param array|null $file Raw upload entry.
+         */
+        $file = apply_filters( 'bb_manual_payment_proof_file', isset( $_FILES['bb_manual_receipt'] ) ? $_FILES['bb_manual_receipt'] : null );
+
+        if ( ! is_array( $file )) {
             return 0;
         }
-
-        $file = $_FILES['bb_manual_receipt']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 
         if ( ! isset( $file['error'] ) || (int) $file['error'] !== UPLOAD_ERR_OK ) {
             return 0;
@@ -225,7 +368,26 @@ final class ManualPaymentSubmission {
 
         $tmp_name = isset( $file['tmp_name'] ) ? (string) $file['tmp_name'] : '';
 
-        if ( '' === $tmp_name || ! is_uploaded_file( $tmp_name )) {
+        if ( '' === $tmp_name ) {
+            return 0;
+        }
+
+        /**
+         * Filter whether the upload must pass PHP's is_uploaded_file() check.
+         *
+         * TRUE in production (a genuine HTTP upload). Automated tests may
+         * set it to false to exercise the storage path with a local file.
+         *
+         * @param bool  $require Real upload required.
+         * @param array $file    Upload entry.
+         */
+        $require_upload = (bool) apply_filters( 'bb_manual_payment_proof_require_upload', true, $file );
+
+        if ( $require_upload && ! is_uploaded_file( $tmp_name )) {
+            return 0;
+        }
+
+        if ( ! $require_upload && ! file_exists( $tmp_name )) {
             return 0;
         }
 
@@ -241,9 +403,10 @@ final class ManualPaymentSubmission {
         require_once ABSPATH . 'wp-admin/includes/media.php';
 
         $overrides = array(
-            'test_form' => false,
-            'test_type' => true,
-            'mimes'     => array(
+            'test_form'   => false,
+            'test_type'   => true,
+            'test_upload' => $require_upload,
+            'mimes'       => array(
                 'png'      => 'image/png',
                 'jpg|jpeg' => 'image/jpeg',
                 'webp'     => 'image/webp',
@@ -251,7 +414,15 @@ final class ManualPaymentSubmission {
             ),
         );
 
-        $moved = wp_handle_upload( $file, $overrides );
+        /*
+         * Production always uses wp_handle_upload (a genuine HTTP upload).
+         * When the strict upload check is disabled (tests/integrations),
+         * use wp_handle_sideload, the WordPress-blessed path for a local
+         * file - it is never used while the strict check is on.
+         */
+        $moved = $require_upload
+            ? wp_handle_upload( $file, $overrides )
+            : wp_handle_sideload( $file, $overrides );
 
         if ( ! is_array( $moved ) || isset( $moved['error'] ) || empty( $moved['file'] )) {
             return 0;

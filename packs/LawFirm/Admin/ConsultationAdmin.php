@@ -56,6 +56,12 @@ class ConsultationAdmin {
         add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_list_column' ), 10, 2 );
         add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_action' ) );
 
+        /* Print the real action forms OUTSIDE the post editor form (footer). */
+        add_action( 'admin_footer-post.php', array( $this, 'render_actions_form' ) );
+
+        /* Colour-coded status / payment badges on the list screen. */
+        add_action( 'admin_head-edit.php', array( $this, 'print_list_styles' ) );
+
         /* Broaden the Consultation Requests list search across payment/meta. */
         add_action( 'pre_get_posts', array( $this, 'extend_admin_search' ) );
         add_filter( 'get_search_query', array( $this, 'search_placeholder_value' ) );
@@ -118,7 +124,10 @@ class ConsultationAdmin {
                 if ( '' === $status ) {
                     $status = ConsultationMeta::default_status();
                 }
-                echo esc_html( ConsultationMeta::status_label( $status ));
+
+                $cls = 'bb-consult-status bb-consult-status-' . sanitize_html_class( $status );
+
+                echo '<span class="' . esc_attr( $cls ) . '">' . esc_html( ConsultationMeta::status_label( $status )) . '</span>';
                 break;
 
             case 'bb_payment':
@@ -126,7 +135,10 @@ class ConsultationAdmin {
                 if ( '' === $state ) {
                     $state = 'not_required';
                 }
-                echo esc_html( ConsultationMeta::payment_label( $state ));
+
+                $cls = 'bb-consult-payment bb-consult-payment-' . sanitize_html_class( $state );
+
+                echo '<span class="' . esc_attr( $cls ) . '">' . esc_html( ConsultationMeta::payment_label( $state )) . '</span>';
                 break;
 
             case 'bb_reference':
@@ -281,31 +293,76 @@ class ConsultationAdmin {
         echo '<hr>';
         echo '<h4>' . esc_html__( 'Actions', 'business-builder' ) . '</h4>';
 
-        $endpoint = admin_url( 'admin-post.php' );
-        echo '<form method="post" action="' . esc_url( $endpoint ) . '" style="display:inline-block;margin-right:12px;">';
-        echo '<input type="hidden" name="action" value="' . esc_attr( self::ACTION ) . '" />';
-        echo '<input type="hidden" name="consultation_id" value="' . esc_attr( (string) $id ) . '" />';
-        echo '<input type="hidden" name="bb_op" value="set_status" />';
-        wp_nonce_field( self::NONCE_ACTION );
+        /*
+         * IMPORTANT: a meta box renders INSIDE the post editor's
+         * <form id="post">. A nested <form> is invalid HTML and the browser
+         * drops it, so a plain meta-box form would actually submit the POST
+         * editor (saving the post and redirecting to the list) and never run
+         * our admin-post action. We therefore associate the controls with a
+         * real <form> rendered OUTSIDE the post form (see
+         * render_actions_form(), printed in the admin footer) using the
+         * standard HTML5 `form` attribute. This needs no JavaScript.
+         */
+        $form_id = 'bb-consultation-actions-form';
+
         echo '<label><strong>' . esc_html__( 'Change Status', 'business-builder' ) . '</strong> ';
-        echo '<select name="status">';
+        echo '<select name="status" form="' . esc_attr( $form_id ) . '">';
 
         foreach ( ConsultationMeta::statuses() as $slug => $label ) {
             echo '<option value="' . esc_attr( $slug ) . '" ' . selected( $status, $slug, false ) . '>' . esc_html( $label ) . '</option>';
         }
 
         echo '</select></label> ';
-        echo '<button type="submit" class="button button-primary">' . esc_html__( 'Apply', 'business-builder' ) . '</button>';
+        echo '<button type="submit" form="' . esc_attr( $form_id ) . '" class="button button-primary">' . esc_html__( 'Apply', 'business-builder' ) . '</button>';
+
+        if ( $payment_required && in_array( $payment_status, array( 'pending', 'failed' ), true )) {
+
+            $paid_form_id = 'bb-consultation-markpaid-form';
+
+            echo ' <button type="submit" form="' . esc_attr( $paid_form_id ) . '" class="button">' . esc_html__( 'Mark Payment Verified', 'business-builder' ) . '</button>';
+        }
+    }
+
+    /**
+     * Print the REAL action forms in the admin footer, OUTSIDE the post form.
+     *
+     * WordPress renders the post editor inside <form id="post">; a meta box
+     * cannot contain its own <form>. These standalone forms are associated
+     * with the meta-box controls through the HTML5 `form="<id>"` attribute.
+     */
+    public function render_actions_form(): void {
+
+        $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+        if ( ! $screen || self::POST_TYPE !== $screen->post_type || 'post' !== $screen->base ) {
+            return;
+        }
+
+        $id = isset( $_GET['post'] ) ? absint( wp_unslash( $_GET['post'] )) : (int) get_the_ID();
+
+        if ( $id <= 0 || self::POST_TYPE !== get_post_type( $id )) {
+            return;
+        }
+
+        $payment_required = '1' === (string) get_post_meta( $id, ConsultationMeta::key( 'payment_required' ), true );
+        $payment_status   = (string) get_post_meta( $id, ConsultationMeta::key( 'payment_status' ), true );
+
+        $endpoint = admin_url( 'admin-post.php' );
+
+        echo '<form id="bb-consultation-actions-form" method="post" action="' . esc_url( $endpoint ) . '" style="display:none;">';
+        echo '<input type="hidden" name="action" value="' . esc_attr( self::ACTION ) . '" />';
+        echo '<input type="hidden" name="consultation_id" value="' . esc_attr( (string) $id ) . '" />';
+        echo '<input type="hidden" name="bb_op" value="set_status" />';
+        wp_nonce_field( self::NONCE_ACTION );
         echo '</form>';
 
-        if ( $payment_required && in_array( $payment_status, array( 'pending', 'failed' ), true ) ) {
+        if ( $payment_required && in_array( $payment_status, array( 'pending', 'failed' ), true )) {
 
-            echo '<form method="post" action="' . esc_url( $endpoint ) . '" style="display:inline-block;">';
+            echo '<form id="bb-consultation-markpaid-form" method="post" action="' . esc_url( $endpoint ) . '" style="display:none;">';
             echo '<input type="hidden" name="action" value="' . esc_attr( self::ACTION ) . '" />';
             echo '<input type="hidden" name="consultation_id" value="' . esc_attr( (string) $id ) . '" />';
             echo '<input type="hidden" name="bb_op" value="mark_paid" />';
             wp_nonce_field( self::NONCE_ACTION );
-            echo '<button type="submit" class="button">' . esc_html__( 'Mark Payment Verified', 'business-builder' ) . '</button>';
             echo '</form>';
         }
     }
@@ -339,7 +396,19 @@ class ConsultationAdmin {
             $this->do_mark_paid( $id );
         }
 
-        wp_safe_redirect( get_edit_post_link( $id, 'raw' ) );
+        /*
+         * Redirect back to the SAME edit screen. get_edit_post_link() can
+         * be empty for a private, non-standard post type, and an empty
+         * wp_safe_redirect() target misbehaves, so we build the edit URL
+         * explicitly and fall back to the list screen.
+         */
+        $redirect = get_edit_post_link( $id, 'raw' );
+
+        if ( ! is_string( $redirect ) || '' === $redirect ) {
+            $redirect = admin_url( 'post.php?post=' . $id . '&action=edit' );
+        }
+
+        wp_safe_redirect( $redirect );
         exit;
     }
 
@@ -534,5 +603,46 @@ class ConsultationAdmin {
     public function search_placeholder_value( $term ) {
 
         return $term;
+    }
+
+    /**
+     * Print colour-coded status / payment badges for the Consultation list.
+     *
+     * Kept inline (screen-scoped) so the pack adds no new admin stylesheet
+     * and no global overhead — mirrors the Appointments list badges so both
+     * screens share one consistent visual language.
+     */
+    public function print_list_styles(): void {
+
+        $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+        if ( ! $screen || self::POST_TYPE !== $screen->post_type || 'edit' !== $screen->base ) {
+            return;
+        }
+
+        ?>
+        <style>
+            .bb-consult-status, .bb-consult-payment {
+                display: inline-block;
+                padding: 2px 9px;
+                border-radius: 999px;
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 1.7;
+                background: #f0f0f1;
+                color: #3c434a;
+            }
+            .bb-consult-status-new { background: #e6eefc; color: #11467f; }
+            .bb-consult-status-pending { background: #fdf3d3; color: #8a6100; }
+            .bb-consult-status-contacted { background: #e8e2fb; color: #43309a; }
+            .bb-consult-status-scheduled { background: #d7f0e0; color: #14623a; }
+            .bb-consult-status-completed { background: #dceefb; color: #0d5a8a; }
+            .bb-consult-status-cancelled { background: #fbe3e3; color: #8a1f1f; }
+            .bb-consult-payment-paid { background: #d7f0e0; color: #14623a; }
+            .bb-consult-payment-pending, .bb-consult-payment-processing { background: #fdf3d3; color: #8a6100; }
+            .bb-consult-payment-failed, .bb-consult-payment-cancelled { background: #fbe3e3; color: #8a1f1f; }
+            .bb-consult-payment-not_required { background: #f0f0f1; color: #646970; }
+        </style>
+        <?php
     }
 }
