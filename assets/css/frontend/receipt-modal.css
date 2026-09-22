@@ -26,8 +26,10 @@ body.bb-receipt-open {
 .bb-receipt-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.62);
-  backdrop-filter: blur(2px);
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: bbBackdropIn 0.25s ease both;
 }
 
 .bb-receipt-modal-panel {
@@ -37,13 +39,13 @@ body.bb-receipt-open {
   max-width: 760px;
   margin: auto;
   background: #f8fafc;
-  border-radius: 18px;
+  border-radius: var(--bb-radius-card, 18px);
   padding: 12px;
   box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
   animation: bbReceiptIn 0.22s ease both;
 }
 
-@keyframes bbReceiptIn {
+@keyframes bbReciptIn {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -51,6 +53,15 @@ body.bb-receipt-open {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes bbBackdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -68,17 +79,22 @@ body.bb-receipt-open {
   width: 36px;
   height: 36px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--bb-radius-pill, 999px);
   background: rgba(15, 23, 42, 0.08);
-  color: #0f172a;
+  color: var(--bb-color-heading, #0f172a);
   font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background var(--bb-transition-fast, 0.15s ease);
 }
 
 .bb-receipt-modal-close:hover {
   background: rgba(15, 23, 42, 0.16);
+  transform: rotate(90deg) scale(1.05);
+}
+
+.bb-receipt-modal-close:active {
+  transform: rotate(90deg) scale(0.95);
 }
 
 .bb-receipt-modal-body {

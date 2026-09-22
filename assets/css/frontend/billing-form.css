@@ -15,9 +15,9 @@
 .bb-template .bb-billing {
   margin-top: 18px;
   padding: 20px 20px 4px;
-  border-radius: 14px;
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  background: linear-gradient(180deg, #fbfcfe 0%, #f6f8fb 100%);
+  border-radius: var(--bb-radius-lg, 14px);
+  border: 1px solid var(--bb-color-border, rgba(15, 23, 42, 0.1));
+  background: linear-gradient(180deg, var(--bb-color-gray-50, #fbfcfe) 0%, var(--bb-color-gray-100, #f6f8fb) 100%);
 }
 
 /*
@@ -68,16 +68,16 @@
 
 .bb-template .bb-billing-title {
   margin: 0 0 4px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-size: var(--bb-font-size-body, 1rem);
+  font-weight: var(--bb-font-weight-bold, 700);
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-billing-hint {
   margin: 0 0 16px;
   font-size: 0.85rem;
-  line-height: 1.5;
-  color: #64748b;
+  line-height: var(--bb-line-height-normal, 1.5);
+  color: var(--bb-color-text-muted, #64748b);
 }
 
 .bb-template .bb-billing-grid {
@@ -94,29 +94,29 @@
 }
 
 .bb-template .bb-billing-field label {
-  font-weight: 600;
+  font-weight: var(--bb-font-weight-semibold, 600);
   font-size: 0.85rem;
-  color: #0f172a;
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-billing-input {
   width: 100%;
   box-sizing: border-box;
   padding: 12px 14px;
-  border: 1.5px solid rgba(15, 23, 42, 0.16);
-  border-radius: 11px;
-  background: #fff;
-  color: #1f2937;
+  border: 1.5px solid var(--bb-color-border-strong, rgba(15, 23, 42, 0.16));
+  border-radius: var(--bb-radius-sm, 11px);
+  background: var(--bb-color-white, #fff);
+  color: var(--bb-color-gray-800, #1f2937);
   font: inherit;
-  line-height: 1.5;
+  line-height: var(--bb-line-height-normal, 1.5);
   transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease;
+    border-color var(--bb-transition-fast, 0.15s ease),
+    box-shadow var(--bb-transition-fast, 0.15s ease),
+    background var(--bb-transition-fast, 0.15s ease);
 }
 
 .bb-template .bb-billing-input::placeholder {
-  color: #9aa4b2;
+  color: var(--bb-color-gray-400, #9aa4b2);
 }
 
 .bb-template .bb-billing-input:hover {
@@ -125,27 +125,27 @@
 
 .bb-template .bb-billing-input:focus {
   outline: none;
-  border-color: #1d4ed8;
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.14);
+  border-color: var(--bb-color-primary, #1d4ed8);
+  background: var(--bb-color-white, #fff);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
 }
 
 /* Invalid state (set by JS). */
 .bb-template .bb-billing-input[aria-invalid="true"] {
-  border-color: #d63638;
-  background: #fff9f9;
+  border-color: var(--bb-color-error, #d63638);
+  background: var(--bb-color-error-light, #fff9f9);
 }
 
 .bb-template .bb-billing-input[aria-invalid="true"]:focus {
-  border-color: #d63638;
-  box-shadow: 0 0 0 4px rgba(214, 54, 56, 0.14);
+  border-color: var(--bb-color-error, #d63638);
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.14);
 }
 
 .bb-template .bb-billing-error {
   display: none;
   font-size: 0.78rem;
   line-height: 1.4;
-  color: #b32d2e;
+  color: var(--bb-color-error-dark, #b32d2e);
 }
 
 .bb-template .bb-billing-error.is-visible {

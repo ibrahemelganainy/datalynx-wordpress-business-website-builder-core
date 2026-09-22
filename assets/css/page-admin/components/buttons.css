@@ -1,18 +1,14 @@
 /**
- * Shared button system.
- *
- * Every action button in the builder (Edit / Duplicate /
- * Delete / Add Section / Live Preview / Save / Cancel /
- * Select Image / Remove Image / Repeater Add / Repeater
- * Remove) is routed through this one set of rules so they
- * all share the same height, padding, font, and radius —
- * this is the fix for the "buttons don't line up" issue.
- *
- * Each button keeps its own color via a small modifier
- * class (.bb-btn-primary, .bb-btn-danger, .bb-btn-neutral,
- * .bb-btn-ghost) layered on top of the same base sizing.
+ * Shared Button System.
+ * Premium Edition - App-like interactive buttons with realistic depth.
+ * 
+ * Every action button in the builder shares this DNA. 
+ * Uses strict !important flags to safeguard against aggressive WP admin styles.
  */
 
+/* ---------------------------------------------------
+ * Base Button DNA
+ * --------------------------------------------------- */
 .bb-btn,
 .bb-section-item-actions .bb-edit-section,
 .bb-section-item-actions .bb-duplicate-section,
@@ -30,116 +26,131 @@
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: var(--bb-space-2xs);
+    gap: var(--bb-space-xs) !important; /* Slightly wider gap for better breathing room */
     box-sizing: border-box !important;
     height: var(--bb-control-height) !important;
     min-height: var(--bb-control-height) !important;
     padding: 0 var(--bb-control-padding-x) !important;
     margin: 0 !important;
     border-radius: var(--bb-control-radius) !important;
-    border: 1px solid transparent;
-    font-family: var(--bb-font-family);
+    border: 1px solid transparent !important;
+    font-family: var(--bb-font-family) !important;
     font-size: var(--bb-control-font-size) !important;
     font-weight: var(--bb-control-font-weight) !important;
     line-height: 1 !important;
-    white-space: nowrap;
+    white-space: nowrap !important;
     text-decoration: none !important;
-    cursor: pointer;
-    transition: var(--bb-transition-fast);
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    outline: none !important;
 }
 
-/* Compact variant — used for inline row actions like
-   repeater "Remove" where a full-size button feels heavy. */
+/* Premium Click Interaction */
+.bb-btn:not(:disabled):not(.is-loading):active,
+.bb-live-preview-button:not(:disabled):active,
+#bb-save-section:not(:disabled):active,
+.bb-add-section:not(:disabled):active {
+    transform: translateY(1px) scale(0.97) !important;
+}
+
+/* Accessible Focus Ring */
+.bb-btn:focus-visible,
+.bb-live-preview-button:focus-visible,
+#bb-save-section:focus-visible {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25) !important;
+}
+
+/* Compact variant */
 .bb-btn-sm,
 .bb-repeater-remove {
     height: var(--bb-control-height-sm) !important;
     min-height: var(--bb-control-height-sm) !important;
     padding: 0 var(--bb-control-padding-x-sm) !important;
+    font-size: var(--bb-control-font-size-sm) !important;
 }
 
 /* ---------------------------------------------------
- * Color variants
+ * Color Variants
  * --------------------------------------------------- */
 
+/* Primary - Vibrant with top-light highlight (inset shadow) */
 .bb-btn-primary,
 .bb-live-preview-button,
 #bb-save-section {
-    background: linear-gradient(135deg, var(--bb-primary-color), var(--bb-primary-hover)) !important;
+    background: linear-gradient(180deg, var(--bb-primary-color), var(--bb-primary-hover)) !important;
     border-color: var(--bb-primary-hover) !important;
     color: var(--bb-text-light) !important;
-    box-shadow: var(--bb-shadow-sm) !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) !important;
 }
 
 .bb-btn-primary:hover,
-.bb-btn-primary:focus,
 .bb-live-preview-button:hover,
-.bb-live-preview-button:focus,
-#bb-save-section:hover,
-#bb-save-section:focus {
-    background: linear-gradient(135deg, var(--bb-primary-hover), #0f4d7d) !important;
-    color: var(--bb-text-light) !important;
-    box-shadow: var(--bb-shadow-md) !important;
+#bb-save-section:hover {
+    background: linear-gradient(180deg, #3b82f6, var(--bb-primary-hover)) !important; /* Brighter top on hover */
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
+/* Outline Primary */
 .bb-btn-outline-primary,
 .bb-section-item-actions .bb-edit-section,
 .bb-add-section {
     background-color: var(--bb-bg-main) !important;
-    border-color: var(--bb-primary-color) !important;
+    border-color: var(--bb-primary-border) !important;
     color: var(--bb-primary-color) !important;
+    box-shadow: var(--bb-shadow-sm) !important;
 }
 
 .bb-btn-outline-primary:hover,
-.bb-btn-outline-primary:focus,
 .bb-section-item-actions .bb-edit-section:hover,
-.bb-section-item-actions .bb-edit-section:focus,
-.bb-add-section:hover,
-.bb-add-section:focus {
-    background-color: var(--bb-bg-hover) !important;
-    border-color: var(--bb-primary-hover) !important;
+.bb-add-section:hover {
+    background-color: var(--bb-primary-soft) !important;
+    border-color: var(--bb-primary-color) !important;
     color: var(--bb-primary-hover) !important;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.05) !important;
 }
 
+/* Neutral */
 .bb-btn-neutral,
 .bb-section-item-actions .bb-duplicate-section,
 .bb-image-actions .bb-select-image-btn {
     background-color: var(--bb-bg-main) !important;
-    border-color: #d0d7de !important;
+    border-color: var(--bb-border-dashed) !important;
     color: var(--bb-text-dark) !important;
+    box-shadow: var(--bb-shadow-sm) !important;
 }
 
 .bb-btn-neutral:hover,
-.bb-btn-neutral:focus,
 .bb-section-item-actions .bb-duplicate-section:hover,
-.bb-section-item-actions .bb-duplicate-section:focus,
-.bb-image-actions .bb-select-image-btn:hover,
-.bb-image-actions .bb-select-image-btn:focus {
-    background-color: #f3f4f6 !important;
-    border-color: #c5ccd5 !important;
+.bb-image-actions .bb-select-image-btn:hover {
+    background-color: var(--bb-bg-subtle) !important;
+    border-color: var(--bb-border-strong) !important;
+    color: #000000 !important;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04) !important;
 }
 
+/* Outline Danger */
 .bb-btn-outline-danger,
 .bb-section-item-actions .bb-delete-section,
 .bb-image-actions .bb-remove-image-btn,
 .bb-repeater-remove {
     background-color: var(--bb-bg-main) !important;
-    border-color: var(--bb-danger-color) !important;
+    border-color: var(--bb-danger-border) !important;
     color: var(--bb-danger-color) !important;
+    box-shadow: var(--bb-shadow-sm) !important;
 }
 
 .bb-btn-outline-danger:hover,
-.bb-btn-outline-danger:focus,
 .bb-section-item-actions .bb-delete-section:hover,
-.bb-section-item-actions .bb-delete-section:focus,
 .bb-image-actions .bb-remove-image-btn:hover,
-.bb-image-actions .bb-remove-image-btn:focus,
-.bb-repeater-remove:hover,
-.bb-repeater-remove:focus {
+.bb-repeater-remove:hover {
     background-color: var(--bb-danger-soft) !important;
-    border-color: var(--bb-danger-hover) !important;
+    border-color: var(--bb-danger-color) !important;
     color: var(--bb-danger-hover) !important;
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.05) !important;
 }
 
+/* Ghost (Icon Buttons & Modals Close) */
 .bb-btn-ghost,
 .bb-close-section-editor,
 .bb-live-preview-close {
@@ -149,44 +160,37 @@
     width: var(--bb-control-height) !important;
     padding: 0 !important;
     font-size: 20px !important;
+    border-radius: var(--bb-radius-md) !important;
 }
 
 .bb-btn-ghost:hover,
-.bb-btn-ghost:focus,
 .bb-close-section-editor:hover,
-.bb-close-section-editor:focus,
-.bb-live-preview-close:hover,
-.bb-live-preview-close:focus {
+.bb-live-preview-close:hover {
     background: var(--bb-bg-muted) !important;
     color: var(--bb-text-dark) !important;
+    transform: scale(1.05) !important;
 }
 
+/* Dashed */
 .bb-btn-dashed,
 .bb-repeater-add {
-    background-color: var(--bb-bg-subtle) !important;
-    border: 1px dashed var(--bb-border-dashed) !important;
-    color: var(--bb-text-dark) !important;
+    background-color: transparent !important;
+    border: 1px dashed var(--bb-border-strong) !important;
+    color: var(--bb-text-muted) !important;
+    box-shadow: none !important;
 }
 
 .bb-btn-dashed:hover,
-.bb-btn-dashed:focus,
-.bb-repeater-add:hover,
-.bb-repeater-add:focus {
-    background-color: var(--bb-bg-hover) !important;
+.bb-repeater-add:hover {
+    background-color: var(--bb-primary-soft) !important;
     border-color: var(--bb-primary-color) !important;
-    color: var(--bb-primary-color) !important;
+    color: var(--bb-primary-hover) !important;
+    border-style: solid !important;
 }
 
-/*
- * Disabled / loading state, shared by any of the above.
- *
- * NOTE: if the "Live Preview" button looks washed out
- * specifically on unsaved/draft pages, check whether the
- * JS is actually setting `disabled` on it (the same way
- * "Add Section" is blocked until the page is first saved).
- * That would be expected behavior, not a styling bug — this
- * rule is what renders that state; it isn't what triggers it.
- */
+/* ---------------------------------------------------
+ * States (Disabled / Loading)
+ * --------------------------------------------------- */
 .bb-btn:disabled,
 .bb-btn.is-loading,
 .bb-section-item-actions .bb-edit-section:disabled,
@@ -199,18 +203,34 @@
 .bb-image-actions .bb-select-image-btn:disabled,
 .bb-image-actions .bb-remove-image-btn:disabled,
 #bb-save-section:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+    opacity: 0.55 !important;
+    cursor: not-allowed !important;
     box-shadow: none !important;
+    transform: none !important;
+    filter: grayscale(20%) !important;
 }
 
-/* Icon inside a button (dashicon or <img>) never collapses
-   the button to zero visible width even if the label text
-   is empty. */
+/* Pulse animation for loading state */
+@keyframes bbpLoadingPulse {
+    0% { opacity: 0.55; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.55; }
+}
+
+.bb-btn.is-loading {
+    animation: bbpLoadingPulse 1.5s infinite ease-in-out !important;
+}
+
+/* ---------------------------------------------------
+ * Icons within buttons
+ * --------------------------------------------------- */
 .bb-btn .dashicons,
 .bb-live-preview-button .dashicons {
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-    line-height: 1;
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }

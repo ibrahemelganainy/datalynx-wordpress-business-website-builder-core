@@ -67,11 +67,21 @@ class DashboardStats {
         $appts   = $this->appointment_metrics();
         $revenue = $this->revenue_metrics();
         $lawyers = $this->lawyer_metrics();
+        $manual  = $this->manual_review_metrics();
 
         $consult_url = admin_url( 'edit.php?post_type=' . self::CONSULTATIONS );
         $appt_url    = admin_url( 'edit.php?post_type=' . Appointment::POST_TYPE );
         $lawyer_url  = admin_url( 'edit.php?post_type=' . self::LAWYERS );
         $pay_url     = admin_url( 'admin.php?page=bb-law-firm-payments' );
+        $manual_url  = admin_url( 'admin.php?page=bb-law-firm-manual-payments' );
+
+        /* Real, derived context (never invented percentages). */
+        $consult_paid_pct = $consult['total'] > 0
+            ? (int) round( ( $consult['paid'] / $consult['total'] ) * 100 )
+            : 0;
+        $lawyer_active_pct = $lawyers['total'] > 0
+            ? (int) round( ( $lawyers['active'] / $lawyers['total'] ) * 100 )
+            : 0;
 
         return array(
             array(
@@ -81,6 +91,7 @@ class DashboardStats {
                 'icon'  => 'dashicons-phone',
                 'url'   => $consult_url,
                 'accent' => 'primary',
+                'hint'  => __( 'All time', 'business-builder' ),
             ),
             array(
                 'key'   => 'consultations_new',
@@ -89,6 +100,7 @@ class DashboardStats {
                 'icon'  => 'dashicons-email-alt',
                 'url'   => add_query_arg( 'bb_filter', 'new', $consult_url ),
                 'accent' => 'info',
+                'hint'  => __( 'Awaiting review', 'business-builder' ),
             ),
             array(
                 'key'   => 'consultations_pending',
@@ -97,14 +109,19 @@ class DashboardStats {
                 'icon'  => 'dashicons-clock',
                 'url'   => add_query_arg( 'bb_filter', 'pending', $consult_url ),
                 'accent' => 'warning',
+                'hint'  => __( 'In progress', 'business-builder' ),
             ),
             array(
                 'key'   => 'consultations_paid',
                 'label' => __( 'Paid Consultations', 'business-builder' ),
                 'value' => $consult['paid'],
                 'icon'  => 'dashicons-yes-alt',
- 'url'   => add_query_arg( 'bb_filter', 'paid', $consult_url ),
+                'url'   => add_query_arg( 'bb_filter', 'paid', $consult_url ),
                 'accent' => 'success',
+                'hint'  => $consult['total'] > 0
+                    /* translators: %d: percentage of consultations paid */
+                    ? sprintf( __( '%d%% of requests', 'business-builder' ), $consult_paid_pct )
+                    : __( 'No requests yet', 'business-builder' ),
             ),
             array(
                 'key'   => 'consultations_unpaid',
@@ -113,6 +130,16 @@ class DashboardStats {
                 'icon'  => 'dashicons-warning',
                 'url'   => add_query_arg( 'bb_filter', 'unpaid', $consult_url ),
                 'accent' => 'danger',
+                'hint'  => __( 'Needs follow-up', 'business-builder' ),
+            ),
+            array(
+                'key'   => 'manual_payments_pending',
+                'label' => __( 'Manual Payments to Review', 'business-builder' ),
+                'value' => $manual['pending'],
+                'icon'  => 'dashicons-money-alt',
+                'url'   => $manual_url,
+                'accent' => 'warning',
+                'hint'  => __( 'Awaiting verification', 'business-builder' ),
             ),
             array(
                 'key'   => 'appointments_total',
@@ -121,6 +148,7 @@ class DashboardStats {
                 'icon'  => 'dashicons-calendar-alt',
                 'url'   => $appt_url,
                 'accent' => 'primary',
+                'hint'  => __( 'All time', 'business-builder' ),
             ),
             array(
                 'key'   => 'appointments_upcoming',
@@ -129,6 +157,7 @@ class DashboardStats {
                 'icon'  => 'dashicons-calendar',
                 'url'   => $appt_url,
                 'accent' => 'info',
+                'hint'  => __( 'Scheduled ahead', 'business-builder' ),
             ),
             array(
                 'key'   => 'appointments_today',
@@ -137,6 +166,7 @@ class DashboardStats {
                 'icon'  => 'dashicons-clock',
                 'url'   => $appt_url,
                 'accent' => 'warning',
+                'hint'  => __( 'Happening today', 'business-builder' ),
             ),
             array(
                 'key'   => 'lawyers_total',
@@ -145,6 +175,7 @@ class DashboardStats {
                 'icon'  => 'dashicons-businessperson',
                 'url'   => $lawyer_url,
                 'accent' => 'primary',
+                'hint'  => __( 'Published profiles', 'business-builder' ),
             ),
             array(
                 'key'   => 'lawyers_active',
@@ -153,6 +184,10 @@ class DashboardStats {
                 'icon'  => 'dashicons-groups',
                 'url'   => $lawyer_url,
                 'accent' => 'success',
+                'hint'  => $lawyers['total'] > 0
+                    /* translators: %d: percentage of lawyers active */
+                    ? sprintf( __( '%d%% visible on site', 'business-builder' ), $lawyer_active_pct )
+                    : __( 'No lawyers yet', 'business-builder' ),
             ),
             array(
                 'key'   => 'revenue_total',
@@ -161,6 +196,7 @@ class DashboardStats {
                 'icon'  => 'dashicons-chart-line',
                 'url'   => $pay_url,
                 'accent' => 'success',
+                'hint'  => __( 'Verified payments', 'business-builder' ),
             ),
             array(
                 'key'   => 'revenue_month',
@@ -169,6 +205,7 @@ class DashboardStats {
                 'icon'  => 'dashicons-money-alt',
                 'url'   => $pay_url,
                 'accent' => 'info',
+                'hint'  => __( 'Current month', 'business-builder' ),
             ),
         );
     }
@@ -575,6 +612,100 @@ class DashboardStats {
         $this->collect_appointment_actions( $items, $limit );
 
         return $items;
+    }
+
+    /**
+     * Manual payment review metrics (real, site-scoped).
+     *
+     * Reuses the SAME canonical transaction store the Manual Payments screen
+     * reads. The review buckets map onto the canonical statuses exactly as
+     * ManualPaymentsAdmin does (never a second status model):
+     *   on_hold            -> pending review
+     *   paid / completed   -> approved
+     *   failed             -> rejected
+     *
+     * @return array{pending:int,approved:int,rejected:int}
+     */
+    public function manual_review_metrics(): array {
+
+        $out = array(
+            'pending'  => 0,
+            'approved' => 0,
+            'rejected' => 0,
+        );
+
+        foreach ( $this->payments->transactions( 500 ) as $txn ) {
+
+            if ( ! is_array( $txn ) || ! isset( $txn['status'] ) ) {
+                continue;
+            }
+
+            $status = sanitize_key( (string) $txn['status'] );
+
+            if ( 'on_hold' === $status ) {
+                $out['pending']++;
+            } elseif ( in_array( $status, array( 'paid', 'completed' ), true ) ) {
+                $out['approved']++;
+            } elseif ( 'failed' === $status ) {
+                $out['rejected']++;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Recently received appointments (for the recent-records list).
+     *
+     * Read-only, bounded, site-scoped. Uses the canonical appointment meta
+     * (client snapshot, date/time, status) — no duplicate storage.
+     *
+     * @param int $limit Max items.
+     * @return array<int, array<string, mixed>>
+     */
+    public function recent_appointments( int $limit = 6 ): array {
+
+        if ( ! post_type_exists( Appointment::POST_TYPE ) ) {
+            return array();
+        }
+
+        $posts = get_posts(
+            array(
+                'post_type'      => Appointment::POST_TYPE,
+                'post_status'    => 'publish',
+                'posts_per_page' => max( 1, $limit ),
+                'no_found_rows'  => true,
+                'orderby'        => 'date',
+                'order'          => 'DESC',
+            )
+        );
+
+        $out = array();
+
+        foreach ( $posts as $post ) {
+
+            $status = (string) get_post_meta( $post->ID, AppointmentMeta::key( 'status' ), true );
+
+            if ( '' === $status ) {
+                $status = AppointmentMeta::default_status();
+            }
+
+            $date  = (string) get_post_meta( $post->ID, AppointmentMeta::key( 'date' ), true );
+            $start = (string) get_post_meta( $post->ID, AppointmentMeta::key( 'start' ), true );
+
+            $out[] = array(
+                'id'        => (int) $post->ID,
+                'name'      => (string) get_post_meta( $post->ID, AppointmentMeta::key( 'client_name' ), true ),
+                'date'      => $date,
+                'start'     => $start,
+                'status'    => AppointmentMeta::status_label( $status ),
+                'reference' => (string) get_post_meta( $post->ID, AppointmentMeta::key( 'public_reference' ), true ),
+                'created'   => (string) $post->post_date,
+                'url'       => get_edit_post_link( (int) $post->ID, 'raw' ),
+            );
+        }
+
+        return $out;
     }
 
     /**

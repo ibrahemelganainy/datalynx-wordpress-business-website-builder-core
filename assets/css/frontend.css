@@ -1,19 +1,30 @@
-/**
- * Business Builder Core - Frontend Styles
- * -------------------------------------------------------
- * Aggregator for the front-end section stylesheets.
- * Every pack section has its own file so a single section
- * can be restyled in isolation. Loaded on the public site
- * by Core\Plugin::enqueue_builder_frontend_assets().
+/*
+ * Business Builder Core - Frontend Styles (ENTRY FILE)
  *
- * Order matters: section-base.css defines the shared
- * variables/helpers that the per-section files rely on.
+ * This is the single stylesheet WordPress enqueues (handle `bb-frontend`).
+ * It no longer contains bundled CSS; instead it @imports the individual
+ * source files that live in assets/css/frontend/, in the SAME order the
+ * previous bundle used so rendering is unchanged.
+ *
+ * Edit the files in assets/css/frontend/ directly — this file only lists them.
+ *
+ * NOTE: `@import` paths are resolved relative to THIS file's URL
+ * (assets/css/frontend.css), hence the "frontend/" prefix.
+ *
+ * NOTE: @import introduces a small sequential fetch waterfall (the browser
+ * loads this file, then each imported file). If that ever becomes a problem,
+ * re-bundling into a single file is the alternative.
  */
 
-/* Shared variables + helpers (load first). */
-@import url("frontend/section-base.css");
+/* Tokens first — everything below depends on these custom properties. */
+@import url("frontend/design-tokens.css");
 
-/* Law Firm pack sections. */
+/* Base building blocks. */
+@import url("frontend/components.css");
+@import url("frontend/layout.css");
+
+/* LawFirm pack sections and front-end forms. */
+@import url("frontend/section-base.css");
 @import url("frontend/section-testimonials.css");
 @import url("frontend/section-lawyers.css");
 @import url("frontend/section-legal-services.css");
@@ -21,14 +32,9 @@
 @import url("frontend/section-faq.css");
 @import url("frontend/section-consultation.css");
 @import url("frontend/section-consultation-form.css");
-/* Appointment booking form (availability summary + booking fields). */
 @import url("frontend/section-booking-form.css");
-/* Shared frontend payment selection component (consultation + booking). */
 @import url("frontend/section-payment.css");
-/* Dynamic billing form (shown only for gateways needing billing_data). */
 @import url("frontend/billing-form.css");
-/* Separate payment step page (billing + Pay) for billing gateways. */
 @import url("frontend/payment-step.css");
-/* Consultation & Appointment status lookup section. */
 @import url("frontend/status-lookup.css");
 @import url("frontend/section-lawyer-profile.css");

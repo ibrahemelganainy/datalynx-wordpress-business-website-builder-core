@@ -1,0 +1,320 @@
+/**
+ * Business Builder Core - Frontend: Modern Animations & Transitions
+ * ---------------------------------------------------
+ * Comprehensive collection of modern keyframe animations and transition
+ * utilities for enhanced visual feedback and smooth interactions.
+ * All animations respect prefers-reduced-motion preference.
+ *
+ * Scoped to `.bb-template` so animations never affect WordPress admin.
+ */
+
+/* ===================================================================
+ * Keyframe Animations (Modern Visual Effects)
+ * =================================================================== */
+
+/* Fade animations */
+@keyframes bb-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bb-fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Slide animations */
+@keyframes bb-slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bb-slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bb-slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bb-slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale animations */
+@keyframes bb-scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bb-scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* Bounce animations */
+@keyframes bb-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes bb-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Spin/Rotate animations */
+@keyframes bb-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bb-spinReverse {
+  to { transform: rotate(-360deg); }
+}
+
+/* Shimmer (loading effect) */
+@keyframes bb-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Glow effect */
+@keyframes bb-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.8);
+  }
+}
+
+/* Swing animation */
+@keyframes bb-swing {
+  20% { transform: rotate(15deg); }
+  40% { transform: rotate(-10deg); }
+  60% { transform: rotate(5deg); }
+  80% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Shake animation for error states */
+@keyframes bb-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* ===================================================================
+ * Animation Utility Classes
+ * =================================================================== */
+
+/* Fade utilities */
+.bb-template .animate-fade-in {
+  animation: bb-fadeIn 0.3s ease-in-out;
+}
+
+.bb-template .animate-fade-out {
+  animation: bb-fadeOut 0.3s ease-in-out;
+}
+
+/* Slide utilities */
+.bb-template .animate-slide-in-up {
+  animation: bb-slideInUp 0.4s ease-out;
+}
+
+.bb-template .animate-slide-in-down {
+  animation: bb-slideInDown 0.4s ease-out;
+}
+
+.bb-template .animate-slide-in-left {
+  animation: bb-slideInLeft 0.4s ease-out;
+}
+
+.bb-template .animate-slide-in-right {
+  animation: bb-slideInRight 0.4s ease-out;
+}
+
+/* Scale utilities */
+.bb-template .animate-scale-in {
+  animation: bb-scaleIn 0.3s ease-out;
+}
+
+.bb-template .animate-scale-out {
+  animation: bb-scaleOut 0.3s ease-out;
+}
+
+/* Bounce utilities */
+.bb-template .animate-bounce {
+  animation: bb-bounce 1s infinite;
+}
+
+.bb-template .animate-pulse {
+  animation: bb-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Spin utilities */
+.bb-template .animate-spin {
+  animation: bb-spin 1s linear infinite;
+}
+
+.bb-template .animate-spin-reverse {
+  animation: bb-spinReverse 1s linear infinite;
+}
+
+/* Glow utilities */
+.bb-template .animate-glow {
+  animation: bb-glow 2s ease-in-out infinite;
+}
+
+/* Shake utilities (for errors) */
+.bb-template .animate-shake {
+  animation: bb-shake 0.5s ease-in-out;
+}
+
+/* Swing utilities (attention grabber) */
+.bb-template .animate-swing {
+  animation: bb-swing 1s ease-in-out;
+  transform-origin: top center;
+}
+
+/* ===================================================================
+ * Hover Lift Animations
+ * =================================================================== */
+
+.bb-template .hover-lift {
+  transition: transform var(--bb-transition-base),
+              box-shadow var(--bb-transition-base);
+}
+
+.bb-template .hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.bb-template .hover-lift-sm:hover {
+  transform: translateY(-2px);
+}
+
+.bb-template .hover-lift-lg:hover {
+  transform: translateY(-6px);
+}
+
+/* ===================================================================
+ * Interaction Effects
+ * =================================================================== */
+
+/* Button press effect */
+.bb-template .active-press {
+  transition: all 0.1s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.bb-template .active-press:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth transitions for common properties */
+.bb-template .transition-smooth {
+  transition: all var(--bb-transition-base);
+}
+
+.bb-template .transition-slow {
+  transition: all var(--bb-transition-slow);
+}
+
+.bb-template .transition-fast {
+  transition: all var(--bb-transition-fast);
+}
+
+/* ===================================================================
+ * Loading & Skeleton States
+ * =================================================================== */
+
+.bb-template .skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bb-color-gray-200) 0%,
+    var(--bb-color-gray-100) 50%,
+    var(--bb-color-gray-200) 100%
+  );
+  background-size: 200% 100%;
+  animation: bb-shimmer 2s infinite;
+}
+
+.bb-template .loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--bb-color-gray-200);
+  border-top-color: var(--bb-color-primary);
+  border-radius: 50%;
+  animation: bb-spin 0.8s linear infinite;
+}
+
+/* ===================================================================
+ * Respect User Preferences
+ * =================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-template *,
+  .bb-template *::before,
+  .bb-template *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .bb-template .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--bb-color-gray-700) 0%,
+      var(--bb-color-gray-600) 50%,
+      var(--bb-color-gray-700) 100%
+    );
+  }
+}

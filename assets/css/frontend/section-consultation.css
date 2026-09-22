@@ -23,7 +23,7 @@
 
 .bb-template .bb-section-consultation .bb-section-title {
   margin: 0 0 12px;
-  font-weight: 800;
+  font-weight: var(--bb-font-weight-bold, 800);
   letter-spacing: -0.03em;
   color: var(--bb-fe-heading-color, #0f172a);
 }
@@ -42,11 +42,11 @@
   justify-content: center;
   margin: 8px auto 0;
   padding: 14px 24px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #0f172a, #1d4ed8);
-  color: #fff;
+  border-radius: var(--bb-radius-pill, 999px);
+  background: linear-gradient(135deg, var(--bb-color-gray-900, #0f172a), var(--bb-color-primary, #1d4ed8));
+  color: var(--bb-color-white, #fff);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: var(--bb-font-weight-bold, 700);
   box-shadow: 0 15px 30px rgba(37, 99, 235, 0.25);
 }
 

@@ -119,7 +119,7 @@ class NotificationsAdmin {
         wp_enqueue_style(
             'bb-notifications',
             BB_CORE_URL . 'assets/css/admin/notifications.css',
-            array(),
+            array( 'bb-law-firm-dashboard' ),
             BB_CORE_VERSION
         );
 

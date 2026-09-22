@@ -46,24 +46,60 @@ class DashboardAdmin {
     public function register(): void {
 
         add_action( 'bb_law_firm_render_dashboard', array( $this, 'render_page' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+
+        /*
+         * Register/enqueue the shared shell stylesheet at an EARLY priority
+         * so the handle exists before the sibling LawFirm screens (whose own
+         * admin_enqueue_scripts callbacks may be registered earlier) declare
+         * it as a dependency of their stylesheet.
+         */
+        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ), 5 );
         add_action( 'admin_post_' . self::ACTION_READ_ALL, array( $this, 'handle_mark_read' ) );
     }
 
+    /**
+     * Enqueue / register the dashboard stylesheet.
+     *
+     * The same stylesheet owns the SHARED admin shell (.bb-dashboard-header,
+     * .bb-btn*) reused by the Notifications, Payment Logs and Manual Payments
+     * screens. It is therefore REGISTERED (not just enqueued) on every LawFirm
+     * admin screen so those screens can declare it as a dependency of their own
+     * stylesheet and render a correctly styled header. On the dashboard page
+     * itself it is enqueued directly.
+     *
+     * @param string $hook Current admin page hook.
+     */
     public function enqueue_assets( string $hook ): void {
 
-        $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] )) : '';
+        $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 
-        if ( self::PAGE_SLUG !== $page ) {
+        /* Which screens belong to the LawFirm console (share the shell). */
+        $lawfirm_screens = array(
+            self::PAGE_SLUG,
+            'bb-law-firm-notifications',
+            'bb-law-firm-payment-logs',
+            'bb-law-firm-manual-payments',
+            'bb-law-firm-payments',
+        );
+
+        if ( ! in_array( $page, $lawfirm_screens, true ) ) {
             return;
         }
 
-        wp_enqueue_style(
+        /*
+         * Register first (idempotent) so any sibling screen can depend on
+         * this handle; enqueue only when we are actually on the dashboard.
+         */
+        wp_register_style(
             'bb-law-firm-dashboard',
             BB_CORE_URL . 'assets/css/admin/dashboard.css',
             array(),
             BB_CORE_VERSION
         );
+
+        if ( self::PAGE_SLUG === $page ) {
+            wp_enqueue_style( 'bb-law-firm-dashboard' );
+        }
     }
 
     public function render_page(): void {
@@ -75,6 +111,7 @@ class DashboardAdmin {
         $kpis    = $this->stats->get_kpis();
         $actions = $this->stats->action_center( 6 );
         $recent  = $this->stats->recent_consultations( 6 );
+        $appts   = $this->stats->recent_appointments( 5 );
         $unread  = $this->notifications->unread_count();
 
         $charts = array(
@@ -123,6 +160,7 @@ class DashboardAdmin {
                     <?php $this->render_notifications_widget(); ?>
                     <?php $this->render_action_center( $actions ); ?>
                     <?php $this->render_activity( $recent, $unread ); ?>
+                    <?php $this->render_recent_appointments( $appts ); ?>
                 </aside>
 
             </div>
@@ -227,16 +265,36 @@ class DashboardAdmin {
             $accent = isset( $kpi['accent'] ) ? (string) $kpi['accent'] : 'primary';
             $url    = isset( $kpi['url'] ) ? (string) $kpi['url'] : '';
             $icon   = isset( $kpi['icon'] ) ? (string) $kpi['icon'] : 'dashicons-chart-bar';
+            $label  = isset( $kpi['label'] ) ? (string) $kpi['label'] : '';
+            $hint   = isset( $kpi['hint'] ) ? (string) $kpi['hint'] : '';
 
-            echo '<a class="bb-kpi-card bb-accent-' . esc_attr( $accent ) . '"';
+            /*
+             * A KPI is rendered as an <a> when it has a real destination,
+             * and as a plain <div> otherwise — never a dead link.
+             */
+            $tag = '' !== $url ? 'a' : 'div';
+
+            echo '<' . esc_attr( $tag ) . ' class="bb-kpi-card bb-accent-' . esc_attr( $accent ) . '"';
             if ( '' !== $url ) {
                 echo ' href="' . esc_url( $url ) . '"';
             }
             echo '>';
-            echo '<span class="bb-kpi-icon dashicons ' . esc_attr( $icon ) . '"></span>';
+
+            echo '<span class="bb-kpi-top">';
+            echo '<span class="bb-kpi-iconchip"><span class="dashicons ' . esc_attr( $icon ) . '" aria-hidden="true"></span></span>';
+            if ( '' !== $url ) {
+                echo '<span class="bb-kpi-go dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span>';
+            }
+            echo '</span>';
+
             echo '<span class="bb-kpi-value">' . esc_html( (string) $kpi['value'] ) . '</span>';
-            echo '<span class="bb-kpi-label">' . esc_html( (string) $kpi['label'] ) . '</span>';
-            echo '</a>';
+            echo '<span class="bb-kpi-label">' . esc_html( $label ) . '</span>';
+
+            if ( '' !== $hint ) {
+                echo '<span class="bb-kpi-hint">' . esc_html( $hint ) . '</span>';
+            }
+
+            echo '</' . esc_attr( $tag ) . '>';
         }
 
         echo '</section>';
@@ -422,6 +480,66 @@ class DashboardAdmin {
             echo '</a>';
         }
 
+        echo '</div>';
+        echo '</section>';
+    }
+
+    protected function render_recent_appointments( array $appts ): void {
+
+        $list_url = admin_url( 'edit.php?post_type=bb_appointment' );
+
+        echo '<section class="bb-card bb-activity">';
+        echo '<h2 class="bb-card-title"><span class="dashicons dashicons-calendar-alt"></span> ' . esc_html__( 'Recent Appointments', 'business-builder' ) . '</h2>';
+
+        if ( empty( $appts ) ) {
+            echo '<div class="bb-empty">';
+            echo '<span class="dashicons dashicons-calendar"></span>';
+            echo '<p>' . esc_html__( 'No appointment data is available yet.', 'business-builder' ) . '</p>';
+            echo '</div>';
+            echo '<div class="bb-activity-footer">';
+            echo '<a class="bb-btn bb-btn-ghost" href="' . esc_url( $list_url ) . '">' . esc_html__( 'View All Appointments', 'business-builder' ) . '</a>';
+            echo '</div>';
+            echo '</section>';
+            return;
+        }
+
+        echo '<ul class="bb-activity-list">';
+
+        foreach ( $appts as $row ) {
+
+            $name = '' !== (string) $row['name'] ? (string) $row['name'] : __( '(no name)', 'business-builder' );
+
+            $when = trim( (string) $row['date'] . ' ' . (string) $row['start'] );
+
+            echo '<li class="bb-activity-item">';
+
+            if ( '' !== (string) $row['url'] ) {
+                echo '<a href="' . esc_url( (string) $row['url'] ) . '">';
+            }
+
+            echo '<strong>' . esc_html( $name ) . '</strong>';
+
+            if ( '' !== $when ) {
+                echo '<span class="bb-activity-meta">' . esc_html( $when ) . '</span>';
+            }
+
+            echo '<span class="bb-badge bb-badge-status">' . esc_html( (string) $row['status'] ) . '</span>';
+
+            if ( '' !== (string) $row['reference'] ) {
+                echo '<span class="bb-activity-ref"><code>' . esc_html( (string) $row['reference'] ) . '</code></span>';
+            }
+
+            if ( '' !== (string) $row['url'] ) {
+                echo '</a>';
+            }
+
+            echo '</li>';
+        }
+
+        echo '</ul>';
+
+        echo '<div class="bb-activity-footer">';
+        echo '<a class="bb-btn bb-btn-ghost" href="' . esc_url( $list_url ) . '">' . esc_html__( 'View All Appointments', 'business-builder' ) . '</a>';
         echo '</div>';
         echo '</section>';
     }

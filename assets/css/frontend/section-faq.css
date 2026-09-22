@@ -18,7 +18,7 @@
 
 .bb-template .bb-faq-item {
   padding: 22px 24px;
-  border-radius: 16px;
+  border-radius: var(--bb-radius-xl, 16px);
   background: var(--bb-fe-card-bg, #ffffff);
   border: 1px solid var(--bb-fe-card-border, rgba(15, 23, 42, 0.08));
   box-shadow: var(--bb-fe-card-shadow, 0 12px 26px rgba(15, 23, 42, 0.05));
@@ -47,11 +47,11 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #dbeafe, #ede9fe);
-  color: #1d4ed8;
+  border-radius: var(--bb-radius-pill, 50%);
+  background: linear-gradient(135deg, var(--bb-color-primary-pale, #dbeafe), #ede9fe);
+  color: var(--bb-color-primary, #1d4ed8);
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: var(--bb-font-weight-bold, 800);
 }
 
 .bb-template .bb-faq-answer {

@@ -33,9 +33,9 @@
 .bb-template .bb-service-image {
   width: 100%;
   aspect-ratio: 16 / 10;
-  border-radius: 14px;
+  border-radius: var(--bb-radius-lg, 14px);
   overflow: hidden;
-  background: linear-gradient(135deg, #e2e8f0, #dbeafe);
+  background: linear-gradient(135deg, var(--bb-color-gray-200, #e2e8f0), var(--bb-color-primary-pale, #dbeafe));
 }
 
 .bb-template .bb-service-image img,
@@ -52,11 +52,11 @@
   justify-content: center;
   width: 54px;
   height: 54px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #dbeafe, #ede9fe);
-  color: #1d4ed8;
-  font-size: 24px;
-  font-weight: 800;
+  border-radius: var(--bb-radius-xl, 16px);
+  background: linear-gradient(135deg, var(--bb-color-primary-pale, #dbeafe), #ede9fe);
+  color: var(--bb-color-primary, #1d4ed8);
+  font-size: var(--bb-size-24, 24px);
+  font-weight: var(--bb-font-weight-bold, 800);
   overflow: hidden;
 }
 

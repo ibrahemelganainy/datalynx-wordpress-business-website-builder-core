@@ -40,13 +40,13 @@
 }
 
 .bb-template .bb-consultation-field label {
-  font-weight: 700;
+  font-weight: var(--bb-font-weight-bold, 700);
   font-size: 0.9rem;
-  color: #0f172a;
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-required {
-  color: #d63638;
+  color: var(--bb-color-error, #d63638);
 }
 
 .bb-template .bb-consultation-field input,
@@ -55,20 +55,20 @@
   width: 100%;
   box-sizing: border-box;
   padding: 12px 14px;
-  border: 1px solid rgba(15, 23, 42, 0.15);
-  border-radius: 12px;
-  background: #fff;
-  color: #1f2937;
+  border: 1px solid var(--bb-color-border-strong, rgba(15, 23, 42, 0.15));
+  border-radius: var(--bb-radius-lg, 12px);
+  background: var(--bb-color-white, #fff);
+  color: var(--bb-color-gray-800, #1f2937);
   font: inherit;
-  line-height: 1.5;
+  line-height: var(--bb-line-height-normal, 1.5);
 }
 
 .bb-template .bb-consultation-field input:focus,
 .bb-template .bb-consultation-field select:focus,
 .bb-template .bb-consultation-field textarea:focus {
   outline: none;
-  border-color: #1d4ed8;
-  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+  border-color: var(--bb-color-primary, #1d4ed8);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .bb-template .bb-consultation-field textarea {
@@ -88,21 +88,21 @@
 .bb-template .bb-consultation-notice {
   margin-bottom: 20px;
   padding: 14px 18px;
-  border-radius: 12px;
-  font-weight: 600;
+  border-radius: var(--bb-radius-lg, 12px);
+  font-weight: var(--bb-font-weight-semibold, 600);
   line-height: 1.6;
 }
 
 .bb-template .bb-consultation-success {
-  background: #edfaef;
-  border: 1px solid #00a32a;
-  color: #0a7a24;
+  background: var(--bb-color-success-light, #edfaef);
+  border: 1px solid var(--bb-color-secondary-dark, #00a32a);
+  color: var(--bb-color-secondary-dark, #0a7a24);
 }
 
 .bb-template .bb-consultation-error {
-  background: #fcf0f0;
-  border: 1px solid #b32d2e;
-  color: #8a2424;
+  background: var(--bb-color-error-light, #fcf0f0);
+  border: 1px solid var(--bb-color-error-dark, #b32d2e);
+  color: var(--bb-color-error-dark, #8a2424);
 }
 
 @media (max-width: 640px) {

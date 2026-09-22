@@ -1,108 +1,180 @@
 /**
  * Business Builder Core — Notifications & Activity centre.
- * Enterprise admin styling consistent with the dashboard. RTL-safe.
+ * Premium Edition - Enterprise admin styling consistent with the dashboard.
+ * RTL-safe, smooth micro-interactions, and modern glass-like surfaces.
  */
 
+/* -------------------------------------------------------------------
+ * Animations
+ * ------------------------------------------------------------------- */
+@keyframes bbpFadeInUp {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bbpPopIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bbpPulseAlert {
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+/* -------------------------------------------------------------------
+ * Base Container
+ * ------------------------------------------------------------------- */
 .bb-notification-center {
-  --nc-gap: 18px;
+  --nc-gap: 24px;
+  --bbp-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --bbp-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--bbp-font-family);
+  animation: bbpFadeInUp 0.5s ease-out forwards;
 }
 
 /* Header bell + live count */
 .bb-notification-center .bb-nc-bell {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 8px;
+  padding: 8px 16px;
   border-radius: 999px;
-  background: #eef2ff;
+  background: #eff6ff;
   color: #1d4ed8;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 14px;
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 2px 4px rgba(29, 78, 216, 0.05);
+  transition: all var(--bbp-transition);
+}
+
+.bb-notification-center .bb-nc-bell:hover {
+  background: #dbeafe;
+  box-shadow: 0 4px 6px rgba(29, 78, 216, 0.1);
 }
 
 .bb-notification-center .bb-nc-bell .dashicons {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .bb-notification-center .bb-nc-bell-count.is-active {
-  color: #b91c1c;
+  color: #ffffff;
+  background: #dc2626;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  animation: bbpPulseAlert 2s infinite;
 }
 
-/* Toolbar: filters + search */
+/* -------------------------------------------------------------------
+ * Toolbar: Filters + Search
+ * ------------------------------------------------------------------- */
 .bb-notification-center .bb-nc-toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
   justify-content: space-between;
-  margin: 14px 0 18px;
+  margin: 16px 0 24px;
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
 }
 
 .bb-notification-center .bb-nc-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .bb-notification-center .bb-nc-filter {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
+  gap: 8px;
+  padding: 8px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  background: #fff;
-  color: #334155;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 13.5px;
+  transition: all var(--bbp-transition);
 }
 
 .bb-notification-center .bb-nc-filter:hover {
   border-color: #1d4ed8;
   color: #1d4ed8;
+  background: #f8fafc;
 }
 
 .bb-notification-center .bb-nc-filter.is-active {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
-  color: #fff;
+  background: #1e293b;
+  border-color: #1e293b;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
 }
 
 .bb-notification-center .bb-nc-filter-count {
   display: inline-flex;
-  min-width: 18px;
-  height: 18px;
+  min-width: 20px;
+  height: 20px;
   align-items: center;
   justify-content: center;
-  padding: 0 5px;
+  padding: 0 6px;
   border-radius: 999px;
   background: #ef4444;
-  color: #fff;
-  font-size: 0.72rem;
+  color: #ffffff;
+  font-size: 11.5px;
   font-weight: 800;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+}
+
+.bb-notification-center .bb-nc-filter.is-active .bb-nc-filter-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  box-shadow: none;
 }
 
 .bb-notification-center .bb-nc-search {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
 }
 
 .bb-notification-center .bb-nc-search input[type="search"],
-.bb-notification-center .bb-nc-search select {
-  min-height: 34px;
+.bb-notification-center .bb-nc-search select,
+.bb-notification-center .bb-nc-search .bb-nc-range input[type="date"] {
+  min-height: 38px;
   border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  font-size: 14px;
+  transition: border-color var(--bbp-transition), box-shadow var(--bbp-transition);
+}
+
+.bb-notification-center .bb-nc-search input:focus,
+.bb-notification-center .bb-nc-search select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  outline: none;
 }
 
 .bb-notification-center .bb-nc-search input[type="search"] {
-  min-width: 240px;
+  min-width: 260px;
 }
 
-/* Body layout */
+/* -------------------------------------------------------------------
+ * Body Layout
+ * ------------------------------------------------------------------- */
 .bb-notification-center .bb-nc-body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
@@ -113,62 +185,96 @@
 .bb-notification-center .bb-nc-main {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .bb-notification-center .bb-nc-day {
-  margin: 14px 0 4px;
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
+  margin: 20px 0 8px;
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #64748b;
   font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-/* Notification item */
+.bb-notification-center .bb-nc-day::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+/* -------------------------------------------------------------------
+ * Notification Item Cards
+ * ------------------------------------------------------------------- */
 .bb-notification-center .bb-nc-item {
   display: flex;
-  gap: 14px;
-  padding: 16px 18px;
-  background: #fff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 14px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  gap: 16px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+  transition: all var(--bbp-transition);
+  animation: bbpFadeInUp 0.4s ease-out backwards;
 }
 
+/* Stagger List Animation */
+.bb-notification-center .bb-nc-main > .bb-nc-item:nth-child(1) { animation-delay: 0.1s; }
+.bb-notification-center .bb-nc-main > .bb-nc-item:nth-child(2) { animation-delay: 0.15s; }
+.bb-notification-center .bb-nc-main > .bb-nc-item:nth-child(3) { animation-delay: 0.2s; }
+.bb-notification-center .bb-nc-main > .bb-nc-item:nth-child(4) { animation-delay: 0.25s; }
+
+.bb-notification-center .bb-nc-item:hover {
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.06);
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+/* Unread State */
 .bb-notification-center .bb-nc-item.is-unread {
-  border-inline-start: 4px solid #1d4ed8;
-  background: #fbfcff;
+  border-inline-start: 4px solid #2563eb;
+  background: #f8fafc;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.05);
 }
 
+.bb-notification-center .bb-nc-item.is-unread:hover {
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
+}
+
+/* Manual Payment Category Override */
+.bb-notification-center .bb-nc-item.bb-nc-manual_payment {
+  border-inline-start: 4px solid #f59e0b;
+}
+
+/* Icons */
 .bb-notification-center .bb-nc-item-icon {
   flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 11px;
+  border-radius: 12px;
   background: #f1f5f9;
-  color: #334155;
-  font-size: 20px;
+  color: #475569;
+  font-size: 24px;
+  transition: transform var(--bbp-transition);
 }
 
-.bb-notification-center .bb-nc-payment .bb-nc-item-icon {
-  background: #ecfdf5;
-  color: #047857;
+.bb-notification-center .bb-nc-item:hover .bb-nc-item-icon {
+  transform: scale(1.05);
 }
 
-.bb-notification-center .bb-nc-appointment .bb-nc-item-icon {
-  background: #eff6ff;
-  color: #1d4ed8;
-}
+.bb-notification-center .bb-nc-payment .bb-nc-item-icon { background: #ecfdf5; color: #10b981; }
+.bb-notification-center .bb-nc-appointment .bb-nc-item-icon { background: #eff6ff; color: #3b82f6; }
+.bb-notification-center .bb-nc-consultation .bb-nc-item-icon { background: #fffbeb; color: #d97706; }
 
-.bb-notification-center .bb-nc-consultation .bb-nc-item-icon {
-  background: #fef3c7;
-  color: #92400e;
-}
-
+/* Item Content Layout */
 .bb-notification-center .bb-nc-item-body {
   flex: 1 1 auto;
   min-width: 0;
@@ -177,148 +283,192 @@
 .bb-notification-center .bb-nc-item-head {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .bb-notification-center .bb-nc-item-title {
-  font-size: 0.98rem;
+  font-size: 15px;
+  font-weight: 700;
   color: #0f172a;
 }
 
 .bb-notification-center .bb-nc-dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
-  background: #1d4ed8;
+  background: #2563eb;
   flex: 0 0 auto;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
 .bb-notification-center .bb-nc-item-time {
   margin-inline-start: auto;
-  font-size: 0.78rem;
-  color: #94a3b8;
+  font-size: 12.5px;
+  color: #64748b;
+  font-weight: 500;
 }
 
 .bb-notification-center .bb-nc-item-msg {
-  margin: 6px 0 0;
-  font-size: 0.88rem;
+  margin: 8px 0 0;
+  font-size: 14px;
   color: #475569;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
+/* Meta Data Tags */
 .bb-notification-center .bb-nc-item-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 10px;
+  margin-top: 12px;
+  align-items: center;
 }
 
 .bb-notification-center .bb-nc-ref {
-  font-family: ui-monospace, Menlo, Consolas, monospace;
-  font-size: 0.8rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
   background: #f1f5f9;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
-  color: #0f172a;
+  color: #334155;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
 }
 
 .bb-notification-center .bb-nc-amount {
   font-weight: 800;
-  color: #047857;
-  font-size: 0.86rem;
+  color: #059669;
+  font-size: 14px;
+  background: #d1fae5;
+  padding: 4px 10px;
+  border-radius: 6px;
 }
 
 .bb-notification-center .bb-nc-gateway {
-  font-size: 0.8rem;
+  font-size: 13px;
   color: #64748b;
   text-transform: capitalize;
+  font-weight: 600;
 }
 
+.bb-notification-center .bb-nc-missing {
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 13px;
+  background: #fef2f2;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.bb-notification-center .bb-nc-customer {
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 13.5px;
+}
+
+/* Timeline specific */
+.bb-notification-center .bb-activity-ref {
+  margin-inline-start: 10px;
+  font-weight: 600;
+}
+
+/* Actions Row */
 .bb-notification-center .bb-nc-item-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
+  gap: 10px;
+  margin-top: 16px;
 }
-
 .bb-notification-center .bb-nc-item-actions .bb-btn {
   text-decoration: none;
+  border-radius: 8px;
 }
 
-/* RTL refinements */
+/* -------------------------------------------------------------------
+ * Pagination
+ * ------------------------------------------------------------------- */
+.bb-notification-center .bb-nc-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 0 16px;
+}
+
+.bb-notification-center .bb-nc-pagination .bb-btn {
+  border-radius: 8px;
+  transition: all var(--bbp-transition);
+}
+
+.bb-notification-center .bb-nc-pagination .bb-btn.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #94a3b8;
+}
+
+.bb-notification-center .bb-nc-pageof {
+  font-weight: 700;
+  color: #475569;
+  font-size: 14px;
+  background: #ffffff;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+}
+
+/* -------------------------------------------------------------------
+ * Responsive & RTL Safety
+ * ------------------------------------------------------------------- */
 .bb-rtl.bb-notification-center .bb-nc-item.is-unread {
-  border-inline-start: 4px solid #1d4ed8;
+  border-inline-start: none;
+  border-inline-end: 4px solid #2563eb;
+}
+.bb-rtl.bb-notification-center .bb-nc-item.bb-nc-manual_payment {
+  border-inline-start: none;
+  border-inline-end: 4px solid #f59e0b;
 }
 
 .bb-rtl.bb-notification-center .bb-nc-item-time {
-  margin-inline-start: auto;
+  margin-inline-start: 0;
+  margin-inline-end: auto;
 }
 
-/* Responsive */
+.bb-rtl.bb-notification-center .bb-activity-ref {
+  margin-inline-start: 0;
+  margin-inline-end: 10px;
+}
+
 @media (max-width: 960px) {
   .bb-notification-center .bb-nc-body {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-@media (max-width: 560px) {
-  .bb-notification-center .bb-nc-search input[type="search"] {
-    min-width: 0;
-    width: 100%;
+@media (max-width: 600px) {
+  .bb-notification-center .bb-nc-toolbar {
+    flex-direction: column;
+    align-items: stretch;
   }
-}
-
-/* ------------------------------------------------------------------
- * Manual-payment group + custom date range (this phase).
- * Minimal additions only — the full visual overhaul is a separate task.
- * ------------------------------------------------------------------ */
-
-.bb-notification-center .bb-nc-filter.is-active {
-  font-weight: 800;
-}
-
-/* The Manual Payments group uses the payment colour family. */
-.bb-notification-center .bb-nc-item.bb-nc-manual_payment {
-  border-inline-start: 3px solid #d97706;
-}
-
-/* Custom date range inputs sit inline with the search controls. */
-.bb-notification-center .bb-nc-search .bb-nc-range input[type="date"] {
-  min-height: 32px;
-}
-
-/* Missing related entity: an honest, muted note (never a dead link). */
-.bb-notification-center .bb-nc-missing {
-  color: #b32d2e;
-  font-weight: 600;
-}
-
-.bb-notification-center .bb-nc-customer {
-  color: #334155;
-  font-weight: 600;
-}
-
-/* Pagination */
-.bb-notification-center .bb-nc-pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 16px 0 4px;
-}
-
-.bb-notification-center .bb-nc-pagination .bb-btn.is-disabled {
-  opacity: 0.45;
-  pointer-events: none;
-}
-
-.bb-notification-center .bb-nc-pageof {
-  font-weight: 700;
-  color: #475569;
-}
-
-/* Activity timeline: reference + actor + time on one row. */
-.bb-notification-center .bb-activity-ref {
-  margin-inline-start: 8px;
+  .bb-notification-center .bb-nc-search {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bb-notification-center .bb-nc-search input[type="search"],
+  .bb-notification-center .bb-nc-search select,
+  .bb-notification-center .bb-nc-search .bb-nc-range input[type="date"] {
+    width: 100%;
+    min-width: 0;
+  }
+  .bb-notification-center .bb-nc-item {
+    flex-direction: column;
+  }
+  .bb-notification-center .bb-nc-item-time {
+    margin-inline-start: 0;
+    width: 100%;
+    margin-top: 8px;
+  }
 }

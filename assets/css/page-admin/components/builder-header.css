@@ -1,46 +1,65 @@
 /**
- * Builder header + shell
- *
- * Button sizing/colors now come entirely from buttons.css —
- * this file only owns layout: spacing, alignment, wrapping.
+ * Business Builder Core — Builder Header + Shell
+ * Premium Edition - Layout controls for the main builder interface.
+ * Relies on global variables and external button styles for colors/sizing.
  */
 
 .bb-page-builder {
-    padding-block: var(--bb-space-2xs);
+    padding-block: var(--bb-space-sm);
     font-family: var(--bb-font-family);
     color: var(--bb-text-dark);
+    animation: bbpFadeInUp 0.4s ease-out;
 }
 
+/* Elegant Separator */
 .bb-page-builder hr {
     margin: var(--bb-space-lg) 0;
     border: none;
-    border-top: 1px solid var(--bb-border-color);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--bb-border-color) 15%, var(--bb-border-color) 85%, transparent);
 }
 
+/* ---------------------------------------------------
+ * Main Builder Header
+ * --------------------------------------------------- */
 .bb-builder-header {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: var(--bb-space-md);
+    padding: var(--bb-space-md);
+    background: var(--bb-bg-main);
+    border: 1px solid var(--bb-border-color);
+    border-radius: var(--bb-radius-lg);
+    box-shadow: var(--bb-shadow-sm);
+    margin-bottom: var(--bb-space-md);
+}
+
+.bb-builder-header-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .bb-builder-header h3 {
-    margin: 0 0 var(--bb-space-2xs);
-    font-size: 16px;
-    font-weight: 600;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--bb-text-dark);
+    letter-spacing: -0.01em;
 }
 
 .bb-builder-header .description {
     margin: 0;
     color: var(--bb-text-muted);
-    font-size: 13px;
+    font-size: 13.5px;
+    line-height: 1.5;
 }
 
-/* Right-hand cluster: Enable Builder checkbox + Live Preview
-   button. Both sit on the same baseline regardless of which
-   one is taller, and wrap onto their own row on narrow
-   screens instead of overlapping. */
+/* ---------------------------------------------------
+ * Header Actions (Toggle & Live Preview)
+ * --------------------------------------------------- */
 .bb-builder-actions {
     display: flex;
     flex-wrap: wrap;
@@ -48,79 +67,130 @@
     gap: var(--bb-space-md);
 }
 
+/* Modern Checkbox Label */
 .bb-builder-actions label {
     display: inline-flex;
     align-items: center;
-    gap: var(--bb-space-2xs);
+    gap: var(--bb-space-xs);
     height: var(--bb-control-height);
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--bb-text-dark);
+    cursor: pointer;
     white-space: nowrap;
+    padding: 0 var(--bb-space-xs);
+    border-radius: var(--bb-radius-sm);
+    transition: var(--bb-transition-fast);
+}
+
+.bb-builder-actions label:hover {
+    background: var(--bb-bg-subtle);
 }
 
 .bb-builder-actions input[type="checkbox"] {
     margin: 0;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--bb-primary-color);
 }
 
-/*
- * FIX: this button previously rendered as an empty white
- * box in the header. The height/padding it needs now comes
- * from buttons.css (.bb-live-preview-button is included in
- * the shared selector list there), so it can never collapse
- * to zero width even if its icon or label is briefly empty
- * while assets load. `gap` guarantees icon and text don't
- * overlap once both are present.
- */
 .bb-live-preview-button {
-    gap: var(--bb-space-2xs);
+    gap: var(--bb-space-xs);
+    box-shadow: var(--bb-shadow-sm);
 }
 
+/* ---------------------------------------------------
+ * Template Selector Bar
+ * --------------------------------------------------- */
 .bb-builder-template {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--bb-space-sm);
+    padding: var(--bb-space-sm) var(--bb-space-md);
+    background: var(--bb-bg-subtle);
+    border-radius: var(--bb-radius-md);
+    margin-bottom: var(--bb-space-lg);
 }
 
 .bb-builder-template label {
     font-weight: 600;
+    font-size: 14px;
+    color: var(--bb-text-dark);
     white-space: nowrap;
 }
 
 .bb-builder-template select {
-    min-width: 200px;
+    min-width: 240px;
     height: var(--bb-control-height);
     padding: 0 var(--bb-control-padding-x);
     border: 1px solid var(--bb-border-color);
     border-radius: var(--bb-control-radius);
     font-size: var(--bb-control-font-size);
+    font-family: inherit;
+    color: var(--bb-text-dark);
     background-color: var(--bb-bg-main);
+    box-shadow: var(--bb-shadow-sm);
+    transition: var(--bb-transition-fast);
+    cursor: pointer;
+    appearance: auto; /* Uses native dropdown arrow, can be customized later */
 }
 
+.bb-builder-template select:hover,
+.bb-builder-template select:focus {
+    border-color: var(--bb-primary-color);
+    box-shadow: 0 0 0 3px var(--bb-primary-soft);
+    outline: none;
+}
+
+/* ---------------------------------------------------
+ * Sections Area Header
+ * --------------------------------------------------- */
 .bb-builder-sections-header {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: var(--bb-space-sm);
     margin-bottom: var(--bb-space-md);
+    padding: 0 var(--bb-space-2xs);
 }
 
 .bb-builder-sections-header h4 {
-    margin: 0 0 var(--bb-space-2xs);
-    font-size: 14px;
-    font-weight: 600;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--bb-text-dark);
 }
 
 .bb-builder-sections-header span {
     color: var(--bb-text-muted);
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 500;
 }
 
+/* ---------------------------------------------------
+ * Empty State
+ * --------------------------------------------------- */
 .bb-builder-empty {
-    padding: var(--bb-space-xl) var(--bb-space-md);
+    padding: var(--bb-space-2xl) var(--bb-space-md);
     background-color: var(--bb-bg-subtle);
-    border: 1px dashed var(--bb-border-dashed);
-    border-radius: var(--bb-radius-md);
+    border: 2px dashed var(--bb-border-dashed);
+    border-radius: var(--bb-radius-lg);
     text-align: center;
     color: var(--bb-text-muted);
+    font-size: 15px;
+    font-weight: 500;
+    transition: var(--bb-transition-medium);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--bb-space-sm);
+}
+
+.bb-builder-empty:hover {
+    border-color: var(--bb-border-strong);
+    background-color: var(--bb-bg-muted);
 }

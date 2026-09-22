@@ -135,7 +135,7 @@ class ManualPaymentsAdmin {
         wp_enqueue_style(
             'bb-manual-payments',
             BB_CORE_URL . 'assets/css/admin/manual-payments.css',
-            array(),
+            array( 'bb-law-firm-dashboard' ),
             BB_CORE_VERSION
         );
     }

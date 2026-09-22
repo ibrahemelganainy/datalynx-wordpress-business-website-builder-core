@@ -1,0 +1,350 @@
+/**
+ * Business Builder Core - Frontend Design Tokens
+ * -------------------------------------------------------
+ * The single source of truth for the public front-end design
+ * system: color palette, typography scale, spacing, radii,
+ * shadows, transitions and responsive breakpoints.
+ *
+ * Scope: everything is declared inside `.bb-template` so the
+ * tokens are available to every builder section/template WITHOUT
+ * leaking onto the WordPress admin, the theme's other pages, or
+ * any backend screen. A `:root` mirror of the raw palette is also
+ * provided so theme-level components can reuse the exact colors.
+ *
+ * Naming:
+ *   --bb-color-*      raw palette (immutable values)
+ *   --bb-font-*       type scale / families
+ *   --bb-space-*      8px based spacing scale
+ *   --bb-radius-*     corner radii
+ *   --bb-shadow-*     elevation
+ *   --bb-transition-* motion
+ *
+ * This file contains NO rules that change layout on its own; it
+ * only declares custom properties, so it is 100% non-breaking.
+ */
+
+/* -----------------------------------------------------------------
+ * Raw palette, also exposed on :root so any front-end component
+ * (not only `.bb-template`) can reference the exact same colors.
+ * ----------------------------------------------------------------- */
+:root {
+  /* Primary (Vibrant Blue) */
+  --bb-color-primary: #2563eb;
+  --bb-color-primary-dark: #1e40af;
+  --bb-color-primary-light: #3b82f6;
+  --bb-color-primary-pale: #dbeafe;
+
+  /* Secondary (Emerald Green) */
+  --bb-color-secondary: #10b981;
+  --bb-color-secondary-dark: #059669;
+  --bb-color-secondary-light: #34d399;
+  --bb-color-secondary-pale: #d1fae5;
+
+  /* Accent (Amber) */
+  --bb-color-accent: #f59e0b;
+  --bb-color-accent-dark: #d97706;
+  --bb-color-accent-light: #fcd34d;
+  --bb-color-accent-pale: #fef3c7;
+
+  /* Neutrals (Grayscale) */
+  --bb-color-white: #ffffff;
+  --bb-color-gray-50: #f9fafb;
+  --bb-color-gray-100: #f3f4f6;
+  --bb-color-gray-200: #e5e7eb;
+  --bb-color-gray-300: #d1d5db;
+  --bb-color-gray-400: #9ca3af;
+  --bb-color-gray-500: #6b7280;
+  --bb-color-gray-600: #4b5563;
+  --bb-color-gray-700: #374151;
+  --bb-color-gray-800: #1f2937;
+  --bb-color-gray-900: #111827;
+  --bb-color-black: #000;
+
+  /* Semantic */
+  --bb-color-success: #10b981;
+  --bb-color-success-light: #d1fae5;
+  --bb-color-warning: #f59e0b;
+  --bb-color-warning-light: #fef3c7;
+  --bb-color-error: #ef4444;
+  --bb-color-error-dark: #dc2626;
+  --bb-color-error-light: #fee2e2;
+  --bb-color-info: #3b82f6;
+  --bb-color-info-light: #dbeafe;
+
+  /* Typography families */
+  --bb-font-primary:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --bb-font-mono: "Menlo", "Monaco", "Courier New", monospace;
+}
+
+/* -----------------------------------------------------------------
+ * Full token set, scoped to the builder front-end wrapper.
+ * ----------------------------------------------------------------- */
+.bb-template {
+  /* ---- Typography: families ---- */
+  --bb-font-primary:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --bb-font-mono: "Menlo", "Monaco", "Courier New", monospace;
+
+  /* ---- Typography: type scale (16px base) ---- */
+  --bb-font-size-h1: 2.5rem; /* 40px */
+  --bb-font-size-h2: 2rem; /* 32px */
+  --bb-font-size-h3: 1.75rem; /* 28px */
+  --bb-font-size-h4: 1.5rem; /* 24px */
+  --bb-font-size-h5: 1.25rem; /* 20px */
+  --bb-font-size-h6: 1.125rem; /* 18px */
+
+  --bb-font-size-body-lg: 1.125rem; /* 18px */
+  --bb-font-size-body: 1rem; /* 16px */
+  --bb-font-size-body-sm: 0.875rem; /* 14px */
+  --bb-font-size-body-xs: 0.75rem; /* 12px */
+
+  /* ---- Typography: line heights ---- */
+  --bb-line-height-tight: 1.2;
+  --bb-line-height-normal: 1.5;
+  --bb-line-height-relaxed: 1.75;
+
+  /* ---- Typography: weights ---- */
+  --bb-font-weight-light: 300;
+  --bb-font-weight-normal: 400;
+  --bb-font-weight-medium: 500;
+  --bb-font-weight-semibold: 600;
+  --bb-font-weight-bold: 700;
+
+  /* ---- Spacing scale (8px base) ---- */
+  --bb-space-xs: 0.25rem; /* 4px */
+  --bb-space-sm: 0.5rem; /* 8px */
+  --bb-space-md: 1rem; /* 16px */
+  --bb-space-lg: 1.5rem; /* 24px */
+  --bb-space-xl: 2rem; /* 32px */
+  --bb-space-2xl: 3rem; /* 48px */
+  --bb-space-3xl: 4rem; /* 64px */
+
+  /* Common raw sizes */
+  --bb-size-4: 0.25rem;
+  --bb-size-8: 0.5rem;
+  --bb-size-16: 1rem;
+  --bb-size-24: 1.5rem;
+  --bb-size-32: 2rem;
+  --bb-size-48: 3rem;
+  --bb-size-64: 4rem;
+  --bb-size-96: 6rem;
+  --bb-size-128: 8rem;
+
+  /* ---- Radii ---- */
+  --bb-radius-sm: 0.375rem;
+  --bb-radius-md: 0.5rem;
+  --bb-radius-lg: 0.75rem;
+  --bb-radius-xl: 1rem;
+  --bb-radius-card: 20px;
+  --bb-radius-pill: 9999px;
+
+  /* ---- Elevation (multi-layered modern shadows) ---- */
+  --bb-shadow-none: none;
+  --bb-shadow-xs: 0 1px 1px rgba(0, 0, 0, 0.04);
+  --bb-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --bb-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --bb-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --bb-shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.15);
+  --bb-shadow-2xl: 0 20px 60px rgba(0, 0, 0, 0.2);
+  --bb-shadow-card: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --bb-shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.12);
+  --bb-shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  
+  /* ---- Backdrop & Glass Effects (for modern UI) ---- */
+  --bb-backdrop-blur: blur(12px);
+  --bb-backdrop-saturate: saturate(180%);
+
+  /* ---- Motion (smooth transitions for modern UX) ---- */
+  --bb-transition-fast: 0.15s ease-in-out;
+  --bb-transition-base: 0.2s ease-in-out;
+  --bb-transition-slow: 0.3s ease-in-out;
+  --bb-transition-slower: 0.5s ease-in-out;
+  
+  /* ---- Cubic Bezier Easing Functions for Advanced Animations ---- */
+  --bb-easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --bb-easing-in-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --bb-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ---- Semantic role tokens (used by sections) ---- */
+  --bb-color-heading: var(--bb-color-gray-900);
+  --bb-color-text: var(--bb-color-gray-700);
+  --bb-color-text-muted: var(--bb-color-gray-500);
+  --bb-color-link: var(--bb-color-primary);
+  --bb-color-link-hover: var(--bb-color-primary-dark);
+  --bb-color-surface: var(--bb-color-white);
+  --bb-color-surface-muted: var(--bb-color-gray-50);
+  --bb-color-border: var(--bb-color-gray-200);
+  --bb-color-border-strong: var(--bb-color-gray-300);
+
+  /* ---- Breakpoints (reference values; media queries are literal) ---- */
+  --bb-breakpoint-sm: 640px;
+  --bb-breakpoint-md: 768px;
+  --bb-breakpoint-lg: 1024px;
+  --bb-breakpoint-xl: 1280px;
+  --bb-breakpoint-2xl: 1536px;
+
+  /* Short aliases kept for backwards compatibility with earlier files. */
+  --bb-bp-sm: var(--bb-breakpoint-sm);
+  --bb-bp-md: var(--bb-breakpoint-md);
+  --bb-bp-lg: var(--bb-breakpoint-lg);
+  --bb-bp-xl: var(--bb-breakpoint-xl);
+  --bb-bp-2xl: var(--bb-breakpoint-2xl);
+
+  /* ---- Smooth transitions (prompt section 7) ----
+   * Applied to the builder wrapper only - never to the WordPress
+   * admin or the theme's other pages. */
+  transition-property: color, background-color, border-color, box-shadow,
+    opacity;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+/* -----------------------------------------------------------------
+ * Base typography + smoothing for the builder front-end wrapper.
+ * Scoped to `.bb-template` so the theme and admin are untouched.
+ * ----------------------------------------------------------------- */
+.bb-template {
+  font-family: var(--bb-font-primary);
+  font-size: var(--bb-font-size-body);
+  line-height: var(--bb-line-height-normal);
+  color: var(--bb-color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.bb-template h1,
+.bb-template .bb-h1 {
+  font-size: var(--bb-font-size-h1);
+  font-weight: var(--bb-font-weight-bold);
+  line-height: var(--bb-line-height-tight);
+  color: var(--bb-color-heading);
+  letter-spacing: -0.02em;
+}
+
+.bb-template h2,
+.bb-template .bb-h2 {
+  font-size: var(--bb-font-size-h2);
+  font-weight: var(--bb-font-weight-bold);
+  line-height: var(--bb-line-height-tight);
+  color: var(--bb-color-heading);
+  letter-spacing: -0.01em;
+}
+
+.bb-template h3,
+.bb-template .bb-h3 {
+  font-size: var(--bb-font-size-h3);
+  font-weight: var(--bb-font-weight-semibold);
+  line-height: var(--bb-line-height-tight);
+  color: var(--bb-color-gray-800);
+}
+
+.bb-template h4,
+.bb-template h5,
+.bb-template h6 {
+  font-weight: var(--bb-font-weight-semibold);
+  color: var(--bb-color-gray-800);
+}
+
+.bb-template a {
+  color: var(--bb-color-link);
+  text-decoration: none;
+  transition: color var(--bb-transition-base);
+}
+
+.bb-template a:hover {
+    color: var(--bb-color-link-hover);
+    text-decoration: underline;
+}
+
+.bb-template p {
+    margin-bottom: var(--bb-space-md);
+}
+
+.bb-template small,
+.bb-template .bb-text-sm {
+    font-size: var(--bb-font-size-body-sm);
+    color: var(--bb-color-gray-600);
+}
+
+/* -----------------------------------------------------------------
+ * Accessibility (prompt section 8), scoped to the builder wrapper so
+ * keyboard focus rings are visible without touching the admin/theme.
+ * ----------------------------------------------------------------- */
+.bb-template :focus-visible {
+    outline: 2px solid var(--bb-color-primary);
+    outline-offset: 2px;
+}
+
+.bb-template button:focus-visible,
+.bb-template a:focus-visible,
+.bb-template input:focus-visible,
+.bb-template select:focus-visible,
+.bb-template textarea:focus-visible {
+    outline: 2px solid var(--bb-color-primary);
+    outline-offset: 2px;
+}
+
+/* Skip-to-content link (visible on keyboard focus only). */
+.bb-template .bb-skip-to-main {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    z-index: 100;
+    padding: var(--bb-space-md);
+    background: var(--bb-color-primary);
+    color: var(--bb-color-white);
+    text-decoration: none;
+}
+
+.bb-template .bb-skip-to-main:focus {
+    top: 0;
+}
+
+/* -----------------------------------------------------------------
+ * Reduced motion (prompt section 7) - scoped, never global.
+ * ----------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .bb-template *,
+    .bb-template *::before,
+    .bb-template *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* -----------------------------------------------------------------
+ * Dark mode (prompt section 8).
+ *
+ * Re-maps the NEUTRAL tokens so every component built on them adapts
+ * automatically, then adjusts the wrapper surface. Scoped to
+ * `.bb-template` so it never recolors the WordPress admin or the rest
+ * of the theme's pages.
+ * ----------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+    .bb-template {
+        --bb-color-surface: #1e293b;
+        --bb-color-surface-muted: #0f172a;
+        --bb-color-heading: #f8fafc;
+        --bb-color-text: #e2e8f0;
+        --bb-color-text-muted: #94a3b8;
+        --bb-color-border: #334155;
+        --bb-color-border-strong: #475569;
+
+        color: var(--bb-color-text);
+        background-color: var(--bb-color-surface-muted);
+    }
+
+    .bb-template .bb-card,
+    .bb-template .bb-lawyer-card,
+    .bb-template .bb-service-card,
+    .bb-template .bb-practice-area-card,
+    .bb-template .bb-testimonial-card,
+    .bb-template .bb-faq-item,
+    .bb-template .bb-lawyer-profile-fact {
+        background-color: var(--bb-color-surface);
+        border-color: var(--bb-color-border);
+    }
+}

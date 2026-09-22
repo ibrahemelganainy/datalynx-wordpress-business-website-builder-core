@@ -6,26 +6,42 @@
  * Loaded first so per-section files can rely on it.
  */
 
+/*
+ * Legacy section tokens, now bridged to the front-end design system
+ * (design-tokens.css). Every existing section keeps referencing the
+ * SAME `--bb-fe-*` names, but they now resolve to the new palette /
+ * spacing / shadows, so each section inherits the refreshed look with
+ * zero markup or per-section changes.
+ *
+ * Each value keeps a literal fallback equal to its previous value, so
+ * the sections still render correctly even if design-tokens.css is
+ * ever not loaded (e.g. an integration that enqueues this file alone).
+ */
 .bb-template {
-    --bb-fe-section-gap: 24px;
-    --bb-fe-card-bg: #ffffff;
-    --bb-fe-card-border: rgba(15, 23, 42, 0.08);
-    --bb-fe-card-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
-    --bb-fe-radius-card: 20px;
-    --bb-fe-heading-color: #0f172a;
-    --bb-fe-text-color: #475569;
-    --bb-fe-star-color: #f5b301;
-    --bb-fe-accent: linear-gradient(135deg, #60a5fa, #a78bfa);
+    --bb-fe-section-gap: var(--bb-space-lg, 24px);
+    --bb-fe-card-bg: var(--bb-color-surface, #ffffff);
+    --bb-fe-card-border: var(--bb-color-border, rgba(15, 23, 42, 0.08));
+    --bb-fe-card-shadow: var(--bb-shadow-card, 0 18px 34px rgba(15, 23, 42, 0.06));
+    --bb-fe-radius-card: var(--bb-radius-card, 20px);
+    --bb-fe-heading-color: var(--bb-color-heading, #0f172a);
+    --bb-fe-text-color: var(--bb-color-text, #475569);
+    --bb-fe-star-color: var(--bb-color-accent, #f5b301);
+    --bb-fe-accent: linear-gradient(135deg, var(--bb-color-primary-light, #60a5fa), #a78bfa);
 }
 
 /* Empty states shown when a section has no published items. */
 .bb-template .bb-empty-state {
-    padding: 22px 24px;
-    border: 1px dashed rgba(107, 114, 128, 0.45);
-    border-radius: 14px;
-    background: #f9fafb;
-    color: #4b5563;
+    padding: 40px 32px;
+    border: 2px dashed var(--bb-color-border-strong, rgba(107, 114, 128, 0.3));
+    border-radius: var(--bb-radius-lg, 14px);
+    background: linear-gradient(135deg, var(--bb-color-surface-muted, #f9fafb) 0%, var(--bb-color-gray-50, #f3f4f6) 100%);
+    color: var(--bb-color-text, #4b5563);
     text-align: center;
+    transition: all var(--bb-transition-base);
+}
+
+.bb-template .bb-empty-state:hover {
+    border-color: var(--bb-color-border, rgba(15, 23, 42, 0.12));
 }
 
 /* Shared responsive grid helper used by several sections. */
@@ -50,5 +66,35 @@
 @media (max-width: 640px) {
     .bb-template [class*="bb-grid-columns-"] {
         grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Staggered animations for grid items */
+.bb-template [class*="bb-grid-columns-"] > * {
+    animation: bb-slideInUp 0.4s ease-out both;
+}
+
+.bb-template [class*="bb-grid-columns-"] > :nth-child(1) { animation-delay: 0.05s; }
+.bb-template [class*="bb-grid-columns-"] > :nth-child(2) { animation-delay: 0.1s; }
+.bb-template [class*="bb-grid-columns-"] > :nth-child(3) { animation-delay: 0.15s; }
+.bb-template [class*="bb-grid-columns-"] > :nth-child(4) { animation-delay: 0.2s; }
+.bb-template [class*="bb-grid-columns-"] > :nth-child(5) { animation-delay: 0.25s; }
+.bb-template [class*="bb-grid-columns-"] > :nth-child(6) { animation-delay: 0.3s; }
+.bb-template [class*="bb-grid-columns-"] > :nth-child(n+7) { animation-delay: 0.35s; }
+
+@keyframes bb-slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bb-template [class*="bb-grid-columns-"] > * {
+        animation: none;
     }
 }

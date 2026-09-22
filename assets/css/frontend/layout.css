@@ -1,0 +1,223 @@
+/**
+ * Business Builder Core - Frontend Layout Components
+ * -------------------------------------------------------
+ * Implements the remaining prompt components that are not tied to a
+ * single dynamic section:
+ *   - Navigation / header stylings  (prompt 5 - Navigation/Header)
+ *   - Footer                        (prompt 5 - Footer)
+ *   - Mobile menu toggle            (prompt 5 - Navigation/Header)
+ *
+ * Everything is scoped to `.bb-template` (the builder's front-end
+ * wrapper) so it can style a site header/footer when it renders inside
+ * the builder output, WITHOUT affecting the WordPress admin or the
+ * active theme's own header/footer elsewhere on the site.
+ *
+ * The templates call get_header()/get_footer(), so these rules are
+ * additive: they only take effect on markup carrying the bb- classes
+ * or a header/footer that lives inside `.bb-template`.
+ */
+
+/* =================================================================
+ * Navigation / Header
+ * ================================================================= */
+.bb-template .bb-header,
+.bb-template .bb-navbar,
+.bb-template header.bb-site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--bb-color-white);
+  border-bottom: 1px solid var(--bb-color-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.bb-template .bb-header-wrapper {
+  max-width: var(--bb-breakpoint-xl);
+  margin: 0 auto;
+  padding: var(--bb-space-md) var(--bb-space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bb-template .bb-logo {
+  font-size: var(--bb-font-size-h4);
+  font-weight: var(--bb-font-weight-bold);
+  color: var(--bb-color-primary);
+  text-decoration: none;
+}
+
+.bb-template .bb-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: var(--bb-space-lg);
+}
+
+.bb-template .bb-nav a {
+  font-weight: var(--bb-font-weight-medium);
+  color: var(--bb-color-gray-700);
+  transition: color var(--bb-transition-base);
+}
+
+.bb-template .bb-nav a:hover,
+.bb-template .bb-nav a.is-active {
+  color: var(--bb-color-primary);
+  text-decoration: none;
+}
+
+.bb-template .bb-nav a::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background-color: var(--bb-color-primary);
+  width: 0;
+  transition: width var(--bb-transition-base);
+  margin-top: 4px;
+}
+
+.bb-template .bb-nav a:hover::after,
+.bb-template .bb-nav a.is-active::after {
+  width: 100%;
+}
+
+/* Mobile menu toggle. */
+.bb-template .bb-menu-toggle {
+  display: none;
+  padding: var(--bb-space-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .bb-template .bb-menu-toggle {
+    display: block;
+  }
+
+  .bb-template .bb-nav ul {
+    display: none;
+    flex-direction: column;
+    gap: var(--bb-space-md);
+  }
+
+  .bb-template .bb-nav.is-open ul {
+    display: flex;
+  }
+}
+
+/* =================================================================
+ * Footer
+ * ================================================================= */
+.bb-template .bb-footer,
+.bb-template footer.bb-site-footer {
+  padding: var(--bb-space-3xl) var(--bb-space-lg);
+  margin-top: var(--bb-space-3xl);
+  background-color: var(--bb-color-gray-900);
+  color: var(--bb-color-gray-300);
+}
+
+.bb-template .bb-footer-wrapper {
+  max-width: var(--bb-breakpoint-xl);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--bb-space-2xl);
+}
+
+.bb-template .bb-footer h4 {
+  margin-bottom: var(--bb-space-md);
+  font-size: var(--bb-font-size-h6);
+  color: var(--bb-color-white);
+}
+
+.bb-template .bb-footer a {
+  color: var(--bb-color-gray-300);
+  transition: color var(--bb-transition-base);
+}
+
+.bb-template .bb-footer a {
+  position: relative;
+}
+
+.bb-template .bb-footer a:hover {
+  color: var(--bb-color-primary);
+}
+
+.bb-template .bb-footer a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--bb-color-primary);
+  transition: width var(--bb-transition-base);
+}
+
+.bb-template .bb-footer a:hover::after {
+  width: 100%;
+}
+
+.bb-template .bb-footer-bottom {
+  margin-top: var(--bb-space-2xl);
+  padding-top: var(--bb-space-2xl);
+  border-top: 1px solid var(--bb-color-gray-700);
+  text-align: center;
+  font-size: var(--bb-font-size-body-sm);
+  color: var(--bb-color-gray-500);
+}
+
+/* =================================================================
+ * Alerts (prompt 5 - Alerts) - bb- scoped equivalents of .alert*
+ * ================================================================= */
+.bb-template .bb-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--bb-space-md);
+  padding: var(--bb-space-lg);
+  margin-bottom: var(--bb-space-lg);
+  border-radius: var(--bb-radius-sm);
+  border-left: 4px solid var(--bb-color-gray-400);
+}
+
+.bb-template .bb-alert-success {
+  background-color: var(--bb-color-success-light);
+  border-left-color: var(--bb-color-success);
+  color: var(--bb-color-secondary-dark);
+}
+
+.bb-template .bb-alert-warning {
+  background-color: var(--bb-color-warning-light);
+  border-left-color: var(--bb-color-warning);
+  color: var(--bb-color-accent-dark);
+}
+
+.bb-template .bb-alert-error {
+  background-color: var(--bb-color-error-light);
+  border-left-color: var(--bb-color-error);
+  color: var(--bb-color-error-dark);
+}
+
+.bb-template .bb-alert-info {
+  background-color: var(--bb-color-info-light);
+  border-left-color: var(--bb-color-info);
+  color: var(--bb-color-primary-dark);
+}
+
+.bb-template .bb-alert-title {
+  margin-bottom: var(--bb-space-xs);
+  font-weight: var(--bb-font-weight-semibold);
+}
+
+.bb-template .bb-alert-close {
+  margin-left: auto;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}

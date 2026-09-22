@@ -12,10 +12,10 @@
 
 .bb-template .bb-lookup-form {
   padding: 28px 26px;
-  border-radius: 18px;
-  background: #fff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
+  border-radius: var(--bb-radius-card, 18px);
+  background: var(--bb-color-surface, #fff);
+  border: 1px solid var(--bb-color-border, rgba(15, 23, 42, 0.08));
+  box-shadow: var(--bb-shadow-card, 0 18px 34px rgba(15, 23, 42, 0.06));
 }
 
 .bb-template .bb-lookup-types {
@@ -27,17 +27,17 @@
 .bb-template .bb-lookup-legend {
   padding: 0;
   margin: 0 0 10px;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #0f172a;
+  font-weight: var(--bb-font-weight-bold, 700);
+  font-size: var(--bb-font-size-body, 1rem);
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-lookup-tabs {
   display: inline-flex;
   gap: 6px;
   padding: 5px;
-  border-radius: 12px;
-  background: #f1f5f9;
+  border-radius: var(--bb-radius-lg, 12px);
+  background: var(--bb-color-gray-100, #f1f5f9);
 }
 
 .bb-template .bb-lookup-tab {
@@ -58,23 +58,23 @@
   display: inline-block;
   padding: 9px 18px;
   border-radius: 9px;
-  font-weight: 600;
+  font-weight: var(--bb-font-weight-semibold, 600);
   font-size: 0.9rem;
-  color: #475569;
+  color: var(--bb-color-text, #475569);
   transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    box-shadow 0.15s ease;
+    background var(--bb-transition-fast, 0.15s ease),
+    color var(--bb-transition-fast, 0.15s ease),
+    box-shadow var(--bb-transition-fast, 0.15s ease);
 }
 
 .bb-template .bb-lookup-tab input:checked + span {
-  background: #fff;
-  color: #1d4ed8;
+  background: var(--bb-color-white, #fff);
+  color: var(--bb-color-primary, #1d4ed8);
   box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
 }
 
 .bb-template .bb-lookup-tab input:focus-visible + span {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid var(--bb-color-primary, #1d4ed8);
   outline-offset: 2px;
 }
 
@@ -91,39 +91,39 @@
 }
 
 .bb-template .bb-lookup-field label {
-  font-weight: 600;
+  font-weight: var(--bb-font-weight-semibold, 600);
   font-size: 0.88rem;
-  color: #0f172a;
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-lookup-field input {
   width: 100%;
   box-sizing: border-box;
   padding: 12px 14px;
-  border: 1.5px solid rgba(15, 23, 42, 0.16);
-  border-radius: 11px;
+  border: 1.5px solid var(--bb-color-border-strong, rgba(15, 23, 42, 0.16));
+  border-radius: var(--bb-radius-sm, 11px);
   font: inherit;
-  background: #fff;
+  background: var(--bb-color-white, #fff);
   transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+    border-color var(--bb-transition-fast, 0.15s ease),
+    box-shadow var(--bb-transition-fast, 0.15s ease);
 }
 
 .bb-template .bb-lookup-field input:focus {
   outline: none;
-  border-color: #1d4ed8;
-  box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.14);
+  border-color: var(--bb-color-primary, #1d4ed8);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
 }
 
 .bb-template .bb-lookup-field input[aria-invalid="true"] {
-  border-color: #d63638;
-  background: #fff9f9;
+  border-color: var(--bb-color-error, #d63638);
+  background: var(--bb-color-error-light, #fff9f9);
 }
 
 .bb-template .bb-lookup-error {
   display: none;
   font-size: 0.78rem;
-  color: #b32d2e;
+  color: var(--bb-color-error-dark, #b32d2e);
 }
 
 .bb-template .bb-lookup-error.is-visible {
@@ -179,9 +179,9 @@
 }
 
 .bb-template .bb-lookup-notice.is-error {
-  background: #fcf0f0;
-  border: 1px solid #b32d2e;
-  color: #8a2424;
+  background: var(--bb-color-error-light, #fcf0f0);
+  border: 1px solid var(--bb-color-error-dark, #b32d2e);
+  color: var(--bb-color-error-dark, #8a2424);
 }
 
 /* ---- Result card ---- */
@@ -189,10 +189,10 @@
 .bb-template .bb-lookup-result {
   margin-top: 22px;
   padding: 26px 26px 20px;
-  border-radius: 18px;
-  background: #fff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
+  border-radius: var(--bb-radius-card, 18px);
+  background: var(--bb-color-surface, #fff);
+  border: 1px solid var(--bb-color-border, rgba(15, 23, 42, 0.08));
+  box-shadow: var(--bb-shadow-card, 0 18px 34px rgba(15, 23, 42, 0.06));
   animation: bb-lookup-in 0.3s ease both;
 }
 
@@ -219,28 +219,28 @@
 .bb-template .bb-lookup-result-title {
   margin: 0;
   font-size: 1.15rem;
-  font-weight: 800;
-  color: #0f172a;
+  font-weight: var(--bb-font-weight-bold, 800);
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-lookup-badge {
   display: inline-block;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: var(--bb-radius-pill, 999px);
   font-size: 0.8rem;
-  font-weight: 700;
-  background: #eef2ff;
-  color: #1d4ed8;
+  font-weight: var(--bb-font-weight-bold, 700);
+  background: var(--bb-color-primary-pale, #eef2ff);
+  color: var(--bb-color-primary, #1d4ed8);
 }
 
 .bb-template .bb-lookup-badge.is-paid {
-  background: #e6f6ec;
-  color: #1a7f37;
+  background: var(--bb-color-success-light, #e6f6ec);
+  color: var(--bb-color-secondary-dark, #1a7f37);
 }
 
 .bb-template .bb-lookup-badge.is-pending {
-  background: #fff4e5;
-  color: #a15c00;
+  background: var(--bb-color-warning-light, #fff4e5);
+  color: var(--bb-color-accent-dark, #a15c00);
 }
 
 /* ---- Result head status + result action bar ---- */
@@ -269,20 +269,20 @@
 
 .bb-template .bb-lookup-result-close-text {
   padding: 10px 16px;
-  border: 1px solid rgba(15, 23, 42, 0.16);
-  border-radius: 10px;
-  background: #fff;
-  color: #334155;
+  border: 1px solid var(--bb-color-border-strong, rgba(15, 23, 42, 0.16));
+  border-radius: var(--bb-radius-sm, 10px);
+  background: var(--bb-color-white, #fff);
+  color: var(--bb-color-gray-700, #334155);
   font: inherit;
-  font-weight: 600;
+  font-weight: var(--bb-font-weight-semibold, 600);
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition: background var(--bb-transition-fast, 0.15s ease), color var(--bb-transition-fast, 0.15s ease), border-color var(--bb-transition-fast, 0.15s ease);
 }
 
 .bb-template .bb-lookup-result-close-text:hover,
 .bb-template .bb-lookup-result-close-text:focus {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--bb-color-gray-100, #f1f5f9);
+  color: var(--bb-color-heading, #0f172a);
   border-color: rgba(15, 23, 42, 0.28);
 }
 
@@ -296,20 +296,20 @@
 .bb-template .bb-lookup-table td {
   padding: 9px 6px;
   text-align: start;
-  border-bottom: 1px solid #eef1f5;
+  border-bottom: 1px solid var(--bb-color-border, #eef1f5);
   vertical-align: top;
   font-size: 0.9rem;
 }
 
 .bb-template .bb-lookup-table th {
   width: 45%;
-  color: #64748b;
-  font-weight: 600;
+  color: var(--bb-color-text-muted, #64748b);
+  font-weight: var(--bb-font-weight-semibold, 600);
 }
 
 .bb-template .bb-lookup-table td {
-  color: #0f172a;
-  font-weight: 600;
+  color: var(--bb-color-heading, #0f172a);
+  font-weight: var(--bb-font-weight-semibold, 600);
   word-break: break-word;
 }
 
@@ -329,7 +329,7 @@
   align-items: center;
   gap: 7px;
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: var(--bb-color-gray-400, #94a3b8);
 }
 
 .bb-template .bb-lookup-step-dot {
@@ -338,20 +338,20 @@
   justify-content: center;
   width: 18px;
   height: 18px;
-  border-radius: 999px;
-  border: 2px solid #cbd5e1;
+  border-radius: var(--bb-radius-pill, 999px);
+  border: 2px solid var(--bb-color-gray-300, #cbd5e1);
   font-size: 0.7rem;
-  color: #fff;
+  color: var(--bb-color-white, #fff);
 }
 
 .bb-template .bb-lookup-step.is-done {
-  color: #1a7f37;
-  font-weight: 700;
+  color: var(--bb-color-secondary-dark, #1a7f37);
+  font-weight: var(--bb-font-weight-bold, 700);
 }
 
 .bb-template .bb-lookup-step.is-done .bb-lookup-step-dot {
-  background: #1a7f37;
-  border-color: #1a7f37;
+  background: var(--bb-color-secondary-dark, #1a7f37);
+  border-color: var(--bb-color-secondary-dark, #1a7f37);
 }
 
 .bb-template .bb-lookup-receipt {
@@ -362,8 +362,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 700;
-  color: #1d4ed8;
+  font-weight: var(--bb-font-weight-bold, 700);
+  color: var(--bb-color-primary, #1d4ed8);
   text-decoration: none;
 }
 

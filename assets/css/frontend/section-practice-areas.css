@@ -37,7 +37,7 @@
 
 .bb-template .bb-practice-area-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 24px 44px rgba(15, 23, 42, 0.12);
+  box-shadow: var(--bb-shadow-card-hover, 0 24px 44px rgba(15, 23, 42, 0.12));
 }
 
 /* Heading forced bold — protected from theme h3 resets. */

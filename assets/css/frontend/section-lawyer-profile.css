@@ -33,7 +33,7 @@
 .bb-template .bb-lawyer-profile-media {
   overflow: hidden;
   border-radius: 26px;
-  background: linear-gradient(135deg, #e2e8f0, #dbeafe);
+  background: linear-gradient(135deg, var(--bb-color-gray-200, #e2e8f0), var(--bb-color-primary-pale, #dbeafe));
 }
 
 .bb-template .bb-lawyer-profile-image {
@@ -50,10 +50,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #e2e8f0, #dbeafe);
-  font-size: 4rem;
-  font-weight: 800;
-  color: #1f2937;
+  background: linear-gradient(135deg, var(--bb-color-gray-200, #e2e8f0), var(--bb-color-primary-pale, #dbeafe));
+  font-size: var(--bb-size-64, 4rem);
+  font-weight: var(--bb-font-weight-bold, 800);
+  color: var(--bb-color-gray-800, #1f2937);
 }
 
 /* Name — forced so a theme's h1 reset cannot flatten it. */
@@ -68,9 +68,9 @@
 
 .bb-template .bb-lawyer-profile-role {
   margin: 0 0 16px;
-  color: #1d4ed8;
+  color: var(--bb-color-primary, #1d4ed8);
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: var(--bb-font-weight-bold, 700);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -86,16 +86,16 @@
   display: inline-flex;
   align-items: center;
   padding: 7px 14px;
-  border-radius: 999px;
-  background: rgba(59, 130, 246, 0.08);
-  color: #1d4ed8;
+  border-radius: var(--bb-radius-pill, 999px);
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--bb-color-primary, #1d4ed8);
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: var(--bb-font-weight-bold, 700);
   text-decoration: none;
 }
 
 .bb-template .bb-lawyer-profile-area:hover {
-  background: rgba(59, 130, 246, 0.16);
+  background: rgba(37, 99, 235, 0.16);
 }
 
 .bb-template .bb-lawyer-profile-lede {
@@ -150,7 +150,7 @@
   font-size: 0.78rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #64748b;
+  color: var(--bb-color-text-muted, #64748b);
 }
 
 .bb-template .bb-lawyer-profile-fact span {
@@ -167,13 +167,13 @@
 }
 
 .bb-template .bb-lawyer-profile-socials a {
-  color: #334155;
-  font-weight: 600;
+  color: var(--bb-color-gray-700, #334155);
+  font-weight: var(--bb-font-weight-semibold, 600);
   text-decoration: none;
 }
 
 .bb-template .bb-lawyer-profile-socials a:hover {
-  color: #1d4ed8;
+  color: var(--bb-color-primary, #1d4ed8);
   text-decoration: underline;
 }
 

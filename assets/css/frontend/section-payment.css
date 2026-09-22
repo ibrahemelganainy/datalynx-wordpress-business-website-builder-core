@@ -22,9 +22,9 @@
 .bb-template .bb-payment-legend {
   padding: 0;
   margin: 0 0 12px;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #0f172a;
+  font-weight: var(--bb-font-weight-bold, 700);
+  font-size: var(--bb-font-size-body, 1rem);
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-payment-grid {
@@ -37,17 +37,17 @@
   position: relative;
   display: block;
   cursor: pointer;
-  border-radius: 14px;
-  border: 1.5px solid rgba(15, 23, 42, 0.14);
-  background: #fff;
+  border-radius: var(--bb-radius-lg, 14px);
+  border: 1.5px solid var(--bb-color-border-strong, rgba(15, 23, 42, 0.14));
+  background: var(--bb-color-white, #fff);
   transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease;
+    border-color var(--bb-transition-fast, 0.15s ease),
+    box-shadow var(--bb-transition-fast, 0.15s ease),
+    background var(--bb-transition-fast, 0.15s ease);
 }
 
 .bb-template .bb-payment-option:hover {
-  border-color: rgba(29, 78, 216, 0.45);
+  border-color: rgba(37, 99, 235, 0.45);
   box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
 }
 
@@ -69,9 +69,9 @@
 
 /* Selected state */
 .bb-template .bb-payment-option:has(.bb-payment-radio:checked) {
-  border-color: #1d4ed8;
-  background: rgba(29, 78, 216, 0.04);
-  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+  border-color: var(--bb-color-primary, #1d4ed8);
+  background: rgba(37, 99, 235, 0.04);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .bb-template .bb-payment-check {
@@ -91,9 +91,9 @@
 .bb-template
   .bb-payment-option:has(.bb-payment-radio:checked)
   .bb-payment-check {
-  border-color: #1d4ed8;
-  background: #1d4ed8;
-  box-shadow: inset 0 0 0 3px #fff;
+  border-color: var(--bb-color-primary, #1d4ed8);
+  background: var(--bb-color-primary, #1d4ed8);
+  box-shadow: inset 0 0 0 3px var(--bb-color-white, #fff);
 }
 
 /* Keyboard focus ring (accessible) */
@@ -103,8 +103,8 @@
 }
 
 .bb-template .bb-payment-option:focus-within {
-  border-color: #1d4ed8;
-  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
+  border-color: var(--bb-color-primary, #1d4ed8);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .bb-template .bb-payment-logo {
@@ -114,8 +114,8 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  border-radius: 10px;
-  background: #f8fafc;
+  border-radius: var(--bb-radius-sm, 10px);
+  background: var(--bb-color-gray-50, #f8fafc);
   border: 1px solid rgba(15, 23, 42, 0.06);
   overflow: hidden;
 }
@@ -136,15 +136,15 @@
 }
 
 .bb-template .bb-payment-option-name {
-  font-weight: 700;
+  font-weight: var(--bb-font-weight-bold, 700);
   font-size: 0.95rem;
-  color: #0f172a;
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-payment-option-desc {
   font-size: 0.82rem;
   line-height: 1.4;
-  color: #64748b;
+  color: var(--bb-color-text-muted, #64748b);
 }
 
 .bb-template .bb-payment-secure {
@@ -153,7 +153,7 @@
   gap: 8px;
   margin: 14px 0 0;
   font-size: 0.82rem;
-  color: #475569;
+  color: var(--bb-color-text, #475569);
 }
 
 .bb-template .bb-payment-secure-icon {
@@ -163,11 +163,11 @@
 .bb-template .bb-payment-unconfigured {
   margin-top: 14px;
   padding: 14px 16px;
-  border-radius: 12px;
-  background: #fff7ed;
-  border: 1px solid #f0a82f;
-  color: #8a5a00;
-  font-weight: 600;
+  border-radius: var(--bb-radius-lg, 12px);
+  background: var(--bb-color-warning-light, #fff7ed);
+  border: 1px solid var(--bb-color-accent, #f0a82f);
+  color: var(--bb-color-accent-dark, #8a5a00);
+  font-weight: var(--bb-font-weight-semibold, 600);
   line-height: 1.6;
 }
 
@@ -199,9 +199,9 @@
 .bb-template .bb-manual-instructions {
   margin: 14px 0 0;
   padding: 16px 18px;
-  border-radius: 14px;
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  background: #f8fafc;
+  border-radius: var(--bb-radius-lg, 14px);
+  border: 1px solid var(--bb-color-border, rgba(15, 23, 42, 0.1));
+  background: var(--bb-color-gray-50, #f8fafc);
 }
 
 .bb-template .bb-manual-head {
@@ -219,15 +219,15 @@
 .bb-template .bb-manual-title {
   margin: 0 0 2px;
   font-size: 0.98rem;
-  font-weight: 800;
-  color: #0f172a;
+  font-weight: var(--bb-font-weight-bold, 800);
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-manual-note {
   margin: 0;
   font-size: 0.84rem;
-  line-height: 1.5;
-  color: #64748b;
+  line-height: var(--bb-line-height-normal, 1.5);
+  color: var(--bb-color-text-muted, #64748b);
 }
 
 .bb-template .bb-manual-rows {
@@ -244,16 +244,16 @@
   gap: 14px;
   flex-wrap: wrap;
   padding: 9px 12px;
-  border-radius: 10px;
-  background: #fff;
+  border-radius: var(--bb-radius-sm, 10px);
+  background: var(--bb-color-white, #fff);
   border: 1px solid rgba(15, 23, 42, 0.06);
 }
 
 .bb-template .bb-manual-row-label {
   margin: 0;
   font-size: 0.82rem;
-  font-weight: 700;
-  color: #475569;
+  font-weight: var(--bb-font-weight-bold, 700);
+  color: var(--bb-color-text, #475569);
 }
 
 .bb-template .bb-manual-row-value {
@@ -264,35 +264,35 @@
 }
 
 .bb-template .bb-manual-value {
-  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-family: var(--bb-font-mono, ui-monospace, Menlo, Consolas, monospace);
   font-size: 0.9rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-weight: var(--bb-font-weight-bold, 700);
+  color: var(--bb-color-heading, #0f172a);
   word-break: break-all;
 }
 
 .bb-template .bb-manual-copy {
   flex: 0 0 auto;
   padding: 3px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(29, 78, 216, 0.3);
-  background: rgba(29, 78, 216, 0.06);
-  color: #1d4ed8;
-  font-size: 0.75rem;
-  font-weight: 700;
+  border-radius: var(--bb-radius-pill, 999px);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  background: rgba(37, 99, 235, 0.06);
+  color: var(--bb-color-primary, #1d4ed8);
+  font-size: var(--bb-font-size-body-xs, 0.75rem);
+  font-weight: var(--bb-font-weight-bold, 700);
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background var(--bb-transition-fast, 0.15s ease);
 }
 
 .bb-template .bb-manual-copy:hover {
-  background: rgba(29, 78, 216, 0.12);
+  background: rgba(37, 99, 235, 0.12);
 }
 
 .bb-template .bb-manual-help {
   margin: 12px 0 0;
   font-size: 0.84rem;
   line-height: 1.6;
-  color: #475569;
+  color: var(--bb-color-text, #475569);
 }
 
 .bb-template .bb-manual-help p {
@@ -314,42 +314,42 @@
 
 .bb-template .bb-manual-field label {
   font-size: 0.86rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-weight: var(--bb-font-weight-bold, 700);
+  color: var(--bb-color-heading, #0f172a);
 }
 
 .bb-template .bb-manual-input,
 .bb-template .bb-manual-file {
   width: 100%;
   padding: 11px 13px;
-  border: 1.5px solid rgba(15, 23, 42, 0.16);
-  border-radius: 11px;
+  border: 1.5px solid var(--bb-color-border-strong, rgba(15, 23, 42, 0.16));
+  border-radius: var(--bb-radius-sm, 11px);
   font: inherit;
-  background: #fff;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background: var(--bb-color-white, #fff);
+  transition: border-color var(--bb-transition-fast, 0.15s ease), box-shadow var(--bb-transition-fast, 0.15s ease);
 }
 
 .bb-template .bb-manual-input:focus,
 .bb-template .bb-manual-file:focus {
   outline: none;
-  border-color: #1d4ed8;
-  box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.14);
+  border-color: var(--bb-color-primary, #1d4ed8);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
 }
 
 .bb-template .bb-manual-input[aria-invalid="true"] {
-  border-color: #d63638;
-  background: #fff9f9;
+  border-color: var(--bb-color-error, #d63638);
+  background: var(--bb-color-error-light, #fff9f9);
 }
 
 .bb-template .bb-manual-error {
   font-size: 0.78rem;
-  color: #b32d2e;
+  color: var(--bb-color-error-dark, #b32d2e);
   min-height: 1em;
 }
 
 .bb-template .bb-manual-hint {
   font-size: 0.76rem;
-  color: #64748b;
+  color: var(--bb-color-text-muted, #64748b);
 }
 
 .bb-template .bb-manual-verified {
@@ -358,8 +358,8 @@
   gap: 8px;
   margin: 14px 0 0;
   font-size: 0.8rem;
-  font-weight: 600;
-  color: #8a5a00;
+  font-weight: var(--bb-font-weight-semibold, 600);
+  color: var(--bb-color-accent-dark, #8a5a00);
 }
 
 .bb-template .bb-manual-verified-icon {

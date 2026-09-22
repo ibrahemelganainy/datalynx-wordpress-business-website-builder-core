@@ -1,7 +1,24 @@
 /**
- * Live preview modal
+ * Live Preview Modal
+ * Premium Edition - Browser-like window shell, glassmorphism overlay, and smooth entry animations.
  */
 
+/* ---------------------------------------------------
+ * Entry Animations
+ * --------------------------------------------------- */
+@keyframes bbpFadeInOverlay {
+    from { opacity: 0; backdrop-filter: blur(0px); }
+    to { opacity: 1; backdrop-filter: blur(6px); }
+}
+
+@keyframes bbpPopInModal {
+    0% { opacity: 0; transform: scale(0.96) translateY(15px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ---------------------------------------------------
+ * Modal Container & Overlay
+ * --------------------------------------------------- */
 .bb-live-preview-modal {
     position: fixed;
     inset: 0;
@@ -9,65 +26,87 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--bb-space-lg);
+    padding: var(--bb-space-xl);
     font-family: var(--bb-font-family);
+    /* Prevent scrolling on the body behind it (optional but good practice if applied via JS) */
 }
 
 .bb-live-preview-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(15, 23, 42, 0.65);
+    background: rgba(15, 23, 42, 0.5); /* Slightly lighter dark since we have blur */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    animation: bbpFadeInOverlay 0.3s ease-out forwards;
 }
 
+/* ---------------------------------------------------
+ * Panel (Browser Window Shell)
+ * --------------------------------------------------- */
 .bb-live-preview-panel {
     position: relative;
-    width: min(1200px, 94vw);
-    height: min(88vh, 860px);
+    width: min(1280px, 95vw); /* Slightly wider for modern screens */
+    height: min(90vh, 900px);
     min-height: 0;
     background: var(--bb-bg-main);
-    border-radius: var(--bb-radius-lg);
+    border-radius: var(--bb-radius-xl);
     overflow: hidden;
-    box-shadow: var(--bb-shadow-modal);
+    /* Deep, layered shadow for floating effect + subtle inner border */
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     display: flex;
     flex-direction: column;
     z-index: 1;
+    animation: bbpPopInModal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ---------------------------------------------------
+ * Header / Title Bar
+ * --------------------------------------------------- */
 .bb-live-preview-header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--bb-space-sm);
-    padding: var(--bb-space-sm) var(--bb-space-md);
+    gap: var(--bb-space-md);
+    padding: 12px var(--bb-space-md);
     background: var(--bb-bg-subtle);
     border-bottom: 1px solid var(--bb-border-color);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+}
+
+/* The macOS-style traffic light buttons */
+.bb-live-preview-header::before {
+    content: "";
+    display: inline-block;
+    width: 52px;
+    height: 12px;
+    flex-shrink: 0;
+    /* High quality refined colors matching modern OS */
+    background-image: 
+        radial-gradient(circle, #ed6a5e 6px, transparent 6px),
+        radial-gradient(circle, #f4bf4f 6px, transparent 6px),
+        radial-gradient(circle, #61c554 6px, transparent 6px);
+    background-repeat: no-repeat;
+    background-position: 0 50%, 20px 50%, 40px 50%;
+    background-size: 12px 12px;
 }
 
 .bb-live-preview-header h3 {
     margin: 0;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
-    color: var(--bb-text-dark);
+    color: var(--bb-text-muted);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-align: center;
+    flex-grow: 1; /* Pushes the close button to the far right, keeping title centered */
+    letter-spacing: 0.02em;
 }
 
-.bb-live-preview-header::before {
-    content: "";
-    display: inline-block;
-    width: 34px;
-    height: 10px;
-    flex-shrink: 0;
-    background-image:
-        radial-gradient(circle, #ef4444 4px, transparent 4px),
-        radial-gradient(circle, #f59e0b 4px, transparent 4px),
-        radial-gradient(circle, #22c55e 4px, transparent 4px);
-    background-repeat: no-repeat;
-    background-position: 0 50%, 14px 50%, 28px 50%;
-}
-
+/* ---------------------------------------------------
+ * Frame Content
+ * --------------------------------------------------- */
 .bb-live-preview-panel iframe {
     flex: 1 1 auto;
     min-height: 0;
@@ -76,5 +115,6 @@
     height: 100%;
     display: block;
     border: 0;
-    background: #fff;
+    /* Subtle skeleton background color before iframe content paints */
+    background: var(--bb-bg-muted); 
 }

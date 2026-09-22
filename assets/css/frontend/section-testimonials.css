@@ -55,7 +55,7 @@
   border-radius: 50%;
   overflow: hidden;
   flex: none;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
+  box-shadow: var(--bb-shadow-md, 0 8px 18px rgba(15, 23, 42, 0.12));
 }
 
 .bb-template .bb-testimonial-image img,
@@ -121,9 +121,9 @@
 /* Client title / role. */
 .bb-template .bb-testimonial-card > p {
   margin: 0;
-  color: #64748b;
+  color: var(--bb-color-text-muted, #64748b);
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: var(--bb-font-weight-semibold, 600);
   letter-spacing: 0.02em;
 }
 

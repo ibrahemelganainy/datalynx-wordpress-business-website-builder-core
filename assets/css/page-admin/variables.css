@@ -1,87 +1,103 @@
 :root {
-
     /* ---------------------------------------------------
-     * Surfaces
+     * Surfaces (Modern Slate & Gray scale)
      * --------------------------------------------------- */
     --bb-bg-main: #ffffff;
-    --bb-bg-subtle: #f6f7f7;
-    --bb-bg-muted: #f0f0f1;
-    --bb-bg-hover: #f0f6fc;
-    --bb-bg-dark: #0f172a;
+    --bb-bg-subtle: #f8fafc; /* Softer, cooler gray for subtle backgrounds */
+    --bb-bg-muted: #f1f5f9;  /* Better contrast for muted elements */
+    --bb-bg-hover: #f1f5f9;
+    --bb-bg-dark: #0f172a;   /* Deep slate for premium dark accents */
 
     /* ---------------------------------------------------
      * Borders
      * --------------------------------------------------- */
-    --bb-border-color: #dcdcde;
-    --bb-border-dashed: #c3c4c7;
-    --bb-border-strong: #a7aaad;
+    --bb-border-color: #e2e8f0;
+    --bb-border-dashed: #cbd5e1;
+    --bb-border-strong: #94a3b8;
 
     /* ---------------------------------------------------
      * Text
      * --------------------------------------------------- */
-    --bb-text-muted: #646970;
-    --bb-text-dark: #1d2327;
+    --bb-text-muted: #64748b; /* Professional slate gray */
+    --bb-text-dark: #0f172a;  /* High readability dark slate */
     --bb-text-light: #ffffff;
 
     /* ---------------------------------------------------
-     * Brand / status colors
+     * Brand / Status Colors
      * --------------------------------------------------- */
-    --bb-primary-color: #2271b1;
-    --bb-primary-hover: #135e96;
-    --bb-primary-soft: #f0f6fc;
+    /* Primary: Modern vibrant blue (matches notification center) */
+    --bb-primary-color: #2563eb;
+    --bb-primary-hover: #1d4ed8;
+    --bb-primary-soft: #eff6ff;
+    --bb-primary-border: #bfdbfe;
 
-    --bb-danger-color: #b32d2e;
-    --bb-danger-hover: #8a2424;
-    --bb-danger-soft: #fcf0f0;
+    /* Danger: Sharp, accessible red */
+    --bb-danger-color: #dc2626;
+    --bb-danger-hover: #b91c1c;
+    --bb-danger-soft: #fef2f2;
+    --bb-danger-border: #fecaca;
 
-    --bb-success-color: #00a32a;
-    --bb-success-soft: #edfaef;
+    /* Success: Trustworthy emerald green */
+    --bb-success-color: #10b981;
+    --bb-success-hover: #059669;
+    --bb-success-soft: #ecfdf5;
+    --bb-success-border: #a7f3d0;
+
+    /* Warning: Warm amber (added for completeness in dashboard states) */
+    --bb-warning-color: #f59e0b;
+    --bb-warning-hover: #d97706;
+    --bb-warning-soft: #fffbeb;
+    --bb-warning-border: #fde68a;
 
     /* ---------------------------------------------------
-     * Radius scale
+     * Radius Scale (Slightly rounder for a modern feel)
      * --------------------------------------------------- */
-    --bb-radius-sm: 4px;
-    --bb-radius-md: 6px;
+    --bb-radius-sm: 6px;
+    --bb-radius-md: 8px;
     --bb-radius-lg: 12px;
-    --bb-radius-xl: 20px;
+    --bb-radius-xl: 16px;
     --bb-radius-pill: 999px;
 
     /* ---------------------------------------------------
-     * Shadows
+     * Shadows (Multi-layered for realistic depth)
      * --------------------------------------------------- */
-    --bb-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-    --bb-shadow-md: 0 4px 14px rgba(15, 23, 42, 0.08);
-    --bb-shadow-lg: 0 18px 34px rgba(15, 23, 42, 0.10);
-    --bb-shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.25);
+    --bb-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --bb-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+    --bb-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+    --bb-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+    --bb-shadow-modal: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
 
     /* ---------------------------------------------------
-     * Motion
+     * Motion (Smooth cubic-bezier curves)
      * --------------------------------------------------- */
-    --bb-transition-fast: all 0.15s ease-in-out;
-    --bb-transition-medium: all 0.25s ease-in-out;
+    --bb-transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --bb-transition-medium: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --bb-transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
     /* ---------------------------------------------------
-     * Layout / stacking
+     * Layout / Stacking
      * --------------------------------------------------- */
     --bb-z-index-modal: 100000;
     --bb-z-index-modal-nested: 100010;
 
     /* ---------------------------------------------------
-     * Control sizing — every button/select/input in the
-     * builder shares this scale so heights line up
-     * regardless of which component file renders it.
+     * Control Sizing (Buttons, Selects, Inputs)
      * --------------------------------------------------- */
-    --bb-control-height: 36px;
-    --bb-control-height-sm: 30px;
-    --bb-control-height-lg: 42px;
+    --bb-control-height: 38px;      /* Slightly taller for better touch targets */
+    --bb-control-height-sm: 32px;
+    --bb-control-height-lg: 44px;
+    
     --bb-control-padding-x: 16px;
-    --bb-control-padding-x-sm: 10px;
-    --bb-control-font-size: 13px;
-    --bb-control-font-weight: 500;
-    --bb-control-radius: var(--bb-radius-sm);
+    --bb-control-padding-x-sm: 12px;
+    --bb-control-padding-x-lg: 20px;
+    
+    --bb-control-font-size: 14px;   /* Enhanced legibility */
+    --bb-control-font-size-sm: 13px;
+    --bb-control-font-weight: 600;  /* Crisper typography in controls */
+    --bb-control-radius: var(--bb-radius-md);
 
     /* ---------------------------------------------------
-     * Spacing scale
+     * Spacing Scale (Strict 4pt Grid)
      * --------------------------------------------------- */
     --bb-space-2xs: 4px;
     --bb-space-xs: 8px;
@@ -94,6 +110,6 @@
     /* ---------------------------------------------------
      * Typography
      * --------------------------------------------------- */
-    --bb-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, Helvetica, Arial, sans-serif;
+    --bb-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --bb-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 }

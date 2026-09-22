@@ -1,27 +1,44 @@
-/* Frontend template shell + shared section blocks */
+/**
+ * Frontend Template Shell + Shared Section Blocks
+ * Premium Edition - Floating glassmorphism headers, fluid typography, and distinct thematic skins.
+ */
+
+/* ---------------------------------------------------
+ * Base Template Shell
+ * --------------------------------------------------- */
 .bb-template {
     display: block;
     width: 100%;
-    color: #111827;
-    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--bb-text-dark, #0f172a);
+    font-family: var(--bb-font-family, "Inter", "Segoe UI", Arial, sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
+/* Modern Theme Background */
 .bb-template-modern {
-    background:
-        radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 28%),
+    background: 
+        radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(147, 197, 253, 0.05) 0%, transparent 40%),
         linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 }
 
+/* Luxury Theme Background */
 .bb-template-luxury {
-    background:
-        radial-gradient(circle at top right, rgba(180, 134, 66, 0.14), transparent 34%),
-        linear-gradient(180deg, #f7f2ea 0%, #fffdfb 100%);
+    background: 
+        radial-gradient(circle at 100% 0%, rgba(184, 134, 60, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 0% 100%, rgba(212, 175, 55, 0.04) 0%, transparent 40%),
+        linear-gradient(180deg, #fcfbf9 0%, #f7f3ea 100%);
 }
 
+/* ---------------------------------------------------
+ * Section Containers
+ * --------------------------------------------------- */
 .bb-section {
     position: relative;
-    padding: 56px 0;
-    border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+    padding: clamp(3rem, 6vw, 6rem) 0;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.03);
+    
     /*
      * FIX (screenshots showing cropped decorative shapes at
      * the bottom of a section): without a defined bound,
@@ -38,11 +55,11 @@
 }
 
 .bb-template-modern .bb-section {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(248, 250, 252, 0.92));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(248, 250, 252, 0.8));
 }
 
 .bb-template-luxury .bb-section {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(247, 242, 234, 0.58));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(247, 242, 234, 0.4));
 }
 
 .bb-section-header,
@@ -52,73 +69,96 @@
 }
 
 .bb-section-inner {
-    max-width: 1220px;
+    max-width: var(--bb-container-width, 1280px);
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 clamp(1.25rem, 4vw, 2.5rem);
 }
 
 .bb-template-modern .bb-section-inner {
     position: relative;
 }
 
+/* Subtle separator lines */
 .bb-template-modern .bb-section-inner::before,
 .bb-template-luxury .bb-section-inner::before {
     content: "";
     position: absolute;
-    inset: -14px 0 auto 0;
+    inset: -20px 0 auto 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.45), transparent);
+    background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.25), transparent);
 }
 
+/* ---------------------------------------------------
+ * Section Typography
+ * --------------------------------------------------- */
 .bb-template-modern .bb-section h2,
 .bb-template-luxury .bb-section h2 {
-    margin: 0 0 18px;
+    margin: 0 0 var(--bb-space-md, 20px);
+    font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 1.08;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
 }
 
 .bb-template-modern .bb-section h2 {
     color: #0f172a;
+    background: linear-gradient(90deg, #0f172a, #334155);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .bb-template-luxury .bb-section h2 {
-    color: #1f2937;
-    font-family: Georgia, "Times New Roman", serif;
+    color: #1a1a1a;
+    font-family: var(--bb-font-serif, "Playfair Display", Georgia, "Times New Roman", serif);
+    font-weight: 700;
 }
 
 .bb-template-modern .bb-section p,
 .bb-template-luxury .bb-section p {
     color: #475569;
-    line-height: 1.8;
+    line-height: 1.75;
+    font-size: 1.125rem;
 }
 
+/* Luxury decorative underline */
 .bb-template-luxury .bb-section .bb-section-inner > h2::after {
     content: "";
     display: block;
-    width: 92px;
+    width: 80px;
     height: 3px;
-    margin-top: 12px;
+    margin-top: 16px;
     border-radius: 999px;
-    background: linear-gradient(90deg, #b8843c, #dcc29c);
+    background: linear-gradient(90deg, #d4af37, #f3e5ab, #d4af37);
+    background-size: 200% auto;
+    animation: bbpLuxuryShine 3s linear infinite;
 }
 
+@keyframes bbpLuxuryShine {
+    to { background-position: 200% center; }
+}
+
+/* ---------------------------------------------------
+ * Header & Footer Bars (Floating Glassmorphism)
+ * --------------------------------------------------- */
 .bb-header-bar,
 .bb-footer-bar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 18px;
-    padding: 18px 24px;
-    border-radius: 18px;
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+    gap: var(--bb-space-md, 20px);
+    padding: 16px 28px;
+    border-radius: var(--bb-radius-2xl, 24px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
     overflow: hidden;
+    margin: var(--bb-space-md, 20px) 0; /* Add margin for floating effect */
 }
 
+/* Edge accent line for Enterprise/Footer */
 .bb-header-enterprise,
 .bb-footer-bar {
     position: relative;
@@ -129,21 +169,32 @@
     content: "";
     position: absolute;
     inset: 0 auto 0 0;
-    width: 4px;
-    background: linear-gradient(180deg, #111827, #374151);
+    width: 5px;
+    background: linear-gradient(180deg, var(--bb-primary-color, #2563eb), #60a5fa);
 }
 
 .bb-template-luxury .bb-header-bar,
 .bb-template-luxury .bb-footer-bar {
-    background: rgba(255, 255, 255, 0.85);
-    border-color: rgba(138, 92, 24, 0.12);
+    background: rgba(255, 255, 255, 0.75);
+    border-color: rgba(184, 134, 60, 0.15);
+    box-shadow: 0 10px 40px rgba(138, 92, 24, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
+.bb-template-luxury .bb-header-enterprise::before,
+.bb-template-luxury .bb-footer-bar::before {
+    background: linear-gradient(180deg, #b8863c, #e8cba5);
+}
+
+/* ---------------------------------------------------
+ * Header Elements
+ * --------------------------------------------------- */
 .bb-header-brand,
 .bb-footer-brand h3 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #0f172a;
+    margin: 0;
 }
 
 .bb-header-nav {
@@ -151,80 +202,162 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: var(--bb-space-md, 24px);
 }
 
 .bb-header-nav a,
-.bb-header-cta,
 .bb-footer-meta span,
 .bb-footer-socials a {
-    color: #374151;
+    color: #475569;
     text-decoration: none;
     font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--bb-transition-fast, 0.2s);
+    position: relative;
+}
+
+.bb-header-nav a:hover,
+.bb-footer-socials a:hover {
+    color: var(--bb-primary-color, #2563eb);
+}
+
+.bb-template-luxury .bb-header-nav a:hover,
+.bb-template-luxury .bb-footer-socials a:hover {
+    color: #b8863c;
+}
+
+/* Hover underline effect */
+.bb-header-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: currentColor;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.bb-header-nav a:hover::after {
+    width: 100%;
 }
 
 .bb-header-actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: var(--bb-space-md, 20px);
 }
 
 .bb-header-contact-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 14px;
     font-size: 0.85rem;
 }
 
 .bb-header-contact-links a {
-    color: #374151;
+    color: #64748b;
     text-decoration: none;
     font-weight: 600;
+    transition: color 0.2s;
 }
 
+.bb-header-contact-links a:hover {
+    color: #0f172a;
+}
+
+/* ---------------------------------------------------
+ * Header CTA Button
+ * --------------------------------------------------- */
 .bb-header-cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #1f2937, #111827);
-    color: #fff !important;
-    padding: 11px 18px;
-    border-radius: 999px;
-    box-shadow: 0 10px 23px rgba(17, 24, 39, 0.18);
+    background: linear-gradient(135deg, #0f172a, #334155);
+    color: #ffffff !important;
+    padding: 12px 24px;
+    border-radius: var(--bb-radius-pill, 9999px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
     white-space: nowrap;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.bb-header-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(15, 23, 42, 0.3);
+    background: linear-gradient(135deg, #000000, #1e293b);
+}
+
+.bb-template-luxury .bb-header-cta {
+    background: linear-gradient(135deg, #b8863c, #8a5c18);
+    box-shadow: 0 8px 20px rgba(184, 134, 60, 0.25);
+}
+
+.bb-template-luxury .bb-header-cta:hover {
+    background: linear-gradient(135deg, #d4af37, #9c6f1c);
+    box-shadow: 0 12px 25px rgba(184, 134, 60, 0.35);
+}
+
+/* ---------------------------------------------------
+ * Footer Specifics
+ * --------------------------------------------------- */
 .bb-footer-bar {
     flex-wrap: wrap;
     align-items: flex-start;
+    padding: 32px 28px; /* Slightly larger padding for footer */
 }
 
 .bb-footer-brand,
 .bb-footer-meta,
 .bb-footer-copyright {
-    flex: 1 1 180px;
+    flex: 1 1 220px;
 }
 
 .bb-footer-brand p {
-    margin: 8px 0 0;
-    color: #4b5563;
-    line-height: 1.7;
+    margin: 12px 0 0;
+    color: #64748b;
+    line-height: 1.6;
+    font-size: 0.9rem;
+    max-width: 300px;
 }
 
 .bb-footer-meta {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
 
 .bb-footer-socials {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 16px;
 }
 
 .bb-footer-copyright {
     text-align: right;
-    color: #4b5563;
-    font-weight: 600;
+    color: #64748b;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .bb-footer-copyright {
+        text-align: left;
+    }
+    
+    .bb-header-bar, .bb-footer-bar {
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .bb-header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
 }

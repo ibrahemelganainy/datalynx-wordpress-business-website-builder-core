@@ -1,30 +1,78 @@
 /**
- * Payment management center styles.
+ * Payment management center styles - Premium Edition.
  *
  * Professional gateway-card interface for the Law Firm Payment Settings
- * screen. Direction-neutral; .bb-rtl flips the few mirrored bits.
+ * screen. Upgraded with modern aesthetics, soft shadows, and smooth
+ * micro-interactions. Direction-neutral; .bb-rtl flips the mirrored bits.
  *
  * @package BusinessBuilderCore
  */
 
+/* -------------------------------------------------------------------
+ * Animations (Keyframes)
+ * ------------------------------------------------------------------- */
+@keyframes bbpFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bbpFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bbpPulseShadow {
+  0% { box-shadow: 0 0 0 0 rgba(0, 163, 42, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(0, 163, 42, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 163, 42, 0); }
+}
+
+@keyframes bbpShine {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* -------------------------------------------------------------------
+ * Variables & Base
+ * ------------------------------------------------------------------- */
 .bb-payments {
-  --bbp-bg: #f6f7f9;
+  --bbp-bg: #f8fafc;
   --bbp-surface: #ffffff;
-  --bbp-border: #e2e4e7;
-  --bbp-text: #1d2327;
-  --bbp-muted: #646970;
-  --bbp-primary: #2271b1;
-  --bbp-primary-soft: #f0f6fc;
-  --bbp-success: #00a32a;
-  --bbp-success-soft: #edfaef;
-  --bbp-danger: #b32d2e;
-  --bbp-warning: #b26a00;
-  --bbp-warning-soft: #fef8e7;
-  --bbp-radius: 12px;
-  --bbp-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 20px rgba(15, 23, 42, 0.05);
+  --bbp-border: rgba(226, 232, 240, 0.8);
+  --bbp-border-strong: #cbd5e1;
+  --bbp-text: #0f172a;
+  --bbp-muted: #64748b;
+  
+  --bbp-primary: #2563eb;
+  --bbp-primary-dark: #1d4ed8;
+  --bbp-primary-soft: #eff6ff;
+  
+  --bbp-success: #10b981;
+  --bbp-success-soft: #ecfdf5;
+  --bbp-danger: #ef4444;
+  --bbp-warning: #f59e0b;
+  --bbp-warning-soft: #fffbeb;
+  
+  --bbp-radius: 16px;
+  --bbp-radius-sm: 10px;
+  
+  --bbp-shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.02);
+  --bbp-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --bbp-shadow-hover: 0 12px 20px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  
+  --bbp-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --bbp-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
   max-width: 1600px;
   padding-bottom: 48px;
+  font-family: var(--bbp-font-family);
+  animation: bbpFadeIn 0.5s ease-out forwards;
 }
 
 /* Header */
@@ -33,25 +81,73 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 22px 24px;
-  margin: 12px 0 24px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e2a44 100%);
+  gap: 24px;
+  padding: 32px;
+  margin: 12px 0 32px;
+  background: linear-gradient(135deg, #090e17 0%, #1e293b 100%);
   color: #fff;
   border-radius: var(--bbp-radius);
-  box-shadow: var(--bbp-shadow);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
+  position: relative;
+  overflow: hidden;
+  animation: bbpFadeInUp 0.6s ease-out forwards;
+}
+
+/* Subtle Animated Shine on Header */
+.bb-payments-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline-start: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  transform: skewX(-20deg);
+  animation: bbpShine 6s infinite linear;
+  pointer-events: none;
+}
+
+.bb-payments-header-copy {
+  max-width: 70ch;
+  position: relative;
+  z-index: 2;
 }
 
 .bb-payments-header h1 {
   margin: 0;
   color: #fff;
-  font-size: 24px;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .bb-payments-header p {
-  margin: 6px 0 0;
-  color: rgba(255, 255, 255, 0.72);
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.bb-payments-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
   font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 2;
+}
+
+.bb-payments-header-badge .dashicons {
+  color: #4ade80;
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
 }
 
 /* Generic card */
@@ -60,116 +156,174 @@
   border: 1px solid var(--bbp-border);
   border-radius: var(--bbp-radius);
   box-shadow: var(--bbp-shadow);
-  padding: 20px 22px;
-  margin-bottom: 22px;
+  padding: 28px;
+  margin-bottom: 28px;
+  transition: box-shadow var(--bbp-transition);
+  opacity: 0;
+  animation: bbpFadeInUp 0.6s ease-out forwards;
+  animation-delay: 0.1s;
+}
+
+.bb-pc-card:hover {
+  box-shadow: var(--bbp-shadow-hover);
 }
 
 .bb-pc-card h2 {
-  margin: 0 0 16px;
-  font-size: 15px;
-  font-weight: 600;
+  margin: 0 0 20px;
+  font-size: 16px;
+  font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  color: var(--bbp-text);
 }
 
 .bb-pc-card h2 .dashicons {
   color: var(--bbp-primary);
+  background: var(--bbp-primary-soft);
+  padding: 6px;
+  border-radius: 8px;
+  width: auto;
+  height: auto;
+}
+
+.bb-pc-section-hint {
+  margin: -8px 0 24px;
+  font-size: 13.5px;
+  color: var(--bbp-muted);
 }
 
 /* Currency row */
 .bb-pc-currency-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 28px;
   align-items: flex-end;
+  padding: 16px;
+  background: var(--bbp-bg);
+  border-radius: var(--bbp-radius-sm);
+  border: 1px solid var(--bbp-border);
 }
 
 .bb-pc-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  min-width: 240px;
+  gap: 8px;
+  min-width: 260px;
 }
 
 .bb-pc-field label {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 13.5px;
+  color: var(--bbp-text);
 }
 
 .bb-pc-field .description {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--bbp-muted);
   margin: 0;
 }
 
 .bb-pc-currency-preview {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--bbp-primary);
-  padding: 8px 12px;
-  background: var(--bbp-primary-soft);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bbp-primary-dark);
+  padding: 10px 16px;
+  background: #fff;
+  border: 1px solid var(--bbp-primary);
   border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
 }
 
 /* Gateway grid */
 .bb-gateway-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 24px;
 }
 
 .bb-gateway-card {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 18px;
+  gap: 16px;
+  padding: 22px;
   background: var(--bbp-surface);
   border: 1px solid var(--bbp-border);
   border-radius: var(--bbp-radius);
   box-shadow: var(--bbp-shadow);
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+  transition: all var(--bbp-transition);
+  position: relative;
+  opacity: 0;
+  animation: bbpFadeInUp 0.6s ease-out forwards;
+}
+
+/* Staggered Gateway Animation */
+.bb-gateway-grid > *:nth-child(1) { animation-delay: 0.1s; }
+.bb-gateway-grid > *:nth-child(2) { animation-delay: 0.2s; }
+.bb-gateway-grid > *:nth-child(3) { animation-delay: 0.3s; }
+.bb-gateway-grid > *:nth-child(4) { animation-delay: 0.4s; }
+
+.bb-gateway-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--bbp-shadow-hover);
+  border-color: var(--bbp-border-strong);
 }
 
 .bb-gateway-card.is-enabled {
   border-color: var(--bbp-success);
 }
 
+.bb-gateway-card.is-enabled.is-configured {
+  box-shadow: 0 0 0 1px var(--bbp-success), var(--bbp-shadow);
+}
+.bb-gateway-card.is-enabled.is-configured:hover {
+  box-shadow: 0 0 0 1px var(--bbp-success), var(--bbp-shadow-hover);
+}
+
+.bb-gateway-card.is-enabled.is-unconfigured {
+  box-shadow: 0 0 0 1px var(--bbp-warning), var(--bbp-shadow);
+}
+
 .bb-gateway-card.is-disabled {
-  opacity: 0.92;
+  opacity: 0.85;
+  background: var(--bbp-bg);
 }
 
 .bb-gateway-head {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
 .bb-gateway-logo {
-  width: 48px;
-  height: 48px;
-  flex: 0 0 48px;
+  width: 56px;
+  height: 56px;
+  flex: 0 0 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background: var(--bbp-bg);
+  border-radius: 12px;
+  background: #fff;
   border: 1px solid var(--bbp-border);
+  box-shadow: var(--bbp-shadow-sm);
   overflow: hidden;
+  transition: transform var(--bbp-transition);
+}
+
+.bb-gateway-card:hover .bb-gateway-logo {
+  transform: scale(1.05);
 }
 
 .bb-gateway-logo img {
-  max-width: 34px;
-  max-height: 34px;
+  max-width: 38px;
+  max-height: 38px;
   display: block;
 }
 
 .bb-gateway-logo .dashicons {
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
   color: var(--bbp-primary);
 }
 
@@ -180,16 +334,19 @@
 
 .bb-gateway-name strong {
   display: block;
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--bbp-text);
 }
 
 .bb-gateway-name span {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--bbp-muted);
 }
 
 .bb-gateway-desc {
-  font-size: 12.5px;
+  font-size: 13.5px;
+  line-height: 1.5;
   color: var(--bbp-muted);
   margin: 0;
 }
@@ -198,40 +355,31 @@
 .bb-gateway-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .bb-gtag {
-  display: inline-block;
-  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
-.bb-gtag-success {
-  background: var(--bbp-success-soft);
-  color: var(--bbp-success);
-}
-.bb-gtag-warning {
-  background: var(--bbp-warning-soft);
-  color: var(--bbp-warning);
-}
-.bb-gtag-muted {
-  background: var(--bbp-bg);
-  color: var(--bbp-muted);
-}
-.bb-gtag-danger {
-  background: #fcf0f0;
-  color: var(--bbp-danger);
-}
+.bb-gtag-success { background: var(--bbp-success-soft); color: var(--bbp-success); }
+.bb-gtag-warning { background: var(--bbp-warning-soft); color: #b45309; }
+.bb-gtag-muted { background: var(--bbp-border); color: var(--bbp-muted); }
+.bb-gtag-danger { background: var(--bbp-danger-soft); color: var(--bbp-danger); }
 
-/* Toggle switch */
+/* Toggle switch - Modern iOS Style */
 .bb-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
+  gap: 10px;
+  font-size: 13px;
   cursor: pointer;
   user-select: none;
 }
@@ -243,13 +391,14 @@
 }
 
 .bb-toggle-track {
-  width: 40px;
-  height: 22px;
+  width: 44px;
+  height: 24px;
   border-radius: 999px;
-  background: #c3c4c7;
+  background: #cbd5e1;
   position: relative;
-  transition: background 0.15s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   flex: 0 0 auto;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .bb-toggle-track::after {
@@ -257,37 +406,57 @@
   position: absolute;
   top: 2px;
   inset-inline-start: 2px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #fff;
-  transition: transform 0.15s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.bb-toggle:hover .bb-toggle-track::after {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .bb-toggle input:checked + .bb-toggle-track {
   background: var(--bbp-success);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1), 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
 .bb-toggle input:checked + .bb-toggle-track::after {
-  transform: translateX(18px);
+  transform: translateX(20px);
 }
 
 .bb-rtl .bb-toggle input:checked + .bb-toggle-track::after {
-  transform: translateX(-18px);
+  transform: translateX(-20px);
+}
+
+.bb-toggle-gateway { gap: 12px; }
+.bb-toggle-state {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bbp-muted);
+  min-width: 28px;
+  transition: color var(--bbp-transition);
+}
+.bb-gateway-card.is-enabled .bb-toggle-state {
+  color: var(--bbp-success);
 }
 
 /* Expandable config */
 .bb-gateway-config {
   border-top: 1px solid var(--bbp-border);
-  padding-top: 14px;
+  padding-top: 16px;
+  margin-top: 4px;
 }
 
 .bb-gateway-config summary {
   cursor: pointer;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--bbp-primary);
   list-style: none;
+  outline: none;
 }
 
 .bb-gateway-config summary::-webkit-details-marker {
@@ -298,26 +467,32 @@
   content: "\f345";
   font-family: dashicons;
   display: inline-block;
-  margin-inline-end: 6px;
-  transition: transform 0.15s ease;
+  margin-inline-end: 8px;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .bb-gateway-config[open] summary::before {
   transform: rotate(90deg);
 }
+.bb-rtl .bb-gateway-config[open] summary::before {
+  transform: rotate(-90deg);
+}
 
 .bb-gateway-fields {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 12px;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 4px;
+  animation: bbpFadeIn 0.3s ease-out forwards;
 }
 
 .bb-gateway-field label {
   display: block;
   font-weight: 600;
-  font-size: 12.5px;
-  margin-bottom: 4px;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: var(--bbp-text);
 }
 
 .bb-gateway-field input[type="text"],
@@ -326,104 +501,60 @@
 .bb-gateway-field textarea {
   width: 100%;
   max-width: 100%;
+  min-height: 36px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  font-size: 14px;
+  transition: all var(--bbp-transition);
+}
+
+.bb-gateway-field input:focus,
+.bb-gateway-field select:focus,
+.bb-gateway-field textarea:focus {
+  border-color: var(--bbp-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  outline: none;
 }
 
 .bb-gateway-field .description {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--bbp-muted);
-  margin: 4px 0 0;
+  margin: 6px 0 0;
 }
 
 .bb-gateway-secret-note {
-  font-size: 11.5px;
-  color: var(--bbp-muted);
-}
-
-/* Status strip */
-.bb-pc-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  padding: 12px 16px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.bb-pc-status.is-ok {
-  background: var(--bbp-success-soft);
-  color: var(--bbp-success);
-}
-.bb-pc-status.is-warn {
-  background: var(--bbp-warning-soft);
-  color: var(--bbp-warning);
-}
-/* ------------------------------------------------------------------
-   Phase B additions: multi-gateway management center
-   ------------------------------------------------------------------ */
-
-.bb-payments-header-copy {
-  max-width: 70ch;
-}
-
-.bb-payments-header-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.12);
-  font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.bb-payments-header-badge .dashicons {
-  color: #9fd0a8;
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
-}
-
-.bb-pc-section-hint {
-  margin: -6px 0 18px;
-  font-size: 13px;
-}
-
-/* Toggle: explicit On/Off label next to the switch */
-.bb-toggle-gateway {
-  gap: 10px;
-}
-
-.bb-toggle-state {
   font-size: 12px;
-  font-weight: 600;
   color: var(--bbp-muted);
-  min-width: 24px;
+  background: var(--bbp-bg);
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 6px;
+  border: 1px dashed var(--bbp-border-strong);
 }
 
-.bb-gateway-card.is-enabled .bb-toggle-state {
-  color: var(--bbp-success);
-}
-
-/* Currency combobox (progressive enhancement) */
+/* Combobox Enhancements */
 .bb-combobox {
   position: relative;
   display: block;
-  min-width: 260px;
+  min-width: 280px;
 }
-
 .bb-combobox-input {
   width: 100%;
-  min-height: 32px;
-  padding: 4px 10px;
-  border: 1px solid #8c8f94;
-  border-radius: 4px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
   background: #fff;
   font-size: 14px;
   line-height: 1.6;
+  transition: all var(--bbp-transition);
 }
-
-/* Hide the native select only once JS has enhanced the combobox */
+.bb-combobox-input:focus {
+  border-color: var(--bbp-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  outline: none;
+}
 .bb-combobox.is-enhanced .bb-combobox-select {
   position: absolute;
   width: 1px;
@@ -435,8 +566,6 @@
   padding: 0;
   margin: -1px;
 }
-
-/* When JS is unavailable, hide the text input and show the select */
 .bb-combobox:not(.is-enhanced) .bb-combobox-input {
   display: none;
 }
@@ -445,30 +574,30 @@
 .bb-gateway-config-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   width: 100%;
-  padding: 8px 0 0;
+  padding: 12px 0 0;
   border: 0;
   border-top: 1px solid var(--bbp-border);
   background: none;
   color: var(--bbp-primary);
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 700;
+  font-size: 13.5px;
   cursor: pointer;
   text-align: start;
+  transition: color var(--bbp-transition);
 }
 
 .bb-gateway-config-toggle:hover,
 .bb-gateway-config-toggle:focus {
-  color: var(--bbp-primary);
-  text-decoration: underline;
+  color: var(--bbp-primary-dark);
 }
 
 .bb-gateway-config-toggle .dashicons {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  transition: transform 0.15s ease;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .bb-gateway-config.is-open .bb-gateway-config-toggle .dashicons {
@@ -480,9 +609,24 @@
 }
 
 .bb-gateway-config-toggle:focus-visible {
-  outline: 2px solid var(--bbp-primary);
-  outline-offset: 2px;
+  outline: 3px solid rgba(37, 99, 235, 0.3);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
+
+/* Status strip */
+.bb-pc-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 14px 20px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+}
+.bb-pc-status.is-ok { background: var(--bbp-success-soft); color: var(--bbp-success); border: 1px solid rgba(16, 185, 129, 0.2); }
+.bb-pc-status.is-warn { background: var(--bbp-warning-soft); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.2); }
 
 /* Save row */
 .bb-payments-save {
@@ -492,101 +636,46 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 16px;
-  padding: 16px 20px;
-  margin-top: 8px;
-  background: var(--bbp-surface);
+  padding: 16px 24px;
+  margin-top: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--bbp-border);
   border-radius: var(--bbp-radius);
-  box-shadow: var(--bbp-shadow);
+  box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.05);
+  z-index: 10;
 }
 
 .bb-payments-save-hint {
-  font-size: 12.5px;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--bbp-muted);
 }
 
-/* Gateway field spacing */
-.bb-gateway-fields {
-  padding-top: 4px;
-}
-
-.bb-gateway-field input[type="text"],
-.bb-gateway-field input[type="password"],
-.bb-gateway-field select,
-.bb-gateway-field textarea {
-  min-height: 32px;
-}
-
-/* Card state accents */
-.bb-gateway-card.is-enabled.is-configured {
-  box-shadow:
-    0 0 0 1px var(--bbp-success),
-    var(--bbp-shadow);
-}
-
-.bb-gateway-card.is-enabled.is-unconfigured {
-  box-shadow:
-    0 0 0 1px var(--bbp-warning),
-    var(--bbp-shadow);
-}
-
-/* Responsive: single column on small screens */
-@media screen and (max-width: 782px) {
-  .bb-gateway-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .bb-pc-currency-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .bb-pc-field {
-    min-width: 0;
-  }
-
-  .bb-combobox {
-    min-width: 0;
-  }
-
-  .bb-payments-save {
-    position: static;
-  }
-}
-/*
- * Fix: the "Configure gateway" button had no visible effect.
- *
- * The config panel is toggled by adding/removing the HTML `hidden`
- * attribute (see assets/js/admin/payment-settings.js). Because
- * `.bb-gateway-fields` sets `display: flex`, the browser's default
- * `[hidden] { display: none }` rule was overridden and the panel stayed
- * visible no matter what the button did. This higher-specificity rule
- * restores the expected show/hide behaviour.
- */
-.bb-gateway-fields[hidden] {
-  display: none;
-}
-/*
- * Webhook URL field (read-only) + copy button on each gateway card.
- *
- * The URL is generated per site (from the site's own home URL) and shown
- * above the gateway's webhook/secret field. It is never a secret, so it is
- * safe to display in cleartext.
- */
+/* Webhook URL field + copy button */
 .bb-gateway-field-webhook .bb-webhook-copy {
   display: flex;
   align-items: stretch;
-  gap: 8px;
+  gap: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  box-shadow: var(--bbp-shadow-sm);
 }
 
 .bb-gateway-field-webhook .bb-webhook-url {
   flex: 1 1 auto;
   min-width: 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.82rem;
-  background: #f6f7f7;
-  color: #1f2937;
+  font-size: 13px;
+  background: var(--bbp-bg);
+  color: var(--bbp-text);
   cursor: text;
+  border: none;
+  padding: 8px 12px;
+}
+.bb-gateway-field-webhook .bb-webhook-url:focus {
+  box-shadow: inset 0 0 0 2px var(--bbp-primary);
 }
 
 .bb-gateway-field-webhook .bb-webhook-copy-button {
@@ -595,52 +684,61 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
+  width: 44px;
   padding: 0;
   cursor: pointer;
+  background: #fff;
+  border: none;
+  border-inline-start: 1px solid #cbd5e1;
+  transition: all var(--bbp-transition);
+  color: var(--bbp-text-muted);
 }
 
-/* The copy icon. */
+.bb-gateway-field-webhook .bb-webhook-copy-button:hover {
+  background: var(--bbp-primary-soft);
+  color: var(--bbp-primary);
+}
+
 .bb-gateway-field-webhook .bb-copy-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 0;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bb-gateway-field-webhook .bb-webhook-copy-button:hover .bb-copy-icon {
+  transform: scale(1.15);
 }
 
 .bb-gateway-field-webhook .bb-copy-icon svg {
   display: block;
 }
 
-/*
- * Tooltip bubble (shown on hover / keyboard focus). Dark rounded bubble
- * with a small arrow, matching the payment center's tooltips.
- */
+/* Tooltip bubble */
 .bb-gateway-field-webhook .bb-copy-tip {
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 10px);
-  transform: translateX(-50%) translateY(4px);
+  bottom: calc(100% + 12px);
+  transform: translateX(-50%) translateY(8px) scale(0.95);
   z-index: 100;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
+  gap: 8px;
+  padding: 8px 14px;
   border-radius: 8px;
-  background: #1f2937;
+  background: #1e293b;
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 13px;
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.28);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.3);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.14s ease, transform 0.14s ease;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Arrow */
 .bb-gateway-field-webhook .bb-copy-tip::after {
   content: "";
   position: absolute;
@@ -648,43 +746,75 @@
   left: 50%;
   transform: translateX(-50%);
   border: 6px solid transparent;
-  border-top-color: #1f2937;
+  border-top-color: #1e293b;
 }
 
 .bb-gateway-field-webhook .bb-webhook-copy-button:hover .bb-copy-tip,
 .bb-gateway-field-webhook .bb-webhook-copy-button:focus-visible .bb-copy-tip {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(0) scale(1);
 }
 
-/* The green check is hidden until the copy succeeds. */
 .bb-gateway-field-webhook .bb-copy-tip-check {
   display: none;
   align-items: center;
   justify-content: center;
-  color: #22c55e;
+  color: #4ade80;
   line-height: 0;
 }
 
 .bb-gateway-field-webhook .bb-webhook-copy-button.is-copied .bb-copy-tip {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(0) scale(1);
 }
 
 .bb-gateway-field-webhook .bb-webhook-copy-button.is-copied .bb-copy-tip-check {
   display: inline-flex;
 }
 
-/* Copied icon state: tint the icon green to reinforce success. */
+/* Copied Success state */
 .bb-gateway-field-webhook .bb-webhook-copy-button.is-copied {
-  border-color: #1a7f37;
-  color: #1a7f37;
-  background: #e6f6ec;
+  background: var(--bbp-success-soft);
+  color: var(--bbp-success);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.bb-gateway-field-webhook .bb-webhook-copy-button.is-copied .bb-copy-icon {
+  transform: scale(1.2);
 }
 
-/* RTL: keep the input/button order natural. */
 .bb-rtl .bb-gateway-field-webhook .bb-webhook-copy {
   flex-direction: row-reverse;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+  .bb-payments-header {
+    padding: 24px 20px;
+    border-radius: 12px;
+  }
+  .bb-pc-card {
+    padding: 20px;
+  }
+  .bb-gateway-grid {
+    grid-template-columns: 1fr;
+  }
+  .bb-pc-currency-row {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+  .bb-pc-field, .bb-combobox {
+    min-width: 0;
+  }
+  .bb-payments-save {
+    position: static;
+    justify-content: center;
+  }
+}
+
+/* Required state override for Javascript toggle */
+.bb-gateway-fields[hidden] {
+  display: none;
 }

@@ -1,123 +1,163 @@
-/* Shared content section blocks */
-.bb-section-title {
-    margin: 0 0 12px;
-    font-size: clamp(2rem, 4vw, 3rem);
-    line-height: 1.2;
-}
+/**
+ * Shared Content Section Blocks
+ * Premium Edition - Modern presentation, glassmorphism, and fluid micro-interactions.
+ */
 
-.bb-section-description {
-    margin: 0 0 24px;
-    color: #4b5563;
-    line-height: 1.7;
-}
-
+/* ---------------------------------------------------
+ * Section Headings & Typography
+ * --------------------------------------------------- */
 .bb-section-heading {
     max-width: 760px;
-    margin-bottom: 24px;
+    margin-bottom: var(--bb-space-xl);
 }
 
 .bb-kicker-label {
     display: inline-flex;
     align-items: center;
-    margin-bottom: 12px;
-    padding: 7px 12px;
-    border-radius: 999px;
-    background: rgba(59, 130, 246, 0.08);
-    color: #1d4ed8;
-    font-size: 11px;
+    margin-bottom: var(--bb-space-sm);
+    padding: 6px 14px;
+    border-radius: var(--bb-radius-pill);
+    background: var(--bb-primary-soft);
+    color: var(--bb-primary-color);
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
+.bb-section-title {
+    margin: 0 0 var(--bb-space-sm);
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--bb-text-dark);
+    letter-spacing: -0.02em;
+}
+
+.bb-section-description {
+    margin: 0 0 var(--bb-space-lg);
+    color: var(--bb-text-muted);
+    font-size: 1.125rem;
+    line-height: 1.7;
+}
+
+/* ---------------------------------------------------
+ * About / Showcase Block
+ * --------------------------------------------------- */
 .bb-about-showcase {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.2fr);
-    gap: 28px;
+    gap: var(--bb-space-2xl);
     align-items: center;
-    padding: 18px 0;
+    padding: var(--bb-space-lg) 0;
 }
 
 .bb-about-media {
     position: relative;
-    /* Contain any decorative/absolutely-positioned child
-       element (blobs, badges) so it cannot visually bleed
-       past this block on the front end. */
     overflow: hidden;
-    border-radius: 26px;
+    border-radius: 28px;
+    box-shadow: var(--bb-shadow-xl);
+    transform: translateZ(0); /* Force hardware acceleration */
+}
+
+/* Suble zoom effect on image hover */
+.bb-about-media:hover .bb-about-image {
+    transform: scale(1.03);
 }
 
 .bb-about-image,
 .bb-about-image-placeholder {
     width: 100%;
-    min-height: 470px;
+    min-height: 480px;
     display: block;
-    border-radius: 26px;
     object-fit: cover;
-    box-shadow: 0 30px 60px rgba(15, 23, 42, 0.12);
+    transition: var(--bb-transition-slow);
 }
 
 .bb-about-image-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #e2e8f0, #dbeafe);
-    color: #1f2937;
-    font-size: 1.2rem;
+    background: linear-gradient(135deg, var(--bb-bg-muted), var(--bb-primary-soft));
+    color: var(--bb-text-muted);
+    font-size: 1.25rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
 }
 
 .bb-about-copy {
-    padding: 8px 0;
+    padding: var(--bb-space-sm) 0;
 }
 
+/* Glassmorphism Metrics */
 .bb-about-metrics {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-    margin: 24px 0 28px;
+    gap: var(--bb-space-md);
+    margin: var(--bb-space-lg) 0 var(--bb-space-xl);
 }
 
 .bb-about-metrics div {
-    padding: 18px 12px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(15, 23, 42, 0.06);
+    padding: var(--bb-space-md) var(--bb-space-sm);
+    border-radius: var(--bb-radius-xl);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03);
     text-align: center;
+    transition: var(--bb-transition-medium);
+}
+
+.bb-about-metrics div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    background: rgba(255, 255, 255, 0.9);
 }
 
 .bb-about-metrics strong {
     display: block;
-    font-size: 1.5rem;
-    color: #0f172a;
-    margin-bottom: 6px;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--bb-primary-color);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
 }
 
 .bb-about-metrics span {
-    color: #64748b;
+    color: var(--bb-text-muted);
     font-size: 12px;
-    letter-spacing: 0.04em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
 }
 
+/* ---------------------------------------------------
+ * Features Grid & Cards
+ * --------------------------------------------------- */
 .bb-features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 22px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--bb-space-lg);
 }
 
 .bb-feature-card {
     position: relative;
-    padding: 24px 22px 20px;
-    border-radius: 22px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9));
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.05);
-    /* Contain the top accent bar (::before) and the icon
-       image so nothing overflows the rounded card corners. */
+    padding: var(--bb-space-lg);
+    border-radius: var(--bb-radius-xl);
+    background: var(--bb-bg-main);
+    border: 1px solid var(--bb-border-color);
+    box-shadow: var(--bb-shadow-sm);
     overflow: hidden;
+    transition: var(--bb-transition-medium);
+}
+
+.bb-feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--bb-shadow-lg);
+    border-color: var(--bb-primary-border);
 }
 
 .bb-feature-card::before {
@@ -126,122 +166,186 @@
     inset: 0 auto auto 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, #60a5fa, #a78bfa);
+    background: linear-gradient(90deg, var(--bb-primary-color), #8b5cf6, #ec4899);
+    opacity: 0.85;
+    transition: var(--bb-transition-medium);
+}
+
+.bb-feature-card:hover::before {
+    opacity: 1;
+    height: 6px;
 }
 
 .bb-feature-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 54px;
-    height: 54px;
-    margin-bottom: 18px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #dbeafe, #ede9fe);
-    color: #1d4ed8;
-    font-size: 24px;
+    width: 56px;
+    height: 56px;
+    margin-bottom: var(--bb-space-md);
+    border-radius: var(--bb-radius-lg);
+    background: linear-gradient(135deg, var(--bb-primary-soft), #fff);
+    color: var(--bb-primary-color);
+    font-size: 26px;
     font-weight: 800;
-    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.1);
 }
 
 .bb-feature-icon img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: var(--bb-radius-lg);
 }
 
 .bb-feature-card h3 {
-    margin: 0 0 10px;
-    font-size: 1.15rem;
-    color: #0f172a;
+    margin: 0 0 var(--bb-space-xs);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--bb-text-dark);
 }
 
 .bb-feature-card p {
     margin: 0;
-    color: #475569;
-    line-height: 1.7;
+    color: var(--bb-text-muted);
+    line-height: 1.6;
 }
 
+/* ---------------------------------------------------
+ * Call to Action (CTA) Band
+ * --------------------------------------------------- */
 .bb-cta-band {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 24px;
-    padding: 34px 38px;
-    border-radius: 28px;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 52%, #334155 100%);
-    box-shadow: 0 28px 50px rgba(15, 23, 42, 0.18);
+    gap: var(--bb-space-lg);
+    padding: var(--bb-space-xl) 48px;
+    border-radius: 32px;
+    background: linear-gradient(135deg, var(--bb-bg-dark) 0%, #1e293b 50%, #0f172a 100%);
+    box-shadow: var(--bb-shadow-xl);
     overflow: hidden;
+    position: relative;
+}
+
+/* Decorative glow behind the CTA */
+.bb-cta-band::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(37,99,235,0.2) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .bb-cta-copy h2 {
-    margin: 0 0 8px;
-    color: #fff;
-    font-size: clamp(2rem, 4vw, 3rem);
+    margin: 0 0 var(--bb-space-xs);
+    color: #ffffff;
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    font-weight: 800;
     line-height: 1.1;
+    letter-spacing: -0.02em;
 }
 
 .bb-cta-copy p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(248, 250, 252, 0.85); /* Slightly off-white for reading comfort */
     line-height: 1.7;
+    font-size: 1.125rem;
 }
 
+/* Content specific buttons */
 .bb-primary-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 22px;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #0f172a, #1d4ed8);
-    color: #fff;
+    padding: 16px 28px;
+    border-radius: var(--bb-radius-pill);
+    background: linear-gradient(135deg, var(--bb-primary-color), var(--bb-primary-hover));
+    color: #ffffff;
     text-decoration: none;
     font-weight: 700;
-    box-shadow: 0 15px 30px rgba(37, 99, 235, 0.25);
+    font-size: 1rem;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     white-space: nowrap;
+    transition: var(--bb-transition-medium);
+    z-index: 1; /* Keep above decorative pseudo-elements */
+}
+
+.bb-primary-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    color: #ffffff;
 }
 
 .bb-primary-button-light {
-    background: linear-gradient(135deg, #ffffff, #e2e8f0);
-    color: #111827;
-    box-shadow: 0 15px 30px rgba(255, 255, 255, 0.14);
+    background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    color: var(--bb-text-dark);
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
+.bb-primary-button-light:hover {
+    background: #ffffff;
+    color: var(--bb-primary-color);
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
+}
+
+/* ---------------------------------------------------
+ * Generic Section Items (Cards/Repeater Grid)
+ * --------------------------------------------------- */
 .bb-section-items {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--bb-space-lg);
 }
 
 .bb-section-item-card {
-    background: #ffffff;
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    border-radius: 18px;
-    padding: 22px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
-    overflow: hidden;
+    background: var(--bb-bg-main);
+    border: 1px solid var(--bb-border-color);
+    border-radius: var(--bb-radius-xl);
+    padding: var(--bb-space-lg);
+    box-shadow: var(--bb-shadow-sm);
+    transition: var(--bb-transition-medium);
+    display: flex;
+    flex-direction: column;
+}
+
+.bb-section-item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--bb-shadow-lg);
+    border-color: var(--bb-border-dashed);
 }
 
 .bb-section-image {
-    margin-bottom: 16px;
+    margin-bottom: var(--bb-space-md);
+    overflow: hidden;
+    border-radius: var(--bb-radius-md);
 }
 
 .bb-section-image img {
     width: 100%;
     height: auto;
-    border-radius: 12px;
     display: block;
+    transition: var(--bb-transition-medium);
+}
+
+.bb-section-item-card:hover .bb-section-image img {
+    transform: scale(1.04);
 }
 
 .bb-section-card-title {
-    margin: 0 0 8px;
-    font-size: 1.2rem;
+    margin: 0 0 var(--bb-space-xs);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--bb-text-dark);
 }
 
 .bb-section-card-description {
     margin: 0;
-    line-height: 1.7;
-    color: #4b5563;
+    line-height: 1.6;
+    color: var(--bb-text-muted);
+    flex-grow: 1; /* Pushes any footer/button to the bottom if added later */
 }
