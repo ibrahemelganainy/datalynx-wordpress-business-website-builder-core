@@ -1,346 +1,4165 @@
+# Arabic translation for Business Builder Core.
+# This file is generated from the plugin source by tests/_gen_po.php.
+# Do not hand-edit: update the source or the translations map instead.
 msgid ""
 msgstr ""
 "Project-Id-Version: Business Builder Core 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
 "Language: ar\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "%1$d gateway(s) enabled · %2$d fully configured."
+msgstr "%1$d بوابة مُفعّلة · %2$d مُعدّة بالكامل."
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "%1$s could not be started: %2$s"
+msgstr "تعذّر بدء %1$s: %2$s"
+
+#: templates/booking-form.php
+msgid "%1$s, from %2$s to %3$s"
+msgstr "%1$s، من %2$s إلى %3$s"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "%d%% of requests"
+msgstr "%d%% من الطلبات"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "%d%% visible on site"
+msgstr "%d%% ظاهرون على الموقع"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "%s Number"
+msgstr "رقم %s"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "%s ago"
+msgstr "قبل %s"
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "%s could not be started. Please try another payment method or contact us."
+msgstr "تعذّر بدء %s. يرجى تجربة وسيلة دفع أخرى أو التواصل معنا."
+
+#: includes/Core/Payments/Gateways/AbstractApiGateway.php
+msgid "%s is configuration-ready, but its live payment API has not been enabled on this site yet. Please choose another payment method."
+msgstr "%s جاهزة للإعداد، لكن واجهة الدفع المباشر لم يتم تفعيلها على هذا الموقع بعد. يرجى اختيار وسيلة دفع أخرى."
+
+#: includes/Core/Payments/AbstractGateway.php
+#: includes/REST/PageBuilderAjax.php
+msgid "%s is required."
+msgstr "%s مطلوب."
+
+#: includes/Core/Payments/Gateways/AbstractApiGateway.php
+msgid "%s webhook verification is not enabled (no verified API integration)."
+msgstr "التحقق عبر الويبهوك لـ%s غير مُفعّل (لا يوجد تكامل API موثّق)."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "%s years experience"
+msgstr "خبرة %s سنوات"
+
+#: templates/booking-form.php
+msgid "(%d minutes per appointment)"
+msgstr "(%d دقيقة لكل موعد)"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "(no name)"
+msgstr "(بدون اسم)"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "(not provided)"
+msgstr "(غير مُقدَّم)"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "(not specified)"
+msgstr "(غير محدّد)"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "0 shows all items."
+msgstr "0 يعرض كل العناصر."
+
+#: includes/Core/Payments/Checkout/PaymentCheckout.php
+msgid "A currency is required to continue."
+msgstr "مطلوبة عملة للمتابعة."
+
+#: includes/Core/Payments/Checkout/CheckoutRequest.php
+msgid "A currency is required."
+msgstr "مطلوبة عملة."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "A default only. Each Consultation / Appointment section can override this in the Page Builder."
+msgstr "قيمة افتراضية فقط. يمكن لكل قسم استشارة / موعد تجاوزها في منشئ الصفحات."
+
+#: packs/LawFirm/Payments/ManualPaymentSubmission.php
+msgid "A manual payment was submitted for a %s and is awaiting verification."
+msgstr "تم إرسال دفع يدوي لـ%s وهو بانتظار التحقق."
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "A new consultation request was submitted."
+msgstr "تم إرسال طلب استشارة جديد."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "A section can override this. Numeric amount only."
+msgstr "يمكن للقسم تجاوز هذا. قيمة رقمية فقط."
+
+#: includes/Core/Payments/Checkout/PaymentCheckout.php
+msgid "A valid amount is required to continue."
+msgstr "مطلوب مبلغ صالح للمتابعة."
+
+#: includes/Core/Payments/Checkout/CheckoutRequest.php
+msgid "A valid amount is required."
+msgstr "مطلوب مبلغ صالح."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "API Key"
+msgstr "مفتاح API"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "API not enabled yet"
+msgstr "واجهة الدفع لم تُفعّل بعد"
+
+#: includes/Builder/CoreSections.php
+#: packs/LawFirm/Starter/StarterSite.php
+msgid "About"
+msgstr "من نحن"
+
+#: includes/Builder/CoreSections.php
+msgid "About the business or organization."
+msgstr "نبذة عن الشركة أو المؤسسة."
+
+#: includes/Builder/CoreSections.php
+msgid "About title..."
+msgstr "عنوان قسم من نحن..."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Accept cards and wallets in Egypt and the region."
+msgstr "اقبل الدفع بالبطاقات والمحافظ في مصر والمنطقة."
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Account Holder"
+msgstr "صاحب الحساب"
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Account Name"
+msgstr "اسم الحساب"
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Account Number / IBAN"
+msgstr "رقم الحساب / الآيبان"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Action Center"
+msgstr "مركز الإجراءات"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Actions"
+msgstr "الإجراءات"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Active"
+msgstr "نشط"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Active Lawyers"
+msgstr "المحامون النشطون"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Activity"
+msgstr "النشاط"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Add Lawyer"
+msgstr "إضافة محامٍ"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Add Legal Service"
+msgstr "إضافة خدمة قانونية"
+
+#: packs/LawFirm/Appointments/Appointment.php
+#: packs/LawFirm/PostTypes/Faq.php
+#: packs/LawFirm/PostTypes/Lawyer.php
+#: packs/LawFirm/PostTypes/LegalService.php
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgid "Add New"
+msgstr "إضافة جديد"
+
+#: packs/LawFirm/Appointments/Appointment.php
+msgid "Add New Appointment"
+msgstr "إضافة موعد جديد"
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgid "Add New FAQ"
+msgstr "إضافة سؤال شائع"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "Add New FAQ Category"
+msgstr "إضافة فئة أسئلة شائعة"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Add New Lawyer"
+msgstr "إضافة محامٍ جديد"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Add New Legal Service"
+msgstr "إضافة خدمة قانونية جديدة"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "Add New Practice Area"
+msgstr "إضافة مجال ممارسة جديد"
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgid "Add New Testimonial"
+msgstr "إضافة رأي عميل"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Add Practice Area"
+msgstr "إضافة مجال ممارسة"
+
+#: includes/Admin/PageAdmin.php
+msgid "Add Section"
+msgstr "إضافة قسم"
+
+#: includes/Builder/SectionRenderer.php
+msgid "Add slider slides to start your hero carousel."
+msgstr "أضف شرائح السلايدر لبدء عرض الرئيسية."
+
+#: includes/Builder/CoreSections.php
+#: includes/Builder/SectionRenderer.php
+msgid "Address"
+msgstr "العنوان"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Admin Activity Log"
+msgstr "سجل نشاط المسؤول"
+
+#: includes/Builder/CoreSections.php
+msgid "Advanced Slider"
+msgstr "سلايدر متقدم"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Algerian Dinar"
+msgstr "الدينار الجزائري"
+
+#: includes/Builder/CoreSections.php
+msgid "Alignment"
+msgstr "المحاذاة"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "All"
+msgstr "الكل"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "All Categories"
+msgstr "كل الفئات"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "All FAQ Categories"
+msgstr "كل فئات الأسئلة الشائعة"
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgid "All FAQs"
+msgstr "كل الأسئلة الشائعة"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "All Lawyers"
+msgstr "كل المحامين"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "All Legal Services"
+msgstr "كل الخدمات القانونية"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "All Practice Areas"
+msgstr "كل مجالات الممارسة"
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgid "All Testimonials"
+msgstr "كل آراء العملاء"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "All enabled gateways and their credentials are saved together."
+msgstr "تُحفظ كل البوابات المُفعّلة وبيانات اعتمادها معًا."
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "All gateways"
+msgstr "كل البوابات"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "All statuses"
+msgstr "كل الحالات"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "All time"
+msgstr "كل الفترات"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Allow Appointment Lookup"
+msgstr "السماح بالبحث عن الموعد"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Allow Consultation Lookup"
+msgstr "السماح بالبحث عن الاستشارة"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+#: packs/LawFirm/Frontend/StatusPage.php
+#: templates/partials/manual-payment-instructions.php
+msgid "Amount"
+msgstr "المبلغ"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Amount due"
+msgstr "المبلغ المستحق"
+
+#: templates/partials/payment-methods.php
+msgid "Amount due: %s"
+msgstr "المبلغ المستحق: %s"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Apply"
+msgstr "تطبيق"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: templates/status-lookup.php
+msgid "Appointment"
+msgstr "موعد"
+
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Appointment #%1$d is now %2$s"
+msgstr "أصبح الموعد رقم %1$d الآن %2$s"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/BillingPage.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Appointment Booking"
+msgstr "حجز موعد"
+
+#: packs/LawFirm/Appointments/BookingForm.php
+msgid "Appointment Booking — %s"
+msgstr "حجز موعد — %s"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Frontend/StatusPage.php
+msgid "Appointment Date"
+msgstr "تاريخ الموعد"
+
+#: templates/booking-form.php
+msgid "Appointment Fee"
+msgstr "رسوم الموعد"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Appointment Length (minutes)"
+msgstr "مدة الموعد (بالدقائق)"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Appointment No"
+msgstr "رقم الموعد"
+
+#: packs/LawFirm/Frontend/StatusPage.php
+msgid "Appointment Status"
+msgstr "حالة الموعد"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+msgid "Appointment Time"
+msgstr "وقت الموعد"
+
+#: templates/booking-form.php
+msgid "Appointment Type"
+msgstr "نوع الموعد"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Appointment created"
+msgstr "تم إنشاء موعد"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Appointment payment"
+msgstr "دفع موعد"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+#: packs/LawFirm/Appointments/Appointment.php
+msgid "Appointments"
+msgstr "المواعيد"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Appointments Over Time"
+msgstr "المواعيد عبر الزمن"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Appointments by Status"
+msgstr "المواعيد حسب الحالة"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Approve"
+msgstr "موافقة"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Approved"
+msgstr "مقبول"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Ascending"
+msgstr "تصاعدي"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Australian Dollar"
+msgstr "الدولار الأسترالي"
+
+#: includes/Builder/CoreSections.php
+msgid "Autoplay"
+msgstr "تشغيل تلقائي"
+
+#: templates/booking-form.php
+msgid "Availability is confirmed when you submit."
+msgstr "يتم تأكيد الإتاحة عند الإرسال."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: templates/booking-form.php
+msgid "Available Days"
+msgstr "الأيام المتاحة"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Available From"
+msgstr "متاح من"
+
+#: templates/booking-form.php
+msgid "Available Times"
+msgstr "الأوقات المتاحة"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Available To"
+msgstr "متاح حتى"
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+msgid "Awaiting Payment"
+msgstr "بانتظار الدفع"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Awaiting review"
+msgstr "بانتظار المراجعة"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Awaiting verification"
+msgstr "بانتظار التحقق"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Back to website"
+msgstr "العودة إلى الموقع"
+
+#: includes/Builder/CoreSections.php
+msgid "Background Image"
+msgstr "صورة الخلفية"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Bahraini Dinar"
+msgstr "الدينار البحريني"
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Bank Name"
+msgstr "اسم البنك"
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Bank Transfer"
+msgstr "التحويل البنكي"
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Bank transfer payments are verified manually by an administrator."
+msgstr "يتم التحقق من مدفوعات التحويل البنكي يدويًا بواسطة المسؤول."
+
+#: templates/partials/billing-form.php
+msgid "Billing Details"
+msgstr "تفاصيل الفاتورة"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Billing Summary"
+msgstr "ملخص الفاتورة"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Billing details"
+msgstr "تفاصيل الفاتورة"
+
+#: templates/single-bb_lawyer.php
+msgid "Biography"
+msgstr "نبذة"
+
+#: templates/booking-form.php
+msgid "Book Appointment"
+msgstr "احجز موعدًا"
+
+#: includes/Builder/CoreSections.php
+#: includes/Builder/SectionRenderer.php
+msgid "Book a Consultation"
+msgstr "احجز استشارة"
+
+#: includes/Core/Payments/Currencies.php
+msgid "British Pound"
+msgstr "الجنيه الإسترليني"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Buffer Between Appointments (minutes)"
+msgstr "الفاصل بين المواعيد (بالدقائق)"
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Build Law Firm Starter Site"
+msgstr "إنشاء موقع المكتب الجاهز"
+
+#: includes/Admin/PageAdmin.php
+msgid "Build this page using Business Builder sections."
+msgstr "أنشئ هذه الصفحة باستخدام أقسام منشئ الأعمال."
+
+#: includes/Admin/PageAdmin.php
+msgid "Business Builder"
+msgstr "منشئ الأعمال"
+
+#: includes/Builder/CoreSections.php
+msgid "Business growth at scale"
+msgstr "نمو الأعمال على نطاق واسع"
+
+#: includes/Builder/CoreSections.php
+msgid "Button Text"
+msgstr "نص الزر"
+
+#: includes/Builder/CoreSections.php
+msgid "Button URL"
+msgstr "رابط الزر"
+
+#: includes/Builder/CoreSections.php
+msgid "CTA Text"
+msgstr "نص دعوة اتخاذ الإجراء"
+
+#: includes/Builder/CoreSections.php
+msgid "CTA URL"
+msgstr "رابط دعوة اتخاذ الإجراء"
+
+#: templates/single-bb_lawyer.php
+msgid "Call"
+msgstr "اتصال"
+
+#: includes/Builder/CoreSections.php
+msgid "Call to Action"
+msgstr "دعوة لاتخاذ إجراء"
+
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+msgid "Call to Action Text"
+msgstr "نص دعوة اتخاذ الإجراء"
+
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+msgid "Call to Action URL"
+msgstr "رابط دعوة اتخاذ الإجراء"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Canadian Dollar"
+msgstr "الدولار الكندي"
+
+#: includes/Admin/PageAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Cancel"
+msgstr "إلغاء"
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+#: packs/LawFirm/Appointments/AppointmentMeta.php
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Cancelled"
+msgstr "ملغى"
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Card payments via Stripe Checkout (Visa, Mastercard, Amex)."
+msgstr "مدفوعات البطاقات عبر سترايب (فيزا، ماستركارد، أمكس)."
+
+#: includes/Builder/CoreSections.php
+msgid "Center"
+msgstr "وسط"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Change Status"
+msgstr "تغيير الحالة"
+
+#: packs/LawFirm/Frontend/StatusPage.php
+#: templates/status-lookup.php
+msgid "Check Status"
+msgstr "التحقق من الحالة"
+
+#: templates/status-page.php
+msgid "Check Your Request Status"
+msgstr "تحقق من حالة طلبك"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Chinese Yuan"
+msgstr "اليوان الصيني"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Choose your currency, enable one or more gateways, and configure each independently. Only enabled and fully configured gateways are ever offered to customers."
+msgstr "اختر عملتك، وفعّل بوابة أو أكثر، وأعدّ كلًا منها بشكل مستقل. لا تُعرض للعملاء سوى البوابات المُفعّلة والمُعدّة بالكامل."
+
+#: includes/Builder/CoreSections.php
+#: packs/LawFirm/Templates/Classic.php
+msgid "Classic"
+msgstr "كلاسيكي"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Client"
+msgstr "العميل"
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "Client ID"
+msgstr "معرّف العميل"
+
+#: packs/LawFirm/PostTypes/TestimonialFields.php
+msgid "Client Name"
+msgstr "اسم العميل"
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgid "Client Photo"
+msgstr "صورة العميل"
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "Client Secret"
+msgstr "السر الخاص بالعميل"
+
+#: packs/LawFirm/PostTypes/TestimonialFields.php
+msgid "Client Title"
+msgstr "المسمى الوظيفي للعميل"
+
+#: includes/Core/Plugin.php
+msgid "Close"
+msgstr "إغلاق"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Code / Reason"
+msgstr "الرمز / السبب"
+
+#: includes/Builder/CoreSections.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Columns"
+msgstr "الأعمدة"
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+#: packs/LawFirm/Appointments/AppointmentMeta.php
+#: packs/LawFirm/Frontend/LookupHandler.php
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Completed"
+msgstr "مكتمل"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Configure Payment"
+msgstr "إعداد الدفع"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Configure gateway"
+msgstr "إعداد البوابة"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Configured"
+msgstr "مُعد"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Confirm"
+msgstr "تأكيد"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Confirm Rejection"
+msgstr "تأكيد الرفض"
+
+#: packs/LawFirm/Appointments/AppointmentMeta.php
+#: packs/LawFirm/Frontend/LookupHandler.php
+msgid "Confirmed"
+msgstr "مؤكّد"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+#: packs/LawFirm/Appointments/AppointmentMeta.php
+#: templates/status-lookup.php
+msgid "Consultation"
+msgstr "استشارة"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Consultation #%1$d status changed to %2$s"
+msgstr "تم تغيير حالة الاستشارة رقم %1$d إلى %2$s"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Consultation & Appointment Lookup"
+msgstr "البحث عن استشارة وموعد"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: templates/consultation-form.php
+msgid "Consultation Fee"
+msgstr "رسوم الاستشارة"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Consultation No"
+msgstr "رقم الاستشارة"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Consultation Request"
+msgstr "طلب استشارة"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+#: packs/LawFirm/PostTypes/Consultation.php
+msgid "Consultation Requests"
+msgstr "طلبات الاستشارة"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Consultation Status"
+msgstr "حالة الاستشارة"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Consultation created"
+msgstr "تم إنشاء استشارة"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Consultation payment"
+msgstr "دفع استشارة"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Consultation status changed"
+msgstr "تم تغيير حالة الاستشارة"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Consultation waiting for payment"
+msgstr "استشارة بانتظار الدفع"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+#: packs/LawFirm/PostTypes/Consultation.php
+msgid "Consultations"
+msgstr "الاستشارات"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Consultations Over Time"
+msgstr "الاستشارات عبر الزمن"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Consultations by Practice Area"
+msgstr "الاستشارات حسب مجال الممارسة"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Consultations by Status"
+msgstr "الاستشارات حسب الحالة"
+
+#: includes/Builder/CoreSections.php
+#: packs/LawFirm/Starter/StarterSite.php
+msgid "Contact"
+msgstr "اتصل بنا"
+
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Contacted"
+msgstr "تم التواصل"
+
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "Continue to Payment"
+msgstr "المتابعة إلى الدفع"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+#: templates/partials/manual-payment-instructions.php
+msgid "Copied"
+msgstr "تم النسخ"
+
+#: templates/partials/manual-payment-instructions.php
+msgid "Copy"
+msgstr "نسخ"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Copy this link and paste it into your payment provider's dashboard (Webhooks / Callback URL) so payment confirmations reach your site."
+msgstr "انسخ هذا الرابط والصقه في لوحة تحكم مزوّد الدفع (الويبهوك / رابط الاستدعاء الراجع) حتى تصل تأكيدات الدفع إلى موقعك."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+#: templates/partials/manual-payment-instructions.php
+msgid "Copy to clipboard"
+msgstr "نسخ إلى الحافظة"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Copy webhook URL to clipboard"
+msgstr "نسخ رابط الويبهوك إلى الحافظة"
+
+#: includes/Builder/CoreSections.php
+msgid "Copyright"
+msgstr "حقوق النشر"
+
+#: packs/LawFirm/Appointments/AppointmentMeta.php
+msgid "Court Session"
+msgstr "جلسة محكمة"
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Create a ready-made set of Law Firm pages (Home, About, Practice Areas, Services, Lawyers, Contact) using the Builder. Existing pages are never overwritten."
+msgstr "أنشئ مجموعة جاهزة من صفحات المكتب (الرئيسية، من نحن، مجالات الممارسة، الخدمات، المحامون، اتصل بنا) باستخدام المنشئ. لا تُستبدل الصفحات الحالية أبدًا."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Credentials are stored per site and never exposed to visitors."
+msgstr "تُخزَّن بيانات الاعتماد لكل موقع على حدة ولا تُكشف للزوار أبدًا."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Currencies: %s"
+msgstr "العملات: %s"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Currency"
+msgstr "العملة"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Currency & Defaults"
+msgstr "العملة والإعدادات الافتراضية"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Current month"
+msgstr "الشهر الحالي"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Custom / legacy currency"
+msgstr "عملة مخصّصة / قديمة"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Customer"
+msgstr "العميل"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Customer Transaction Reference"
+msgstr "مرجع معاملة العميل"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Daily end time in 24-hour HH:MM format (e.g. 17:00). Empty uses the site default."
+msgstr "وقت الانتهاء اليومي بصيغة 24 ساعة HH:MM (مثال 17:00). الفراغ يستخدم الافتراضي للموقع."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Daily start time in 24-hour HH:MM format (e.g. 09:00). Empty uses the site default."
+msgstr "وقت البدء اليومي بصيغة 24 ساعة HH:MM (مثال 09:00). الفراغ يستخدم الافتراضي للموقع."
+
+#: includes/Core/Payments/Currencies.php
+msgid "Danish Krone"
+msgstr "الكرونة الدنماركية"
+
+#: includes/Builder/CoreSections.php
+msgid "Dark"
+msgstr "داكن"
+
+#: packs/LawFirm/Admin/DashboardMenu.php
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: packs/LawFirm/Frontend/StatusPage.php
+#: templates/booking-form.php
+msgid "Date"
+msgstr "التاريخ"
+
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Date / Time"
+msgstr "التاريخ / الوقت"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Days of the week that accept appointments. Leave all unchecked to use the site default."
+msgstr "أيام الأسبوع التي تستقبل المواعيد. اترك الكل غير محدد لاستخدام الافتراضي للموقع."
+
+#: includes/Admin/PageAdmin.php
+msgid "Default"
+msgstr "افتراضي"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Default Consultation Fee"
+msgstr "رسوم الاستشارة الافتراضية"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Degrees, universities, and qualifications. One per line is fine."
+msgstr "الدرجات العلمية والجامعات والمؤهلات. سطر واحد لكل عنصر."
+
+#: includes/Admin/PageAdmin.php
+msgid "Delete"
+msgstr "حذف"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Descending"
+msgstr "تنازلي"
+
+#: includes/Builder/CoreSections.php
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Description"
+msgstr "الوصف"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Disabled"
+msgstr "مُعطّل"
+
+#: packs/LawFirm/PostTypes/FaqFields.php
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+#: packs/LawFirm/PostTypes/TestimonialFields.php
+msgid "Display Order"
+msgstr "ترتيب العرض"
+
+#: includes/Builder/CoreSections.php
+msgid "Display a collection of features or benefits."
+msgstr "عرض مجموعة من المميزات أو الفوائد."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Display client testimonials from your database."
+msgstr "عرض آراء العملاء من قاعدة بياناتك."
+
+#: includes/Builder/CoreSections.php
+msgid "Display contact information and contact options."
+msgstr "عرض معلومات الاتصال ووسائل التواصل."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Display frequently asked questions from your database."
+msgstr "عرض الأسئلة الشائعة من قاعدة بياناتك."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Display lawyers from your database, optionally filtered by practice area."
+msgstr "عرض المحامين من قاعدة بياناتك، مع إمكانية التصفية حسب مجال الممارسة."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Display legal services from your database."
+msgstr "عرض الخدمات القانونية من قاعدة بياناتك."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Display payment status, method and references in the result."
+msgstr "عرض حالة الدفع والوسيلة والمراجع في النتيجة."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Display the appointment booking form."
+msgstr "عرض نموذج حجز الموعد."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Display the firm practice areas from the taxonomy."
+msgstr "عرض مجالات ممارسة المكتب من التصنيف."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Display the legal consultation request form."
+msgstr "عرض نموذج طلب الاستشارة القانونية."
+
+#: includes/Admin/PageAdmin.php
+msgid "Duplicate"
+msgstr "تكرار"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Duration of each appointment slot in minutes. Leave 0 to use the site default."
+msgstr "مدة كل فترة موعد بالدقائق. اترك 0 لاستخدام الافتراضي للموقع."
+
+#: includes/Admin/PageAdmin.php
+msgid "Edit"
+msgstr "تعديل"
+
+#: packs/LawFirm/Appointments/Appointment.php
+msgid "Edit Appointment"
+msgstr "تعديل الموعد"
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgid "Edit FAQ"
+msgstr "تعديل السؤال الشائع"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "Edit FAQ Category"
+msgstr "تعديل فئة الأسئلة الشائعة"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Edit Lawyer"
+msgstr "تعديل المحامي"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Edit Legal Service"
+msgstr "تعديل الخدمة القانونية"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "Edit Practice Area"
+msgstr "تعديل مجال الممارسة"
+
+#: includes/Admin/PageAdmin.php
+msgid "Edit Section"
+msgstr "تعديل القسم"
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgid "Edit Testimonial"
+msgstr "تعديل رأي العميل"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Edit configuration"
+msgstr "تعديل الإعداد"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: templates/single-bb_lawyer.php
+msgid "Education"
+msgstr "التعليم"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Egyptian Pound"
+msgstr "الجنيه المصري"
+
+#: includes/Core/Payments/Gateways/WalletGateway.php
+msgid "Electronic Wallet"
+msgstr "المحفظة الإلكترونية"
+
+#: includes/Builder/CoreSections.php
+#: includes/Builder/SectionRenderer.php
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: templates/booking-form.php
+#: templates/consultation-form.php
+#: templates/partials/billing-form.php
+#: templates/single-bb_lawyer.php
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Email Address"
+msgstr "عنوان البريد الإلكتروني"
+
+#: includes/Admin/PageAdmin.php
+msgid "Enable Builder"
+msgstr "تفعيل المنشئ"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Enable Payment"
+msgstr "تفعيل الدفع"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Enable or disable this gateway"
+msgstr "تفعيل أو تعطيل هذه البوابة"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Enabled"
+msgstr "مُفعّل"
+
+#: includes/Builder/CoreSections.php
+msgid "Encourage visitors to take an action."
+msgstr "تشجيع الزوار على اتخاذ إجراء."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Enter a section title..."
+msgstr "أدخل عنوان القسم..."
+
+#: includes/Builder/CoreSections.php
+msgid "Enter a short subheading..."
+msgstr "أدخل عنوانًا فرعيًا قصيرًا..."
+
+#: includes/Core/Payments/Receipt/ReceiptPage.php
+msgid "Enter a valid reference number to view your receipt."
+msgstr "أدخل رقم مرجع صالح لعرض إيصالك."
+
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+msgid "Enter an icon class, icon name, or icon identifier. The Builder will use this value when rendering the service."
+msgstr "أدخل اسم فئة الأيقونة أو اسم الأيقونة أو معرّف الأيقونة. سيستخدم المنشئ هذه القيمة عند عرض الخدمة."
+
+#: includes/Builder/CoreSections.php
+msgid "Enter the hero description..."
+msgstr "أدخل وصف الرئيسية..."
+
+#: includes/Builder/CoreSections.php
+msgid "Enter the main title..."
+msgstr "أدخل العنوان الرئيسي..."
+
+#: templates/status-page.php
+msgid "Enter the reference number you received to see the current status of your request and payment."
+msgstr "أدخل الرقم المرجعي الذي استلمته لعرض الحالة الحالية لطلبك ودفعك."
+
+#: includes/Builder/CoreSections.php
+msgid "Enterprise"
+msgstr "مؤسسي"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Entity"
+msgstr "الكيان"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Euro"
+msgstr "اليورو"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Every payment transaction on this site, across all gateways — with the exact status and, for failures, the reason."
+msgstr "كل معاملة دفع على هذا الموقع، عبر جميع البوابات — بالحالة الدقيقة، ولمعرفة سبب الفشل عند حدوثه."
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Expired"
+msgstr "منتهي الصلاحية"
+
+#: includes/Builder/CoreSections.php
+msgid "Eyebrow"
+msgstr "النص العلوي"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "FAQ Categories"
+msgstr "فئات الأسئلة الشائعة"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "FAQ Category"
+msgstr "فئة السؤال الشائع"
+
+#: packs/LawFirm/PostTypes/FaqFields.php
+msgid "FAQ Details"
+msgstr "تفاصيل السؤال الشائع"
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgid "FAQs"
+msgstr "الأسئلة الشائعة"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "FREE"
+msgstr "مجاني"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Facebook"
+msgstr "فيسبوك"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Facebook profile URL."
+msgstr "رابط الملف الشخصي على فيسبوك."
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Failed"
+msgstr "فشل"
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Fawry did not return a reference number."
+msgstr "لم يُرجع فوري رقمًا مرجعيًا."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Fawry is not fully configured."
+msgstr "فوري غير مُعد بالكامل."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Fawry notification is incomplete."
+msgstr "إشعار فوري غير مكتمل."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Fawry notification verification failed."
+msgstr "فشل التحقق من إشعار فوري."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Fawry payment is not completed yet."
+msgstr "لم يكتمل دفع فوري بعد."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Fawry payment verified."
+msgstr "تم التحقق من دفع فوري."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Fawry reported the payment was not successful."
+msgstr "أفاد فوري بأن الدفع لم ينجح."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Fawry security key is not configured."
+msgstr "مفتاح أمان فوري غير مُعد."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Fawry supports EGP only."
+msgstr "فوري يدعم الجنيه المصري فقط."
+
+#: includes/Builder/CoreSections.php
+msgid "Feature title..."
+msgstr "عنوان الميزة..."
+
+#: packs/LawFirm/PostTypes/FaqFields.php
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+#: packs/LawFirm/PostTypes/TestimonialFields.php
+#: packs/LawFirm/Taxonomies/PracticeAreaFields.php
+msgid "Featured"
+msgstr "مميّز"
+
+#: packs/LawFirm/PostTypes/FaqFields.php
+msgid "Featured FAQs can be highlighted by sections that only show featured items."
+msgstr "يمكن إبراز الأسئلة المميّزة عبر الأقسام التي تعرض العناصر المميّزة فقط."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Featured Only"
+msgstr "المميّز فقط"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Featured lawyers can be highlighted by sections that only show featured profiles."
+msgstr "يمكن إبراز المحامين المميّزين عبر الأقسام التي تعرض الملفات المميّزة فقط."
+
+#: packs/LawFirm/Taxonomies/PracticeAreaFields.php
+msgid "Featured practice areas can be highlighted by sections that only show featured items."
+msgstr "يمكن إبراز مجالات الممارسة المميّزة عبر الأقسام التي تعرض العناصر المميّزة فقط."
+
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+msgid "Featured services can be highlighted by sections that only show featured items."
+msgstr "يمكن إبراز الخدمات المميّزة عبر الأقسام التي تعرض العناصر المميّزة فقط."
+
+#: packs/LawFirm/PostTypes/TestimonialFields.php
+msgid "Featured testimonials can be highlighted by sections that only show featured items."
+msgstr "يمكن إبراز آراء العملاء المميّزة عبر الأقسام التي تعرض العناصر المميّزة فقط."
+
+#: includes/Builder/CoreSections.php
+msgid "Features"
+msgstr "المميزات"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Fee"
+msgstr "الرسوم"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Filter"
+msgstr "تصفية"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Filter lawyers list"
+msgstr "تصفية قائمة المحامين"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Filter legal services list"
+msgstr "تصفية قائمة الخدمات القانونية"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Filter manual payments"
+msgstr "تصفية المدفوعات اليدوية"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Filter notifications"
+msgstr "تصفية الإشعارات"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+#: templates/partials/billing-form.php
+msgid "First Name"
+msgstr "الاسم الأول"
+
+#: includes/Core/Payments/Checkout/PaymentCheckout.php
+msgid "Follow the offline instructions to complete your payment."
+msgstr "اتبع التعليمات غير المتصلة لإتمام عملية الدفع."
+
+#: includes/Builder/CoreSections.php
+msgid "Footer"
+msgstr "التذييل"
+
+#: includes/Builder/CoreSections.php
+msgid "Footer area with business details and secondary navigation."
+msgstr "منطقة التذييل مع تفاصيل الشركة والتنقل الثانوي."
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "For example: Senior Lawyer, Partner, Legal Consultant."
+msgstr "مثال: محامٍ أول، شريك، مستشار قانوني."
+
+#: includes/Core/Payments/Receipt/Receipt.php
+msgid "Free"
+msgstr "مجاني"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Free (no payment required)"
+msgstr "مجاني (لا حاجة للدفع)"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Free of Charge"
+msgstr "مجانًا"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Frequently Asked Questions"
+msgstr "الأسئلة الشائعة"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: templates/booking-form.php
+msgid "Friday"
+msgstr "الجمعة"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "From date"
+msgstr "من تاريخ"
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "From your PayPal webhook settings. Required for webhook verification."
+msgstr "من إعدادات الويبهوك في باي بال. مطلوب للتحقق عبر الويبهوك."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "From your Paymob account. Required for callback verification."
+msgstr "من حسابك في بيموب. مطلوب للتحقق من الاستدعاء الراجع."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "From your Stripe webhook endpoint (whsec_...). Required for webhook verification."
+msgstr "من نقطة نهاية الويبهوك في سترايب (whsec_...). مطلوب للتحقق عبر الويبهوك."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "From your XPay dashboard (Developers → API keys)."
+msgstr "من لوحة تحكم XPay (المطوّرون ← مفاتيح API)."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "From your XPay webhook endpoint. Required to verify webhooks."
+msgstr "من نقطة نهاية الويبهوك في XPay. مطلوب للتحقق من الويبهوك."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Gap kept free between two appointments. Leave 0 to use the site default."
+msgstr "الفاصل الزمني الفارغ بين موعدين. اترك 0 لاستخدام الافتراضي للموقع."
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Gateway"
+msgstr "البوابة"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Gateway Reference"
+msgstr "مرجع البوابة"
+
+#: includes/Builder/CoreSections.php
+msgid "Get Started"
+msgstr "ابدأ الآن"
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "HMAC Secret"
+msgstr "سر HMAC"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Happening today"
+msgstr "تحدث اليوم"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Hard cap on confirmed/pending bookings per day. Leave 0 for no limit."
+msgstr "الحد الأقصى الصارم للحجوزات المؤكدة/المعلّقة يوميًا. اترك 0 بلا حد."
+
+#: includes/Builder/CoreSections.php
+msgid "Header"
+msgstr "الترويسة"
+
+#: includes/Builder/CoreSections.php
+msgid "Height"
+msgstr "الارتفاع"
 
 #: includes/Builder/CoreSections.php
 msgid "Hero"
 msgstr "الرئيسية"
 
+#: includes/Builder/CoreSections.php
+msgid "Hero Image"
+msgstr "صورة الرئيسية"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Hidden on website"
+msgstr "مخفي على الموقع"
+
+#: packs/LawFirm/Taxonomies/PracticeAreaFields.php
+msgid "Highlight this practice area in featured sections."
+msgstr "إبراز مجال الممارسة هذا في الأقسام المميّزة."
+
+#: packs/LawFirm/Starter/StarterSite.php
+msgid "Home"
+msgstr "الرئيسية"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "INVOICE"
+msgstr "فاتورة"
+
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+#: packs/LawFirm/Taxonomies/PracticeAreaFields.php
+msgid "Icon"
+msgstr "الأيقونة"
+
+#: includes/Builder/CoreSections.php
+msgid "Icon / Image"
+msgstr "أيقونة / صورة"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "If disabled, this lawyer will not be displayed on the website."
+msgstr "إذا تم تعطيل هذا الخيار، لن يظهر هذا المحامي على الموقع."
+
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+msgid "If disabled, this legal service will not be displayed on the website."
+msgstr "إذا تم تعطيل هذا الخيار، لن تظهر هذه الخدمة القانونية على الموقع."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Iframe ID"
+msgstr "معرّف الإطار"
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "Ignored non-completion PayPal event."
+msgstr "تم تجاهل حدث باي بال غير مكتمل."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Ignored non-completion Stripe event."
+msgstr "تم تجاهل حدث سترايب غير مكتمل."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "Ignored non-completion XPay event."
+msgstr "تم تجاهل حدث XPay غير مكتمل."
+
+#: includes/Builder/CoreSections.php
+#: packs/LawFirm/Taxonomies/PracticeAreaFields.php
+msgid "Image"
+msgstr "صورة"
+
+#: includes/Builder/CoreSections.php
+msgid "Image Position"
+msgstr "موضع الصورة"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "In progress"
+msgstr "قيد المعالجة"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Inactive"
+msgstr "غير نشط"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Inactive lawyers are hidden from the website but keep all their data."
+msgstr "يُخفى المحامون غير النشطين من الموقع مع الاحتفاظ بكل بياناتهم."
+
+#: includes/Core/Payments/Currencies.php
+msgid "Indian Rupee"
+msgstr "الروبية الهندية"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Insert into lawyer"
+msgstr "إدراج في المحامي"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Insert into legal service"
+msgstr "إدراج في الخدمة القانونية"
+
+#: includes/Core/Payments/Gateways/InstaPayGateway.php
+msgid "InstaPay"
+msgstr "إنستاباي"
+
+#: includes/Core/Payments/Gateways/InstaPayGateway.php
+msgid "InstaPay Address"
+msgstr "عنوان إنستاباي"
+
+#: includes/Core/Payments/Gateways/InstaPayGateway.php
+msgid "InstaPay payments are verified manually by an administrator."
+msgstr "يتم التحقق من مدفوعات إنستاباي يدويًا بواسطة المسؤول."
+
+#: includes/Core/Payments/Gateways/InstaPayGateway.php
+msgid "Instant bank transfer via InstaPay, verified manually. Fully functional."
+msgstr "تحويل بنكي فوري عبر إنستاباي، يُتحقق منه يدويًا. يعمل بكامل طاقته."
+
+#: includes/Core/Payments/Gateways/InstaPayGateway.php
+#: includes/Core/Payments/Gateways/WalletGateway.php
+msgid "Instructions"
+msgstr "التعليمات"
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Integration ID"
+msgstr "معرّف التكامل"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Intro Text"
+msgstr "نص المقدمة"
+
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Invalid appointment."
+msgstr "موعد غير صالح."
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Invalid consultation request."
+msgstr "طلب استشارة غير صالح."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Invalid page."
+msgstr "صفحة غير صالحة."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Invalid proof reference"
+msgstr "مرجع إثبات غير صالح"
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Invalid section data."
+msgstr "بيانات قسم غير صالحة."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Invalid section order."
+msgstr "ترتيب قسم غير صالح."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Invalid section type."
+msgstr "نوع قسم غير صالح."
+
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Invalid status."
+msgstr "حالة غير صالحة."
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Invoice Reference"
+msgstr "مرجع الفاتورة"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Iraqi Dinar"
+msgstr "الدينار العراقي"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Japanese Yen"
+msgstr "الين الياباني"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Jordanian Dinar"
+msgstr "الدينار الأردني"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Kenyan Shilling"
+msgstr "الشلن الكيني"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Kuwaiti Dinar"
+msgstr "الدينار الكويتي"
+
+#: includes/Builder/CoreSections.php
+msgid "Label"
+msgstr "التسمية"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: templates/single-bb_lawyer.php
+msgid "Languages"
+msgstr "اللغات"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Last 30 days"
+msgstr "آخر 30 يومًا"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Last 7 days"
+msgstr "آخر 7 أيام"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+#: templates/partials/billing-form.php
+msgid "Last Name"
+msgstr "اسم العائلة"
+
+#: packs/LawFirm/Admin/DashboardMenu.php
+msgid "Law Firm"
+msgstr "المكتب"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+#: packs/LawFirm/Admin/DashboardMenu.php
+msgid "Law Firm Dashboard"
+msgstr "لوحة تحكم المكتب"
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Law Firm Starter"
+msgstr "بداية المكتب"
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Law Firm Starter Site"
+msgstr "موقع المكتب الجاهز"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Lawyer"
+msgstr "محامٍ"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Lawyer #%d"
+msgstr "المحامي رقم %d"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Lawyer Archives"
+msgstr "أرشيف المحامين"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Lawyer Attributes"
+msgstr "خصائص المحامي"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Lawyer Details"
+msgstr "تفاصيل المحامي"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Lawyer Photo"
+msgstr "صورة المحامي"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Lawyer created"
+msgstr "تم إنشاء محامٍ"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Lawyer email address."
+msgstr "البريد الإلكتروني للمحامي."
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Lawyer phone number."
+msgstr "رقم هاتف المحامي."
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Lawyer set to inactive: %s"
+msgstr "تم تعيين المحامي كغير نشط: %s"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Lawyer status changed"
+msgstr "تم تغيير حالة محامٍ"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Lawyer updated"
+msgstr "تم تحديث محامٍ"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+#: packs/LawFirm/PostTypes/Lawyer.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: packs/LawFirm/Starter/StarterSite.php
+msgid "Lawyers"
+msgstr "المحامون"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Lawyers list"
+msgstr "قائمة المحامين"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Lawyers list navigation"
+msgstr "التنقل في قائمة المحامين"
+
+#: includes/Builder/CoreSections.php
+msgid "Layout"
+msgstr "التخطيط"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Leave empty to keep current"
+msgstr "اتركه فارغًا للإبقاء على القيمة الحالية"
+
+#: includes/Builder/CoreSections.php
+msgid "Left"
+msgstr "يسار"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+#: packs/LawFirm/Frontend/BillingPage.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Legal Consultation"
+msgstr "استشارة قانونية"
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "Legal Consultation — %s"
+msgstr "استشارة قانونية — %s"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Legal Matter"
+msgstr "المسألة القانونية"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Legal Service"
+msgstr "خدمة قانونية"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Legal Service Archives"
+msgstr "أرشيف الخدمات القانونية"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Legal Service Attributes"
+msgstr "خصائص الخدمة القانونية"
+
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+msgid "Legal Service Details"
+msgstr "تفاصيل الخدمة القانونية"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Legal Services"
+msgstr "الخدمات القانونية"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Legal services list"
+msgstr "قائمة الخدمات القانونية"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Legal services list navigation"
+msgstr "التنقل في قائمة الخدمات القانونية"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Let customers check their own consultation or appointment status using their reference number and phone number."
+msgstr "يتيح للعملاء التحقق من حالة استشارتهم أو موعدهم باستخدام الرقم المرجعي ورقم الهاتف."
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: templates/single-bb_lawyer.php
+msgid "License Number"
+msgstr "رقم الترخيص"
+
+#: includes/Builder/CoreSections.php
+msgid "Light"
+msgstr "فاتح"
+
+#: includes/Builder/CoreSections.php
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "LinkedIn"
+msgstr "لينكدإن"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "LinkedIn profile URL."
+msgstr "رابط الملف الشخصي على لينكدإن."
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "Links are not allowed in the message."
+msgstr "لا يُسمح بالروابط في الرسالة."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+#: includes/Core/Payments/Gateways/StripeGateway.php
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "Live"
+msgstr "مباشر"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Live API ready"
+msgstr "واجهة الدفع المباشر جاهزة"
+
+#: includes/Admin/PageAdmin.php
+msgid "Live Preview"
+msgstr "معاينة مباشرة"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Live operational feed: requests, bookings, payments and system activity for this site."
+msgstr "تغذية تشغيلية مباشرة: الطلبات والحجوزات والمدفوعات ونشاط النظام لهذا الموقع."
+
+#: includes/Core/Plugin.php
+msgid "Loading receipt…"
+msgstr "جارٍ تحميل الإيصال…"
+
+#: includes/Builder/CoreSections.php
+msgid "Logo Text"
+msgstr "نص الشعار"
+
+#: templates/status-lookup.php
+msgid "Look up"
+msgstr "بحث"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+msgid "Lower numbers appear first on the website."
+msgstr "الأرقام الأقل تظهر أولًا على الموقع."
+
+#: includes/Admin/PageAdmin.php
+#: packs/LawFirm/Templates/Luxury.php
+msgid "Luxury"
+msgstr "فاخر"
+
+#: includes/Builder/CoreSections.php
 msgid "Main introductory section of the website."
 msgstr "القسم التعريفي الرئيسي للموقع."
 
-msgid "About"
-msgstr "من نحن"
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Manage Website"
+msgstr "إدارة الموقع"
 
-msgid "About the business or organization."
-msgstr "نبذة عن الشركة أو المؤسسة."
+#: templates/partials/manual-payment-instructions.php
+msgid "Manual Payment Instructions"
+msgstr "تعليمات الدفع اليدوي"
 
-msgid "Features"
-msgstr "المميزات"
+#: packs/LawFirm/Admin/DashboardMenu.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Manual Payments"
+msgstr "المدفوعات اليدوية"
 
-msgid "Display a collection of features or benefits."
-msgstr "عرض مجموعة من المميزات أو الفوائد."
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Manual Payments to Review"
+msgstr "مدفوعات يدوية بحاجة إلى مراجعة"
 
-msgid "Call to Action"
-msgstr "دعوة لاتخاذ إجراء"
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Manual payment approved"
+msgstr "تمت الموافقة على دفع يدوي"
 
-msgid "Encourage visitors to take an action."
-msgstr "تشجيع الزوار على اتخاذ إجراء."
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Manual payment approved by administrator."
+msgstr "تمت الموافقة على الدفع اليدوي بواسطة المسؤول."
 
-msgid "Contact"
-msgstr "اتصل بنا"
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Manual payment approved for %s"
+msgstr "تمت الموافقة على الدفع اليدوي لـ%s"
 
-msgid "Display contact information and contact options."
-msgstr "عرض معلومات الاتصال ووسائل التواصل."
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Manual payment rejected"
+msgstr "تم رفض دفع يدوي"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Manual payment rejected by administrator."
+msgstr "تم رفض الدفع اليدوي بواسطة المسؤول."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Manual payment rejected for %s"
+msgstr "تم رفض الدفع اليدوي لـ%s"
+
+#: packs/LawFirm/Payments/ManualPaymentSubmission.php
+msgid "Manual payment requires verification"
+msgstr "الدفع اليدوي يحتاج إلى تحقق"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Manual payment submitted"
+msgstr "تم إرسال دفع يدوي"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Manual txn:"
+msgstr "معاملة يدوية:"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Manual verification"
+msgstr "تحقق يدوي"
+
+#: includes/Builder/SectionRenderer.php
+msgid "Map preview"
+msgstr "معاينة الخريطة"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Mark All as Read"
+msgstr "تعليم الكل كمقروء"
+
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Mark Completed"
+msgstr "تعليم كمكتمل"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Mark Payment Verified"
+msgstr "تعليم الدفع كمُتحقَّق منه"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Mark Read"
+msgstr "تعليم كمقروء"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Mark as Paid"
+msgstr "تعليم كمدفوع"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Maximum Appointments Per Day"
+msgstr "الحد الأقصى للمواعيد في اليوم"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Maximum Items"
+msgstr "الحد الأقصى للعناصر"
+
+#: packs/LawFirm/Appointments/AppointmentMeta.php
+msgid "Meeting"
+msgstr "اجتماع"
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Merchant Code"
+msgstr "كود التاجر"
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+#: templates/consultation-form.php
+msgid "Message"
+msgstr "الرسالة"
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "Message is required."
+msgstr "الرسالة مطلوبة."
+
+#: includes/Builder/CoreSections.php
+msgid "Minimum Height"
+msgstr "الحد الأدنى للارتفاع"
+
+#: includes/Builder/CoreSections.php
+msgid "Minimum height of the hero section in pixels."
+msgstr "الحد الأدنى لارتفاع قسم الرئيسية بالبكسل."
+
+#: includes/Core/Payments/Checkout/CheckoutRequest.php
+msgid "Missing or invalid related item."
+msgstr "عنصر مرتبط مفقود أو غير صالح."
+
+#: includes/Core/Payments/Gateways/WalletGateway.php
+msgid "Mobile wallet transfer (e.g. Vodafone Cash), verified manually. Fully functional."
+msgstr "تحويل عبر المحفظة الإلكترونية (مثل فودافون كاش)، يُتحقق منه يدويًا. يعمل بكامل طاقته."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+#: includes/Core/Payments/Gateways/StripeGateway.php
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "Mode"
+msgstr "الوضع"
+
+#: includes/Admin/PageAdmin.php
+#: packs/LawFirm/Templates/Modern.php
+msgid "Modern"
+msgstr "عصري"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: templates/booking-form.php
+msgid "Monday"
+msgstr "الاثنين"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Moroccan Dirham"
+msgstr "الدرهم المغربي"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+#: templates/consultation-form.php
+msgid "Name"
+msgstr "الاسم"
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "Name is required."
+msgstr "الاسم مطلوب."
+
+#: includes/Builder/CoreSections.php
+msgid "Navigation Links"
+msgstr "روابط التنقل"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Needs follow-up"
+msgstr "يحتاج متابعة"
+
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "New"
+msgstr "جديد"
+
+#: packs/LawFirm/Appointments/Appointment.php
+msgid "New Appointment"
+msgstr "موعد جديد"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "New Consultation Requests"
+msgstr "طلبات الاستشارة الجديدة"
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgid "New FAQ"
+msgstr "سؤال شائع جديد"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "New FAQ Category Name"
+msgstr "اسم فئة الأسئلة الشائعة الجديد"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "New Lawyer"
+msgstr "محامٍ جديد"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "New Legal Service"
+msgstr "خدمة قانونية جديدة"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "New Practice Area Name"
+msgstr "اسم مجال الممارسة الجديد"
+
+#: includes/Core/Plugin.php
+msgid "New Search"
+msgstr "بحث جديد"
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgid "New Testimonial"
+msgstr "رأي عميل جديد"
+
+#: packs/LawFirm/Appointments/BookingForm.php
+msgid "New appointment request from %1$s for %2$s at %3$s"
+msgstr "طلب موعد جديد من %1$s بتاريخ %2$s في %3$s"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "New consultation request awaiting review"
+msgstr "طلب استشارة جديد بانتظار المراجعة"
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "New consultation request from %s"
+msgstr "طلب استشارة جديد من %s"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "New lawyer added: %s"
+msgstr "تمت إضافة محامٍ جديد: %s"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Next"
+msgstr "التالي"
+
+#: templates/booking-form.php
+msgid "Next available time"
+msgstr "أقرب وقت متاح"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Nigerian Naira"
+msgstr "النايرا النيجيرية"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "No FAQ categories found."
+msgstr "لم يتم العثور على فئات أسئلة شائعة."
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgid "No FAQs found in Trash."
+msgstr "لم يتم العثور على أسئلة شائعة في سلة المهملات."
+
+#: packs/LawFirm/PostTypes/Faq.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "No FAQs found."
+msgstr "لم يتم العثور على أسئلة شائعة."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "No Fawry reference supplied."
+msgstr "لم يتم تزويد رقم فوري المرجعي."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "No PayPal order reference supplied."
+msgstr "لم يتم تزويد مرجع طلب باي بال."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "No Paymob transaction in the payload."
+msgstr "لا توجد معاملة بيموب في البيانات الواردة."
+
+#: packs/LawFirm/Appointments/AppointmentMeta.php
+msgid "No Show"
+msgstr "لم يحضر"
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "No Stripe session reference supplied."
+msgstr "لم يتم تزويد مرجع جلسة سترايب."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "No XPay session reference supplied."
+msgstr "لم يتم تزويد مرجع جلسة XPay."
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "No appointment data is available yet."
+msgstr "لا تتوفر بيانات مواعيد بعد."
+
+#: packs/LawFirm/Appointments/Appointment.php
+msgid "No appointments found in Trash."
+msgstr "لم يتم العثور على مواعيد في سلة المهملات."
+
+#: packs/LawFirm/Appointments/Appointment.php
+msgid "No appointments found."
+msgstr "لم يتم العثور على مواعيد."
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "No consultation data is available yet."
+msgstr "لا تتوفر بيانات استشارات بعد."
+
+#: packs/LawFirm/PostTypes/Consultation.php
+msgid "No consultation requests found in Trash."
+msgstr "لم يتم العثور على طلبات استشارة في سلة المهملات."
+
+#: packs/LawFirm/PostTypes/Consultation.php
+msgid "No consultation requests found."
+msgstr "لم يتم العثور على طلبات استشارة."
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "No lawyers found in Trash."
+msgstr "لم يتم العثور على محامين في سلة المهملات."
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "No lawyers found."
+msgstr "لم يتم العثور على محامين."
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "No lawyers yet"
+msgstr "لا يوجد محامون بعد"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "No legal services found in Trash."
+msgstr "لم يتم العثور على خدمات قانونية في سلة المهملات."
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "No legal services found."
+msgstr "لم يتم العثور على خدمات قانونية."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "No manual payments match this view."
+msgstr "لا توجد مدفوعات يدوية تطابق هذا العرض."
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "No notifications match your filters."
+msgstr "لا توجد إشعارات تطابق عوامل التصفية."
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "No payment data is available yet."
+msgstr "لا تتوفر بيانات دفع بعد."
+
+#: includes/Core/Payments/Receipt/Receipt.php
+msgid "No payment required"
+msgstr "لا حاجة للدفع"
+
+#: includes/Core/Payments/Transaction/PaymentTransactionPostType.php
+msgid "No payments found in Trash."
+msgstr "لم يتم العثور على مدفوعات في سلة المهملات."
+
+#: includes/Core/Payments/Transaction/PaymentTransactionPostType.php
+msgid "No payments found."
+msgstr "لم يتم العثور على مدفوعات."
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "No payments match the current filters."
+msgstr "لا توجد مدفوعات تطابق عوامل التصفية الحالية."
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "No practice area data is available yet."
+msgstr "لا تتوفر بيانات مجالات ممارسة بعد."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "No practice areas found."
+msgstr "لم يتم العثور على مجالات ممارسة."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "No proof uploaded"
+msgstr "لم يتم رفع أي إثبات"
+
+#: includes/Core/Payments/Receipt/ReceiptPage.php
+msgid "No receipt was found for that reference number."
+msgstr "لم يتم العثور على إيصال لهذا الرقم المرجعي."
+
+#: packs/LawFirm/Frontend/StatusPage.php
+msgid "No record was found for that reference number."
+msgstr "لم يتم العثور على سجل لهذا الرقم المرجعي."
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "No recorded activity yet."
+msgstr "لا يوجد نشاط مسجّل بعد."
+
+#: packs/LawFirm/Frontend/ReceiptRoute.php
+msgid "No reference supplied."
+msgstr "لم يتم تزويد رقم مرجعي."
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "No requests yet"
+msgstr "لا توجد طلبات بعد"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "No revenue data is available yet."
+msgstr "لا تتوفر بيانات إيرادات بعد."
+
+#: includes/Admin/PageAdmin.php
+msgid "No sections have been added to this page yet."
+msgstr "لم تتم إضافة أي أقسام إلى هذه الصفحة بعد."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "No services found."
+msgstr "لم يتم العثور على خدمات."
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgid "No testimonials found in Trash."
+msgstr "لم يتم العثور على آراء عملاء في سلة المهملات."
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "No testimonials found."
+msgstr "لم يتم العثور على آراء عملاء."
+
+#: includes/Builder/CoreSections.php
+msgid "None"
+msgstr "بدون"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "None (free service)"
+msgstr "لا يوجد (خدمة مجانية)"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Norwegian Krone"
+msgstr "الكرونة النرويجية"
+
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Not Required"
+msgstr "غير مطلوب"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Not configured"
+msgstr "غير مُعد"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Not specified"
+msgstr "غير محدّد"
+
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: templates/booking-form.php
+msgid "Notes"
+msgstr "ملاحظات"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Nothing needs your attention right now."
+msgstr "لا يوجد ما يحتاج انتباهك الآن."
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Notifications"
+msgstr "الإشعارات"
+
+#: packs/LawFirm/Admin/DashboardMenu.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Notifications & Activity"
+msgstr "الإشعارات والنشاط"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Notifications pagination"
+msgstr "ترقيم صفحات الإشعارات"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Number of years of professional experience."
+msgstr "عدد سنوات الخبرة المهنية."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Numeric amount. Leave 0 to use the site default fee."
+msgstr "قيمة رقمية. اترك 0 لاستخدام رسوم الموقع الافتراضية."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Off"
+msgstr "إيقاف"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Offer a \"View Receipt\" link when a payment exists."
+msgstr "عرض رابط \"عرض الإيصال\" عند وجود دفعة."
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Offline bank transfer, verified manually by an administrator. Fully functional."
+msgstr "تحويل بنكي غير متصل، يُتحقق منه يدويًا بواسطة المسؤول. يعمل بكامل طاقته."
+
+#: includes/Core/Payments/Currencies.php
+msgid "Omani Rial"
+msgstr "الريال العماني"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "On"
+msgstr "تشغيل"
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+msgid "On Hold"
+msgstr "معلّق"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Only the selected gateways are offered for this section. Leave all unchecked to allow every available gateway."
+msgstr "تُعرض البوابات المختارة فقط لهذا القسم. اترك الكل غير محدد للسماح بكل بوابة متاحة."
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Open uploaded payment proof"
+msgstr "فتح إثبات الدفع المرفوع"
+
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+msgid "Optional button shown with this service. Leave the text empty to hide it."
+msgstr "زر اختياري يظهر مع هذه الخدمة. اترك النص فارغًا لإخفائه."
+
+#: packs/LawFirm/Taxonomies/PracticeAreaFields.php
+msgid "Optional icon identifier, for example: dashicons-portfolio or a short label."
+msgstr "معرّف أيقونة اختياري، مثال: dashicons-portfolio أو تسمية قصيرة."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Order"
+msgstr "الترتيب"
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "Our server could not reach the payment provider. Please try again shortly, or choose another method."
+msgstr "تعذّر على خادمنا الوصول إلى مزوّد الدفع. يرجى المحاولة مجددًا قريبًا، أو اختيار وسيلة أخرى."
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "Our server could not securely reach the payment provider. Please try again shortly, or choose another method."
+msgstr "تعذّر على خادمنا الوصول الآمن إلى مزوّد الدفع. يرجى المحاولة مجددًا قريبًا، أو اختيار وسيلة أخرى."
+
+#: includes/Builder/CoreSections.php
+msgid "Overlay"
+msgstr "طبقة تغطية"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "PAYMENT RECEIPT"
+msgstr "إيصال دفع"
+
+#: templates/partials/manual-payment-instructions.php
+msgid "PNG, JPG, WEBP or PDF. Max 5 MB."
+msgstr "PNG أو JPG أو WEBP أو PDF. بحد أقصى 5 ميجابايت."
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Page"
+msgstr "صفحة"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Page %1$d of %2$d"
+msgstr "صفحة %1$d من %2$d"
+
+#: includes/Admin/PageAdmin.php
+msgid "Page Builder"
+msgstr "منشئ الصفحات"
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Pages to be created"
+msgstr "الصفحات التي ستُنشأ"
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+#: packs/LawFirm/Admin/DashboardStats.php
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Paid"
+msgstr "مدفوع"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Paid Consultations"
+msgstr "الاستشارات المدفوعة"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Paid vs Unpaid Consultations"
+msgstr "الاستشارات المدفوعة مقابل غير المدفوعة"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Pakistani Rupee"
+msgstr "الروبية الباكستانية"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "Parent FAQ Category"
+msgstr "فئة الأسئلة الشائعة الأب"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "Parent FAQ Category:"
+msgstr "فئة الأسئلة الشائعة الأب:"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "Parent Practice Area"
+msgstr "مجال الممارسة الأب"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "Parent Practice Area:"
+msgstr "مجال الممارسة الأب:"
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Pay at thousands of Fawry outlets or online using a reference number."
+msgstr "ادفع من آلاف منافذ فوري أو عبر الإنترنت باستخدام رقم مرجعي."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "Pay securely with XPay — cards and local methods (Egypt)."
+msgstr "ادفع بأمان عبر XPay — البطاقات والوسائل المحلية (مصر)."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Pay using the Fawry reference number below."
+msgstr "ادفع باستخدام رقم فوري المرجعي أدناه."
+
+#: includes/Core/Payments/Checkout/PaymentCheckout.php
+msgid "Pay using the reference number shown and keep it safe."
+msgstr "ادفع باستخدام رقم المرجع الظاهر واحتفظ به."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "Pay with a PayPal account or card. Secure online payment."
+msgstr "ادفع بحساب أو بطاقة باي بال. دفع إلكتروني آمن."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal authentication failed. Please check the Client ID and Secret."
+msgstr "فشلت مصادقة باي بال. يرجى التحقق من معرّف العميل والسر."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal capture did not complete."
+msgstr "لم يكتمل تحصيل باي بال."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal could not be reached from this server (%s). Ensure the cURL and OpenSSL PHP extensions are enabled AND a CA bundle is configured (curl.cainfo / openssl.cafile) in php.ini."
+msgstr "تعذّر الوصول إلى باي بال من هذا الخادم (%s). تأكد من تفعيل إضافتي cURL وOpenSSL في PHP ومن إعداد حزمة CA (curl.cainfo / openssl.cafile) في php.ini."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal did not return an access token."
+msgstr "لم يُرجع باي بال رمز وصول."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal did not return an approval link."
+msgstr "لم يُرجع باي بال رابط موافقة."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal does not support the configured currency."
+msgstr "باي بال لا يدعم العملة المُعدّة."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal is not fully configured (missing Client ID or Secret)."
+msgstr "باي بال غير مُعد بالكامل (معرّف العميل أو السر مفقود)."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal order is not approved yet."
+msgstr "لم تتم الموافقة على طلب باي بال بعد."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal payment captured."
+msgstr "تم تحصيل دفع باي بال."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal payment verified."
+msgstr "تم التحقق من دفع باي بال."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal webhook carried no order id."
+msgstr "لم يحمل ويبهوك باي بال معرّف طلب."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal webhook id is not configured."
+msgstr "معرّف ويبهوك باي بال غير مُعد."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "PayPal webhook signature verification failed."
+msgstr "فشل التحقق من توقيع ويبهوك باي بال."
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: packs/LawFirm/Frontend/LookupHandler.php
+msgid "Payment"
+msgstr "دفع"
+
+#: includes/REST/PaymentCallback.php
+msgid "Payment %1$s confirmed for %2$s"
+msgstr "تم تأكيد الدفع %1$s لـ%2$s"
+
+#: includes/REST/PaymentWebhook.php
+msgid "Payment %1$s for %2$s %3$s"
+msgstr "الدفع %1$s لـ%2$s %3$s"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Payment Date"
+msgstr "تاريخ الدفع"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Payment Gateways"
+msgstr "بوابات الدفع"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Payment Information"
+msgstr "معلومات الدفع"
+
+#: packs/LawFirm/Admin/DashboardMenu.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Payment Logs"
+msgstr "سجلات الدفع"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Payment Management"
+msgstr "إدارة الدفع"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: templates/booking-form.php
+#: templates/consultation-form.php
+#: templates/partials/payment-methods.php
+msgid "Payment Method"
+msgstr "وسيلة الدفع"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Payment Proof"
+msgstr "إثبات الدفع"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Payment Ref"
+msgstr "مرجع الدفع"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Payment Reference"
+msgstr "مرجع الدفع"
+
+#: packs/LawFirm/Admin/DashboardMenu.php
+msgid "Payment Settings"
+msgstr "إعدادات الدفع"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Frontend/StatusPage.php
+msgid "Payment Status"
+msgstr "حالة الدفع"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Payment approved. The consultation/appointment is now paid."
+msgstr "تمت الموافقة على الدفع. أصبحت الاستشارة/الموعد مدفوعة الآن."
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Payment checkout failed"
+msgstr "فشل بدء الدفع"
+
+#: includes/REST/PaymentCallback.php
+msgid "Payment failed"
+msgstr "فشل الدفع"
+
+#: templates/booking-form.php
+msgid "Payment is required for this appointment, but no payment method is available yet. Please contact us to complete your booking."
+msgstr "الدفع مطلوب لهذا الموعد، لكن لا تتوفر وسيلة دفع بعد. يرجى التواصل معنا لإتمام حجزك."
+
+#: templates/consultation-form.php
+msgid "Payment is required for this consultation, but no payment method is available yet. Please contact us to complete your request."
+msgstr "الدفع مطلوب لهذه الاستشارة، لكن لا تتوفر وسيلة دفع بعد. يرجى التواصل معنا لإتمام طلبك."
+
+#: templates/booking-form.php
+msgid "Payment is required to confirm this appointment."
+msgstr "الدفع مطلوب لتأكيد هذا الموعد."
+
+#: templates/consultation-form.php
+msgid "Payment is required to confirm this consultation."
+msgstr "الدفع مطلوب لتأكيد هذه الاستشارة."
+
+#: includes/Core/Plugin.php
+msgid "Payment receipt"
+msgstr "إيصال الدفع"
+
+#: templates/booking-form.php
+msgid "Payment received. Your appointment is confirmed — your receipt is shown below."
+msgstr "تم استلام الدفع. تم تأكيد موعدك — يظهر إيصالك أدناه."
+
+#: templates/consultation-form.php
+msgid "Payment received. Your consultation is confirmed — your receipt is shown below."
+msgstr "تم استلام الدفع. تم تأكيد استشارتك — يظهر إيصالك أدناه."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Payment rejected. The customer's request has been marked unpaid."
+msgstr "تم رفض الدفع. تم تعليم طلب العميل كغير مدفوع."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Payment settings saved."
+msgstr "تم حفظ إعدادات الدفع."
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Payment status synchronized"
+msgstr "تمت مزامنة حالة الدفع"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Payment verified for consultation #%d"
+msgstr "تم التحقق من الدفع للاستشارة رقم %d"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Payment verified manually"
+msgstr "تم التحقق من الدفع يدويًا"
+
+#: includes/Core/Payments/Transaction/PaymentTransactionPostType.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Payments"
+msgstr "المدفوعات"
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob %1$s failed: %2$s"
+msgstr "فشل %1$s في بيموب: %2$s"
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob authentication failed. Please check the API key."
+msgstr "فشلت مصادقة بيموب. يرجى التحقق من مفتاح API."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob callback is not verifiable (no HMAC secret)."
+msgstr "الاستدعاء الراجع لبيموب غير قابل للتحقق (لا يوجد سر HMAC)."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob callback verification failed."
+msgstr "فشل التحقق من الاستدعاء الراجع لبيموب."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob did not return a payment token."
+msgstr "لم يُرجع بيموب رمز دفع."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob did not return an auth token."
+msgstr "لم يُرجع بيموب رمز مصادقة."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob did not return an order id."
+msgstr "لم يُرجع بيموب معرّف طلب."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob integration supports %2$s but the site currency is %1$s. Please set Site Currency to %2$s in Payment Settings."
+msgstr "تكامل بيموب يدعم %2$s لكن عملة الموقع هي %1$s. يرجى ضبط عملة الموقع على %2$s في إعدادات الدفع."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob is not configured (missing API key)."
+msgstr "بيموب غير مُعد (مفتاح API مفقود)."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob is not fully configured (missing Integration or Iframe ID)."
+msgstr "بيموب غير مُعد بالكامل (معرّف التكامل أو الإطار مفقود)."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob payment verified."
+msgstr "تم التحقق من دفع بيموب."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "Paymob reported the payment was not successful."
+msgstr "أفاد بيموب بأن الدفع لم ينجح."
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Appointments/AppointmentMeta.php
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Pending Consultations"
+msgstr "الاستشارات المعلّقة"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Frontend/LookupHandler.php
+msgid "Pending Manual Verification"
+msgstr "بانتظار التحقق اليدوي"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Pending Review"
+msgstr "بانتظار المراجعة"
+
+#: includes/Builder/CoreSections.php
+#: includes/Builder/SectionRenderer.php
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "Phone"
+msgstr "الهاتف"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+#: templates/partials/billing-form.php
+#: templates/status-lookup.php
+msgid "Phone Number"
+msgstr "رقم الهاتف"
+
+#: packs/LawFirm/Appointments/Availability.php
+#: templates/booking-form.php
+msgid "Please choose a date in the future."
+msgstr "يرجى اختيار تاريخ في المستقبل."
+
+#: includes/Core/Payments/Checkout/CheckoutRequest.php
+msgid "Please choose a payment method."
+msgstr "يرجى اختيار وسيلة دفع."
+
+#: templates/booking-form.php
+msgid "Please choose a valid date for your appointment."
+msgstr "يرجى اختيار تاريخ صالح لموعدك."
+
+#: packs/LawFirm/Appointments/Availability.php
+msgid "Please choose a valid date."
+msgstr "يرجى اختيار تاريخ صالح."
+
+#: packs/LawFirm/Payments/PaymentFlow.php
+msgid "Please choose a valid payment method."
+msgstr "يرجى اختيار وسيلة دفع صالحة."
+
+#: templates/booking-form.php
+msgid "Please choose a valid time for your appointment."
+msgstr "يرجى اختيار وقت صالح لموعدك."
+
+#: packs/LawFirm/Appointments/Availability.php
+msgid "Please choose a valid time slot."
+msgstr "يرجى اختيار فترة زمنية صالحة."
+
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "Please choose another payment method, or contact us so we can help."
+msgstr "يرجى اختيار وسيلة دفع أخرى، أو تواصل معنا لمساعدتك."
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Please complete a bank transfer and send us the reference number for verification."
+msgstr "يرجى إتمام التحويل البنكي وإرسال رقم المرجع إلينا للتحقق."
+
+#: packs/LawFirm/Frontend/StatusPage.php
+msgid "Please enter a valid reference number."
+msgstr "يرجى إدخال رقم مرجعي صالح."
+
+#: packs/LawFirm/Frontend/LookupHandler.php
+msgid "Please enter your phone number."
+msgstr "يرجى إدخال رقم هاتفك."
+
+#: packs/LawFirm/Frontend/LookupHandler.php
+msgid "Please enter your reference number."
+msgstr "يرجى إدخال الرقم المرجعي الخاص بك."
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Please keep this receipt for your records."
+msgstr "يرجى الاحتفاظ بهذا الإيصال لسجلاتك."
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "Please provide a phone number or an email address."
+msgstr "يرجى تقديم رقم هاتف أو بريد إلكتروني."
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "Please provide a valid email address."
+msgstr "يرجى تقديم بريد إلكتروني صالح."
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Please return to the website and start the payment again."
+msgstr "يرجى العودة إلى الموقع وبدء الدفع من جديد."
+
+#: includes/Core/Payments/Gateways/WalletGateway.php
+msgid "Please send the amount to the wallet number below and submit the transfer reference."
+msgstr "يرجى إرسال المبلغ إلى رقم المحفظة أدناه وإرسال مرجع التحويل."
+
+#: includes/Core/Payments/Gateways/InstaPayGateway.php
+msgid "Please transfer via InstaPay and submit the reference for verification."
+msgstr "يرجى التحويل عبر إنستاباي وإرسال المرجع للتحقق."
+
+#: includes/Core/Payments/Currencies.php
+msgid "Polish Zloty"
+msgstr "الزلوتي البولندي"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+#: packs/LawFirm/Frontend/StatusPage.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "Practice Area"
+msgstr "مجال الممارسة"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: packs/LawFirm/Starter/StarterSite.php
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "Practice Areas"
+msgstr "مجالات الممارسة"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "Preferred Contact"
+msgstr "وسيلة التواصل المفضّلة"
+
+#: templates/consultation-form.php
+msgid "Preferred Contact Method"
+msgstr "وسيلة التواصل المفضّلة"
+
+#: includes/Admin/PageAdmin.php
+msgid "Preview"
+msgstr "معاينة"
+
+#: includes/Admin/PageAdmin.php
+msgid "Preview updates as you edit fields."
+msgstr "تتحدث المعاينة أثناء تعديل الحقول."
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Previous"
+msgstr "السابق"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Print Invoice"
+msgstr "طباعة الفاتورة"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Print Receipt"
+msgstr "طباعة الإيصال"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Proceed to Pay %s"
+msgstr "المتابعة للدفع %s"
+
+#: templates/partials/payment-methods.php
+msgid "Proceed to Payment"
+msgstr "المتابعة إلى الدفع"
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Processing"
+msgstr "قيد المعالجة"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Professional Title"
+msgstr "المسمى المهني"
+
+#: includes/Builder/CoreSections.php
+msgid "Professional hero slider with image, headline, CTA and layered overlay."
+msgstr "سلايدر رئيسي احترافي بصورة وعنوان رئيسي ودعوة اتخاذ إجراء وطبقة تغطية."
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Professional license or registration number."
+msgstr "رقم الترخيص أو التسجيل المهني."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Proof record exists but the file was deleted"
+msgstr "يوجد سجل إثبات لكن تم حذف الملف"
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "Publishable Key"
+msgstr "المفتاح القابل للنشر"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Published profiles"
+msgstr "الملفات المنشورة"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Qatari Riyal"
+msgstr "الريال القطري"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Quick Actions"
+msgstr "إجراءات سريعة"
+
+#: packs/LawFirm/PostTypes/TestimonialFields.php
+msgid "Rating"
+msgstr "التقييم"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Reason: %s"
+msgstr "السبب: %s"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Receipt"
+msgstr "إيصال"
+
+#: packs/LawFirm/Frontend/ReceiptRoute.php
+msgid "Receipt - %s"
+msgstr "إيصال - %s"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Receipt No:"
+msgstr "رقم الإيصال:"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Receipt viewed"
+msgstr "تم عرض الإيصال"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Recent Appointments"
+msgstr "أحدث المواعيد"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Recent Consultation Requests"
+msgstr "أحدث طلبات الاستشارة"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: packs/LawFirm/Frontend/BillingPage.php
+#: packs/LawFirm/Frontend/StatusPage.php
+msgid "Reference"
+msgstr "مرجع"
+
+#: packs/LawFirm/Frontend/StatusPage.php
+#: templates/status-lookup.php
+msgid "Reference Number"
+msgstr "الرقم المرجعي"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Reference, entity, code…"
+msgstr "مرجع، كيان، رمز…"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Refresh"
+msgstr "تحديث"
+
+#: includes/Core/Payments/Transaction/TransactionStatus.php
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Refunded"
+msgstr "مُسترد"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Reject"
+msgstr "رفض"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Rejected"
+msgstr "مرفوض"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Rejection reason (optional)"
+msgstr "سبب الرفض (اختياري)"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Rejection reason:"
+msgstr "سبب الرفض:"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Related %s is no longer available."
+msgstr "العنصر المرتبط %s لم يعد متاحًا."
+
+#: packs/LawFirm/Taxonomies/PracticeAreaFields.php
+msgid "Remove Image"
+msgstr "إزالة الصورة"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Remove Lawyer Photo"
+msgstr "إزالة صورة المحامي"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Remove Service Image"
+msgstr "إزالة صورة الخدمة"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "Request"
+msgstr "الطلب"
+
+#: packs/LawFirm/Frontend/StatusPage.php
+msgid "Request Status"
+msgstr "حالة الطلب"
+
+#: templates/consultation-form.php
+msgid "Request a Consultation"
+msgstr "اطلب استشارة"
+
+#: packs/LawFirm/Frontend/LookupHandler.php
+msgid "Requested"
+msgstr "مطلوب"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Require Payment by Default"
+msgstr "طلب الدفع افتراضيًا"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Required"
+msgstr "مطلوب"
+
+#: packs/LawFirm/Appointments/AppointmentMeta.php
+msgid "Rescheduled"
+msgstr "أُعيد جدولته"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Reset"
+msgstr "إعادة تعيين"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Revenue Over Time"
+msgstr "الإيرادات عبر الزمن"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Revenue This Month"
+msgstr "إيرادات هذا الشهر"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Revenue by Payment Gateway"
+msgstr "الإيرادات حسب بوابة الدفع"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Review"
+msgstr "مراجعة"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Review Manual Payment"
+msgstr "مراجعة الدفع اليدوي"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Review submitted wallet, InstaPay and bank-transfer payments for this site."
+msgstr "راجع مدفوعات المحفظة وإنستاباي والتحويل البنكي المُرسَلة لهذا الموقع."
+
+#: includes/Builder/CoreSections.php
+msgid "Right"
+msgstr "يمين"
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Run Starter Again"
+msgstr "تشغيل البدء مجددًا"
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "Sandbox"
+msgstr "بيئة تجريبية"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: templates/booking-form.php
+msgid "Saturday"
+msgstr "السبت"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Saudi Riyal"
+msgstr "الريال السعودي"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Save Invoice"
+msgstr "حفظ الفاتورة"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Save Payment Settings"
+msgstr "حفظ إعدادات الدفع"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Save Receipt"
+msgstr "حفظ الإيصال"
+
+#: includes/Admin/PageAdmin.php
+msgid "Save Section"
+msgstr "حفظ القسم"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Saved: %s"
+msgstr "تم الحفظ: %s"
+
+#: packs/LawFirm/Frontend/LookupHandler.php
+#: packs/LawFirm/PostTypes/ConsultationMeta.php
+msgid "Scheduled"
+msgstr "مجدول"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Scheduled ahead"
+msgstr "مجدولة مسبقًا"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Search"
+msgstr "بحث"
+
+#: packs/LawFirm/Appointments/Appointment.php
+msgid "Search Appointments"
+msgstr "البحث في المواعيد"
+
+#: packs/LawFirm/PostTypes/Consultation.php
+msgid "Search Consultations"
+msgstr "البحث في الاستشارات"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "Search FAQ Categories"
+msgstr "البحث في فئات الأسئلة الشائعة"
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgid "Search FAQs"
+msgstr "البحث في الأسئلة الشائعة"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Search Lawyers"
+msgstr "البحث في المحامين"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Search Legal Services"
+msgstr "البحث في الخدمات القانونية"
+
+#: includes/Core/Payments/Transaction/PaymentTransactionPostType.php
+msgid "Search Payments"
+msgstr "البحث في المدفوعات"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "Search Practice Areas"
+msgstr "البحث في مجالات الممارسة"
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgid "Search Testimonials"
+msgstr "البحث في آراء العملاء"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Search currencies…"
+msgstr "ابحث عن العملات…"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Search notifications"
+msgstr "البحث في الإشعارات"
+
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "Search payments"
+msgstr "البحث في المدفوعات"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Search reference, customer…"
+msgstr "ابحث عن مرجع، عميل…"
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "Secret Key"
+msgstr "المفتاح السري"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Section Title"
+msgstr "عنوان القسم"
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Section added successfully."
+msgstr "تمت إضافة القسم بنجاح."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Section deleted successfully."
+msgstr "تم حذف القسم بنجاح."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Section duplicated successfully."
+msgstr "تم تكرار القسم بنجاح."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Section not found."
+msgstr "لم يتم العثور على القسم."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Section order updated successfully."
+msgstr "تم تحديث ترتيب الأقسام بنجاح."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "Section updated successfully."
+msgstr "تم تحديث القسم بنجاح."
+
+#: includes/Admin/PageAdmin.php
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Sections"
+msgstr "الأقسام"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Secure payment - %s"
+msgstr "دفع آمن - %s"
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Secure payment with %s"
+msgstr "دفع آمن عبر %s"
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "Security Key"
+msgstr "مفتاح الأمان"
+
+#: packs/LawFirm/Taxonomies/PracticeAreaFields.php
+msgid "Select Image"
+msgstr "اختيار صورة"
+
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "Select a practice area"
+msgstr "اختر مجال ممارسة"
+
+#: includes/Admin/PageAdmin.php
+msgid "Select a section to edit its content."
+msgstr "اختر قسمًا لتعديل محتواه."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "Server-side key. Never exposed to visitors."
+msgstr "مفتاح من جهة الخادم. لا يُكشف للزوار أبدًا."
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Service"
+msgstr "الخدمة"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Service Image"
+msgstr "صورة الخدمة"
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+#: includes/Core/Payments/Gateways/StripeGateway.php
+#: includes/Core/Payments/Gateways/XPayGateway.php
+#: includes/Core/Payments/Receipt/Receipt.php
+msgid "Service payment"
+msgstr "دفع خدمة"
+
+#: packs/LawFirm/Starter/StarterSite.php
+msgid "Services"
+msgstr "الخدمات"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Set Lawyer Photo"
+msgstr "تعيين صورة المحامي"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Set Service Image"
+msgstr "تعيين صورة الخدمة"
+
+#: includes/Admin/SiteSettingsPage.php
+msgid "Settings saved successfully."
+msgstr "تم حفظ الإعدادات بنجاح."
+
+#: includes/Builder/CoreSections.php
+msgid "Show Map"
+msgstr "عرض الخريطة"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Show Payment Details"
+msgstr "عرض تفاصيل الدفع"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Show Receipt Button"
+msgstr "عرض زر الإيصال"
+
+#: packs/LawFirm/PostTypes/FaqFields.php
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: packs/LawFirm/PostTypes/LegalServiceFields.php
+#: packs/LawFirm/PostTypes/TestimonialFields.php
+msgid "Show on Website"
+msgstr "عرض على الموقع"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Show only items marked as featured."
+msgstr "إظهار العناصر المميّزة فقط."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Show the \"Appointment\" option in the lookup form."
+msgstr "عرض خيار \"موعد\" في نموذج البحث."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Show the \"Consultation\" option in the lookup form."
+msgstr "عرض خيار \"استشارة\" في نموذج البحث."
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Shown to the client after they choose bank transfer."
+msgstr "تُعرض للعميل بعد اختياره التحويل البنكي."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Site Currency"
+msgstr "عملة الموقع"
+
+#: includes/Builder/CoreSections.php
+msgid "Slides"
+msgstr "الشرائح"
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Slug"
+msgstr "المعرّف"
+
+#: includes/Builder/CoreSections.php
+msgid "Social Links"
+msgstr "روابط التواصل الاجتماعي"
+
+#: templates/booking-form.php
+msgid "Sorry, that time slot was just taken. Please choose another slot."
+msgstr "عذرًا، تم حجز هذه الفترة الزمنية للتو. يرجى اختيار فترة أخرى."
+
+#: templates/consultation-form.php
+msgid "Sorry, your request could not be sent. Please check the required fields and try again."
+msgstr "عذرًا، تعذّر إرسال طلبك. يرجى التحقق من الحقول المطلوبة والمحاولة مجددًا."
+
+#: templates/booking-form.php
+msgid "Sorry, your request could not be submitted. Please check the required fields."
+msgstr "عذرًا، تعذّر إرسال طلبك. يرجى التحقق من الحقول المطلوبة."
+
+#: includes/Core/Payments/Currencies.php
+msgid "South African Rand"
+msgstr "الراند الجنوب أفريقي"
+
+#: includes/Builder/CoreSections.php
+msgid "Split"
+msgstr "منقسم"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Spoken languages, for example: Arabic, English, French."
+msgstr "اللغات المتحدث بها، مثال: العربية، الإنجليزية، الفرنسية."
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Starter pages already existed, so nothing was created. Existing content was not changed."
+msgstr "الصفحات الجاهزة موجودة مسبقًا، لذا لم يتم إنشاء شيء. لم يتغير المحتوى الحالي."
+
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Starter pages created successfully."
+msgstr "تم إنشاء الصفحات الجاهزة بنجاح."
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: packs/LawFirm/PostTypes/Lawyer.php
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "Status"
+msgstr "الحالة"
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Stripe did not return a checkout URL."
+msgstr "لم تُرجع سترايب رابط دفع."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Stripe is not configured (missing secret key)."
+msgstr "سترايب غير مُعد (المفتاح السري مفقود)."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Stripe is not configured."
+msgstr "سترايب غير مُعد."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Stripe payment verified."
+msgstr "تم التحقق من دفع سترايب."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Stripe session expired."
+msgstr "انتهت صلاحية جلسة سترايب."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Stripe session is not paid yet."
+msgstr "لم يتم دفع جلسة سترايب بعد."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Stripe webhook carried no session id."
+msgstr "لم يحمل ويبهوك سترايب معرّف جلسة."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Stripe webhook signature is missing or not configured."
+msgstr "توقيع ويبهوك سترايب مفقود أو غير مُعد."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Stripe webhook signature verification failed."
+msgstr "فشل التحقق من توقيع ويبهوك سترايب."
+
+#: includes/Builder/CoreSections.php
+msgid "Subheading"
+msgstr "العنوان الفرعي"
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Frontend/LookupHandler.php
+msgid "Submitted"
+msgstr "تم الإرسال"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: templates/booking-form.php
+msgid "Sunday"
+msgstr "الأحد"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Swedish Krona"
+msgstr "الكرونة السويدية"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Swiss Franc"
+msgstr "الفرنك السويسري"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "System"
+msgstr "النظام"
+
+#: includes/Admin/PageAdmin.php
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "Template"
+msgstr "القالب"
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "Test"
+msgstr "اختبار"
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "Test / Sandbox"
+msgstr "اختبار / بيئة تجريبية"
+
+#: packs/LawFirm/PostTypes/TestimonialFields.php
+msgid "Testimonial Details"
+msgstr "تفاصيل رأي العميل"
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Testimonials"
+msgstr "آراء العملاء"
+
+#: templates/consultation-form.php
+msgid "Thank you. Your consultation request has been received and our team will contact you shortly."
+msgstr "شكرًا لك. تم استلام طلب استشارتك وسيتواصل فريقنا معك قريبًا."
+
+#: packs/LawFirm/Appointments/Availability.php
+#: templates/booking-form.php
+msgid "That day is fully booked. Please choose another day."
+msgstr "هذا اليوم محجوز بالكامل. يرجى اختيار يوم آخر."
+
+#: templates/booking-form.php
+msgid "That time is outside our booking hours. Please choose another time."
+msgstr "هذا الوقت خارج ساعات الحجز لدينا. يرجى اختيار وقت آخر."
+
+#: packs/LawFirm/Appointments/Availability.php
+msgid "That time is outside the available booking hours."
+msgstr "هذا الوقت خارج ساعات الحجز المتاحة."
+
+#: packs/LawFirm/Appointments/Availability.php
+msgid "That time slot is no longer available. Please choose another."
+msgstr "هذه الفترة الزمنية لم تعد متاحة. يرجى اختيار فترة أخرى."
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "The amount is not valid. Please contact us so we can correct it."
+msgstr "المبلغ غير صالح. يرجى التواصل معنا لتصحيحه."
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "The bank the client should transfer to."
+msgstr "البنك الذي يجب أن يحوّل إليه العميل."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "The manual payment was verified and confirmed."
+msgstr "تم التحقق من الدفع اليدوي وتأكيده."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+#: includes/Core/Payments/Gateways/StripeGateway.php
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "The payment amount is invalid."
+msgstr "مبلغ الدفع غير صالح."
+
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "The payment could not be started."
+msgstr "تعذّر بدء الدفع."
+
+#: includes/Core/Payments/Checkout/PaymentCheckout.php
+msgid "The payment provider could not be reached. Please try again."
+msgstr "تعذّر الوصول إلى مزوّد الدفع. يرجى المحاولة مجددًا."
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "The payment provider did not return a checkout link. Please try again, or choose another method."
+msgstr "لم يُرجع مزوّد الدفع رابط دفع. يرجى المحاولة مجددًا، أو اختيار وسيلة أخرى."
+
+#: includes/REST/PaymentCallback.php
+msgid "The payment via %1$s for %2$s did not complete."
+msgstr "لم تكتمل عملية الدفع عبر %1$s لـ%2$s."
+
+#: packs/LawFirm/Frontend/LookupHandler.php
+msgid "The provided reference and phone number could not be verified."
+msgstr "تعذّر التحقق من الرقم المرجعي ورقم الهاتف المُقدَّمين."
+
+#: includes/Core/Plugin.php
+msgid "The receipt could not be loaded."
+msgstr "تعذّر تحميل الإيصال."
+
+#: packs/LawFirm/Payments/PaymentFlow.php
+msgid "The request could not be prepared for payment."
+msgstr "تعذّر تجهيز الطلب للدفع."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "The section could not be added."
+msgstr "تعذّر إضافة القسم."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "The section could not be deleted."
+msgstr "تعذّر حذف القسم."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "The section could not be duplicated."
+msgstr "تعذّر تكرار القسم."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "The section could not be updated."
+msgstr "تعذّر تحديث القسم."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "The section order could not be updated."
+msgstr "تعذّر تحديث ترتيب الأقسام."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "The section was added but could not be loaded."
+msgstr "تمت إضافة القسم ولكن تعذّر تحميله."
+
+#: packs/LawFirm/Appointments/Availability.php
+msgid "The selected day is not available for bookings."
+msgstr "اليوم المختار غير متاح للحجز."
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "The selected payment method does not support this site currency. Please choose another method, or contact us."
+msgstr "وسيلة الدفع المختارة لا تدعم عملة هذا الموقع. يرجى اختيار وسيلة أخرى، أو تواصل معنا."
+
+#: includes/Core/Payments/Checkout/PaymentCheckout.php
+msgid "The selected payment method is not available."
+msgstr "وسيلة الدفع المختارة غير متاحة."
+
+#: includes/Core/Payments/Checkout/PaymentCheckout.php
+msgid "The selected payment method is not configured yet."
+msgstr "لم يتم إعداد وسيلة الدفع المختارة بعد."
+
+#: includes/Core/Payments/Checkout/PaymentCheckout.php
+msgid "The selected payment method is not enabled."
+msgstr "وسيلة الدفع المختارة غير مُفعّلة."
+
+#: templates/partials/billing-form.php
+msgid "These details are required by Paymob to process your card payment securely."
+msgstr "هذه التفاصيل مطلوبة من بيموب لمعالجة دفع بطاقتك بأمان."
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "These details are required by the payment provider. We never store your card details."
+msgstr "هذه التفاصيل مطلوبة من مزوّد الدفع. نحن لا نخزّن بيانات بطاقتك أبدًا."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "This gateway has no configurable fields."
+msgstr "هذه البوابة ليس لها حقول قابلة للإعداد."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "This payment could not be approved (invalid or already reviewed)."
+msgstr "تعذّرت الموافقة على هذا الدفع (غير صالح أو تمت مراجعته مسبقًا)."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "This payment could not be rejected (invalid or already reviewed)."
+msgstr "تعذّر رفض هذا الدفع (غير صالح أو تمت مراجعته مسبقًا)."
+
+#: templates/partials/manual-payment-instructions.php
+msgid "This payment is completed only after an administrator verifies it."
+msgstr "لا يكتمل هذا الدفع إلا بعد أن يتحقق منه المسؤول."
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "This payment link is no longer valid"
+msgstr "رابط الدفع هذا لم يعد صالحًا"
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "This payment method is currently disabled. Please choose another, or contact us."
+msgstr "وسيلة الدفع هذه مُعطّلة حاليًا. يرجى اختيار أخرى، أو تواصل معنا."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "This payment method is not available for the current currency. Please choose another payment method."
+msgstr "وسيلة الدفع هذه غير متاحة للعملة الحالية. يرجى اختيار وسيلة دفع أخرى."
+
+#: includes/Core/Payments/Checkout/PaymentCheckout.php
+msgid "This payment method is not available right now. Please choose another."
+msgstr "وسيلة الدفع هذه غير متاحة الآن. يرجى اختيار وسيلة أخرى."
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "This payment method is not set up yet. Please choose another, or contact us so we can help."
+msgstr "لم يتم إعداد وسيلة الدفع هذه بعد. يرجى اختيار أخرى، أو تواصل معنا لمساعدتك."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "This payment proof could not be found."
+msgstr "تعذّر العثور على إثبات الدفع هذا."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "This payment proof file is no longer available."
+msgstr "ملف إثبات الدفع هذا لم يعد متاحًا."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "This payment proof is no longer available."
+msgstr "إثبات الدفع هذا لم يعد متاحًا."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "This payment proof type is not allowed."
+msgstr "نوع إثبات الدفع هذا غير مسموح."
+
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "This service is free of charge. Your invoice is shown below."
+msgstr "هذه الخدمة مجانية. تظهر فاتورتك أدناه."
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "This service is provided free of charge. No payment is required — please keep this invoice for your records."
+msgstr "تُقدَّم هذه الخدمة مجانًا. لا حاجة للدفع — يرجى الاحتفاظ بهذه الفاتورة لسجلاتك."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: templates/booking-form.php
+msgid "Thursday"
+msgstr "الخميس"
+
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: templates/booking-form.php
+msgid "Time"
+msgstr "الوقت"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Time window"
+msgstr "النطاق الزمني"
+
+#: includes/Builder/CoreSections.php
+msgid "Title"
+msgstr "العنوان"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "To date"
+msgstr "إلى تاريخ"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Today"
+msgstr "اليوم"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Today's Appointments"
+msgstr "مواعيد اليوم"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Toggle a gateway on to accept it, then open its configuration. Enabling a gateway only offers it to customers once its required fields are complete."
+msgstr "فعّل بوابة لقبولها، ثم افتح إعداداتها. لا تُعرض البوابة للعملاء إلا بعد اكتمال حقولها المطلوبة."
+
+#: includes/Core/Payments/Receipt/ReceiptPage.php
+#: packs/LawFirm/Frontend/LookupHandler.php
+#: packs/LawFirm/Frontend/StatusPage.php
+msgid "Too many attempts. Please wait a moment and try again."
+msgstr "محاولات كثيرة جدًا. يرجى الانتظار قليلًا والمحاولة مجددًا."
+
+#: includes/Builder/CoreSections.php
+msgid "Top navigation and call-to-action area for the page."
+msgstr "شريط التنقل العلوي ومنطقة دعوة اتخاذ الإجراء للصفحة."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "Total"
+msgstr "الإجمالي"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Total Appointments"
+msgstr "إجمالي المواعيد"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Total Consultation Requests"
+msgstr "إجمالي طلبات الاستشارة"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Total Lawyers"
+msgstr "إجمالي المحامين"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Total Revenue"
+msgstr "إجمالي الإيرادات"
+
+#: includes/Core/Payments/Receipt/Receipt.php
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: templates/partials/manual-payment-instructions.php
+msgid "Transaction Reference"
+msgstr "مرجع المعاملة"
+
+#: includes/Core/Payments/Gateways/BankTransferGateway.php
+msgid "Transfer Instructions"
+msgstr "تعليمات التحويل"
+
+#: templates/partials/manual-payment-instructions.php
+msgid "Transfer the amount externally, then enter the transaction reference below. An administrator will verify your payment."
+msgstr "حوّل المبلغ خارجيًا، ثم أدخل مرجع المعاملة أدناه. سيتحقق المسؤول من دفعك."
+
+#: includes/Builder/CoreSections.php
+msgid "Trusted by 2,500 companies"
+msgstr "موثوق به من 2,500 شركة"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: templates/booking-form.php
+msgid "Tuesday"
+msgstr "الثلاثاء"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Tunisian Dinar"
+msgstr "الدينار التونسي"
+
+#: includes/Core/Payments/Currencies.php
+msgid "Turkish Lira"
+msgstr "الليرة التركية"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "Type"
+msgstr "النوع"
+
+#: includes/Core/Payments/Currencies.php
+msgid "UAE Dirham"
+msgstr "الدرهم الإماراتي"
+
+#: includes/Builder/CoreSections.php
+msgid "URL"
+msgstr "الرابط"
+
+#: includes/Core/Payments/Currencies.php
+msgid "US Dollar"
+msgstr "الدولار الأمريكي"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Unconfirmed appointment"
+msgstr "موعد غير مؤكّد"
+
+#: packs/LawFirm/Frontend/LookupHandler.php
+msgid "Under Review"
+msgstr "قيد المراجعة"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Unknown payment callback"
+msgstr "استدعاء دفع غير معروف"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Unpaid"
+msgstr "غير مدفوع"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Unpaid Consultations"
+msgstr "الاستشارات غير المدفوعة"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Unread"
+msgstr "غير مقروء"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Upcoming Appointments"
+msgstr "المواعيد القادمة"
+
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgid "Update FAQ Category"
+msgstr "تحديث فئة الأسئلة الشائعة"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "Update Practice Area"
+msgstr "تحديث مجال الممارسة"
+
+#: templates/partials/manual-payment-instructions.php
+msgid "Upload Receipt (optional)"
+msgstr "رفع الإيصال (اختياري)"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "Uploaded payment proof"
+msgstr "إثبات الدفع المرفوع"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Uploaded to this lawyer"
+msgstr "تم رفعها إلى هذا المحامي"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Uploaded to this legal service"
+msgstr "تم رفعها إلى هذه الخدمة القانونية"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "Use as Lawyer Photo"
+msgstr "استخدامها كصورة للمحامي"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "Use as Service Image"
+msgstr "استخدامها كصورة للخدمة"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "Use site default"
+msgstr "استخدام الافتراضي للموقع"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Used across consultations and appointments for this site."
+msgstr "تُستخدم في الاستشارات والمواعيد لهذا الموقع."
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "Verified payments"
+msgstr "المدفوعات المُتحقَّق منها"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "View"
+msgstr "عرض"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "View All Appointments"
+msgstr "عرض كل المواعيد"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "View All Notifications"
+msgstr "عرض كل الإشعارات"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+#: packs/LawFirm/Appointments/Appointment.php
+msgid "View Appointment"
+msgstr "عرض الموعد"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+#: packs/LawFirm/PostTypes/Consultation.php
+msgid "View Consultation"
+msgstr "عرض الاستشارة"
+
+#: packs/LawFirm/Admin/DashboardStats.php
+msgid "View Details"
+msgstr "عرض التفاصيل"
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgid "View FAQ"
+msgstr "عرض السؤال الشائع"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "View Invoice"
+msgstr "عرض الفاتورة"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgid "View Lawyer"
+msgstr "عرض المحامي"
+
+#: packs/LawFirm/PostTypes/LegalService.php
+msgid "View Legal Service"
+msgstr "عرض الخدمة القانونية"
+
+#: includes/Core/Payments/Transaction/PaymentTransactionPostType.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "View Payment"
+msgstr "عرض الدفع"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
+msgid "View Practice Area"
+msgstr "عرض مجال الممارسة"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "View Proof"
+msgstr "عرض الإثبات"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+#: packs/LawFirm/Frontend/StatusPage.php
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "View Receipt"
+msgstr "عرض الإيصال"
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "View Record"
+msgstr "عرض السجل"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "View Site"
+msgstr "عرض الموقع"
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgid "View Testimonial"
+msgstr "عرض رأي العميل"
+
+#: includes/Core/Payments/Gateways/WalletGateway.php
+msgid "Wallet Number"
+msgstr "رقم المحفظة"
+
+#: includes/Core/Payments/Gateways/WalletGateway.php
+msgid "Wallet Provider"
+msgstr "مزوّد المحفظة"
+
+#: includes/Core/Payments/Gateways/WalletGateway.php
+msgid "Wallet payments are verified manually by an administrator."
+msgstr "يتم التحقق من مدفوعات المحفظة يدويًا بواسطة المسؤول."
+
+#: templates/booking-form.php
+msgid "We are not taking bookings on the selected day. Please choose another day."
+msgstr "لا نستقبل حجوزات في اليوم المختار. يرجى اختيار يوم آخر."
+
+#: includes/Core/Payments/Gateways/FawryGateway.php
+msgid "We could not create the Fawry payment. Please try another payment method."
+msgstr "تعذّر إنشاء دفع فوري. يرجى تجربة وسيلة دفع أخرى."
+
+#: packs/LawFirm/Appointments/BookingForm.php
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "We could not save your payment submission. Please try again."
+msgstr "تعذّر حفظ إرسال دفعتك. يرجى المحاولة مجددًا."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "We could not start the payment with PayPal. Please try another payment method."
+msgstr "تعذّر بدء الدفع عبر باي بال. يرجى تجربة وسيلة دفع أخرى."
+
+#: includes/Core/Payments/Gateways/PaymobGateway.php
+msgid "We could not start the payment with Paymob. Please try another payment method."
+msgstr "تعذّر بدء الدفع عبر بيموب. يرجى تجربة وسيلة دفع أخرى."
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+msgid "We could not start the payment with Stripe. Please try another payment method."
+msgstr "تعذّر بدء الدفع عبر سترايب. يرجى تجربة وسيلة دفع أخرى."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "We could not start the payment with XPay. Please try another payment method."
+msgstr "تعذّر بدء الدفع عبر XPay. يرجى تجربة وسيلة دفع أخرى."
+
+#: templates/booking-form.php
+msgid "We use your mobile number to prevent double bookings."
+msgstr "نستخدم رقم جوالك لمنع الحجز المزدوج."
+
+#: includes/Core/Payments/Gateways/PayPalGateway.php
+msgid "Webhook ID"
+msgstr "معرّف الويبهوك"
+
+#: includes/Core/Payments/Gateways/StripeGateway.php
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "Webhook Signing Secret"
+msgstr "سر توقيع الويبهوك"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "Webhook URL"
+msgstr "رابط الويبهوك"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+#: templates/booking-form.php
+msgid "Wednesday"
+msgstr "الأربعاء"
+
+#: includes/Builder/CoreSections.php
+#: includes/Builder/SectionRenderer.php
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: templates/consultation-form.php
+#: templates/single-bb_lawyer.php
+msgid "WhatsApp"
+msgstr "واتساب"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "WhatsApp number including country code."
+msgstr "رقم واتساب متضمنًا رمز الدولة."
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "When on, the customer must pay before the request is confirmed."
+msgstr "عند التفعيل، يجب على العميل الدفع قبل تأكيد الطلب."
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "X"
+msgstr "X"
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+msgid "X profile URL."
+msgstr "رابط الملف الشخصي على X."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay %1$s failed: %2$s"
+msgstr "فشل %1$s في XPay: %2$s"
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay did not return a checkout URL."
+msgstr "لم تُرجع XPay رابط دفع."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay is not configured (missing Secret Key)."
+msgstr "XPay غير مُعد (المفتاح السري مفقود)."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay is not configured."
+msgstr "XPay غير مُعد."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay payment verified."
+msgstr "تم التحقق من دفع XPay."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay session expired."
+msgstr "انتهت صلاحية جلسة XPay."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay session is not paid yet."
+msgstr "لم يتم دفع جلسة XPay بعد."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay supports EGP only. Please choose another payment method."
+msgstr "XPay يدعم الجنيه المصري فقط. يرجى اختيار وسيلة دفع أخرى."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay webhook carried no session id."
+msgstr "لم يحمل ويبهوك XPay معرّف جلسة."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay webhook signature is missing or not configured."
+msgstr "توقيع ويبهوك XPay مفقود أو غير مُعد."
+
+#: includes/Core/Payments/Gateways/XPayGateway.php
+msgid "XPay webhook signature verification failed."
+msgstr "فشل التحقق من توقيع ويبهوك XPay."
+
+#: packs/LawFirm/PostTypes/LawyerFields.php
+#: templates/single-bb_lawyer.php
+msgid "Years of Experience"
+msgstr "سنوات الخبرة"
+
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+msgid "Yesterday"
+msgstr "أمس"
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "You are all caught up."
+msgstr "لا يوجد جديد لديك."
+
+#: includes/Admin/SiteSettingsPage.php
+#: packs/LawFirm/Admin/DashboardAdmin.php
+#: packs/LawFirm/Admin/DashboardMenu.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "You do not have permission to access this page."
+msgstr "ليس لديك إذن للوصول إلى هذه الصفحة."
+
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+msgid "You do not have permission to edit this appointment."
+msgstr "ليس لديك إذن لتعديل هذا الموعد."
+
+#: includes/REST/PageBuilderAjax.php
+msgid "You do not have permission to edit this page."
+msgstr "ليس لديك إذن لتعديل هذه الصفحة."
+
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+msgid "You do not have permission to edit this request."
+msgstr "ليس لديك إذن لتعديل هذا الطلب."
+
+#: includes/Admin/SiteSettingsPage.php
+#: packs/LawFirm/Admin/ConsultationAdmin.php
+#: packs/LawFirm/Admin/DashboardAdmin.php
+#: packs/LawFirm/Admin/NotificationsAdmin.php
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+#: packs/LawFirm/Appointments/AppointmentAdmin.php
+#: packs/LawFirm/Starter/StarterAdmin.php
+msgid "You do not have permission to perform this action."
+msgstr "ليس لديك إذن لتنفيذ هذا الإجراء."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "You do not have permission to review payments."
+msgstr "ليس لديك إذن لمراجعة المدفوعات."
+
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "You do not have permission to view this payment proof."
+msgstr "ليس لديك إذن لعرض إثبات الدفع هذا."
+
+#: packs/LawFirm/Appointments/Availability.php
+msgid "You have already booked an appointment for this day."
+msgstr "لقد حجزت موعدًا لهذا اليوم بالفعل."
+
+#: templates/booking-form.php
+msgid "You have already booked an appointment for this day. You can only book one appointment per day."
+msgstr "لقد حجزت موعدًا لهذا اليوم بالفعل. يمكنك حجز موعد واحد فقط في اليوم."
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "You have unsaved payment settings."
+msgstr "لديك إعدادات دفع غير محفوظة."
+
+#: templates/booking-form.php
+msgid "Your Name"
+msgstr "اسمك"
+
+#: packs/LawFirm/Frontend/StatusPage.php
+msgid "Your Request Status"
+msgstr "حالة طلبك"
+
+#: templates/booking-form.php
+msgid "Your appointment request has been received. We will confirm it shortly."
+msgstr "تم استلام طلب موعدك. سنؤكده قريبًا."
+
+#: templates/booking-form.php
+msgid "Your appointment was held and is awaiting payment verification. You will receive a confirmation once an administrator verifies your payment."
+msgstr "تم حفظ موعدك وهو بانتظار التحقق من الدفع. ستصلك رسالة تأكيد بمجرد أن يتحقق المسؤول من دفعك."
+
+#: templates/booking-form.php
+msgid "Your appointment was held, but the payment could not be started. Please choose a payment method and try again."
+msgstr "تم حفظ موعدك، لكن تعذّر بدء الدفع. يرجى اختيار وسيلة دفع والمحاولة مجددًا."
+
+#: packs/LawFirm/Frontend/BillingPage.php
+msgid "Your connection is secure. Card details are entered only at the provider."
+msgstr "اتصالك آمن. تُدخَل بيانات البطاقة لدى المزوّد فقط."
+
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "Your operational control center: requests, bookings, payments and activity for this site."
+msgstr "مركز التحكم التشغيلي الخاص بك: الطلبات والحجوزات والمدفوعات والنشاط لهذا الموقع."
+
+#: templates/booking-form.php
+#: templates/consultation-form.php
+msgid "Your payment is processed securely by the provider. We never store card details."
+msgstr "تتم معالجة دفعتك بأمان بواسطة المزوّد. نحن لا نخزّن بيانات البطاقة أبدًا."
+
+#: templates/consultation-form.php
+msgid "Your request was received and is awaiting payment verification. You will receive a confirmation once an administrator verifies your payment."
+msgstr "تم استلام طلبك وهو بانتظار التحقق من الدفع. ستصلك رسالة تأكيد بمجرد أن يتحقق المسؤول من دفعك."
+
+#: packs/LawFirm/Frontend/ConsultationForm.php
+msgid "[%s] New legal consultation request"
+msgstr "[%s] طلب استشارة قانونية جديد"
+
+#: includes/REST/PaymentWebhook.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "appointment"
+msgstr "موعد"
+
+#: includes/REST/PaymentWebhook.php
+#: packs/LawFirm/Admin/ManualPaymentsAdmin.php
+msgid "consultation"
+msgstr "استشارة"
+
+#: templates/partials/billing-form.php
+msgid "e.g. 01012345678"
+msgstr "مثال: 01012345678"
+
+#: templates/partials/billing-form.php
+msgid "e.g. Amina"
+msgstr "مثال: أمينة"
+
+#: includes/Builder/CoreSections.php
+msgid "e.g. Contact Us"
+msgstr "مثال: اتصل بنا"
+
+#: templates/partials/billing-form.php
+msgid "e.g. Youssef"
+msgstr "مثال: يوسف"
+
+#: templates/partials/manual-payment-instructions.php
+msgid "e.g. transfer ID / receipt number"
+msgstr "مثال: معرّف التحويل / رقم الإيصال"
+
+#: packs/LawFirm/Sections/LawFirmSections.php
+msgid "enabled"
+msgstr "مُفعّل"
+
+#: templates/booking-form.php
+msgid "from %1$s to %2$s"
+msgstr "من %1$s إلى %2$s"
+
+#: packs/LawFirm/Admin/PaymentSettingsAdmin.php
+msgid "saved"
+msgstr "محفوظ"
+
+#: templates/partials/billing-form.php
+msgid "you@example.com"
+msgstr "you@example.com"
+
+#: includes/Core/Payments/Receipt/ReceiptRenderer.php
+msgid "—"
+msgstr "—"
+
+#: packs/LawFirm/Appointments/Appointment.php
+msgctxt "post type general name"
+msgid "Appointments"
+msgstr "المواعيد"
+
+#: packs/LawFirm/PostTypes/Consultation.php
+msgctxt "post type general name"
+msgid "Consultation Requests"
+msgstr "طلبات الاستشارة"
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgctxt "post type general name"
+msgid "FAQs"
+msgstr "الأسئلة الشائعة"
 
 #: packs/LawFirm/PostTypes/Lawyer.php
 msgctxt "post type general name"
 msgid "Lawyers"
 msgstr "المحامون"
 
-msgctxt "post type singular name"
-msgid "Lawyer"
-msgstr "محامٍ"
-
-msgid "Lawyers"
-msgstr "المحامون"
-
-msgid "Lawyer"
-msgstr "محامٍ"
-
-msgid "Add New"
-msgstr "إضافة جديد"
-
-msgid "Add New Lawyer"
-msgstr "إضافة محامٍ جديد"
-
-msgid "New Lawyer"
-msgstr "محامٍ جديد"
-
-msgid "Edit Lawyer"
-msgstr "تعديل المحامي"
-
-msgid "View Lawyer"
-msgstr "عرض المحامي"
-
-msgid "All Lawyers"
-msgstr "كل المحامين"
-
-msgid "Search Lawyers"
-msgstr "البحث في المحامين"
-
-msgid "No lawyers found."
-msgstr "لم يتم العثور على محامين."
-
-msgid "No lawyers found in Trash."
-msgstr "لم يتم العثور على محامين في سلة المهملات."
-
-msgid "Lawyer Photo"
-msgstr "صورة المحامي"
-
-msgid "Set Lawyer Photo"
-msgstr "تعيين صورة المحامي"
-
-msgid "Remove Lawyer Photo"
-msgstr "إزالة صورة المحامي"
-
-msgid "Use as Lawyer Photo"
-msgstr "استخدامها كصورة للمحامي"
-
-msgid "Lawyer Archives"
-msgstr "أرشيف المحامين"
-
-msgid "Lawyer Attributes"
-msgstr "خصائص المحامي"
-
-msgid "Insert into lawyer"
-msgstr "إدراج في المحامي"
-
-msgid "Uploaded to this lawyer"
-msgstr "تم رفعها إلى هذا المحامي"
-
-msgid "Filter lawyers list"
-msgstr "تصفية قائمة المحامين"
-
-msgid "Lawyers list navigation"
-msgstr "التنقل في قائمة المحامين"
-
-msgid "Lawyers list"
-msgstr "قائمة المحامين"
-
 #: packs/LawFirm/PostTypes/LegalService.php
 msgctxt "post type general name"
 msgid "Legal Services"
 msgstr "الخدمات القانونية"
 
+#: includes/Core/Payments/Transaction/PaymentTransactionPostType.php
+msgctxt "post type general name"
+msgid "Payments"
+msgstr "المدفوعات"
+
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgctxt "post type general name"
+msgid "Testimonials"
+msgstr "آراء العملاء"
+
+#: packs/LawFirm/Appointments/Appointment.php
+msgctxt "post type singular name"
+msgid "Appointment"
+msgstr "موعد"
+
+#: packs/LawFirm/PostTypes/Consultation.php
+msgctxt "post type singular name"
+msgid "Consultation Request"
+msgstr "طلب استشارة"
+
+#: packs/LawFirm/PostTypes/Faq.php
+msgctxt "post type singular name"
+msgid "FAQ"
+msgstr "سؤال شائع"
+
+#: packs/LawFirm/PostTypes/Lawyer.php
+msgctxt "post type singular name"
+msgid "Lawyer"
+msgstr "محامٍ"
+
+#: packs/LawFirm/PostTypes/LegalService.php
 msgctxt "post type singular name"
 msgid "Legal Service"
 msgstr "خدمة قانونية"
 
-msgid "Legal Services"
-msgstr "الخدمات القانونية"
+#: includes/Core/Payments/Transaction/PaymentTransactionPostType.php
+msgctxt "post type singular name"
+msgid "Payment"
+msgstr "دفع"
 
-msgid "Legal Service"
-msgstr "خدمة قانونية"
+#: packs/LawFirm/PostTypes/Testimonial.php
+msgctxt "post type singular name"
+msgid "Testimonial"
+msgstr "رأي عميل"
 
-msgid "Add New Legal Service"
-msgstr "إضافة خدمة قانونية جديدة"
-
-msgid "New Legal Service"
-msgstr "خدمة قانونية جديدة"
-
-msgid "Edit Legal Service"
-msgstr "تعديل الخدمة القانونية"
-
-msgid "View Legal Service"
-msgstr "عرض الخدمة القانونية"
-
-msgid "All Legal Services"
-msgstr "كل الخدمات القانونية"
-
-msgid "Search Legal Services"
-msgstr "البحث في الخدمات القانونية"
-
-msgid "No legal services found."
-msgstr "لم يتم العثور على خدمات قانونية."
-
-msgid "No legal services found in Trash."
-msgstr "لم يتم العثور على خدمات قانونية في سلة المهملات."
-
-msgid "Service Image"
-msgstr "صورة الخدمة"
-
-msgid "Set Service Image"
-msgstr "تعيين صورة الخدمة"
-
-msgid "Remove Service Image"
-msgstr "إزالة صورة الخدمة"
-
-msgid "Use as Service Image"
-msgstr "استخدامها كصورة للخدمة"
-
-msgid "Legal Service Archives"
-msgstr "أرشيف الخدمات القانونية"
-
-msgid "Legal Service Attributes"
-msgstr "خصائص الخدمة القانونية"
-
-msgid "Insert into legal service"
-msgstr "إدراج في الخدمة القانونية"
-
-msgid "Uploaded to this legal service"
-msgstr "تم رفعها إلى هذه الخدمة القانونية"
-
-msgid "Filter legal services list"
-msgstr "تصفية قائمة الخدمات القانونية"
-
-msgid "Legal services list navigation"
-msgstr "التنقل في قائمة الخدمات القانونية"
-
-msgid "Legal services list"
-msgstr "قائمة الخدمات القانونية"
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgctxt "taxonomy general name"
+msgid "FAQ Categories"
+msgstr "فئات الأسئلة الشائعة"
 
 #: packs/LawFirm/Taxonomies/PracticeArea.php
 msgctxt "taxonomy general name"
 msgid "Practice Areas"
 msgstr "مجالات الممارسة"
 
+#: packs/LawFirm/Taxonomies/FaqCategory.php
+msgctxt "taxonomy singular name"
+msgid "FAQ Category"
+msgstr "فئة السؤال الشائع"
+
+#: packs/LawFirm/Taxonomies/PracticeArea.php
 msgctxt "taxonomy singular name"
 msgid "Practice Area"
-msgstr "مجال ممارسة"
+msgstr "مجال الممارسة"
 
-msgid "Practice Areas"
-msgstr "مجالات الممارسة"
+#: includes/Admin/PageAdmin.php
+msgid "%d section"
+msgid_plural "%d sections"
+msgstr[0] "لا أقسام"
+msgstr[1] "قسم واحد"
+msgstr[2] "قسمان"
+msgstr[3] "%d أقسام"
+msgstr[4] "%d قسمًا"
+msgstr[5] "%d قسم"
 
-msgid "Practice Area"
-msgstr "مجال ممارسة"
+#: packs/LawFirm/Admin/PaymentLogsAdmin.php
+msgid "%d transaction"
+msgid_plural "%d transactions"
+msgstr[0] "لا معاملات"
+msgstr[1] "معاملة واحدة"
+msgstr[2] "معاملتان"
+msgstr[3] "%d معاملات"
+msgstr[4] "%d معاملة"
+msgstr[5] "%d معاملة"
 
-msgid "Search Practice Areas"
-msgstr "البحث في مجالات الممارسة"
-
-msgid "All Practice Areas"
-msgstr "كل مجالات الممارسة"
-
-msgid "Parent Practice Area"
-msgstr "مجال الممارسة الأب"
-
-msgid "Parent Practice Area:"
-msgstr "مجال الممارسة الأب:"
-
-msgid "Edit Practice Area"
-msgstr "تعديل مجال الممارسة"
-
-msgid "View Practice Area"
-msgstr "عرض مجال الممارسة"
-
-msgid "Update Practice Area"
-msgstr "تحديث مجال الممارسة"
-
-msgid "Add New Practice Area"
-msgstr "إضافة مجال ممارسة جديد"
-
-msgid "New Practice Area Name"
-msgstr "اسم مجال الممارسة الجديد"
-
-msgid "No practice areas found."
-msgstr "لم يتم العثور على مجالات ممارسة."
-
-#: packs/LawFirm/PostTypes/LegalServiceFields.php
-msgid "Legal Service Details"
-msgstr "تفاصيل الخدمة القانونية"
-
-msgid "Icon"
-msgstr "الأيقونة"
-
-msgid "Display Order"
-msgstr "ترتيب العرض"
-
-msgid "Lower numbers appear first on the website."
-msgstr "الأرقام الأقل تظهر أولًا على الموقع."
-
-msgid "Show on Website"
-msgstr "عرض على الموقع"
-
-msgid "If disabled, this legal service will not be displayed on the website."
-msgstr "إذا تم تعطيل هذا الخيار، لن تظهر هذه الخدمة القانونية على الموقع."
-
-#: packs/LawFirm/Sections/LawFirmSections.php
-msgid "Display lawyers and legal professionals."
-msgstr "عرض المحامين والمتخصصين القانونيين."
-
-msgid "Display legal services offered by the firm."
-msgstr "عرض الخدمات القانونية التي يقدمها المكتب."
-
-msgid "Display the firm practice areas."
-msgstr "عرض مجالات ممارسة المكتب."
-
-msgid "Testimonials"
-msgstr "آراء العملاء"
-
-msgid "Display client testimonials."
-msgstr "عرض آراء العملاء."
-
-msgid "Frequently Asked Questions"
-msgstr "الأسئلة الشائعة"
-
-msgid "Display frequently asked questions."
-msgstr "عرض الأسئلة الشائعة."
-
-msgid "Legal Consultation"
-msgstr "استشارة قانونية"
-
-msgid "Encourage visitors to request a legal consultation."
-msgstr "تشجيع الزوار على طلب استشارة قانونية."
-
-msgid "Lawyer Details"
-msgstr "تفاصيل المحامي"
-
-msgid "Professional Title"
-msgstr "المسمى المهني"
-
-msgid "Experience"
-msgstr "الخبرة"
-
-msgid "Years of Experience"
-msgstr "سنوات الخبرة"
-
-msgid "License Number"
-msgstr "رقم الترخيص"
-
-msgid "Phone"
-msgstr "الهاتف"
-
-msgid "WhatsApp"
-msgstr "واتساب"
-
-msgid "Email"
-msgstr "البريد الإلكتروني"
-
-msgid "LinkedIn"
-msgstr "لينكدإن"
-
-msgid "Facebook"
-msgstr "فيسبوك"
-
-msgid "X"
-msgstr "X"
-
-msgid "If disabled, this lawyer will not be displayed on the website."
-msgstr "إذا تم تعطيل هذا الخيار، لن يظهر هذا المحامي على الموقع."
-
-msgid "Enter an icon class, icon name, or icon identifier. The Builder will use this value when rendering the service."
-msgstr "أدخل اسم فئة الأيقونة أو اسم الأيقونة أو معرّف الأيقونة. سيستخدم المنشئ هذه القيمة عند عرض الخدمة."
-
-msgid "For example: Senior Lawyer, Partner, Legal Consultant."
-msgstr "مثال: محامٍ أول، شريك، مستشار قانوني."
-
-msgid "Number of years of professional experience."
-msgstr "عدد سنوات الخبرة المهنية."
-
-msgid "Professional license or registration number."
-msgstr "رقم الترخيص أو التسجيل المهني."
-
-msgid "Lawyer phone number."
-msgstr "رقم هاتف المحامي."
-
-msgid "WhatsApp number including country code."
-msgstr "رقم واتساب متضمنًا رمز الدولة."
-
-msgid "Lawyer email address."
-msgstr "البريد الإلكتروني للمحامي."
-
-msgid "LinkedIn profile URL."
-msgstr "رابط الملف الشخصي على لينكدإن."
-
-msgid "Facebook profile URL."
-msgstr "رابط الملف الشخصي على فيسبوك."
-
-msgid "X profile URL."
-msgstr "رابط الملف الشخصي على X."
-
-msgid "Show featured image in the posts lists only, but hide it in the single post view."
-msgstr "إظهار الصورة البارزة في قوائم المقالات فقط، وإخفاؤها في عرض المقالة الفردية."
+#: packs/LawFirm/Admin/DashboardAdmin.php
+msgid "%d unread notification"
+msgid_plural "%d unread notifications"
+msgstr[0] "لا إشعارات غير مقروءة"
+msgstr[1] "إشعار غير مقروء واحد"
+msgstr[2] "إشعاران غير مقروءين"
+msgstr[3] "%d إشعارات غير مقروءة"
+msgstr[4] "%d إشعارًا غير مقروء"
+msgstr[5] "%d إشعار غير مقروء"
