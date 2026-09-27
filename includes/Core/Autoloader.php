@@ -65,7 +65,9 @@ class Autoloader {
             strpos( $relative_class, 'Taxonomies\\' ) === 0 ||
             strpos( $relative_class, 'Settings\\' ) === 0 ||
             strpos( $relative_class, 'Media\\' ) === 0 ||
-            strpos( $relative_class, 'Helpers\\' ) === 0
+            strpos( $relative_class, 'Helpers\\' ) === 0 ||
+            strpos( $relative_class, 'Network\\' ) === 0 ||
+            strpos( $relative_class, 'Design\\' ) === 0
         ) {
 
             $relative_path = str_replace(

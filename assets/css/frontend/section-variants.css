@@ -1,0 +1,369 @@
+/**
+ * Business Builder Core - Frontend: Section layout variants (LawFirm pack)
+ * -----------------------------------------------------------------------
+ * Presentation strategies for section layout variants (Phase 11). They reuse
+ * the Phase-10 card components unchanged — only the WRAPPER/grid differs.
+ *
+ * All values come from the canonical --bb-* token system (via the --bb-fe-*
+ * bridge). No competing token namespace, no hardcoded design values.
+ *
+ *   .bb-lawyers-list        single-column list of lawyer cards
+ *   .bb-services-list       single-column list of service cards
+ *   .bb-practice-areas-list single-column list of practice-area cards
+ *   .bb-lawyers-featured    one full-width featured card, then a grid
+ */
+
+/* ---- List layout (shared shape for the three list variants) ---- */
+
+.bb-template .bb-lawyers-list,
+.bb-template .bb-services-list,
+.bb-template .bb-practice-areas-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bb-fe-section-gap);
+}
+
+/* Cap the readable width and let list rows breathe. */
+.bb-template .bb-lawyers-list > *,
+.bb-template .bb-services-list > *,
+.bb-template .bb-practice-areas-list > * {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  /* A list row shows the media beside the copy instead of stacked. */
+  .bb-template .bb-lawyers-list .bb-lawyer-card,
+  .bb-template .bb-services-list .bb-service-card,
+  .bb-template .bb-practice-areas-list .bb-practice-area-card {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .bb-template .bb-lawyers-list .bb-lawyer-photo,
+  .bb-template .bb-services-list .bb-service-image,
+  .bb-template .bb-practice-areas-list .bb-practice-area-image {
+    flex: 0 0 clamp(180px, 24%, 280px);
+    width: auto;
+  }
+
+  .bb-template .bb-lawyers-list .bb-lawyer-photo {
+    aspect-ratio: auto;
+  }
+
+  .bb-template .bb-lawyers-list .bb-lawyer-body,
+  .bb-template .bb-services-list .bb-service-card,
+  .bb-template .bb-practice-areas-list .bb-practice-area-card {
+    justify-content: center;
+  }
+}
+
+/* ---- Featured layout (lawyers) ---- */
+
+.bb-template .bb-lawyers-featured {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bb-fe-section-gap);
+}
+
+/* The featured (first) card spans the full container width. */
+.bb-template .bb-lawyers-featured > .bb-lawyer-card:first-child {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  /* Featured card: media beside the body, larger photo. */
+  .bb-template .bb-lawyers-featured > .bb-lawyer-card:first-child {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .bb-template
+    .bb-lawyers-featured
+    > .bb-lawyer-card:first-child
+    .bb-lawyer-photo {
+    flex: 0 0 clamp(260px, 34%, 420px);
+    width: auto;
+    aspect-ratio: auto;
+  }
+
+  .bb-template
+    .bb-lawyers-featured
+    > .bb-lawyer-card:first-child
+    .bb-lawyer-body {
+    justify-content: center;
+    padding: var(--bb-space-8) var(--bb-space-10);
+  }
+}
+
+/* RTL: the row direction follows the document, so logical props are enough;
+ * nothing here hardcodes left/right. */
+/* -----------------------------------------------------------------------
+ * Component (card) variants (Phase 12)
+ * -----------------------------------------------------------------------
+ * These style an INDIVIDUAL card's visual design and are ORTHOGONAL to the
+ * section layout variants above: any section layout may use any card variant.
+ *
+ * Modifier classes are added by the corresponding component variant template
+ * (lawyer/card-compact.php, service/card-compact.php,
+ * practice-area/card-compact.php). Base classes are unchanged, so the default
+ * card is byte-identical when no variant is selected.
+ *
+ * All values come from the canonical --bb-* / --bb-fe-* tokens.
+ * ----------------------------------------------------------------------- */
+
+/* ---- Compact lawyer card ---- */
+
+/* Reduce the photo to a shorter, denser panel and tighten the body. */
+.bb-template .bb-lawyer-card--compact .bb-lawyer-photo {
+  aspect-ratio: 3 / 2;
+}
+
+.bb-template .bb-lawyer-card--compact .bb-lawyer-body {
+  gap: var(--bb-space-1);
+  padding: var(--bb-space-4) var(--bb-space-4) var(--bb-space-5);
+}
+
+/* ---- Compact service card ---- */
+
+.bb-template .bb-service-card--compact {
+  padding: var(--bb-space-4);
+}
+
+/* Stacked → inline: icon/image beside the text block, denser. */
+.bb-template .bb-service-card--compact .bb-service-image,
+.bb-template .bb-service-card--compact .bb-service-icon {
+  margin-bottom: var(--bb-space-2);
+}
+
+.bb-template .bb-service-card--compact h3 {
+  font-size: var(--bb-font-size-lg);
+  margin-bottom: var(--bb-space-1);
+}
+
+.bb-template .bb-service-card--compact p {
+  font-size: var(--bb-font-size-sm);
+  margin-bottom: 0;
+}
+
+/* ---- Compact practice-area card ---- */
+
+.bb-template .bb-practice-area-card--compact {
+  padding: var(--bb-space-4);
+}
+
+.bb-template .bb-practice-area-card--compact .bb-practice-area-image,
+.bb-template .bb-practice-area-card--compact .bb-practice-area-icon {
+  margin-bottom: var(--bb-space-2);
+}
+
+.bb-template .bb-practice-area-card--compact h3 {
+  font-size: var(--bb-font-size-lg);
+  margin-bottom: var(--bb-space-1);
+}
+
+.bb-template .bb-practice-area-card--compact p {
+  font-size: var(--bb-font-size-sm);
+  margin-bottom: 0;
+}/* -----------------------------------------------------------------------
+ * Phase 13 — expanded card design catalog
+ * -----------------------------------------------------------------------
+ * featured / minimal / horizontal for the three LawFirm card components.
+ * Each is a distinct COMPOSITION (not a token tweak) and consumes the same
+ * --bb-* / --bb-fe-* tokens. Modifier classes come from the card-{variant}.php
+ * templates; base classes are unchanged, so the default card is untouched.
+ * ----------------------------------------------------------------------- */
+
+/* ============================ LAWYER ============================ */
+
+/* ---- Featured: high emphasis (emphasised CARD, not a full-width banner) ---- */
+.bb-template .bb-lawyer-card--featured .bb-lawyer-photo {
+  aspect-ratio: 4 / 3;
+  max-height: 320px;
+}
+
+.bb-template .bb-lawyer-card--featured .bb-lawyer-body {
+  gap: var(--bb-space-2);
+  padding: var(--bb-space-5) var(--bb-space-6) var(--bb-space-6);
+}
+
+.bb-template .bb-lawyer-card--featured .bb-lawyer-featured-name {
+  font-size: var(--bb-font-size-xl);
+  letter-spacing: -0.01em;
+}
+
+.bb-template .bb-lawyer-card--featured .bb-lawyer-action {
+  margin-top: var(--bb-space-4);
+  margin-bottom: 0;
+}
+
+.bb-template .bb-lawyer-card--featured .bb-lawyer-action .bb-button {
+  width: 100%;
+}
+
+/* ---- Minimal: no chrome, typography-first ---- */
+.bb-template .bb-lawyer-card--minimal {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.bb-template .bb-lawyer-card--minimal:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.bb-template .bb-lawyer-card--minimal .bb-lawyer-body {
+  gap: var(--bb-space-1);
+  padding: var(--bb-space-2) 0;
+}
+
+/* ---- Horizontal: directory row ---- */
+@media (min-width: 640px) {
+  .bb-template .bb-lawyer-card--horizontal {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .bb-template .bb-lawyer-card--horizontal .bb-lawyer-photo {
+    flex: 0 0 clamp(140px, 26%, 240px);
+    width: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .bb-template .bb-lawyer-card--horizontal .bb-lawyer-body {
+    justify-content: center;
+  }
+}
+
+/* ============================ SERVICE ============================ */
+
+/* ---- Featured: larger media, emphasised title ---- */
+.bb-template .bb-service-card--featured {
+  padding: 0;
+  overflow: hidden;
+}
+
+.bb-template .bb-service-card--featured .bb-service-image img,
+.bb-template .bb-service-card--featured .bb-service-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.bb-template .bb-service-card--featured .bb-service-icon {
+  margin: var(--bb-space-5) var(--bb-space-6) 0;
+}
+
+.bb-template .bb-service-card--featured .bb-service-body {
+  padding: var(--bb-space-6);
+}
+
+.bb-template .bb-service-card--featured h3 {
+  font-size: var(--bb-font-size-2xl);
+}
+
+/* ---- Minimal: text-first, icon inline ---- */
+.bb-template .bb-service-card--minimal {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  padding-inline: 0;
+}
+
+.bb-template .bb-service-card--minimal:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.bb-template .bb-service-card--minimal .bb-service-icon-inline {
+  color: var(--bb-color-primary);
+  font-size: 1.1em;
+}
+
+/* ---- Horizontal: media/icon beside copy ---- */
+@media (min-width: 640px) {
+  .bb-template .bb-service-card--horizontal {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--bb-space-4);
+  }
+
+  .bb-template .bb-service-card--horizontal .bb-service-image,
+  .bb-template .bb-service-card--horizontal .bb-service-icon {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+  }
+
+  .bb-template .bb-service-card--horizontal .bb-service-body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+/* ========================= PRACTICE AREA ========================= */
+
+/* ---- Featured: larger media, emphasised title ---- */
+.bb-template .bb-practice-area-card--featured {
+  padding: 0;
+  overflow: hidden;
+}
+
+.bb-template .bb-practice-area-card--featured .bb-practice-area-image img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.bb-template .bb-practice-area-card--featured .bb-practice-area-icon {
+  margin: var(--bb-space-5) var(--bb-space-6) 0;
+}
+
+.bb-template .bb-practice-area-card--featured .bb-practice-area-body {
+  padding: var(--bb-space-6);
+}
+
+.bb-template .bb-practice-area-card--featured h3 {
+  font-size: var(--bb-font-size-2xl);
+}
+
+/* ---- Minimal: text-first, icon inline ---- */
+.bb-template .bb-practice-area-card--minimal {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  padding-inline: 0;
+}
+
+.bb-template .bb-practice-area-card--minimal:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.bb-template .bb-practice-area-card--minimal .bb-practice-area-icon-inline {
+  color: var(--bb-color-primary);
+  font-size: 1.1em;
+}
+
+/* ---- Horizontal: media/icon beside copy ---- */
+@media (min-width: 640px) {
+  .bb-template .bb-practice-area-card--horizontal {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--bb-space-4);
+  }
+
+  .bb-template .bb-practice-area-card--horizontal .bb-practice-area-image,
+  .bb-template .bb-practice-area-card--horizontal .bb-practice-area-icon {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+  }
+
+  .bb-template .bb-practice-area-card--horizontal .bb-practice-area-body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+/* RTL: all layouts above use flex-direction + logical gaps, so they mirror
+ * automatically. Nothing hardcodes left/right. */

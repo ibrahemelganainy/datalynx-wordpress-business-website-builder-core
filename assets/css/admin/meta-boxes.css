@@ -1,0 +1,260 @@
+/* ==========================================================================
+ * Business Builder Core — Enterprise meta boxes (Phase 22 §27, §28)
+ * --------------------------------------------------------------------------
+ * The presentation layer for `Admin\MetaBoxRenderer`.
+ *
+ * RULES OBSERVED
+ * --------------
+ *   - LOGICAL CSS ONLY (`padding-inline`, `border-inline-start`, `margin-block`,
+ *     `inset-inline-start`). The panel therefore mirrors correctly in RTL with
+ *     no second stylesheet and no `[dir=rtl]` overrides — which is the §27
+ *     "RTL/LTR" requirement met by construction rather than by duplication.
+ *   - NO INLINE STYLES. Every meta box previously carried its spacing in
+ *     `style="…"` attributes, which cannot respond to the admin colour scheme.
+ *     Here the layout lives in one place and uses WordPress's own admin palette
+ *     variables where they exist.
+ *   - CARDS, NOT A WALL OF FIELDS (§28): each group is a titled card;
+ *     is a label / control / description column.
+ *   - KEYBOARD + SCREEN READER: focus rings are never removed, tabs are real
+ *     buttons in a `role="tablist"`, and a required field is announced, not only
+ *     coloured.
+ * ========================================================================== */
+
+/* ---- Shell -------------------------------------------------------------- */
+.bb-meta {
+  --bb-meta-gap: 16px;
+  --bb-meta-radius: 8px;
+  --bb-meta-border: #dcdcde;
+  --bb-meta-surface: #fff;
+  --bb-meta-surface-alt: #f6f7f7;
+  --bb-meta-text: #1d2327;
+  --bb-meta-text-muted: #646970;
+  --bb-meta-accent: #2271b1;
+  --bb-meta-danger: #d63638;
+
+  color: var(--bb-meta-text);
+}
+
+.bb-meta-intro {
+  margin: 0 0 var(--bb-meta-gap);
+  color: var(--bb-meta-text-muted);
+  font-size: 13px;
+}
+
+/* ---- Tabs --------------------------------------------------------------- */
+.bb-meta-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-block-end: var(--bb-meta-gap);
+  border-block-end: 1px solid var(--bb-meta-border);
+}
+
+.bb-meta-tab {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  /* border-block transparent; */
+  margin-block-end: -1px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bb-meta-text-muted);
+  cursor: pointer;
+  border-start-start-radius: 4px;
+  border-start-end-radius: 4px;
+}
+
+.bb-meta-tab:hover {
+  color: var(--bb-meta-accent);
+  background: var(--bb-meta-surface-alt);
+}
+
+.bb-meta-tab[aria-selected="true"] {
+  color: var(--bb-meta-accent);
+  border-block-end-color: var(--bb-meta-accent);
+  background: var(--bb-meta-surface);
+}
+
+/* ---- Cards -------------------------------------------------------------- */
+.bb-meta-body {
+  display: grid;
+  gap: var(--bb-meta-gap);
+}
+
+.bb-meta-card {
+  background: var(--bb-meta-surface);
+  border: 1px solid var(--bb-meta-border);
+  border-radius: var(--bb-meta-radius);
+  padding: 16px;
+}
+
+.bb-meta-card-title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--bb-meta-text-muted);
+}
+
+.bb-meta-card-desc {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: var(--bb-meta-text-muted);
+}
+
+/* ---- Field layout ------------------------------------------------------- */
+.bb-meta-fields {
+  display: grid;
+  gap: 14px;
+}
+
+/*
+ * A two-column field: label in a fixed inline-start column, control filling the
+ * rest. `grid-template-columns` with a logical first track means the label
+ * appears on the correct side in both directions.
+ */
+.bb-meta-field {
+  display: grid;
+  grid-template-columns: minmax(140px, 200px) minmax(0, 1fr);
+  gap: 6px 16px;
+  align-items: start;
+  padding-block-end: 14px;
+  border-block-end: 1px solid #f0f0f1;
+}
+
+.bb-meta-field:last-child {
+  padding-block-end: 0;
+  border-block-end: 0;
+}
+
+.bb-meta-label {
+  font-size: 13px;
+  font-weight: 600;
+  padding-block-start: 6px;
+}
+
+.bb-meta-required {
+  color: var(--bb-meta-danger);
+  margin-inline-start: 2px;
+}
+
+.bb-meta-control {
+  min-inline-size: 0;
+}
+
+/* The description sits under the CONTROL, aligned with it, so it reads as a
+   hint for that field rather than a stray paragraph. */
+.bb-meta-desc {
+  grid-column: 2;
+  margin: 0;
+  font-size: 12px;
+  color: var(--bb-meta-text-muted);
+}
+
+/* ---- Inputs ------------------------------------------------------------- */
+.bb-meta .bb-input {
+  max-inline-size: 520px;
+}
+
+.bb-meta .bb-input--number {
+  max-inline-size: 140px;
+}
+
+.bb-meta .bb-input--color {
+  inline-size: 56px;
+  block-size: 34px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+/* A URL field reads better in a monospace face, so a typo is visible. */
+.bb-meta .bb-input--url {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+/* A checkbox field is a switch row, not a labelled box. */
+.bb-meta-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+/* ---- Media -------------------------------------------------------------- */
+.bb-meta-media {
+  display: grid;
+  gap: 8px;
+  max-inline-size: 240px;
+}
+
+.bb-meta-media-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 120px;
+  block-size: 120px;
+  background: var(--bb-meta-surface-alt);
+  border: 1px dashed var(--bb-meta-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bb-meta-media-img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.bb-meta-media-empty {
+  font-size: 11px;
+  color: var(--bb-meta-text-muted);
+  text-align: center;
+  padding-inline: 8px;
+}
+
+.bb-meta-media-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+/* ---- Accessibility ------------------------------------------------------ */
+/*
+ * Focus must always be visible: these are keyboard-reachable controls and the
+ * admin may be operating with a screen reader (§35).
+ */
+.bb-meta .bb-input:focus-visible,
+.bb-meta-tab:focus-visible,
+.bb-meta button:focus-visible,
+.bb-meta a:focus-visible {
+  outline: 2px solid var(--bb-meta-accent);
+  outline-offset: 1px;
+}
+
+/* ---- Responsive --------------------------------------------------------- */
+/*
+ * Below the tablet breakpoint the two-column field collapses to one column, so a
+ * narrow editor window does not squeeze the control to nothing. The label then
+ * sits above its control, which is the natural reading order.
+ */
+@media screen and (max-width: 782px) {
+  .bb-meta-field {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bb-meta-label {
+    padding-block-start: 0;
+  }
+
+  .bb-meta-desc {
+    grid-column: 1;
+  }
+
+  .bb-meta .bb-input {
+    max-inline-size: none;
+  }
+}

@@ -28,9 +28,340 @@ class LawFirmSections {
     }
 
     /**
+     * Register the pack's section layout variants.
+     *
+     * @param \BusinessBuilderCore\Builder\SectionVariants $variants Registry.
+     */
+    public function register_section_variants( $variants ): void {
+
+        if ( ! is_object( $variants ) || ! method_exists( $variants, 'register_many' ) ) {
+            return;
+        }
+
+        $base = __DIR__ . '/variants';
+
+        $variants->register_many(
+            'lawyers',
+            array(
+                'default'  => $base . '/lawyers/default.php',
+                'list'     => $base . '/lawyers/list.php',
+                'featured' => $base . '/lawyers/featured.php',
+            )
+        );
+
+        $variants->register_many(
+            'legal_services',
+            array(
+                'default' => $base . '/services/default.php',
+                'list'    => $base . '/services/list.php',
+            )
+        );
+
+        $variants->register_many(
+            'practice_areas',
+            array(
+                'default' => $base . '/practice-areas/default.php',
+                'list'    => $base . '/practice-areas/list.php',
+            )
+        );
+    }
+
+    /**
+     * Shared section "variant" setting (a whitelisted layout choice).
+     *
+     * Returns an empty array when no variants are registered for the section,
+     * so the builder never shows a pointless single-choice dropdown.
+     *
+     * @param string $section_type Section slug.
+     * @return array
+     */
+    protected function variant_setting( string $section_type ): array {
+
+        if ( ! function_exists( 'bb_section_variant_options' ) ) {
+            return array();
+        }
+
+        $options = bb_section_variant_options( $section_type );
+
+        if ( count( $options ) < 2 ) {
+            return array();
+        }
+
+        return array(
+            'type'    => 'select',
+            'label'   => __( 'Layout', 'business-builder' ),
+            'default' => 'default',
+            'options' => $options,
+        );
+    }
+
+    /**
+     * Shared section "card_variant" setting (a whitelisted CARD design choice).
+     *
+     * This is ORTHOGONAL to the section "Layout" setting: layout controls how
+     * the section arranges its items, card_variant controls the visual design of
+     * an individual card (Phase 12 §5/§27).
+     *
+     * The option whitelist is owned by the pack (it knows its own card variants)
+     * and is enforced by the existing builder `select` sanitizer. Returns an empty
+     * array when a component has no non-default variant, so the builder never
+     * shows a pointless single-choice dropdown.
+     *
+     * @param string                $component           Component path (e.g. 'lawyer/card').
+     * @param array<string, string> $variants            variant slug => translated label.
+     * @return array
+     */
+    protected function card_variant_setting( string $component, array $variants ): array {
+
+        if ( count( $variants ) < 2 ) {
+            return array();
+        }
+
+        /*
+         * Keep only variants that actually resolve to a template, so a
+         * mis-declared option can never be offered. bb_component_path() is the
+         * canonical (whitelist + traversal-safe) resolver from Phase 10.
+         */
+        $options = array();
+
+        if ( function_exists( 'bb_component_path' ) ) {
+            foreach ( $variants as $slug => $label ) {
+                $slug = sanitize_key( (string) $slug );
+                if ( '' === $slug ) {
+                    continue;
+                }
+                if ( 'default' === $slug || '' !== bb_component_path( $component, $slug ) ) {
+                    $options[ $slug ] = $label;
+                }
+            }
+        } else {
+            $options = $variants;
+        }
+
+        if ( count( $options ) < 2 ) {
+            return array();
+        }
+
+        return array(
+            'type'    => 'select',
+            'label'   => __( 'Card design', 'business-builder' ),
+            'default' => 'default',
+            'options' => $options,
+        );
+    }
+
+    /**
+     * Like card_variant_setting(), but attaches each option's description as
+     * schema metadata (`option_titles`). The existing builder schema renderer
+     * simply ignores unknown keys, so this is additive UX metadata for Phase 13
+     * (used as the option's `title` attribute) rather than a new mechanism.
+     *
+     * @param string $component Component path.
+     * @return array
+     */
+    protected function card_setting_with_descriptions( string $component ): array {
+
+        $setting = $this->card_setting_for( $component );
+
+        if ( empty( $setting ) ) {
+            return array();
+        }
+
+        $descriptions = $this->card_variant_descriptions( $component );
+
+        $titles = array();
+
+        foreach ( array_keys( $setting['options'] ) as $slug ) {
+            if ( isset( $descriptions[ $slug ] ) && '' !== $descriptions[ $slug ] ) {
+                $titles[ $slug ] = $descriptions[ $slug ];
+            }
+        }
+
+        if ( ! empty( $titles ) ) {
+            $setting['option_titles'] = $titles;
+        }
+
+        return $setting;
+    }
+
+    /**
+     * The card-design catalog: component => variant slug => presentation metadata.
+     *
+     * This is the pack's declaration of the visual designs it ships (Phase 13
+     * §14-§15). It is intentionally LIGHTWEIGHT: it is presentation metadata
+     * (a translated label + a short description used as the option's title
+     * attribute), never a second rendering engine. The resolver still owns
+     * which FILE renders a variant (card-{variant}.php); this catalog only
+     * describes what is offered to the administrator.
+     *
+     * @return array<string, array<string, array{label: string, description: string}>>
+     */
+    public function card_design_catalog(): array {
+
+        $catalog = array(
+            'lawyer/card'        => array(
+                'default'    => array(
+                    'label'       => __( 'Standard card', 'business-builder' ),
+                    'description' => __( 'Balanced profile card with photo, role and full contact details.', 'business-builder' ),
+                ),
+                'compact'    => array(
+                    'label'       => __( 'Compact card', 'business-builder' ),
+                    'description' => __( 'Dense card with a shorter photo — suits large grids.', 'business-builder' ),
+                ),
+                'featured'   => array(
+                    'label'       => __( 'Featured card', 'business-builder' ),
+                    'description' => __( 'High-emphasis profile with a prominent contact button.', 'business-builder' ),
+                ),
+                'minimal'    => array(
+                    'label'       => __( 'Minimal card', 'business-builder' ),
+                    'description' => __( 'Typography-first, no photo or card chrome — the single key contact line.', 'business-builder' ),
+                ),
+                'horizontal' => array(
+                    'label'       => __( 'Horizontal card', 'business-builder' ),
+                    'description' => __( 'Directory row: photo beside the details. Pairs well with the List layout.', 'business-builder' ),
+                ),
+            ),
+            'service/card'       => array(
+                'default'    => array(
+                    'label'       => __( 'Standard card', 'business-builder' ),
+                    'description' => __( 'Balanced service card with image or icon and a summary.', 'business-builder' ),
+                ),
+                'compact'    => array(
+                    'label'       => __( 'Compact card', 'business-builder' ),
+                    'description' => __( 'Denser service card — reduced padding and type.', 'business-builder' ),
+                ),
+                'featured'   => array(
+                    'label'       => __( 'Featured card', 'business-builder' ),
+                    'description' => __( 'Emphasised service with a larger media treatment.', 'business-builder' ),
+                ),
+                'minimal'    => array(
+                    'label'       => __( 'Minimal card', 'business-builder' ),
+                    'description' => __( 'Text-first service with an inline icon, no card chrome.', 'business-builder' ),
+                ),
+                'horizontal' => array(
+                    'label'       => __( 'Horizontal card', 'business-builder' ),
+                    'description' => __( 'Row layout: image or icon beside the copy.', 'business-builder' ),
+                ),
+            ),
+            'practice-area/card' => array(
+                'default'    => array(
+                    'label'       => __( 'Standard card', 'business-builder' ),
+                    'description' => __( 'Balanced practice-area card with image or icon and a summary.', 'business-builder' ),
+                ),
+                'compact'    => array(
+                    'label'       => __( 'Compact card', 'business-builder' ),
+                    'description' => __( 'Denser practice-area card.', 'business-builder' ),
+                ),
+                'featured'   => array(
+                    'label'       => __( 'Featured card', 'business-builder' ),
+                    'description' => __( 'Emphasised practice area with a larger media treatment.', 'business-builder' ),
+                ),
+                'minimal'    => array(
+                    'label'       => __( 'Minimal card', 'business-builder' ),
+                    'description' => __( 'Text-first practice area with an inline icon.', 'business-builder' ),
+                ),
+                'horizontal' => array(
+                    'label'       => __( 'Horizontal card', 'business-builder' ),
+                    'description' => __( 'Row layout: image or icon beside the copy.', 'business-builder' ),
+                ),
+            ),
+        );
+
+        /**
+         * Filter the LawFirm card-design catalog.
+         *
+         * @param array $catalog Component => variant => {label, description}.
+         */
+        return (array) apply_filters( 'bb_lawfirm_card_design_catalog', $catalog );
+    }
+
+    /**
+     * The card-variant choices each LawFirm card component supports
+     * (variant slug => translated label), derived from the catalog.
+     *
+     * @return array<string, array<string, string>>
+     */
+    protected function card_variant_choices(): array {
+
+        $choices = array();
+
+        foreach ( $this->card_design_catalog() as $component => $variants ) {
+
+            $choices[ $component ] = array();
+
+            foreach ( $variants as $slug => $meta ) {
+                $choices[ $component ][ $slug ] = isset( $meta['label'] ) ? (string) $meta['label'] : (string) $slug;
+            }
+        }
+
+        return $choices;
+    }
+
+    /**
+     * The description for a (component, variant) pair, or '' when unknown.
+     *
+     * Used as the option's `title` attribute so the administrator can read what
+     * each design does without leaving the builder.
+     *
+     * @param string $component Component path.
+     * @return array<string, string> variant slug => description.
+     */
+    protected function card_variant_descriptions( string $component ): array {
+
+        $catalog = $this->card_design_catalog();
+
+        if ( ! isset( $catalog[ $component ] ) ) {
+            return array();
+        }
+
+        $out = array();
+
+        foreach ( $catalog[ $component ] as $slug => $meta ) {
+            $out[ $slug ] = isset( $meta['description'] ) ? (string) $meta['description'] : '';
+        }
+
+        return $out;
+    }
+
+    /**
+     * The card_variant setting for a component (or [] when it has no variants).
+     *
+     * @param string $component Component path.
+     * @return array
+     */
+    protected function card_setting_for( string $component ): array {
+
+        $choices = $this->card_variant_choices();
+
+        if ( ! isset( $choices[ $component ] ) ) {
+            return array();
+        }
+
+        return $this->card_variant_setting( $component, $choices[ $component ] );
+    }
+
+    /**
      * Register all Law Firm sections.
      */
     public function register(): void {
+
+        /*
+         * Register this pack's component directory with the theme's component
+         * resolver. The theme owns generic presentation components; the pack
+         * owns its domain components (lawyer/service/card...). The dependency
+         * direction stays one-way: the pack consumes theme primitives, the
+         * theme never depends on pack domain objects (Phase 10 §34).
+         */
+        add_filter( 'bb_component_roots', array( $this, 'register_component_root' ) );
+
+        /*
+         * Register this pack's SECTION LAYOUT VARIANTS with the core
+         * SectionVariants registry. Section variants are presentation
+         * strategies for a section (same data, same components); the pack owns
+         * its own domain variants, so core never learns about LawFirm
+         * (Phase 11 §22-§23).
+         */
+        add_action( 'bb_register_section_variants', array( $this, 'register_section_variants' ) );
 
         $this->register_lawyers();
         $this->register_legal_services();
@@ -41,11 +372,67 @@ class LawFirmSections {
         $this->register_booking();
         $this->register_lookup();
 
-        add_action( 'bb_render_section_lawyers', array( $this, 'render_lawyers_section' ), 10, 3 );
-        add_action( 'bb_render_section_legal_services', array( $this, 'render_legal_services_section' ), 10, 3 );
-        add_action( 'bb_render_section_practice_areas', array( $this, 'render_practice_areas_section' ), 10, 3 );
-        add_action( 'bb_render_section_testimonials', array( $this, 'render_testimonials_section' ), 10, 3 );
-        add_action( 'bb_render_section_faq', array( $this, 'render_faq_section' ), 10, 3 );
+        /*
+         * Claim this pack's dynamic sections on the generic, type-agnostic
+         * `bb_render_section` hook. The type is compared here (in the pack),
+         * not in core, so the core renderer never learns any business type
+         * (Phase 18 §11: Theme/Core must not reference business concepts).
+         */
+        add_filter( 'bb_render_section', array( $this, 'render_section' ), 10, 4 );
+    }
+
+    /**
+     * Render one of this pack's dynamic sections.
+     *
+     * Returns true only for the section types this pack owns, so an
+     * unclaimed type falls through to core's generic renderer.
+     *
+     * @param bool  $claimed  Whether a renderer already claimed the type.
+     * @param string $type     Section type slug.
+     * @param array $section  Section data.
+     * @param array $settings Section settings.
+     * @param array $content  Section content.
+     * @return bool True when this pack rendered the section.
+     */
+    public function render_section( $claimed, $type, $section = array(), $settings = array(), $content = array() ): bool {
+
+        switch ( sanitize_key( (string) $type ) ) {
+            case 'lawyers':
+                $this->render_lawyers_section( $section, $settings, $content );
+                return true;
+
+            case 'legal_services':
+                $this->render_legal_services_section( $section, $settings, $content );
+                return true;
+
+            case 'practice_areas':
+                $this->render_practice_areas_section( $section, $settings, $content );
+                return true;
+
+            case 'testimonials':
+                $this->render_testimonials_section( $section, $settings, $content );
+                return true;
+
+            case 'faq':
+                $this->render_faq_section( $section, $settings, $content );
+                return true;
+        }
+
+        return (bool) $claimed;
+    }
+
+    /**
+     * Register the pack's component template directory.
+     *
+     * @param string[] $roots Existing component roots.
+     * @return string[]
+     */
+    public function register_component_root( $roots ): array {
+
+        $roots   = is_array( $roots ) ? $roots : array();
+        $roots[] = __DIR__ . '/components';
+
+        return $roots;
     }
 
     /**
@@ -188,12 +575,18 @@ class LawFirmSections {
                 'category'    => 'law-firm',
                 'icon'        => 'dashicons-businessperson',
                 'supports'    => array( 'title', 'description', 'lawyers', 'practice_areas' ),
-                'settings'    => array(
-                    'columns'       => $this->columns_setting( 3 ),
-                    'limit'         => $this->limit_setting(),
-                    'featured'      => $this->featured_setting(),
-                    'practice_area' => $this->practice_area_filter_setting(),
-                    'order'         => $this->order_setting(),
+                'settings'    => array_merge(
+                    array(
+                        'variant'      => $this->variant_setting( 'lawyers' ),
+                        'card_variant' => $this->card_setting_with_descriptions( 'lawyer/card' ),
+                    ),
+                    array(
+                        'columns'       => $this->columns_setting( 3 ),
+                        'limit'         => $this->limit_setting(),
+                        'featured'      => $this->featured_setting(),
+                        'practice_area' => $this->practice_area_filter_setting(),
+                        'order'         => $this->order_setting(),
+                    )
                 ),
                 'content'     => $this->heading_fields(),
             )
@@ -214,12 +607,18 @@ class LawFirmSections {
                 'category'    => 'law-firm',
                 'icon'        => 'dashicons-portfolio',
                 'supports'    => array( 'title', 'description', 'services', 'practice_areas' ),
-                'settings'    => array(
-                    'columns'       => $this->columns_setting( 3 ),
-                    'limit'         => $this->limit_setting(),
-                    'featured'      => $this->featured_setting(),
-                    'practice_area' => $this->practice_area_filter_setting(),
-                    'order'         => $this->order_setting(),
+                'settings'    => array_merge(
+                    array(
+                        'variant'      => $this->variant_setting( 'legal_services' ),
+                        'card_variant' => $this->card_setting_with_descriptions( 'service/card' ),
+                    ),
+                    array(
+                        'columns'       => $this->columns_setting( 3 ),
+                        'limit'         => $this->limit_setting(),
+                        'featured'      => $this->featured_setting(),
+                        'practice_area' => $this->practice_area_filter_setting(),
+                        'order'         => $this->order_setting(),
+                    )
                 ),
                 'content'     => $this->heading_fields(),
             )
@@ -240,10 +639,16 @@ class LawFirmSections {
                 'category'    => 'law-firm',
                 'icon'        => 'dashicons-category',
                 'supports'    => array( 'title', 'description', 'practice_areas' ),
-                'settings'    => array(
-                    'columns'  => $this->columns_setting( 4 ),
-                    'limit'    => $this->limit_setting(),
-                    'featured' => $this->featured_setting(),
+                'settings'    => array_merge(
+                    array(
+                        'variant'      => $this->variant_setting( 'practice_areas' ),
+                        'card_variant' => $this->card_setting_with_descriptions( 'practice-area/card' ),
+                    ),
+                    array(
+                        'columns'  => $this->columns_setting( 4 ),
+                        'limit'    => $this->limit_setting(),
+                        'featured' => $this->featured_setting(),
+                    )
                 ),
                 'content'     => $this->heading_fields(),
             )
@@ -695,6 +1100,22 @@ class LawFirmSections {
             return;
         }
 
+        /*
+         * Prefer the theme's generic heading component. Fall back to the
+         * original inline markup when the theme component API is unavailable,
+         * so the plugin keeps working without the canonical theme.
+         */
+        if ( function_exists( 'bb_component' ) ) {
+            bb_component(
+                'section-heading',
+                array(
+                    'title'       => (string) $title,
+                    'description' => (string) $description,
+                )
+            );
+            return;
+        }
+
         echo '<div class="bb-section-heading">';
 
         if ( '' !== $title ) {
@@ -714,6 +1135,11 @@ class LawFirmSections {
      * @param string $message Message to display.
      */
     protected function render_empty( string $message ): void {
+
+        if ( function_exists( 'bb_component' ) ) {
+            bb_component( 'empty-state', array( 'message' => $message ) );
+            return;
+        }
 
         echo '<div class="bb-empty-state">' . esc_html( $message ) . '</div>';
     }
@@ -754,7 +1180,12 @@ class LawFirmSections {
 
         $this->render_heading( $content );
 
-        echo '<div class="bb-lawyers-grid bb-grid-columns-' . esc_attr( $columns ) . '">';
+        /*
+         * Prepare the presentation data ONCE (Phase 11 §4: query + preparation
+         * happen here, never in a variant template). Each entry is the exact
+         * arg array the Phase-10 'lawyer/card' component expects.
+         */
+        $card_args = array();
 
         foreach ( $items as $item ) {
 
@@ -763,68 +1194,72 @@ class LawFirmSections {
             }
 
             $photo_id = get_post_thumbnail_id( $item->ID );
-            $title = get_post_meta( $item->ID, '_bb_lawyer_title', true );
-            $experience = get_post_meta( $item->ID, '_bb_lawyer_experience', true );
-            $phone = get_post_meta( $item->ID, '_bb_lawyer_phone', true );
-            $email = get_post_meta( $item->ID, '_bb_lawyer_email', true );
-            $linkedin = get_post_meta( $item->ID, '_bb_lawyer_linkedin', true );
 
-            echo '<article class="bb-lawyer-card">';
-
-            if ( $show_photo && $photo_id ) {
-                echo '<div class="bb-lawyer-photo">';
-                echo wp_get_attachment_image( $photo_id, 'medium', false, array( 'class' => 'bb-lawyer-image' ) );
-                echo '</div>';
-            }
+            $photo_html = $photo_id
+                ? wp_get_attachment_image( $photo_id, 'medium', false, array( 'class' => 'bb-lawyer-image' ) )
+                : '';
 
             $profile_url = \BusinessBuilderCore\Packs\LawFirm\Frontend\LawyerProfile::url( (int) $item->ID );
-            $is_public = \BusinessBuilderCore\Packs\LawFirm\Frontend\LawyerProfile::is_public( (int) $item->ID );
+            $is_public   = \BusinessBuilderCore\Packs\LawFirm\Frontend\LawyerProfile::is_public( (int) $item->ID );
 
-            echo '<div class="bb-lawyer-body">';
-
-            /*
-             * Link the name to the canonical profile URL. Only
-             * published lawyers have a working single page, so drafts
-             * render the name as plain text instead of a dead link
-             * (spec 10 / 14).
-             */
-            if ( '' !== $profile_url && $is_public ) {
-                echo '<h3><a class="bb-lawyer-link" href="' . esc_url( $profile_url ) . '">' . esc_html( $item->post_title ) . '</a></h3>';
-            } else {
-                echo '<h3>' . esc_html( $item->post_title ) . '</h3>';
-            }
-
-            if ( $title ) {
-                echo '<p class="bb-lawyer-role">' . esc_html( $title ) . '</p>';
-            }
-
-            if ( $experience ) {
-                echo '<p class="bb-lawyer-meta">' . esc_html( sprintf( __( '%s years experience', 'business-builder' ), $experience ) ) . '</p>';
-            }
-
-            if ( $phone ) {
-                echo '<p><a href="tel:' . esc_attr( $phone ) . '">' . esc_html( $phone ) . '</a></p>';
-            }
-
-            if ( $email ) {
-                echo '<p><a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a></p>';
-            }
+            $linkedin = (string) get_post_meta( $item->ID, '_bb_lawyer_linkedin', true );
 
             /*
-             * Only render the social "Profile" link when the stored value is a
+             * Only pass the social "Profile" link when the stored value is a
              * real URL. A bare handle (legacy data saved before save-time
              * validation) would otherwise become a dead "http://handle" link.
              */
-            $linkedin_is_url = $linkedin && \BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields::is_external_url( (string) $linkedin );
+            $profile_link = ( $linkedin && \BusinessBuilderCore\Packs\LawFirm\PostTypes\LawyerFields::is_external_url( $linkedin ) )
+                ? $linkedin
+                : '';
 
-            if ( $linkedin_is_url ) {
-                echo '<p><a href="' . esc_url( $linkedin ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Profile', 'business-builder' ) . '</a></p>';
-            }
-
-            echo '</div></article>';
+            $card_args[] = array(
+                'name'         => (string) $item->post_title,
+                'profile_url'  => (string) $profile_url,
+                'is_public'    => (bool) $is_public,
+                'photo_html'   => (string) $photo_html,
+                'show_photo'   => (bool) $show_photo,
+                'role'         => (string) get_post_meta( $item->ID, '_bb_lawyer_title', true ),
+                'experience'   => (string) get_post_meta( $item->ID, '_bb_lawyer_experience', true ),
+                'phone'        => (string) get_post_meta( $item->ID, '_bb_lawyer_phone', true ),
+                'email'        => (string) get_post_meta( $item->ID, '_bb_lawyer_email', true ),
+                'profile_link' => (string) $profile_link,
+            );
         }
 
-        echo '</div></div>';
+        /*
+         * Resolve + render the section layout variant. Falls back to inline
+         * default markup if the variant system is unavailable (e.g. the plugin
+         * running without the core loader), so behaviour never regresses.
+         */
+        $variant = isset( $settings['variant'] ) ? (string) $settings['variant'] : '';
+
+        /* Phase 12: the independent CARD design for every item in this section. */
+        $card_variant = isset( $settings['card_variant'] ) ? (string) $settings['card_variant'] : '';
+
+        $rendered = function_exists( 'bb_render_section_variant' )
+            && bb_render_section_variant(
+                'lawyers',
+                $variant,
+                array(
+                    'items'            => $card_args,
+                    'columns'          => $columns,
+                    'settings'         => $settings,
+                    'content'          => $content,
+                    'component'        => 'lawyer/card',
+                    'component_variant' => $card_variant,
+                )
+            );
+
+        if ( ! $rendered ) {
+            echo '<div class="bb-lawyers-grid bb-grid-columns-' . esc_attr( $columns ) . '">';
+            foreach ( $card_args as $one ) {
+                bb_component( 'lawyer/card', $one, $card_variant );
+            }
+            echo '</div>';
+        }
+
+        echo '</div>';
     }
 
     /**
@@ -850,7 +1285,8 @@ class LawFirmSections {
 
         $this->render_heading( $content );
 
-        echo '<div class="bb-services-grid bb-grid-columns-' . esc_attr( $columns ) . '">';
+        /* Prepare the presentation data ONCE (Phase 11 §4-§5). */
+        $card_args = array();
 
         foreach ( $items as $item ) {
 
@@ -858,32 +1294,52 @@ class LawFirmSections {
                 continue;
             }
 
-            $icon = get_post_meta( $item->ID, '_bb_legal_service_icon', true );
             $image_id = get_post_thumbnail_id( $item->ID );
+
+            $image_html = $image_id
+                ? wp_get_attachment_image( $image_id, 'medium', false, array( 'class' => 'bb-service-thumb' ) )
+                : '';
+
             $text_summary = ! empty( $item->post_excerpt )
                 ? $item->post_excerpt
                 : wp_trim_words( wp_strip_all_tags( $item->post_content ), 18 );
 
-            echo '<article class="bb-service-card">';
-
-            if ( $image_id ) {
-                echo '<div class="bb-service-image">';
-                echo wp_get_attachment_image( $image_id, 'medium', false, array( 'class' => 'bb-service-thumb' ) );
-                echo '</div>';
-            } elseif ( $icon ) {
-                echo '<div class="bb-service-icon">' . esc_html( $icon ) . '</div>';
-            }
-
-            echo '<h3>' . esc_html( $item->post_title ) . '</h3>';
-
-            if ( ! empty( $text_summary ) ) {
-                echo '<p>' . esc_html( $text_summary ) . '</p>';
-            }
-
-            echo '</article>';
+            $card_args[] = array(
+                'title'      => (string) $item->post_title,
+                'summary'    => (string) $text_summary,
+                'image_html' => (string) $image_html,
+                'icon'       => (string) get_post_meta( $item->ID, '_bb_legal_service_icon', true ),
+            );
         }
 
-        echo '</div></div>';
+        $variant = isset( $settings['variant'] ) ? (string) $settings['variant'] : '';
+
+        /* Phase 12: independent CARD design for this section's items. */
+        $card_variant = isset( $settings['card_variant'] ) ? (string) $settings['card_variant'] : '';
+
+        $rendered = function_exists( 'bb_render_section_variant' )
+            && bb_render_section_variant(
+                'legal_services',
+                $variant,
+                array(
+                    'items'            => $card_args,
+                    'columns'          => $columns,
+                    'settings'         => $settings,
+                    'content'          => $content,
+                    'component'        => 'service/card',
+                    'component_variant' => $card_variant,
+                )
+            );
+
+        if ( ! $rendered ) {
+            echo '<div class="bb-services-grid bb-grid-columns-' . esc_attr( $columns ) . '">';
+            foreach ( $card_args as $one ) {
+                bb_component( 'service/card', $one, $card_variant );
+            }
+            echo '</div>';
+        }
+
+        echo '</div>';
     }
 
     /**
@@ -909,35 +1365,57 @@ class LawFirmSections {
 
         $this->render_heading( $content );
 
-        echo '<div class="bb-practice-areas-grid bb-grid-columns-' . esc_attr( $columns ) . '">';
+        /* Prepare the presentation data ONCE (Phase 11 §4-§5). */
+        $card_args = array();
 
         foreach ( $terms as $term ) {
 
             $image_id = absint(
                 get_term_meta( $term->term_id, '_bb_practice_area_image', true )
             );
-            $icon = get_term_meta( $term->term_id, '_bb_practice_area_icon', true );
 
-            echo '<article class="bb-practice-area-card">';
+            $image_html = $image_id ? wp_get_attachment_image( $image_id, 'medium' ) : '';
 
-            if ( $image_id ) {
-                echo '<div class="bb-practice-area-image">';
-                echo wp_get_attachment_image( $image_id, 'medium' );
-                echo '</div>';
-            } elseif ( is_string( $icon ) && '' !== $icon ) {
-                echo '<div class="bb-practice-area-icon">' . esc_html( $icon ) . '</div>';
-            }
+            $summary = ! empty( $term->description )
+                ? wp_trim_words( $term->description, 20 )
+                : '';
 
-            echo '<h3>' . esc_html( $term->name ) . '</h3>';
-
-            if ( ! empty( $term->description ) ) {
-                echo '<p>' . esc_html( wp_trim_words( $term->description, 20 ) ) . '</p>';
-            }
-
-            echo '</article>';
+            $card_args[] = array(
+                'title'      => (string) $term->name,
+                'summary'    => (string) $summary,
+                'image_html' => (string) $image_html,
+                'icon'       => (string) get_term_meta( $term->term_id, '_bb_practice_area_icon', true ),
+            );
         }
 
-        echo '</div></div>';
+        $variant = isset( $settings['variant'] ) ? (string) $settings['variant'] : '';
+
+        /* Phase 12: independent CARD design for this section's items. */
+        $card_variant = isset( $settings['card_variant'] ) ? (string) $settings['card_variant'] : '';
+
+        $rendered = function_exists( 'bb_render_section_variant' )
+            && bb_render_section_variant(
+                'practice_areas',
+                $variant,
+                array(
+                    'items'            => $card_args,
+                    'columns'          => $columns,
+                    'settings'         => $settings,
+                    'content'          => $content,
+                    'component'        => 'practice-area/card',
+                    'component_variant' => $card_variant,
+                )
+            );
+
+        if ( ! $rendered ) {
+            echo '<div class="bb-practice-areas-grid bb-grid-columns-' . esc_attr( $columns ) . '">';
+            foreach ( $card_args as $one ) {
+                bb_component( 'practice-area/card', $one, $card_variant );
+            }
+            echo '</div>';
+        }
+
+        echo '</div>';
     }
 
     /**
@@ -969,39 +1447,27 @@ class LawFirmSections {
                 continue;
             }
 
-            $client_name = get_post_meta( $item->ID, '_bb_testimonial_client_name', true );
-            $client_title = get_post_meta( $item->ID, '_bb_testimonial_client_title', true );
-            $rating = absint( get_post_meta( $item->ID, '_bb_testimonial_rating', true ) );
-            $image_id = get_post_thumbnail_id( $item->ID );
+            $client_name  = get_post_meta( $item->ID, '_bb_testimonial_client_name', true );
+            $image_id     = get_post_thumbnail_id( $item->ID );
+
+            $image_html = $image_id
+                ? wp_get_attachment_image( $image_id, 'medium', false, array( 'class' => 'bb-testimonial-thumb' ) )
+                : '';
 
             $quote = ! empty( $item->post_excerpt )
                 ? $item->post_excerpt
                 : wp_strip_all_tags( $item->post_content );
 
-            echo '<article class="bb-testimonial-card">';
-
-            if ( $image_id ) {
-                echo '<div class="bb-testimonial-image">';
-                echo wp_get_attachment_image( $image_id, 'medium', false, array( 'class' => 'bb-testimonial-thumb' ) );
-                echo '</div>';
-            }
-
-            if ( $rating ) {
-                echo '<div class="bb-testimonial-rating">' . str_repeat( 'â˜…', min( 5, $rating ) ) . '</div>';
-            }
-
-            if ( ! empty( $quote ) ) {
-                echo '<blockquote>' . esc_html( wp_trim_words( $quote, 30 ) ) . '</blockquote>';
-            }
-
-            $display_name = $client_name ? $client_name : $item->post_title;
-            echo '<h3>' . esc_html( $display_name ) . '</h3>';
-
-            if ( $client_title ) {
-                echo '<p>' . esc_html( $client_title ) . '</p>';
-            }
-
-            echo '</article>';
+            bb_component(
+                'testimonial/card',
+                array(
+                    'author'       => (string) ( $client_name ? $client_name : $item->post_title ),
+                    'author_title' => (string) get_post_meta( $item->ID, '_bb_testimonial_client_title', true ),
+                    'quote'        => (string) $quote,
+                    'rating'       => absint( get_post_meta( $item->ID, '_bb_testimonial_rating', true ) ),
+                    'image_html'   => (string) $image_html,
+                )
+            );
         }
 
         echo '</div></div>';
@@ -1036,10 +1502,13 @@ class LawFirmSections {
                 continue;
             }
 
-            echo '<div class="bb-faq-item">';
-            echo '<h3>' . esc_html( $item->post_title ) . '</h3>';
-            echo '<div class="bb-faq-answer">' . wp_kses_post( $item->post_content ) . '</div>';
-            echo '</div>';
+            bb_component(
+                'faq/item',
+                array(
+                    'question' => (string) $item->post_title,
+                    'answer'   => (string) $item->post_content,
+                )
+            );
         }
 
         echo '</div></div>';

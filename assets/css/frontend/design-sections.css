@@ -1,0 +1,602 @@
+/* ==========================================================================
+ * Business Builder Core — Phase 22 Section & Layout layer
+ * --------------------------------------------------------------------------
+ * This is the FRONTEND CONSUMER for the Phase 22 tokens. It is the file that
+ * makes a Studio control "reach the frontend" (§25): every token introduced in
+ * `design-tokens.css` (background, grid, glass, header scroll state) and every
+ * section-scoped token written by `SectionStyleSchema` is read here.
+ *
+ * RULES OBSERVED
+ * --------------
+ *   - ONE token namespace: `--bb-*` only. No `--lawfirm-*`, no `--section-*`
+ *     shadow namespace.
+ *   - NO hardcoded section list: the section-scoped rules are written against
+ *     the GENERIC `.bb-section` class and the generic inner/heading/card
+ *     classes, so a pack section that has never been seen by this file still
+ *     receives its overrides.
+ *   - LOGICAL PROPERTIES everywhere (`inline-start`, `block-end`, ...), so RTL
+ *     and LTR are correct by construction and not by a mirrored rule.
+ *   - Every optional layer degrades: if `--bb-glass-blur` is 0 the glass rules
+ *     are inert; if a section declares no background the site background shows.
+ *   - Motion is disabled entirely under `prefers-reduced-motion` (§35).
+ * ========================================================================== */
+
+/* ==========================================================================
+ * 1. SITE BACKGROUND (§10)
+ * --------------------------------------------------------------------------
+ * Three independent layers, painted in order:
+ *   1. the site background colour      (--bb-bg-color)
+ *   2. the background image/gradient   (--bb-bg-gradient)
+ *   3. the overlay tint                (--bb-bg-overlay)
+ *
+ * The overlay is a pseudo-element rather than a fourth background layer, so
+ * its opacity can be dialled independently of the background's own alpha.
+ * ========================================================================== */
+.bb-template {
+  background-color: var(--bb-bg-color, var(--bb-color-background));
+  background-image: var(--bb-bg-gradient, none);
+  background-size: var(--bb-bg-size, cover);
+  background-position: var(--bb-bg-position, center center);
+  background-repeat: var(--bb-bg-repeat, no-repeat);
+  background-attachment: var(--bb-bg-attachment, scroll);
+}
+
+/*
+ * The overlay only exists when the design or the customer turned it on, so a
+ * site that never touches the background section is byte-identical to before.
+ */
+.bb-template.has-bb-overlay {
+  position: relative;
+  isolation: isolate;
+}
+
+.bb-template.has-bb-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--bb-bg-overlay, none);
+  opacity: var(--bb-bg-overlay-opacity, 0);
+  pointer-events: none;
+}
+
+.bb-template.has-bb-overlay > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
+ * 2. CONTAINER & GRID (§11, §12)
+ * --------------------------------------------------------------------------
+ * ONE container definition and ONE grid definition. Sections do not invent
+ * their own grid: they opt in with `.bb-grid` / `.bb-grid-columns-*`, which
+ * every core and pack section already uses.
+ *
+ * The column count is read from a token with the existing hardcoded class as
+ * the fallback, so a section that pins its own columns in its settings keeps
+ * working while the Studio can still re-flow it.
+ * ========================================================================== */
+.bb-template .bb-section-inner {
+  inline-size: 100%;
+  max-inline-size: var(--bb-container-width, 1200px);
+  min-inline-size: var(--bb-container-min, 0px);
+  margin-inline: auto;
+  padding-inline: var(--bb-container-padding-block, 0px);
+}
+
+/*
+ * A generic grid. `--bb-section-grid-columns` is the section-scoped override;
+ * the global `--bb-grid-columns` is the site-wide value.
+ */
+.bb-template .bb-grid,
+.bb-template [class*="bb-grid-columns-"] {
+  display: grid;
+  grid-template-columns: repeat(
+    var(--bb-section-grid-columns, var(--bb-grid-columns, 3)),
+    minmax(0, 1fr)
+  );
+  gap: var(--bb-section-grid-gap, var(--bb-grid-gap, 1.5rem));
+  row-gap: var(
+    --bb-grid-row-gap,
+    var(--bb-section-grid-gap, var(--bb-grid-gap, 1.5rem))
+  );
+  align-items: start;
+}
+
+/*
+ * Card width bounds. `minmax()` on the ITEM (not the track) is what lets a
+ * design say "cards are at least 260px, at most 420px" and have the grid
+ * re-flow rather than overflow.
+ */
+.bb-template .bb-grid > *,
+.bb-template [class*="bb-grid-columns-"] > * {
+  min-inline-size: 0;
+  max-inline-size: var(--bb-card-max-width, none);
+}
+
+.bb-template .bb-card,
+.bb-template .bb-lawyer-card,
+.bb-template .bb-service-card,
+.bb-template .bb-practice-area-card,
+.bb-template .bb-testimonial-card,
+.bb-template .bb-doctor-card,
+.bb-template .bb-medical-service-card {
+  min-inline-size: var(--bb-card-min-width, 0px);
+}
+
+/* Section alignment, applied to the heading/copy block. Logical values only. */
+.bb-template .bb-section-inner {
+  text-align: var(--bb-section-align, start);
+}
+
+.bb-template
+  .bb-section-inner
+  :is(.bb-section-title, .bb-section-heading, .bb-section-description) {
+  text-align: var(--bb-section-align, inherit);
+}
+
+/* Text measure (§11 "text width"). Applies to prose, never to a card grid. */
+.bb-template .bb-section-description,
+.bb-template .bb-section-heading .bb-section-description {
+  max-inline-size: var(
+    --bb-section-content-width,
+    var(--bb-content-width, 68ch)
+  );
+}
+
+/* ==========================================================================
+ * 3. RESPONSIVE GRID (§24)
+ * --------------------------------------------------------------------------
+ * Tablet and mobile column counts come from tokens, so the Studio can set
+ * "4 / 2 / 1" and the frontend honours it without any desktop-only setting
+ * leaking into a narrow viewport.
+ * ========================================================================== */
+@media (max-width: 1024px) {
+  .bb-template .bb-grid,
+  .bb-template [class*="bb-grid-columns-"] {
+    grid-template-columns: repeat(
+      var(--bb-section-grid-columns-tablet, var(--bb-grid-columns-tablet, 2)),
+      minmax(0, 1fr)
+    );
+  }
+}
+
+@media (max-width: 640px) {
+  .bb-template .bb-grid,
+  .bb-template [class*="bb-grid-columns-"] {
+    grid-template-columns: repeat(
+      var(--bb-section-grid-columns-mobile, var(--bb-grid-columns-mobile, 1)),
+      minmax(0, 1fr)
+    );
+  }
+
+  .bb-template .bb-section-inner {
+    padding-inline: min(var(--bb-container-padding-block, 0px), 16px);
+  }
+}
+
+/* ==========================================================================
+ * 4. SECTION-SCOPED OVERRIDES (§16, §25)
+ * --------------------------------------------------------------------------
+ * `SectionStyleSchema` writes `.bb-section-<type>{ --bb-section-*: … }`.
+ * This block is where those tokens are CONSUMED, and it is deliberately
+ * generic: it targets `.bb-section` and the shared inner/heading/card classes,
+ * so ANY registered section — core or pack — receives its overrides without
+ * this file knowing a single section name.
+ * ========================================================================== */
+.bb-template .bb-section {
+  background-color: var(--bb-section-bg, transparent);
+  background-image: var(--bb-section-bg-image, none);
+
+  /*
+   * PHASE 23 §7/§34 — ONE SECTION RHYTHM (fixes audit D2).
+   *
+   * This rule used to read `--bb-section-padding-block` (the PLUGIN's density
+   * control) while the Theme's `layout.css:33` reads `--bb-section-spacing`
+   * (the THEME's rhythm control). Two controls, one property: whichever loaded
+   * last won, so moving either slider produced only a partial change.
+   *
+   * `--bb-section-spacing` is now the SINGLE authoritative source, because it
+   * is the token the Theme itself already consumes for `.bb-section`. The
+   * plugin's density control is bridged INTO it (see design-tokens.css), so
+   * both controls write one value and neither can shadow the other.
+   */
+  padding-block: var(--bb-section-spacing, 0px);
+  padding-inline: var(--bb-section-padding-inline, 0px);
+
+  /*
+   * PHASE 23 §13/§4 — BORDERS ARE OPT-IN (fixes the latent four-side border).
+   *
+   * `border-style: solid` was declared unconditionally, so the moment any rule
+   * set a non-zero `--bb-section-border-width` a border appeared on ALL FOUR
+   * sides with no way to choose sides. Default state must be clean and premium
+   * (§4), so the style is now `none` unless a section explicitly sets a width.
+   *
+   * `--bb-section-border-style` lets a Design opt in the default is `none`.
+   */
+  border-width: var(--bb-section-border-width, 0px);
+  border-style: var(--bb-section-border-style, none);
+  border-color: var(--bb-section-border-color, var(--bb-color-border));
+  border-radius: var(--bb-section-radius, 0px);
+  color: var(--bb-section-text, var(--bb-color-text));
+  position: relative;
+  isolation: isolate;
+}
+
+/*
+ * A section background image (gradient or texture) is painted on a
+ * pseudo-element so it sits BEHIND the content but IN FRONT of the page
+ * background, and so an overlay can tint it without touching the text.
+ */
+.bb-template .bb-section[style*="--bb-section-bg-image"]::before,
+.bb-template .bb-section:has(> .bb-section-inner)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--bb-section-bg-image, none);
+  background-size: cover;
+  background-position: center center;
+  opacity: var(--bb-section-bg-overlay-opacity, 1);
+  pointer-events: none;
+}
+
+.bb-template
+  .bb-section
+  :is(h1, h2, h3, h4, .bb-section-title, .bb-section-card-title) {
+  color: var(--bb-section-heading, inherit);
+}
+
+.bb-template .bb-section .bb-section-description,
+.bb-template .bb-section .bb-section-card-description {
+  color: var(--bb-section-text, inherit);
+}
+
+/* Heading typography overrides. */
+.bb-template .bb-section :is(.bb-section-title, .bb-section-card-title) {
+  font-size: calc(1em * var(--bb-section-heading-scale, 1));
+  font-weight: var(--bb-section-heading-weight, inherit);
+  text-transform: var(--bb-section-heading-transform, inherit);
+  letter-spacing: var(--bb-section-letter-spacing, inherit);
+}
+
+.bb-template .bb-section .bb-section-heading {
+  margin-block-end: var(--bb-section-heading-gap, 0px);
+}
+
+/* Accent — used by the decorative underline and any accent-coloured element. */
+.bb-template .bb-section .bb-section-heading > .bb-section-title::after,
+.bb-template .bb-section .bb-section-heading > h2::after {
+  background-color: var(--bb-section-accent, var(--bb-color-primary));
+}
+
+/* Section buttons. */
+.bb-template .bb-section .bb-button {
+  background-color: var(--bb-section-button-bg, var(--bb-color-primary));
+  color: var(--bb-section-button-color, var(--bb-color-text-inverse, #fff));
+}
+
+/* Section cards. */
+.bb-template
+  .bb-section
+  :is(
+    .bb-card,
+    .bb-lawyer-card,
+    .bb-service-card,
+    .bb-practice-area-card,
+    .bb-testimonial-card,
+    .bb-faq-item,
+    .bb-doctor-card,
+    .bb-medical-service-card
+  ) {
+  background-color: var(--bb-section-card-bg, var(--bb-color-surface));
+  border-color: var(--bb-section-card-border-color, var(--bb-color-border));
+  border-radius: var(--bb-section-card-radius, var(--bb-radius-card));
+  box-shadow: var(--bb-section-card-shadow, var(--bb-shadow-card));
+  padding: var(--bb-section-card-padding, var(--bb-card-padding));
+}
+
+/*
+ * Card image shape (§18 "image ratio"). `aspect-ratio` is used rather than a
+ * fixed height so a portrait card does not distort in a narrow column.
+ */
+.bb-template
+  .bb-section
+  :is(
+    .bb-card,
+    .bb-lawyer-card,
+    .bb-service-card,
+    .bb-doctor-card,
+    .bb-medical-service-card
+  )
+  :is(img, .bb-card-media, .bb-lawyer-photo, .bb-doctor-photo) {
+  aspect-ratio: var(--bb-section-card-image-ratio, auto);
+  object-fit: cover;
+}
+
+/* ==========================================================================
+ * 5. GLASS EFFECT (§19)
+ * --------------------------------------------------------------------------
+ * ONE reusable treatment, applied to a section, a card or the header.
+ *
+ * `--bb-glass-blur` is 0 when glass is OFF, and `@supports` guards the
+ * backdrop-filter, so a browser without support still renders a readable
+ * surface (the tint + border are plain CSS).
+ * ========================================================================== */
+.bb-template .bb-section[data-bb-glass],
+.bb-template .bb-card[data-bb-glass],
+.bb-theme .bb-site-header[data-bb-glass] {
+  background-color: color-mix(
+    in srgb,
+    var(--bb-glass-tint, var(--bb-color-surface))
+      calc(var(--bb-glass-opacity, 1) * 100%),
+    transparent
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--bb-color-border) calc(var(--bb-glass-border-opacity, 1) * 100%),
+    transparent
+  );
+  box-shadow: var(--bb-glass-shadow, none);
+}
+
+@supports (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .bb-template .bb-section[data-bb-glass],
+  .bb-template .bb-card[data-bb-glass],
+  .bb-theme .bb-site-header[data-bb-glass] {
+    -webkit-backdrop-filter: blur(var(--bb-glass-blur, 0px))
+      saturate(var(--bb-glass-saturate, 100%));
+    backdrop-filter: blur(var(--bb-glass-blur, 0px))
+      saturate(var(--bb-glass-saturate, 100%));
+  }
+}
+
+/*
+ * A section that turns glass OFF explicitly must not inherit the site's glass
+ * tint: it goes back to its own background colour.
+ */
+.bb-template .bb-section[data-bb-glass="off"] {
+  background-color: var(--bb-section-bg, var(--bb-color-background));
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* ==========================================================================
+ * 6. HEADER SCROLL STATE (§21)
+ * --------------------------------------------------------------------------
+ * The initial state uses the `--bb-header-initial-*` tokens; the scrolled
+ * state uses `--bb-header-scrolled-*`. `design-shell.js` adds
+ * `.is-bb-scrolled` to the header once the page has moved, so this is a real
+ * frontend behaviour, not a saved-but-inert setting.
+ *
+ * The transition is driven by `--bb-header-scroll-transition`.
+ * ========================================================================== */
+.bb-theme .bb-site-header {
+  background-color: color-mix(
+    in srgb,
+    var(--bb-header-initial-bg, var(--bb-header-bg))
+      calc(var(--bb-header-initial-transparency, 1) * 100%),
+    transparent
+  );
+  border-block-end-color: var(
+    --bb-header-initial-border,
+    var(--bb-color-border)
+  );
+  box-shadow: none;
+  transition:
+    background-color var(--bb-header-scroll-transition, 0.24s)
+      var(--bb-ease-standard, ease),
+    border-color var(--bb-header-scroll-transition, 0.24s)
+      var(--bb-ease-standard, ease),
+    box-shadow var(--bb-header-scroll-transition, 0.24s)
+      var(--bb-ease-standard, ease),
+    color var(--bb-header-scroll-transition, 0.24s)
+      var(--bb-ease-standard, ease);
+}
+
+.bb-theme
+  .bb-site-header
+  :is(.bb-nav-menu a, .bb-site-nav a, .bb-header-nav a) {
+  color: var(--bb-header-initial-nav, var(--bb-header-color));
+  transition: color var(--bb-header-scroll-transition, 0.24s)
+    var(--bb-ease-standard, ease);
+}
+
+.bb-theme .bb-site-header.is-bb-scrolled {
+  background-color: color-mix(
+    in srgb,
+    var(--bb-header-scrolled-bg, var(--bb-header-bg))
+      calc(var(--bb-header-initial-transparency, 1) * 100%),
+    transparent
+  );
+  border-block-end-color: var(
+    --bb-header-scrolled-border,
+    var(--bb-color-border)
+  );
+  box-shadow: var(--bb-header-scrolled-shadow, none);
+  color: var(--bb-header-scrolled-color, var(--bb-header-color));
+}
+
+/*
+ * Once scrolled the header is opaque: the initial transparency exists so the
+ * header can float over a hero, which is exactly the state that ends when the
+ * page moves. Expressed as a full-opacity mix rather than a second token, so a
+ * customer only configures the transparency they can actually see.
+ */
+.bb-theme .bb-site-header.is-bb-scrolled {
+  background-color: var(--bb-header-scrolled-bg, var(--bb-header-bg));
+}
+
+.bb-theme
+  .bb-site-header.is-bb-scrolled
+  :is(.bb-nav-menu a, .bb-site-nav a, .bb-header-nav a) {
+  color: var(--bb-header-scrolled-nav, var(--bb-header-color));
+}
+
+/* ==========================================================================
+ * 7. FOOTER (§22)
+ * ========================================================================== */
+.bb-theme .bb-site-footer {
+  border-block-start-width: var(--bb-footer-border-width, 1px);
+}
+
+.bb-theme .bb-site-footer :is(h1, h2, h3, h4, .bb-footer-heading) {
+  color: var(--bb-footer-heading-color, var(--bb-footer-color));
+}
+
+.bb-theme .bb-site-footer a {
+  color: var(--bb-footer-link-color, var(--bb-footer-color));
+  transition: color var(--bb-motion-fast, 0.14s) var(--bb-ease-standard, ease);
+}
+
+.bb-theme .bb-site-footer a:hover,
+.bb-theme .bb-site-footer a:focus {
+  color: var(--bb-footer-link-hover, var(--bb-color-primary-light));
+}
+
+.bb-theme .bb-site-footer-inner {
+  gap: var(--bb-footer-column-gap, 2rem);
+  column-gap: var(--bb-footer-column-gap, 2rem);
+}
+
+/* ==========================================================================
+ * 8. MOTION (§23)
+ * --------------------------------------------------------------------------
+ * Reveal KINDS are selected by `--bb-reveal-kind` (or a section override) and
+ * resolved server-side into `data-bb-reveal="<kind>"` on the element, so the
+ * animation is chosen by the design and not hardcoded in JavaScript.
+ *
+ * Only `transform`, `opacity` and `filter` are animated: no layout property is
+ * touched, so there is no reflow while scrolling.
+ * ========================================================================== */
+@keyframes bb-reveal-fade-down {
+  from {
+    opacity: 0;
+    transform: translate3d(0, calc(var(--bb-reveal-distance, 20px) * -1), 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes bb-reveal-fade-left {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--bb-reveal-shift, -20px), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes bb-reveal-fade-right {
+  from {
+    opacity: 0;
+    transform: translate3d(calc(var(--bb-reveal-shift, -20px) * -1), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes bb-reveal-blur {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translate3d(0, var(--bb-reveal-distance, 20px), 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.bb-template [data-bb-reveal="fade-down"].is-bb-revealed {
+  animation-name: bb-reveal-fade-down;
+}
+.bb-template [data-bb-reveal="fade-left"].is-bb-revealed {
+  animation-name: bb-reveal-fade-left;
+}
+.bb-template [data-bb-reveal="fade-right"].is-bb-revealed {
+  animation-name: bb-reveal-fade-right;
+}
+.bb-template [data-bb-reveal="blur"].is-bb-revealed {
+  animation-name: bb-reveal-blur;
+}
+
+/*
+ * RTL mirroring for the horizontal reveals: the motion is semantically
+ * identical (it enters from the inline-start edge) rather than visually
+ * inverted.
+ */
+.bb-theme.bb-rtl [data-bb-reveal="fade-left"] {
+  --bb-reveal-shift: 20px;
+}
+
+/* Stagger: a per-child delay derived from the design's stagger step. */
+.bb-template [data-bb-stagger] > * {
+  animation-delay: calc(
+    var(--bb-reveal-stagger-index, 0) * var(--bb-reveal-stagger, 60ms)
+  );
+}
+
+/* Hover language. `data-bb-hover` is emitted from the design/section token. */
+.bb-template [data-bb-hover="scale"]:hover {
+  transform: scale(calc(1 + (var(--bb-hover-lift, 4px) / 100)));
+}
+
+.bb-template [data-bb-hover="glow"]:hover {
+  box-shadow:
+    0 0 0 1px var(--bb-color-primary),
+    0 12px 40px var(--bb-color-primary-pale, rgba(37, 99, 235, 0.25));
+}
+
+.bb-template [data-bb-hover="zoom"] :is(img, .bb-card-media img) {
+  transition: transform var(--bb-motion-slow, 0.42s)
+    var(--bb-ease-standard, ease);
+}
+
+.bb-template [data-bb-hover="zoom"]:hover :is(img, .bb-card-media img) {
+  transform: scale(1.06);
+}
+
+.bb-template [data-bb-hover="none"]:hover {
+  transform: none;
+  box-shadow: var(--bb-section-card-shadow, var(--bb-shadow-card));
+}
+
+/* ==========================================================================
+ * 9. ACCESSIBILITY (§35)
+ * --------------------------------------------------------------------------
+ * Motion is fully disabled for a visitor who asked for reduced motion. The
+ * reveals are also one-shot and progressive: content is visible until
+ * JavaScript marks it, so a JS failure never hides anything.
+ * ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .bb-template [data-bb-reveal],
+  .bb-template [data-bb-reveal] * {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .bb-template [data-bb-hover]:hover {
+    transform: none !important;
+  }
+}
+
+/* Keyboard focus must always be visible, including on a glass surface. */
+.bb-template :is(a, button, input, select, textarea):focus-visible,
+.bb-theme .bb-site-header :is(a, button):focus-visible,
+.bb-theme .bb-site-footer :is(a, button):focus-visible {
+  outline: 2px solid var(--bb-color-primary);
+  outline-offset: 2px;
+}

@@ -297,6 +297,25 @@ class ServiceProvider {
             'law_firm',
             'BusinessBuilderCore\\Packs\\LawFirm\\LawFirmPack'
         );
+
+        /**
+         * Let additional Business Packs register themselves.
+         *
+         * A pack (or a companion plugin) registers through the SAME generic
+         * mechanism the core uses: it maps a BusinessType slug to a pack class.
+         *
+         *   add_action( 'bb_register_packs', function ( $pack_manager ) {
+         *       $pack_manager->register( 'medical', 'My\\Medical\\MedicalPack' );
+         *   } );
+         *
+         * The slug MUST match a registered BusinessType (see BusinessType) and
+         * the class MUST exist; PackManager::register() enforces both (slug is
+         * sanitize_key()'d). This is what lets the platform gain new business
+         * types without editing core code.
+         *
+         * @param PackManager $pack_manager The core pack registry.
+         */
+        do_action( 'bb_register_packs', $this->pack_manager );
     }
 
     /**
@@ -349,6 +368,23 @@ class ServiceProvider {
 
     /**
      * Register Core Builder Sections.
+     *
+     * PRIORITY 5 IS LOAD-BEARING (Phase 22 audit, measured)
+     * ---------------------------------------------------
+     * The Page Builder ADMIN screen does not render section schemas on `init` —
+     * it renders them while BUILDING the admin page. By then `init` has already
+     * fired, so priority 5 is early enough for the editor.
+     *
+     * The Phase 22 Section Studio, however, asks the registry which sections
+     * exist while rendering `admin.php?page=business-builder-design`. That also
+     * happens after `init`, so it is equally safe.
+     *
+     * The real problem this priority does NOT solve is BOOT ORDER: the current
+     * business pack is booted from `ServiceProvider::boot()`, which runs BEFORE
+     * `init`, and the pack's `register()` is what puts its sections into the
+     * registry. So the pack's sections ARE registered by the time the Studio
+     * reads the registry — which is why the Studio reads `SectionRegistry`
+     * directly rather than a snapshot taken here.
      */
     public function register_core_sections(): void {
 

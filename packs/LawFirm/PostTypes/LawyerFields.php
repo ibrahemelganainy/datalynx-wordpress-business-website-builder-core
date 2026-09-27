@@ -2,10 +2,36 @@
 
 namespace BusinessBuilderCore\Packs\LawFirm\PostTypes;
 
+use BusinessBuilderCore\Admin\MetaBoxRenderer;
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+/**
+ * Lawyer Details meta box (Phase 22 §27, §28).
+ *
+ * PHASE 22 UPGRADE — what changed and why
+ * ---------------------------------------
+ * The box used to render 13 unrelated fields as a flat list, each wrapped in an
+ * inline `style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: …"`.
+ * That produced exactly what §27 and §28 forbid:
+ *
+ *   - no grouping, so "Education" (a long paragraph) sat beside "X profile URL"
+ *     with nothing to say they belong to different concerns;
+ *   - presentation in inline attributes, which cannot follow the admin colour
+ *     scheme and do not mirror in RTL;
+ *   - one control shape for every field, so a URL, a number and a textarea were
+ *     visually identical;
+ *   - no required-field marking and no accessible description wiring.
+ *
+ * The fields are now organised into the SIX groups §27 prescribes (Profile,
+ * Contact, Professional, Media, Display, and the existing status control), each
+ * rendered as a card by the shared `Admin\MetaBoxRenderer`, which owns the
+ * layout, the escaping and the accessibility contract. The META KEYS ARE
+ * UNCHANGED, so every existing lawyer's data keeps working and `save()` needed
+ * no change at all.
+ */
 class LawyerFields {
 
     /**
@@ -52,304 +78,200 @@ class LawyerFields {
     /**
      * Render lawyer details meta box.
      */
+    /**
+     * Render the Lawyer Details meta box.
+     *
+     * The fields are declared as GROUPS (§27) and rendered by the shared
+     * `MetaBoxRenderer`, which owns the cards, the field types, the escaping and
+     * the accessibility contract. This method therefore contains DATA (labels,
+     * groups, descriptions) and no markup at all.
+     *
+     * GROUPING RATIONALE (§27 "avoid dumping dozens of unrelated fields into one
+     * huge panel")
+     *   Profile      who this person is
+     *   Contact      how to reach them
+     *   Professional the credentials a visitor judges them by
+     *   Media        the portrait
+     *   Display      how/where they appear
+     *   Status       whether the profile is live
+     *
+     * The META KEYS are identical to the pre-Phase-22 keys (`_bb_lawyer_*`), so
+     * existing data, the `save()` handler and every section query keep working.
+     *
+     * @param \WP_Post $post Post being edited.
+     */
     public function render_meta_box( $post ): void {
 
-        wp_nonce_field(
-            'bb_save_lawyer_details',
-            'bb_lawyer_details_nonce'
+        $groups = array(
+
+            /* ---------------------------------------------------------- Profile */
+            'profile' => array(
+                'label'       => __( 'Profile', 'business-builder' ),
+                'description' => __( 'How this lawyer is identified across the website.', 'business-builder' ),
+                'tab'         => true,
+                'fields'      => array(
+                    'title' => array(
+                        'label'       => __( 'Professional title', 'business-builder' ),
+                        'type'        => 'text',
+                        'description' => __( 'For example: Senior Lawyer, Partner, Legal Consultant.', 'business-builder' ),
+                        'placeholder' => __( 'Senior Lawyer', 'business-builder' ),
+                    ),
+                    'languages' => array(
+                        'label'       => __( 'Languages', 'business-builder' ),
+                        'type'        => 'text',
+                        'description' => __( 'Separate with commas, for example: Arabic, English, French.', 'business-builder' ),
+                    ),
+                ),
+            ),
+
+            /* ---------------------------------------------------------- Contact */
+            'contact' => array(
+                'label'       => __( 'Contact', 'business-builder' ),
+                'description' => __( 'Only the details you fill in are shown on the website.', 'business-builder' ),
+                'tab'         => true,
+                'fields'      => array(
+                    'phone' => array(
+                        'label'       => __( 'Phone', 'business-builder' ),
+                        'type'        => 'text',
+                        'description' => __( 'Shown on the profile and in the contact section.', 'business-builder' ),
+                    ),
+                    'whatsapp' => array(
+                        'label'       => __( 'WhatsApp', 'business-builder' ),
+                        'type'        => 'text',
+                        'description' => __( 'Include the country code, for example +971…', 'business-builder' ),
+                    ),
+                    'email' => array(
+                        'label'       => __( 'Email', 'business-builder' ),
+                        'type'        => 'email',
+                        'description' => __( 'A valid address is required before it can be shown.', 'business-builder' ),
+                    ),
+                ),
+            ),
+
+            /* ----------------------------------------------------- Professional */
+            'professional' => array(
+                'label'       => __( 'Professional information', 'business-builder' ),
+                'description' => __( 'Credentials that help a visitor judge this lawyer\'s experience.', 'business-builder' ),
+                'tab'         => true,
+                'fields'      => array(
+                    'experience' => array(
+                        'label'       => __( 'Years of experience', 'business-builder' ),
+                        'type'        => 'number',
+                        'min'         => 0,
+                        'max'         => 80,
+                        'step'        => 1,
+                        'description' => __( 'Whole years. Leave empty to hide the figure.', 'business-builder' ),
+                    ),
+                    'license_number' => array(
+                        'label'       => __( 'License number', 'business-builder' ),
+                        'type'        => 'text',
+                        'description' => __( 'Professional license or bar registration number.', 'business-builder' ),
+                    ),
+                    'education' => array(
+                        'label'       => __( 'Education', 'business-builder' ),
+                        'type'        => 'textarea',
+                        'rows'        => 4,
+                        'description' => __( 'Degrees and universities. One per line reads best.', 'business-builder' ),
+                    ),
+                ),
+            ),
+
+            /* ------------------------------------------------------------- Media */
+            'media' => array(
+                'label'       => __( 'Portrait', 'business-builder' ),
+                'description' => __( 'A square or portrait image works best. It is cropped to fit.', 'business-builder' ),
+                'fields'      => array(
+                    'photo' => array(
+                        'label'       => __( 'Profile photo', 'business-builder' ),
+                        'type'        => 'media',
+                        'description' => __( 'Shown on cards and on the profile page.', 'business-builder' ),
+                    ),
+                ),
+            ),
+
+            /* ----------------------------------------------------------- Social */
+            'social' => array(
+                'label'       => __( 'Social profiles', 'business-builder' ),
+                'description' => __( 'Optional. Each link is only shown when it is filled in.', 'business-builder' ),
+                'fields'      => array(
+                    'linkedin' => array(
+                        'label'       => __( 'LinkedIn', 'business-builder' ),
+                        'type'        => 'url',
+                        'description' => __( 'Full profile URL.', 'business-builder' ),
+                    ),
+                    'facebook' => array(
+                        'label'       => __( 'Facebook', 'business-builder' ),
+                        'type'        => 'url',
+                        'description' => __( 'Full profile URL.', 'business-builder' ),
+                    ),
+                    'x' => array(
+                        'label'       => __( 'X', 'business-builder' ),
+                        'type'        => 'url',
+                        'description' => __( 'Full profile URL.', 'business-builder' ),
+                    ),
+                ),
+            ),
+
+            /* ---------------------------------------------------------- Display */
+            'display' => array(
+                'label'       => __( 'Display', 'business-builder' ),
+                'description' => __( 'Control where and in what order this lawyer appears.', 'business-builder' ),
+                'fields'      => array(
+                    'display_order' => array(
+                        'label'       => __( 'Display order', 'business-builder' ),
+                        'type'        => 'number',
+                        'min'         => 0,
+                        'max'         => 9999,
+                        'step'        => 1,
+                        'description' => __( 'Lower numbers appear first. Leave empty to sort by name.', 'business-builder' ),
+                    ),
+                    'featured' => array(
+                        'label'       => __( 'Featured', 'business-builder' ),
+                        'type'        => 'checkbox',
+                        'toggle_label' => __( 'Highlight this lawyer', 'business-builder' ),
+                        'description' => __( 'Sections set to “featured only” show featured lawyers.', 'business-builder' ),
+                    ),
+                    'show_on_website' => array(
+                        'label'       => __( 'Show on website', 'business-builder' ),
+                        'type'        => 'checkbox',
+                        'toggle_label' => __( 'Visible to visitors', 'business-builder' ),
+                        'default'     => '1',
+                        'description' => __( 'Turn this off to hide the profile without deleting anything.', 'business-builder' ),
+                    ),
+                ),
+            ),
+
+            /* ----------------------------------------------------------- Status */
+            'status' => array(
+                'label'       => __( 'Status', 'business-builder' ),
+                'description' => __( 'Inactive lawyers keep all their data but are hidden from the website.', 'business-builder' ),
+                'fields'      => array(
+                    'status' => array(
+                        'label'       => __( 'Availability', 'business-builder' ),
+                        'type'        => 'select',
+                        'meta_key'    => '_bb_lawyer_status',
+                        'default'     => 'active',
+                        'options'     => array(
+                            'active'   => __( 'Active — taking clients', 'business-builder' ),
+                            'inactive' => __( 'Inactive — hidden from the website', 'business-builder' ),
+                        ),
+                        'description' => __( 'Inactive profiles are excluded from every section.', 'business-builder' ),
+                    ),
+                ),
+            ),
         );
 
-        $fields = array(
-
-            'title' => array(
-                'label'       => __( 'Professional Title', 'business-builder' ),
-                'type'        => 'text',
-                'description' => __( 'For example: Senior Lawyer, Partner, Legal Consultant.', 'business-builder' ),
+        MetaBoxRenderer::render(
+            array(
+                'prefix'       => '_bb_lawyer_',
+                'nonce_action' => 'bb_save_lawyer_details',
+                'nonce_name'   => 'bb_lawyer_details_nonce',
+                'intro'        => __( 'Everything on this page is used by the Lawyers and Practice Areas sections. Nothing here is required to save the profile.', 'business-builder' ),
+                'groups'       => $groups,
             ),
-
-            'experience' => array(
-                'label'       => __( 'Years of Experience', 'business-builder' ),
-                'type'        => 'number',
-                'description' => __( 'Number of years of professional experience.', 'business-builder' ),
-            ),
-
-            'education' => array(
-                'label'       => __( 'Education', 'business-builder' ),
-                'type'        => 'textarea',
-                'description' => __( 'Degrees, universities, and qualifications. One per line is fine.', 'business-builder' ),
-            ),
-
-            'languages' => array(
-                'label'       => __( 'Languages', 'business-builder' ),
-                'type'        => 'text',
-                'description' => __( 'Spoken languages, for example: Arabic, English, French.', 'business-builder' ),
-            ),
-
-            'license_number' => array(
-                'label'       => __( 'License Number', 'business-builder' ),
-                'type'        => 'text',
-                'description' => __( 'Professional license or registration number.', 'business-builder' ),
-            ),
-
-            'phone' => array(
-                'label'       => __( 'Phone', 'business-builder' ),
-                'type'        => 'text',
-                'description' => __( 'Lawyer phone number.', 'business-builder' ),
-            ),
-
-            'whatsapp' => array(
-                'label'       => __( 'WhatsApp', 'business-builder' ),
-                'type'        => 'text',
-                'description' => __( 'WhatsApp number including country code.', 'business-builder' ),
-            ),
-
-            'email' => array(
-                'label'       => __( 'Email', 'business-builder' ),
-                'type'        => 'email',
-                'description' => __( 'Lawyer email address.', 'business-builder' ),
-            ),
-
-            'linkedin' => array(
-                'label'       => __( 'LinkedIn', 'business-builder' ),
-                'type'        => 'url',
-                'description' => __( 'LinkedIn profile URL.', 'business-builder' ),
-            ),
-
-            'facebook' => array(
-                'label'       => __( 'Facebook', 'business-builder' ),
-                'type'        => 'url',
-                'description' => __( 'Facebook profile URL.', 'business-builder' ),
-            ),
-
-            'x' => array(
-                'label'       => __( 'X', 'business-builder' ),
-                'type'        => 'url',
-                'description' => __( 'X profile URL.', 'business-builder' ),
-            ),
-
-            'display_order' => array(
-                'label'       => __( 'Display Order', 'business-builder' ),
-                'type'        => 'number',
-                'description' => __( 'Lower numbers appear first on the website.', 'business-builder' ),
-            ),
+            (int) $post->ID
         );
-
-        ?>
-
-        <div class="bb-lawyer-field bb-lawyer-status-field">
-            <p>
-                <label for="_bb_lawyer_status">
-                    <strong><?php esc_html_e( 'Status', 'business-builder' ); ?></strong>
-                </label>
-            </p>
-            <p>
-                <?php
-                $status_value = self::get_status( (int) $post->ID );
-                ?>
-                <select name="_bb_lawyer_status" id="_bb_lawyer_status" class="widefat">
-                    <option value="active" <?php selected( $status_value, 'active' ); ?>>
-                        <?php esc_html_e( 'Active', 'business-builder' ); ?>
-                    </option>
-                    <option value="inactive" <?php selected( $status_value, 'inactive' ); ?>>
-                        <?php esc_html_e( 'Inactive', 'business-builder' ); ?>
-                    </option>
-                </select>
-            </p>
-            <p class="description">
-                <?php esc_html_e( 'Inactive lawyers are hidden from the website but keep all their data.', 'business-builder' ); ?>
-            </p>
-        </div>
-
-        <div class="bb-lawyer-fields">
-
-            <?php foreach ( $fields as $field_key => $field ) : ?>
-
-                <?php
-
-                $meta_key = '_bb_lawyer_' . $field_key;
-
-                $value = get_post_meta(
-                    $post->ID,
-                    $meta_key,
-                    true
-                );
-
-                ?>
-
-                <div
-                    style="
-                        margin-bottom: 20px;
-                        padding-bottom: 15px;
-                        border-bottom: 1px solid #ddd;
-                    "
-                >
-
-                    <p>
-                        <label
-                            for="<?php echo esc_attr( $meta_key ); ?>"
-                        >
-                            <strong>
-                                <?php echo esc_html( $field['label'] ); ?>
-                            </strong>
-                        </label>
-                    </p>
-
-                    <p>
-
-                        <?php if ( 'textarea' === $field['type'] ) : ?>
-
-                            <textarea
-                                name="<?php echo esc_attr( $meta_key ); ?>"
-                                id="<?php echo esc_attr( $meta_key ); ?>"
-                                class="widefat"
-                                rows="4"
-                            ><?php echo esc_textarea( $value ); ?></textarea>
-
-                        <?php else : ?>
-
-                            <input
-                                type="<?php echo esc_attr( $field['type'] ); ?>"
-                                name="<?php echo esc_attr( $meta_key ); ?>"
-                                id="<?php echo esc_attr( $meta_key ); ?>"
-                                value="<?php echo esc_attr( $value ); ?>"
-                                class="widefat"
-                                <?php if ( 'number' === $field['type'] ) : ?>
-                                    min="0"
-                                    step="1"
-                                <?php endif; ?>
-                            />
-
-                        <?php endif; ?>
-
-                    </p>
-
-                    <?php if ( ! empty( $field['description'] ) ) : ?>
-
-                        <p class="description">
-                            <?php echo esc_html( $field['description'] ); ?>
-                        </p>
-
-                    <?php endif; ?>
-
-                </div>
-
-            <?php endforeach; ?>
-
-
-            <?php
-
-            $show_on_website = get_post_meta(
-                $post->ID,
-                '_bb_lawyer_show_on_website',
-                true
-            );
-
-            $show_on_website = '' === $show_on_website
-                ? '1'
-                : $show_on_website;
-
-            $featured = get_post_meta(
-                $post->ID,
-                '_bb_lawyer_featured',
-                true
-            );
-
-            ?>
-
-            <div
-                style="
-                    margin-top: 20px;
-                    padding: 15px;
-                    background: #f6f7f7;
-                    border: 1px solid #ddd;
-                "
-            >
-
-                <p>
-
-                    <label>
-
-                        <input
-                            type="checkbox"
-                            name="_bb_lawyer_featured"
-                            value="1"
-                            <?php checked( $featured, '1' ); ?>
-                        />
-
-                        <strong>
-                            <?php
-                            echo esc_html(
-                                __(
-                                    'Featured',
-                                    'business-builder'
-                                )
-                            );
-                            ?>
-                        </strong>
-
-                    </label>
-
-                </p>
-
-                <p class="description">
-
-                    <?php
-                    echo esc_html(
-                        __(
-                            'Featured lawyers can be highlighted by sections that only show featured profiles.',
-                            'business-builder'
-                        )
-                    );
-                    ?>
-
-                </p>
-
-                <p>
-
-                    <label>
-
-                        <input
-                            type="checkbox"
-                            name="_bb_lawyer_show_on_website"
-                            value="1"
-                            <?php checked( $show_on_website, '1' ); ?>
-                        />
-
-                        <strong>
-                            <?php
-                            echo esc_html(
-                                __(
-                                    'Show on Website',
-                                    'business-builder'
-                                )
-                            );
-                            ?>
-                        </strong>
-
-                    </label>
-
-                </p>
-
-                <p class="description">
-
-                    <?php
-                    echo esc_html(
-                        __(
-                            'If disabled, this lawyer will not be displayed on the website.',
-                            'business-builder'
-                        )
-                    );
-                    ?>
-
-                </p>
-
-            </div>
-
-        </div>
-
-        <?php
     }
-
     /**
      * Save lawyer fields.
      */

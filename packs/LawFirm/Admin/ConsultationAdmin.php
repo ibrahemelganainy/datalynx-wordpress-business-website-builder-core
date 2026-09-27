@@ -6,6 +6,10 @@ use BusinessBuilderCore\Packs\LawFirm\PostTypes\ConsultationMeta;
 use BusinessBuilderCore\Core\Notifications\NotificationManager;
 use BusinessBuilderCore\Core\Notifications\Notification;
 use BusinessBuilderCore\Core\Audit\AuditLog;
+use BusinessBuilderCore\Core\Payments\PaymentManager;
+use BusinessBuilderCore\Core\Payments\PaymentTransaction;
+use BusinessBuilderCore\Core\Payments\PaymentResult;
+use BusinessBuilderCore\Core\Payments\Checkout\TransactionSynchronizer;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -463,7 +467,23 @@ class ConsultationAdmin {
             return;
         }
 
-        update_post_meta( $id, ConsultationMeta::key( 'payment_status' ), 'paid' );
+        /*
+         * When a payment transaction exists for this consultation (an online
+         * or manual checkout was actually started), advance it through the
+         * SINGLE canonical synchronizer so the transaction AND the related
+         * consultation stay consistent. Writing the consultation meta alone
+         * would leave the transaction stuck on pending/on_hold while the
+         * consultation showed "Paid" - and the receipt (built from the
+         * transaction) would then contradict the admin badge.
+         *
+         * When NO transaction exists (payment was never initiated through a
+         * gateway), fall back to the existing direct meta update.
+         */
+        $synced = $this->sync_existing_transaction( $id );
+
+        if ( false === $synced ) {
+            update_post_meta( $id, ConsultationMeta::key( 'payment_status' ), 'paid' );
+        }
 
         $this->audit->record( 'payment.manually_verified', 'consultation', $id, array() );
 
@@ -481,6 +501,60 @@ class ConsultationAdmin {
                 'consultation:' . $id . ':payment:paid:manual'
             )
         );
+    }
+
+    /**
+     * Advance an existing transaction for a consultation to "paid" via the
+     * canonical synchronizer, which also updates the consultation's payment
+     * status meta.
+     *
+     * @param int $id Consultation id.
+     * @return bool True when a transaction was found and synced.
+     */
+    protected function sync_existing_transaction( int $id ): bool {
+
+        if ( ! class_exists( PaymentManager::class ) ) {
+            return false;
+        }
+
+        $payments = new PaymentManager();
+
+        $rows = $payments->transactions_for_object( 'consultation', $id );
+
+        if ( empty( $rows ) ) {
+            return false;
+        }
+
+        /* Newest first (transactions_for_object returns newest first). */
+        $row = isset( $rows[0] ) && is_array( $rows[0] ) ? $rows[0] : null;
+
+        if ( null === $row ) {
+            return false;
+        }
+
+        $transaction = PaymentTransaction::from_array( $row );
+
+        if ( $transaction->id <= 0 ) {
+            return false;
+        }
+
+        /* Already paid/refunded: nothing to advance (idempotent, no-op). */
+        if ( in_array( $transaction->status, array( 'paid', 'completed', 'refunded' ), true ) ) {
+            return true;
+        }
+
+        $synchronizer = new TransactionSynchronizer( $payments, $this->audit );
+
+        $reference = '' !== $transaction->reference
+            ? (string) $transaction->reference
+            : (string) $transaction->public_ref;
+
+        $synchronizer->apply(
+            $transaction,
+            new PaymentResult( true, 'paid', $reference, __( 'Manual payment approved by administrator.', 'business-builder' ) )
+        );
+
+        return true;
     }
 
     /**

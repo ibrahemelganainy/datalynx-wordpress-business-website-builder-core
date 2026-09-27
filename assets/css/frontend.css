@@ -38,3 +38,29 @@
 @import url("frontend/payment-step.css");
 @import url("frontend/status-lookup.css");
 @import url("frontend/section-lawyer-profile.css");
+@import url("frontend/section-variants.css");
+/*
+ * Phase 21 - Design Identity layer.
+ *
+ * Loaded LAST on purpose: it consumes the design-identity tokens
+ * (gradients, density, shape, component language, shell behaviour, motion)
+ * and applies them across the shared component and section classes. Being
+ * last means it wins the cascade over the per-section defaults above, which
+ * is what lets ONE design change the whole site's visual identity without
+ * editing any section file.
+ */
+@import url("frontend/design-identity.css");
+/*
+ * Phase 22 - Section, background, grid, glass, shell-state and motion layer.
+ *
+ * Loaded AFTER design-identity.css because it consumes the tokens that layer
+ * established (and the Phase 22 tokens added to design-tokens.css), and because
+ * the section-scoped overrides it defines must win over the site-wide design
+ * values by source order - which is what makes a per-section customization
+ * override a per-section DESIGN decision without a single `!important`.
+ *
+ * It is deliberately GENERIC: it targets `.bb-section` and the shared inner /
+ * heading / card classes, so a pack section this file has never heard of still
+ * receives its Studio overrides.
+ */
+@import url("frontend/design-sections.css");

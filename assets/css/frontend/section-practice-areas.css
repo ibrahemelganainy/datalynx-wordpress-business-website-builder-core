@@ -60,14 +60,14 @@
 
 /* Luxury template tweaks. */
 .bb-template-luxury .bb-practice-area-card {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(138, 92, 24, 0.14);
+  background: var(--bb-fe-surface-translucent);
+  border-color: var(--bb-fe-luxury-border);
 }
 
 .bb-template-luxury .bb-practice-area-card::before {
-  background: linear-gradient(180deg, #b8843c, #dcc29c);
+  background: linear-gradient(180deg, var(--bb-fe-luxury), var(--bb-fe-luxury-soft));
 }
 
 .bb-template-luxury .bb-practice-area-card h3 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--bb-fe-font-heading-serif);
 }

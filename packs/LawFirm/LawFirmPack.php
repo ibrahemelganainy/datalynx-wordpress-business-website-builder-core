@@ -309,6 +309,12 @@ class LawFirmPack {
 
         $this->sections->register();
 
+        /*
+         * Phase 21: the full LawFirm design catalogue (five prepared designs), contributed
+         * through the EXISTING theme preset filters. Core and Theme stay business-agnostic.
+         */
+        ( new \BusinessBuilderCore\Packs\LawFirm\Design\LawFirmDesigns() )->register();
+
     }
 
     /**

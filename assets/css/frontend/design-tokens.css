@@ -76,6 +76,50 @@
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, sans-serif;
   --bb-font-mono: "Menlo", "Monaco", "Courier New", monospace;
+
+  /*
+   * =====================================================================
+   * PHASE 23 — THE ALIAS BRIDGES (§2, §7, §34)
+   * =====================================================================
+   * WHY THESE LIVE ON `:root` AND NOT ON `.bb-template`
+   * --------------------------------------------------
+   * MEASURED, not assumed. The Theme emits the customer's saved overrides as
+   * an inline `:root { --bb-*: … }` block (`inc/enqueue.php:100`,
+   * `wp_add_inline_style('bb-theme-tokens', …)`). `:root` is an ANCESTOR of
+   * both `.bb-theme` (the Theme's component scope) and `.bb-template` (this
+   * file's scope).
+   *
+   * A custom property declared on an ancestor therefore WINS over one declared
+   * on a descendant — there is no specificity competition to lose; the
+   * descendant simply never gets a chance to set it. So a bridge written on
+   * `.bb-template` would be silently defeated the moment a customer moved the
+   * slider. These aliases must be declared at the SAME level as the override
+   * they alias, which is `:root`.
+   *
+   * WHY ALIASES AT ALL (and not a rename)
+   * -------------------------------------
+   * Three properties each had TWO token names: one the Theme consumes, one the
+   * Studio writes. The Theme's name cannot be removed (its stylesheets are in a
+   * separate tree and it must keep working standalone), so the plugin ADOPTS
+   * the Theme's name as the public one and aliases the Studio's control onto
+   * it. Result: ONE control, ONE effective value, both trees agree — and no
+   * second token namespace is introduced (§38).
+   *
+   * Each fallback preserves the Theme's own baseline when the plugin layer is
+   * absent, so Astra and non-builder sites are unaffected.
+   */
+
+  /* D1 — border width. Consumed by components.css × 6, header.css × 3,
+   * shell-variants.css × 1; previously written by NO control at all. */
+  --bb-border-width: var(--bb-border-thickness, 1px);
+
+  /* D3 — container gutter. Consumed by header.css, footer.css, layout.css and
+   * shell-variants.css; previously written by NO control. */
+  --bb-container-padding: var(--bb-container-padding-block, 1.5rem);
+
+  /* D2 — section rhythm. Consumed by the Theme's `layout.css` for
+   * `.bb-section` padding-block, so it is the authoritative rhythm token. */
+  --bb-section-spacing: var(--bb-section-padding-block, 3rem);
 }
 
 /* -----------------------------------------------------------------
@@ -167,6 +211,184 @@
   --bb-easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --bb-easing-in-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --bb-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* =================================================================
+   * PHASE 21 - DESIGN IDENTITY AXES
+   * -----------------------------------------------------------------
+   * A Design is a COMPLETE VISUAL IDENTITY, not a colour preset. These
+   * sections give a design the vocabulary to differ on gradients, density,
+   * shape, component language, shell behaviour and motion - not just hue.
+   *
+   * Everything remains in the ONE `--bb-*` namespace: no `--design-*`,
+   * no `--lawfirm-*`, no second token system. The theme preset resolver
+   * emits these on `:root` exactly like the pre-existing tokens, so a
+   * design simply declares them and every section/component inherits.
+   * ================================================================= */
+
+  /* ---- Gradients ----
+   * Gradients are a primary differentiator, so they are first-class tokens
+   * rather than something each section invents for itself. */
+  --bb-gradient-brand: linear-gradient(135deg, var(--bb-color-primary), var(--bb-color-primary-hover, var(--bb-color-primary)));
+  --bb-gradient-hero: linear-gradient(160deg, var(--bb-color-primary), var(--bb-color-primary-hover, var(--bb-color-primary)));
+  --bb-gradient-cta: linear-gradient(135deg, var(--bb-color-primary), var(--bb-color-accent));
+  --bb-gradient-decorative: linear-gradient(135deg, var(--bb-color-primary-light, var(--bb-color-primary)), var(--bb-color-accent));
+  --bb-gradient-surface: linear-gradient(180deg, var(--bb-color-surface), var(--bb-color-surface-muted));
+
+  /* ---- Visual density & rhythm ----
+   * The SAME section must feel airy in one design and compact in another,
+   * so section rhythm is a design decision, not a per-section setting. */
+  --bb-section-padding-block: clamp(3rem, 6vw, 6rem);
+  --bb-section-padding-block-sm: clamp(2rem, 4vw, 3.5rem);
+  --bb-grid-gap: var(--bb-space-6, 1.5rem);
+  --bb-card-padding: var(--bb-space-6, 1.5rem);
+  --bb-heading-scale: 1;
+  --bb-heading-letter-spacing: -0.02em;
+
+  /* ---- Shape language ----
+   * Border THICKNESS and the card/input radii are part of the shape language.
+   * `--bb-border-width` is aliased to this value on `:root` (see the Phase 23
+   * bridge block at the top of this file), so ONE control drives every border
+   * in both the plugin and the Theme. */
+  --bb-border-thickness: 1px;
+
+  --bb-radius-card: var(--bb-radius-lg, 0.75rem);
+  --bb-radius-input: var(--bb-radius-md, 0.5rem);
+  --bb-shadow-card: var(--bb-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
+  --bb-shadow-hover: var(--bb-shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.12));
+
+  /* ---- Component language ----
+   * One component system, configured per design. Sections consume these and
+   * must never hardcode their own button/card/badge styling. */
+  --bb-button-padding-block: 0.75rem;
+  --bb-button-padding-inline: 1.5rem;
+  --bb-button-weight: var(--bb-font-weight-medium, 500);
+  --bb-button-border-width: 2px;
+  --bb-button-shadow: none;
+  --bb-button-shadow-hover: none;
+  --bb-card-border-width: var(--bb-border-thickness, 1px);
+  --bb-badge-bg: var(--bb-color-primary-pale, #dbeafe);
+  --bb-badge-color: var(--bb-color-primary-hover, #1e40af);
+  --bb-badge-border: transparent;
+
+  /* ---- Shell BEHAVIOUR ----
+   * A design controls HOW the shell behaves (glass, transparency, height),
+   * not only its colour. `--bb-header-transparency: 1` is opaque; lower
+   * values make the header translucent over the hero.
+   *
+   * PHASE 22 adds the SCROLLED state: a header that is transparent over the
+   * hero and solid once the page moves. The `-scrolled` tokens are consumed
+   * by the `.is-bb-scrolled` state emitted by `design-shell.js`, so the
+   * transition is a real frontend behaviour and not a saved-but-inert value. */
+  --bb-header-height: 76px;
+  --bb-header-blur: 0px;
+  --bb-header-saturate: 100%;
+  --bb-header-transparency: 1;
+  --bb-header-border-width: 1px;
+  --bb-nav-gap: var(--bb-space-6, 1.5rem);
+  --bb-footer-padding-block: var(--bb-space-12, 3rem);
+
+  /* Header, initial (unscrolled) state - defaults mirror the header colour
+   * tokens so nothing changes for a site that never touches these. */
+  --bb-header-initial-bg: var(--bb-header-bg);
+  --bb-header-initial-color: var(--bb-header-color);
+  --bb-header-initial-nav: var(--bb-header-color);
+  --bb-header-initial-border: var(--bb-color-border);
+  --bb-header-initial-transparency: var(--bb-header-transparency);
+
+  /* Header, scrolled state. Defaults equal the initial state, so a design or
+   * site that does not opt in keeps the pre-Phase-22 header exactly. */
+  --bb-header-scrolled-bg: var(--bb-header-bg);
+  --bb-header-scrolled-color: var(--bb-header-color);
+  --bb-header-scrolled-nav: var(--bb-header-color);
+  --bb-header-scrolled-border: var(--bb-color-border);
+  --bb-header-scrolled-shadow: none;
+  --bb-header-scroll-transition: 0.24s;
+
+  /* Footer, Phase 22 additions (heading/link colours + column rhythm). */
+  --bb-footer-heading-color: var(--bb-footer-color);
+  --bb-footer-link-color: var(--bb-footer-color);
+  --bb-footer-link-hover: var(--bb-color-primary-light, var(--bb-color-primary));
+  --bb-footer-column-gap: var(--bb-space-8, 2rem);
+  --bb-footer-border-width: 1px;
+
+  /* =================================================================
+   * PHASE 22 - BACKGROUND, GRID, GLASS & MOTION VOCABULARY
+   * -----------------------------------------------------------------
+   * These are NEW AXES on the SAME `--bb-*` namespace. Nothing here is a
+   * second token system: the Theme's `bb_theme_design_schema()` filter
+   * already rejects any token that does not start with `--bb-`, so the
+   * single-namespace rule is enforced by the existing architecture.
+   * ================================================================= */
+
+  /* ---- Site background ----
+   * A layered background: colour, then an optional image, then an overlay
+   * tint. Keeping them as SEPARATE tokens means a design can supply a
+   * gradient while a customer only changes the overlay opacity. */
+  --bb-bg-color: var(--bb-color-background);
+  --bb-bg-image: none;
+  --bb-bg-gradient: none;
+  --bb-bg-size: cover;
+  --bb-bg-position: center center;
+  --bb-bg-repeat: no-repeat;
+  --bb-bg-attachment: scroll;
+  --bb-bg-overlay: none;
+  --bb-bg-overlay-opacity: 0;
+
+  /* ---- Container & grid ----
+   * The container has a MAX width and a MIN gutter; the grid has a column
+   * count per breakpoint plus a gap and a card width range. Sections consume
+   * these so one design change re-flows the entire site.
+   *
+   * `--bb-container-padding` and `--bb-section-spacing` are aliased to the
+   * Studio's controls on `:root` (see the Phase 23 bridge block at the top of
+   * this file), because the THEME consumes those two names. Declaring them
+   * here would be a duplicate definition that the `:root` alias would win. */
+  --bb-container-min: 0px;
+  --bb-container-padding-block: 0px;
+  --bb-grid-columns: 3;
+  --bb-grid-columns-tablet: 2;
+  --bb-grid-columns-mobile: 1;
+  --bb-grid-row-gap: var(--bb-grid-gap, 1.5rem);
+  --bb-card-min-width: 260px;
+  --bb-card-max-width: none;
+  --bb-content-width: 68ch;
+  --bb-section-align: start;
+
+  /* ---- Glass effect ----
+   * Glass is an OPTIONAL, reusable treatment - never forced. Level 0 is
+   * "off" and every consumer keys off `--bb-glass-blur` being 0, so a design
+   * that does not want glass simply leaves the defaults alone. */
+  --bb-glass-blur: 0px;
+  --bb-glass-saturate: 100%;
+  --bb-glass-opacity: 1;
+  --bb-glass-border-opacity: 1;
+  --bb-glass-shadow: none;
+  --bb-glass-tint: var(--bb-color-surface);
+
+  /* ---- Motion personality ----
+   * A design picks a reveal KIND, not just a duration. `--bb-reveal-kind`
+   * is a keyword consumed by the identity layer to select the keyframe set;
+   * `--bb-reveal-stagger` is the per-child delay. */
+  --bb-reveal-kind: fade-up;
+  --bb-reveal-stagger: 60ms;
+  --bb-hover-effect: lift;
+  --bb-hover-zoom: 1;
+  --bb-parallax: 0px;
+
+  /* ---- Motion system ----
+   * ONE centralised motion language. Designs select a personality by setting
+   * these tokens; components consume them and never hardcode timing.
+   *
+   * TIME VALUES ARE IN SECONDS (`0.24s`) to match the design schema, which stores
+   * motion as a plain `number` because the Theme's sanitizer rejects `ms`. */
+  --bb-motion-fast: 0.14s;
+  --bb-motion-normal: 0.24s;
+  --bb-motion-slow: 0.42s;
+  --bb-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --bb-ease-emphasis: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --bb-reveal-distance: 20px;
+  --bb-reveal-duration: 0.42s;
+  --bb-hover-lift: 4px;
 
   /* ---- Semantic role tokens (used by sections) ---- */
   --bb-color-heading: var(--bb-color-gray-900);

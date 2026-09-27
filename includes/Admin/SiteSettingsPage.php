@@ -89,58 +89,98 @@ class SiteSettingsPage {
 
             <?php endif; ?>
 
+            <?php if ( isset( $_GET['bb_type_refused'] ) ) : ?>
+
+            	<div class="notice notice-warning is-dismissible">
+            		<p>
+            			<?php esc_html_e( 'The business type is managed by the network administrator and was not changed. Your other settings were saved.', 'business-builder' ); ?>
+            		</p>
+            	</div>
+
+            <?php endif; ?>
+
             <form
-                method="post"
-                action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
+            	method="post"
+            	action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
             >
 
-                <input
-                    type="hidden"
-                    name="action"
-                    value="bb_save_site_settings"
-                >
+            	<input
+            		type="hidden"
+            		name="action"
+            		value="bb_save_site_settings"
+            	>
 
-                <?php wp_nonce_field( 'bb_save_site_settings' ); ?>
+            	<?php wp_nonce_field( 'bb_save_site_settings' ); ?>
 
-                <h2>Business Information</h2>
+            	<?php
+            	/*
+            	 * Business Type is an ARCHITECTURAL identity, not site content.
+         *
+         * Phase 20 §2/§3/§16: the business type determines what the website IS (which pack,
+         * which capabilities). It is therefore a NETWORK decision. The site administrator may
+         * SEE it but must never be able to change it.
+         *
+         * This is presentation only — the authorization is enforced server-side in
+         * save_settings() and in BusinessTypeGuard.
+         */
+        $can_assign_type = \BusinessBuilderCore\Network\BusinessTypeGuard::current_user_can_assign();
 
-                <table class="form-table">
+        $type_label = '';
 
-                    <tr>
-                        <th scope="row">
-                            <label for="bb_business_type">
-                                Business Type
-                            </label>
-                        </th>
+        if ( '' !== (string) $current_type ) {
+            $type_config = $types[ $current_type ] ?? null;
+            $type_label  = is_array( $type_config )
+                ? (string) ( $type_config['label'] ?? $current_type )
+                : (string) $current_type;
+        }
+        ?>
+        <h2><?php esc_html_e( 'Business Information', 'business-builder' ); ?></h2>
 
-                        <td>
-                            <select
-                                name="business_type"
-                                id="bb_business_type"
-                            >
+        <table class="form-table">
 
-                                <option value="">
-                                    Select Business Type
-                                </option>
+            <tr>
+                <th scope="row">
+                    <?php esc_html_e( 'Business Type', 'business-builder' ); ?>
+                </th>
 
-                                <?php foreach ( $types as $slug => $type ) : ?>
+                <td>
+                    <?php if ( '' === $type_label ) : ?>
 
-                                    <option
-                                        value="<?php echo esc_attr( $slug ); ?>"
-                                        <?php selected( $current_type, $slug ); ?>
-                                    >
-                                        <?php echo esc_html( $type['label'] ); ?>
-                                    </option>
+                        <em><?php esc_html_e( 'Not assigned yet.', 'business-builder' ); ?></em>
+                        <p class="description">
+                            <?php esc_html_e( 'A network administrator assigns the business type when the site is created.', 'business-builder' ); ?>
+                        </p>
 
-                                <?php endforeach; ?>
+                    <?php else : ?>
 
-                            </select>
+                        <strong><?php echo esc_html( $type_label ); ?></strong>
+                        <p class="description">
+                            <?php esc_html_e( 'The business type is managed by the network administrator and cannot be changed from this site.', 'business-builder' ); ?>
+                        </p>
 
-                            <p class="description">
-                                Select the type of business this website represents.
-                            </p>
-                        </td>
-                    </tr>
+                    <?php endif; ?>
+
+                    <?php if ( $can_assign_type ) : ?>
+
+                    	<p class="description">
+                    		<?php
+                    		printf(
+                    			/* translators: %s: link to the network admin screen. */
+                    			esc_html__( 'As a network administrator you can change it from %s.', 'business-builder' ),
+                    			'<a href="' . esc_url( network_admin_url( 'admin.php?page=' . \BusinessBuilderCore\Network\NetworkProvisioning::MENU_SLUG ) ) . '">' . esc_html__( 'Network → Business Sites', 'business-builder' ) . '</a>'
+                    		);
+                    		?>
+                    	</p>
+
+                    <?php endif; ?>
+
+                    <?php /*
+                     * Deliberately NO editable <select name="business_type"> here. Even if one
+                     * were re-introduced, the write is refused server-side unless the request
+                     * carries network authority (see save_settings()).
+                     */ ?>
+                </td>
+            </tr>
 
                     <tr>
                         <th scope="row">
@@ -512,18 +552,42 @@ class SiteSettingsPage {
             ->update( $settings );
 
         /*
-         * Business Type is stored separately because
-         * it controls which Business Pack is loaded.
+         * ---------------------------------------------------------------------------------
+         * Business Type — NETWORK-ONLY write (Phase 20 §2/§3/§40).
+         * ---------------------------------------------------------------------------------
+         *
+         * AUDIT FINDING (docs/phase-20-network-provisioning-audit.md §2): this handler used
+         * to accept `$_POST['business_type']` guarded only by `manage_options` — a capability
+         * every multisite site administrator holds. A customer could therefore POST
+         * `business_type=medical` and reclassify their entire website.
+         *
+         * The rule is now enforced SERVER-SIDE and on the ACTUAL value, not on a hidden field:
+         * the site administrator simply cannot change it, whatever they post.
          */
-        if ( isset( $_POST['business_type'] ) ) {
+        $requested_type = isset( $_POST['business_type'] )
+            ? sanitize_key( wp_unslash( $_POST['business_type'] ) )
+            : '';
 
-            $this->plugin
-                ->get_business_type()
-                ->set_current(
-                    sanitize_key(
-                        wp_unslash( $_POST['business_type'] )
-                    )
+        $current_type = (string) $this->plugin->get_business_type()->get_current();
+
+        if ( '' !== $requested_type && $requested_type !== $current_type ) {
+
+            if ( \BusinessBuilderCore\Network\BusinessTypeGuard::current_user_can_assign_for_site( get_current_blog_id() ) ) {
+
+                \BusinessBuilderCore\Network\BusinessTypeGuard::assign(
+                    $this->plugin->get_business_type(),
+                    $requested_type
                 );
+
+            } else {
+
+                /*
+                 * Refused. Do not fatal: the other (site-owned) settings in this request are
+                 * legitimate and must still save — only the architectural identity change is
+                 * rejected. The refusal is surfaced to the user.
+                 */
+                $type_refused = true;
+            }
         }
 
         wp_safe_redirect(
@@ -531,6 +595,7 @@ class SiteSettingsPage {
                 array(
                     'page'    => 'business-builder-settings',
                     'updated' => '1',
+                    'bb_type_refused' => ! empty( $type_refused ) ? '1' : null,
                 ),
                 admin_url( 'admin.php' )
             )

@@ -149,6 +149,28 @@ class SectionRenderer {
             'data-section-type' => $type,
         );
 
+        /*
+         * Phase 22 presentation state (glass, hover, reveal).
+         *
+         * These are READ FROM TOKENS rather than from settings, so a Studio
+         * customization and a design's authored value are the same input and
+         * cannot drift apart. The resolver lives in the Design namespace and is
+         * generic: it knows the token vocabulary, never a section name.
+         */
+        if ( function_exists( 'bb_section_presentation_state' ) ) {
+
+            $state = bb_section_presentation_state( $type );
+
+            foreach ( $state as $name => $value ) {
+
+                if ( '' === $value ) {
+                    continue;
+                }
+
+                $attributes[ $name ] = $value;
+            }
+        }
+
         /**
          * Allow extensions to modify attributes.
          */
@@ -272,25 +294,35 @@ class SectionRenderer {
             return;
         }
 
-        if (
-            in_array(
-                $type,
-                array(
-                    'lawyers',
-                    'legal_services',
-                    'practice_areas',
-                    'testimonials',
-                    'faq',
-                ),
-                true
-            )
-        ) {
-            do_action(
-                'bb_render_section_' . $type,
-                $section,
-                $settings,
-                $content
-            );
+        /**
+         * Domain (pack) sections render through a generic, type-agnostic
+         * hook. The core renderer must not know any business type: a section
+         * that has no dedicated core renderer is offered to `bb_render_section`
+         * with its own type slug and is given priority over the core fallback.
+         *
+         * A pack (or a child plugin) claims its section types by returning
+         * true from the action — the same self-registration pattern used by
+         * `bb_register_packs` and `bb_register_section_variants`.
+         *
+         *   add_action( 'bb_render_section', function ( $type, $section, $settings, $content ) {
+         *       if ( 'lawyers' !== $type ) { return; }
+         *       // ... render ...
+         *       return true;
+         *   }, 10, 4 );
+         *
+         * When nothing claims the type, rendering falls through to the
+         * generic content renderer below (unchanged legacy behaviour).
+         */
+        $claimed = apply_filters(
+            'bb_render_section',
+            false,
+            $type,
+            $section,
+            $settings,
+            $content
+        );
+
+        if ( true === $claimed ) {
             return;
         }
 

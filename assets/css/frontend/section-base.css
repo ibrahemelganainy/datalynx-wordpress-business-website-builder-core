@@ -27,6 +27,15 @@
     --bb-fe-text-color: var(--bb-color-text, #475569);
     --bb-fe-star-color: var(--bb-color-accent, #f5b301);
     --bb-fe-accent: linear-gradient(135deg, var(--bb-color-primary-light, #60a5fa), #a78bfa);
+
+    /* Component 'luxury' skin — bridged to the canonical tokens (§11/§12). */
+    --bb-fe-surface-translucent: var(--bb-color-surface-translucent, rgba(255, 255, 255, 0.9));
+    --bb-fe-luxury: var(--bb-color-luxury, #b8843c);
+    --bb-fe-luxury-soft: var(--bb-color-luxury-soft, #dcc29c);
+    --bb-fe-luxury-pale: var(--bb-color-luxury-pale, #f6e7cf);
+    --bb-fe-luxury-strong: var(--bb-color-luxury-strong, #8a5c18);
+    --bb-fe-luxury-border: var(--bb-color-luxury-border, rgba(138, 92, 24, 0.14));
+    --bb-fe-font-heading-serif: var(--bb-font-heading-serif, Georgia, "Times New Roman", serif);
 }
 
 /* Empty states shown when a section has no published items. */

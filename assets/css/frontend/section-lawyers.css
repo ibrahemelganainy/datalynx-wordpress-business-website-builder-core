@@ -104,14 +104,14 @@
 
 /* Luxury template tweaks. */
 .bb-template-luxury .bb-lawyer-card {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(138, 92, 24, 0.14);
+  background: var(--bb-fe-surface-translucent);
+  border-color: var(--bb-fe-luxury-border);
 }
 
 .bb-template-luxury .bb-lawyer-body h3 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--bb-fe-font-heading-serif);
 }
 
 .bb-template-luxury .bb-lawyer-role {
-  color: #b8843c;
+  color: var(--bb-fe-luxury);
 }

@@ -86,15 +86,15 @@
 
 /* Luxury template tweaks. */
 .bb-template-luxury .bb-service-card {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(138, 92, 24, 0.14);
+  background: var(--bb-fe-surface-translucent);
+  border-color: var(--bb-fe-luxury-border);
 }
 
 .bb-template-luxury .bb-service-card h3 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--bb-fe-font-heading-serif);
 }
 
 .bb-template-luxury .bb-service-icon {
-  background: linear-gradient(135deg, #f6e7cf, #dcc29c);
-  color: #8a5c18;
+  background: linear-gradient(135deg, var(--bb-fe-luxury-pale), var(--bb-fe-luxury-soft));
+  color: var(--bb-fe-luxury-strong);
 }

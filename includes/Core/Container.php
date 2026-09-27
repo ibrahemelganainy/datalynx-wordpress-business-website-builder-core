@@ -74,49 +74,72 @@ class Container {
      * @return mixed
      */
     public function get(
-        string $id
+    	string $id
     ): mixed {
 
-        /*
-         * Return an already-created shared service.
-         */
-        if ( isset( $this->services[ $id ] ) ) {
-            return $this->services[ $id ];
-        }
+    	/*
+    	 * Return an already-created shared service.
+    	 */
+    	if ( isset( $this->services[ $id ] ) ) {
+    		return $this->services[ $id ];
+    	}
 
-        /*
-         * Resolve a registered factory.
-         */
-        if ( isset( $this->factories[ $id ] ) ) {
+    	/*
+    	 * Resolve a registered factory.
+    	 */
+    	if ( isset( $this->factories[ $id ] ) ) {
 
-            $service = call_user_func(
-                $this->factories[ $id ],
-                $this
-            );
+    		$service = call_user_func(
+    			$this->factories[ $id ],
+    			$this
+    		);
 
-            /*
-             * Factories are treated as shared services
-             * after their first resolution.
-             */
-            $this->services[ $id ] = $service;
+    		/*
+    		 * Factories are treated as shared services
+    		 * after their first resolution.
+    		 */
+    		$this->services[ $id ] = $service;
 
-            return $service;
-        }
+    		return $service;
+    	}
 
-        /*
-         * If the ID is a class name, attempt automatic
-         * dependency resolution.
-         */
-        if ( class_exists( $id ) ) {
-            return $this->make( $id );
-        }
+    	/*
+    	 * If the ID is a class name, attempt automatic
+    	 * dependency resolution.
+    	 *
+    	 * MEASURED FAILURE (Phase 22 audit, tests/_phase22-probe-container.php)
+    	 * -------------------------------------------------------------------
+    	 * This branch used to return `$this->make( $id )` WITHOUT storing the
+    	 * result, so it was not shared:
+    	 *     same instance across two get() calls = false
+    	 *
+    	 * Every consumer therefore received its own throwaway object. The visible
+    	 * symptom was that a Business Pack was handed a SectionRegistry that no
+    	 * other part of the platform could see, so the pack's sections were
+    	 * registered into an orphan registry and the Page Builder and the Phase 22
+    	 * Section Studio both found an EMPTY section list:
+    	 *
+    	 *     sections visible via the CONTAINER registry = (empty)
+    	 *
+    	 * The fix is to resolve it through the SAME path as every other service -
+    	 * which also makes the recursive `make()` resolution of a dependency
+    	 * return the shared instance instead of creating a fresh graph.
+    	 */
+    	if ( class_exists( $id ) ) {
 
-        throw new \RuntimeException(
-            sprintf(
-                'Business Builder Container: Service "%s" could not be resolved.',
-                $id
-            )
-        );
+    		$service = $this->make( $id );
+
+    		$this->services[ $id ] = $service;
+
+    		return $service;
+    	}
+
+    	throw new \RuntimeException(
+    		sprintf(
+    			'Business Builder Container: Service "%s" could not be resolved.',
+    			$id
+    		)
+    	);
     }
 
     /**

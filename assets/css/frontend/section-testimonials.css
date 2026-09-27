@@ -41,7 +41,7 @@
   position: absolute;
   top: -6px;
   right: 18px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--bb-fe-font-heading-serif);
   font-size: 96px;
   line-height: 1;
   color: rgba(148, 163, 184, 0.18);
@@ -129,14 +129,14 @@
 
 /* Luxury template tweaks. */
 .bb-template-luxury .bb-testimonial-card {
-  background: rgba(255, 255, 255, 0.88);
-  border-color: rgba(138, 92, 24, 0.14);
+  background: var(--bb-fe-surface-translucent);
+  border-color: var(--bb-fe-luxury-border);
 }
 
 .bb-template-luxury .bb-testimonial-card h3 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--bb-fe-font-heading-serif);
 }
 
 .bb-template-luxury .bb-testimonial-rating {
-  color: #b8843c;
+  color: var(--bb-fe-luxury);
 }

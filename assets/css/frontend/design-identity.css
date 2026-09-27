@@ -1,0 +1,465 @@
+/**
+ * Business Builder Core - Frontend: Design Identity Layer (Phase 21)
+ * -----------------------------------------------------------------
+ * Consumes the Phase-21 design-identity tokens (declared in design-tokens.css)
+ * so that every design expresses a COMPLETE visual identity, not a colour swap.
+ *
+ * OWNERSHIP / ARCHITECTURE (Phase 21 §4, §5, §33, §40, §54)
+ * ---------------------------------------------------------
+ *   - ONE token namespace: every value below reads a `--bb-*` token. This file
+ *     introduces NO new token names and NO competing namespace.
+ *   - ONE component system: buttons, cards, badges and forms are configured
+ *     from tokens HERE, centrally - a section must never ship its own random
+ *     button/card CSS.
+ *   - Presentation only: nothing here queries data, writes state or knows a
+ *     business type. The whole file is registry-agnostic.
+ *   - The design itself is still resolved by the Theme's preset resolver
+ *     (`bb_theme_preset_config()` -> inline `:root`). This file only turns
+ *     those resolved tokens into visible results.
+ *
+ * Because every rule reads a token, selecting a different design changes the
+ * rendered result with NO markup change and NO per-design stylesheet.
+ */
+
+/* ===================================================================
+ * 1. Section rhythm & density
+ * -------------------------------------------------------------------
+ * A section's vertical rhythm is a design decision. The Theme's own
+ * template-shell.css sets a `clamp()` padding; this rule makes that
+ * rhythm token-driven so a compact design and an airy design genuinely
+ * differ in visual density, on every page type (not just the home page).
+ * =================================================================== */
+.bb-template .bb-section {
+  padding-block: var(--bb-section-padding-block);
+}
+
+/* Compact rhythm where a section follows another of the same kind, so
+   stacked sections read as one composition rather than repeated blocks. */
+.bb-template .bb-section + .bb-section {
+  border-block-start: 0;
+}
+
+.bb-template .bb-grid-columns-1,
+.bb-template .bb-grid-columns-2,
+.bb-template .bb-grid-columns-3,
+.bb-template .bb-grid-columns-4,
+.bb-template [class*="bb-grid-columns-"] {
+  gap: var(--bb-grid-gap);
+}
+
+.bb-template .bb-section-inner {
+  max-width: var(--bb-container-width, 1280px);
+}
+
+/* ===================================================================
+ * 2. Typography scale
+ * -------------------------------------------------------------------
+ * `--bb-heading-scale` multiplies the design's heading sizes, and
+ * `--bb-heading-letter-spacing` carries the design's type personality
+ * (tight editorial vs. open, airy). Applied centrally so every heading
+ * in every section follows the same hierarchy.
+ * =================================================================== */
+.bb-template h1,
+.bb-template h2,
+.bb-template h3,
+.bb-template .bb-section-title,
+.bb-template .bb-section-heading h2 {
+  font-family: var(--bb-font-heading, inherit);
+  font-weight: var(--bb-font-weight-bold, 700);
+  /* `--bb-heading-letter-spacing` is stored as a bare `em` number by the design schema
+     (the Theme's sanitizer accepts a negative `number` but not a negative `length`), and
+     the `em` unit is appended by DesignSchema::resolve_units() before `:root` is emitted. */
+  letter-spacing: var(--bb-heading-letter-spacing, -0.02em);
+}
+
+.bb-template .bb-section h2,
+.bb-template .bb-section-title {
+  /* Relative heading sizes keep the scale coherent when a design shifts it. */
+  font-size: calc(var(--bb-font-size-3xl, 2rem) * var(--bb-heading-scale, 1));
+}
+
+.bb-template .bb-section-heading {
+  max-width: 68ch;
+}
+
+.bb-template .bb-section-description,
+.bb-template .bb-section-heading p {
+  color: var(--bb-color-text-muted, var(--bb-color-text));
+  line-height: var(--bb-line-height-relaxed, 1.75);
+}
+
+/* ===================================================================
+ * 3. Gradients
+ * -------------------------------------------------------------------
+ * The design's gradient tokens, applied to the places where a gradient
+ * is meaningful. Sections never define their own gradient.
+ * =================================================================== */
+
+/* Hero background: a design may give the hero a gradient wash. Absolutely
+   positioned and `z-index: -1` so it sits behind content and can never
+   intercept pointer events or create overflow. */
+.bb-template .bb-section-hero,
+.bb-template .bb-section-slider {
+  position: relative;
+  isolation: isolate;
+}
+
+.bb-template .bb-section-hero::before,
+.bb-template .bb-section-slider::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--bb-gradient-hero);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* CTA: the design's CTA gradient as a deliberate, contained panel. */
+.bb-template .bb-section-cta {
+  position: relative;
+  isolation: isolate;
+}
+
+.bb-template .bb-section-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--bb-gradient-cta);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+/* Decorative accent: a short gradient rule that gives a section heading a
+   designed focal point. Logical properties keep it correct in RTL. */
+.bb-template .bb-section-heading > .bb-section-title::after,
+.bb-template .bb-section-heading > h2::after {
+  content: "";
+  display: block;
+  inline-size: 56px;
+  block-size: 3px;
+  margin-block-start: var(--bb-space-4, 1rem);
+  border-radius: var(--bb-radius-full, 9999px);
+  background-image: var(--bb-gradient-decorative);
+}
+
+/* Sections that already show a decorative underline must not get a second. */
+.bb-template .bb-section-heading.is-centered > h2::after,
+.bb-template .bb-section-heading.is-centered > .bb-section-title::after {
+  margin-inline: auto;
+}
+
+/* ===================================================================
+ * 4. Buttons - ONE central button language
+ * -------------------------------------------------------------------
+ * Every button in every section is configured from these tokens, so a
+ * design changes the entire button language at once and no section can
+ * drift from it (§28, §54).
+ * =================================================================== */
+.bb-template .bb-button,
+.bb-template button.bb-button,
+.bb-template a.bb-button {
+  padding: var(--bb-button-padding-block) var(--bb-button-padding-inline);
+  font-weight: var(--bb-button-weight, var(--bb-font-weight-medium, 500));
+  border-width: var(--bb-button-border-width, 2px);
+  border-style: solid;
+  border-radius: var(--bb-button-radius, var(--bb-radius-md));
+  box-shadow: var(--bb-button-shadow, none);
+  transition:
+    background-color var(--bb-motion-normal) var(--bb-ease-standard),
+    border-color var(--bb-motion-normal) var(--bb-ease-standard),
+    color var(--bb-motion-normal) var(--bb-ease-standard),
+    box-shadow var(--bb-motion-normal) var(--bb-ease-standard),
+    transform var(--bb-motion-fast) var(--bb-ease-standard);
+}
+
+.bb-template .bb-button-primary,
+.bb-template .bb-button-primary:visited {
+  background-color: var(--bb-color-primary);
+  background-image: var(--bb-gradient-brand);
+  border-color: transparent;
+  color: var(--bb-color-text-inverse, #fff);
+}
+
+.bb-template .bb-button-primary:hover,
+.bb-template .bb-button-primary:focus {
+  box-shadow: var(--bb-button-shadow-hover, none);
+  transform: translateY(calc(var(--bb-hover-lift, 4px) * -0.5));
+}
+
+.bb-template .bb-button-outline {
+  background-color: transparent;
+  background-image: none;
+  border-color: var(--bb-color-primary);
+  color: var(--bb-color-primary);
+}
+
+.bb-template .bb-button-outline:hover,
+.bb-template .bb-button-outline:focus {
+  background-color: var(--bb-color-primary);
+  background-image: none;
+  color: var(--bb-color-text-inverse, #fff);
+}
+
+.bb-template .bb-button-secondary {
+  background-image: none;
+}
+
+.bb-template .bb-button-ghost {
+  background-image: none;
+}
+
+/* ===================================================================
+ * 5. Cards - ONE central card language
+ * -------------------------------------------------------------------
+ * Border thickness, radius, padding, elevation and hover behaviour all
+ * come from tokens, so `Aurora`'s soft glass card and `Obsidian`'s
+ * thin-bordered dark card are the SAME component in two configurations.
+ * =================================================================== */
+.bb-template .bb-card,
+.bb-template .bb-lawyer-card,
+.bb-template .bb-service-card,
+.bb-template .bb-practice-area-card,
+.bb-template .bb-testimonial-card,
+.bb-template .bb-faq-item,
+.bb-template .bb-doctor-card,
+.bb-template .bb-medical-service-card {
+  background-color: var(--bb-color-surface);
+  border: var(--bb-card-border-width, var(--bb-border-thickness, 1px)) solid var(--bb-color-border);
+  border-radius: var(--bb-radius-card, var(--bb-radius-lg));
+  box-shadow: var(--bb-shadow-card, var(--bb-shadow-md));
+  transition:
+    box-shadow var(--bb-motion-normal) var(--bb-ease-standard),
+    transform var(--bb-motion-normal) var(--bb-ease-standard),
+    border-color var(--bb-motion-normal) var(--bb-ease-standard);
+}
+
+.bb-template .bb-card:hover,
+.bb-template .bb-lawyer-card:hover,
+.bb-template .bb-service-card:hover,
+.bb-template .bb-practice-area-card:hover,
+.bb-template .bb-testimonial-card:hover,
+.bb-template .bb-doctor-card:hover,
+.bb-template .bb-medical-service-card:hover {
+  box-shadow: var(--bb-shadow-hover, var(--bb-shadow-lg));
+  transform: translateY(calc(var(--bb-hover-lift, 4px) * -1));
+}
+
+/* A design with zero border thickness and a flat shadow becomes a borderless,
+   quiet card without any markup change (e.g. Minimal / Clean Health). */
+.bb-template .bb-card--flush,
+.bb-template .bb-card.is-flush {
+  border: 0;
+}
+
+/* ===================================================================
+ * 6. Badges & forms - shared component language
+ * =================================================================== */
+.bb-template .bb-badge {
+  background-color: var(--bb-badge-bg);
+  color: var(--bb-badge-color);
+  border: var(--bb-border-thickness, 1px) solid var(--bb-badge-border, transparent);
+  border-radius: var(--bb-radius-full, 9999px);
+}
+
+.bb-template .bb-form-control,
+.bb-template input.bb-form-control,
+.bb-template select.bb-form-control,
+.bb-template textarea.bb-form-control {
+  border-width: var(--bb-border-thickness, 1px);
+  border-radius: var(--bb-radius-input, var(--bb-radius-md));
+  background-color: var(--bb-color-surface);
+  color: var(--bb-color-text);
+  transition:
+    border-color var(--bb-motion-fast) var(--bb-ease-standard),
+    box-shadow var(--bb-motion-fast) var(--bb-ease-standard);
+}
+
+.bb-template .bb-form-control:focus {
+  border-color: var(--bb-color-primary);
+  box-shadow: 0 0 0 3px var(--bb-color-primary-pale, rgba(37, 99, 235, 0.15));
+}
+
+/* ===================================================================
+ * 7. Shell behaviour
+ * -------------------------------------------------------------------
+ * `--bb-header-transparency` < 1 lets a design float its header over the
+ * hero; `--bb-header-blur` gives it a glass treatment. Both are read from
+ * the design's tokens, so the header variant markup is never duplicated.
+ *
+ * NOTE: the Theme's own header variant CSS still owns LAYOUT. This rule
+ * only expresses the design's colour/behaviour tokens.
+ * =================================================================== */
+.bb-theme .bb-site-header {
+  block-size: auto;
+  min-block-size: var(--bb-header-height, 76px);
+  border-block-end-width: var(--bb-header-border-width, 1px);
+}
+
+.bb-theme .bb-site-header-inner {
+  min-block-size: var(--bb-header-height, 76px);
+}
+
+.bb-theme .bb-nav-menu {
+  gap: var(--bb-nav-gap, var(--bb-space-6, 1.5rem));
+}
+
+.bb-theme .bb-site-footer-inner {
+  padding-block-start: var(--bb-footer-padding-block, var(--bb-space-12, 3rem));
+}
+
+/* Glass header: applies the design's blur/saturation only when the design
+   actually asks for it (`--bb-header-blur` > 0). Kept behind `@supports` so
+   a browser without backdrop-filter still gets a readable solid header. */
+.bb-theme .bb-site-header[data-bb-glass="1"] {
+  background-color: color-mix(
+    in srgb,
+    var(--bb-header-bg) calc(var(--bb-header-transparency, 1) * 100%),
+    transparent
+  );
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .bb-theme .bb-site-header[data-bb-glass="1"] {
+    -webkit-backdrop-filter: blur(var(--bb-header-blur, 0px)) saturate(var(--bb-header-saturate, 100%));
+    backdrop-filter: blur(var(--bb-header-blur, 0px)) saturate(var(--bb-header-saturate, 100%));
+  }
+}
+
+/* ===================================================================
+ * 8. Motion system
+ * -------------------------------------------------------------------
+ * ONE centralised motion language (§33). Reveal animations are opt-in via
+ * `data-bb-reveal`, use only `transform` + `opacity` (no layout thrash),
+ * and are disabled entirely under `prefers-reduced-motion` (§15, §60).
+ *
+ * RTL: horizontal reveals use LOGICAL direction, so `slide` moves from the
+ * inline-start edge in both LTR and RTL rather than assuming "left".
+ * =================================================================== */
+@keyframes bb-reveal-fade-up {
+  from { opacity: 0; transform: translate3d(0, var(--bb-reveal-distance, 20px), 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes bb-reveal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bb-reveal-scale {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bb-reveal-slide {
+  from { opacity: 0; transform: translate3d(var(--bb-reveal-shift, -20px), 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* LTR: slide in from the inline-start (left). */
+.bb-theme:not(.bb-rtl) [data-bb-reveal="slide"],
+.bb-theme.bb-ltr [data-bb-reveal="slide"] {
+  --bb-reveal-shift: -20px;
+}
+
+/* RTL: mirrored so the motion is semantically identical, not inverted. */
+.bb-theme.bb-rtl [data-bb-reveal="slide"] {
+  --bb-reveal-shift: 20px;
+}
+
+.bb-template [data-bb-reveal] {
+  /* Content stays visible until JS marks it, so a JS failure never hides
+     content (progressive enhancement - no blank page if the script dies). */
+  will-change: opacity, transform;
+}
+
+.bb-template [data-bb-reveal].is-bb-revealed {
+  animation-duration: var(--bb-reveal-duration, var(--bb-motion-slow, 0.42s));
+  animation-timing-function: var(--bb-ease-emphasis, cubic-bezier(0.2, 0.8, 0.2, 1));
+  animation-fill-mode: both;
+}
+
+.bb-template [data-bb-reveal="fade-up"].is-bb-revealed { animation-name: bb-reveal-fade-up; }
+.bb-template [data-bb-reveal="fade"].is-bb-revealed    { animation-name: bb-reveal-fade; }
+.bb-template [data-bb-reveal="scale"].is-bb-revealed   { animation-name: bb-reveal-scale; }
+.bb-template [data-bb-reveal="slide"].is-bb-revealed   { animation-name: bb-reveal-slide; }
+
+/* Staggered children: a design may stagger a grid so cards arrive in
+   sequence. Delay is a multiple of the design's own motion tempo. */
+.bb-template [data-bb-stagger] > * {
+  animation-duration: var(--bb-reveal-duration, var(--bb-motion-slow, 0.42s));
+  animation-timing-function: var(--bb-ease-emphasis, cubic-bezier(0.2, 0.8, 0.2, 1));
+  animation-fill-mode: both;
+  animation-name: bb-reveal-fade-up;
+}
+
+.bb-template [data-bb-stagger] > :nth-child(1) { animation-delay: 0ms; }
+.bb-template [data-bb-stagger] > :nth-child(2) { animation-delay: 60ms; }
+.bb-template [data-bb-stagger] > :nth-child(3) { animation-delay: 120ms; }
+.bb-template [data-bb-stagger] > :nth-child(4) { animation-delay: 180ms; }
+.bb-template [data-bb-stagger] > :nth-child(5) { animation-delay: 240ms; }
+.bb-template [data-bb-stagger] > :nth-child(6) { animation-delay: 300ms; }
+.bb-template [data-bb-stagger] > :nth-child(n+7) { animation-delay: 360ms; }
+
+/* Hover elevation shared by every interactive surface, driven by the
+   design's `--bb-hover-lift` so a "calm" design barely moves. */
+.bb-template .bb-hover-lift,
+.bb-template .hover-lift {
+  transition:
+    transform var(--bb-motion-normal) var(--bb-ease-standard),
+    box-shadow var(--bb-motion-normal) var(--bb-ease-standard);
+}
+
+.bb-template .bb-hover-lift:hover,
+.bb-template .hover-lift:hover {
+  transform: translateY(calc(var(--bb-hover-lift, 4px) * -1));
+  box-shadow: var(--bb-shadow-hover, var(--bb-shadow-lg));
+}
+
+/* ===================================================================
+ * 9. Reduced motion - hard stop for non-essential animation (§15, §60)
+ * -------------------------------------------------------------------
+ * Content visibility is PRESERVED: reveals are simply shown immediately.
+ * =================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .bb-template [data-bb-reveal],
+  .bb-template [data-bb-reveal].is-bb-revealed,
+  .bb-template [data-bb-stagger] > * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .bb-template .bb-card:hover,
+  .bb-template .bb-lawyer-card:hover,
+  .bb-template .bb-service-card:hover,
+  .bb-template .bb-practice-area-card:hover,
+  .bb-template .bb-testimonial-card:hover,
+  .bb-template .bb-doctor-card:hover,
+  .bb-template .bb-medical-service-card:hover,
+  .bb-template .bb-hover-lift:hover,
+  .bb-template .hover-lift:hover,
+  .bb-template .bb-button-primary:hover {
+    transform: none !important;
+  }
+}
+
+/* ===================================================================
+ * 10. Mobile safety (§36) - no horizontal overflow, no overlap
+ * =================================================================== */
+@media (max-width: 767px) {
+  .bb-template .bb-section {
+    padding-block: var(--bb-section-padding-block-sm);
+  }
+
+  .bb-template .bb-section-heading > .bb-section-title::after,
+  .bb-template .bb-section-heading > h2::after {
+    inline-size: 40px;
+  }
+
+  .bb-theme .bb-site-header {
+    min-block-size: auto;
+    --bb-header-blur: 0px;
+  }
+}

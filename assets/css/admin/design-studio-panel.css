@@ -1,0 +1,972 @@
+/**
+ * Business Builder Core - Admin: Design Studio (Phase 21 §20-§29, §37, §45-§49)
+ * ----------------------------------------------------------------------------
+ * The customization panel: palette tiles, colour swatches, gradient tiles, font specimens,
+ * named density/shape/shell/motion choices, and the live preview frame.
+ *
+ * PRINCIPLES
+ * ----------
+ *   - SCOPED to `.bb-studio` so nothing here can affect other admin screens.
+ *   - LOGICAL PROPERTIES throughout (`inline-start`, `inset-inline`), so the whole Studio is
+ *     RTL-safe without a mirrored stylesheet (§35).
+ *   - THE COLOUR IS THE UI (§21): every colour control renders as a large swatch, and the hex
+ *     value is secondary information.
+ *   - RESPONSIVE (§36): the two-column layout collapses to one column on narrow screens.
+ *   - REDUCED MOTION (§60): all transitions are disabled when the user asks for that.
+ */
+
+/* ===================================================================
+ * 1. Layout
+ * =================================================================== */
+.bb-studio {
+  margin-block-start: 32px;
+  padding-block-start: 28px;
+  border-block-start: 1px solid #dcdcde;
+}
+
+.bb-studio-head {
+  margin-block-end: 18px;
+}
+
+.bb-studio-title {
+  margin: 0 0 6px;
+  font-size: 20px;
+  color: #1d2327;
+}
+
+.bb-studio-lede {
+  max-width: 80ch;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #50575e;
+}
+
+.bb-studio-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.bb-studio-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+/* ===================================================================
+ * 2. Control groups
+ * =================================================================== */
+.bb-studio-group {
+  margin: 0;
+  padding: 16px 18px 18px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.bb-studio-legend {
+  padding-inline: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.bb-studio-help {
+  margin: 0 0 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #646970;
+}
+
+/* ===================================================================
+ * 3. Palette tiles (§21, §22)
+ * =================================================================== */
+.bb-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.bb-palette-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  text-align: start;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.bb-palette-tile:hover {
+  border-color: #2271b1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
+  transform: translateY(-1px);
+}
+
+.bb-palette-tile.is-selected {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+/* A palette that would hurt readability is marked, not hidden (§55). */
+.bb-palette-tile--poor {
+  border-color: #dba617;
+}
+
+.bb-palette-swatches {
+  display: flex;
+  overflow: hidden;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+}
+
+.bb-palette-swatches i {
+  display: block;
+  flex: 1;
+  block-size: 26px;
+}
+
+.bb-palette-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.bb-palette-grade {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.bb-palette-grade--good { color: #166534; }
+.bb-palette-grade--fair { color: #92400e; }
+.bb-palette-grade--poor { color: #b32d2e; }
+
+/* ===================================================================
+ * 4. Colour controls (§21) - the swatch IS the control
+ * =================================================================== */
+.bb-color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.bb-color-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fbfbfc;
+}
+
+.bb-color-control.is-overridden {
+  border-color: #2271b1;
+  background: #f0f6fc;
+}
+
+.bb-color-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.bb-color-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* A large, real swatch rather than a bare hex field (§21). */
+.bb-color-input {
+  inline-size: 44px;
+  block-size: 34px;
+  padding: 0;
+  border: 1px solid #c3c4c7;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.bb-color-input::-webkit-color-swatch-wrapper { padding: 2px; }
+.bb-color-input::-webkit-color-swatch { border: 0; border-radius: 4px; }
+
+.bb-color-hex {
+  font-size: 11px;
+  color: #646970;
+  background: transparent;
+  padding: 0;
+}
+
+/* ===================================================================
+ * 5. Font specimens (§24)
+ * =================================================================== */
+.bb-font-picker {
+  margin-block-end: 18px;
+}
+
+.bb-font-picker:last-child { margin-block-end: 0; }
+
+.bb-font-label,
+.bb-choice-label,
+.bb-scale-label,
+.bb-gradient-label {
+  display: block;
+  margin-block-end: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.bb-font-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.bb-font-option {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.bb-font-option:hover { border-color: #2271b1; }
+
+.bb-font-option.is-selected {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  background: #f0f6fc;
+}
+
+.bb-font-option input { position: absolute; opacity: 0; pointer-events: none; }
+
+.bb-font-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1d2327;
+}
+
+/* The specimen is rendered IN the typeface it describes (§24). */
+.bb-font-specimen {
+  display: block;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #3c434a;
+  overflow-wrap: anywhere;
+}
+
+.bb-font-specimen--arabic { font-size: 16px; }
+
+.bb-font-note {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #787c82;
+}
+
+/* ===================================================================
+ * 6. Gradient tiles (§23)
+ * =================================================================== */
+.bb-gradient-picker { margin-block-end: 18px; }
+.bb-gradient-picker:last-child { margin-block-end: 0; }
+
+.bb-gradient-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.bb-gradient-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.bb-gradient-tile:hover { border-color: #2271b1; }
+
+.bb-gradient-tile.is-selected {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+.bb-gradient-tile input { position: absolute; opacity: 0; pointer-events: none; }
+
+.bb-gradient-swatch {
+  display: block;
+  block-size: 34px;
+  border-radius: 5px;
+  background-color: #f0f0f1;
+  background-size: cover;
+}
+
+/* `none` renders as an explicit, visible "no gradient" choice. */
+.bb-gradient-tile.is-flat .bb-gradient-swatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #f0f0f1 0 8px,
+    #fff 8px 16px
+  ) !important;
+}
+
+.bb-gradient-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #50575e;
+}
+
+/* ===================================================================
+ * 7. Named scale choices (§27)
+ * =================================================================== */
+.bb-scale { margin-block-end: 16px; }
+.bb-scale:last-child { margin-block-end: 0; }
+
+.bb-scale-help {
+  display: block;
+  margin-block: -4px 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #787c82;
+}
+
+.bb-scale-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+}
+
+.bb-scale-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.bb-scale-option:hover { border-color: #2271b1; }
+
+.bb-scale-option.is-selected {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  background: #f0f6fc;
+}
+
+.bb-scale-option input { position: absolute; opacity: 0; pointer-events: none; }
+
+/* Proportional bars give the value visual meaning (§27). */
+.bb-scale-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  block-size: 22px;
+}
+
+.bb-scale-bars i {
+  display: block;
+  inline-size: 5px;
+  border-radius: 1px;
+  background: #dcdcde;
+}
+
+.bb-scale-bars i:nth-child(1) { block-size: 6px; }
+.bb-scale-bars i:nth-child(2) { block-size: 10px; }
+.bb-scale-bars i:nth-child(3) { block-size: 14px; }
+.bb-scale-bars i:nth-child(4) { block-size: 18px; }
+.bb-scale-bars i:nth-child(5) { block-size: 22px; }
+
+.bb-scale-bars i.is-on { background: #2271b1; }
+
+.bb-scale-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #50575e;
+  text-align: center;
+}
+
+/* ===================================================================
+ * 8. Range controls
+ * =================================================================== */
+.bb-range { margin-block-end: 16px; }
+.bb-range:last-child { margin-block-end: 0; }
+
+.bb-range-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-block-end: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.bb-range-label code {
+  font-size: 11px;
+  font-weight: 400;
+  color: #646970;
+  background: transparent;
+  padding: 0;
+}
+
+.bb-range-input {
+  inline-size: 100%;
+}
+
+/* ===================================================================
+ * 9. Segmented choice control
+ * =================================================================== */
+.bb-choice { margin-block-end: 16px; }
+.bb-choice:last-child { margin-block-end: 0; }
+
+.bb-choice-options {
+  display: inline-flex;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 8px;
+  background: #f0f0f1;
+}
+
+.bb-choice-option {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #50575e;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.bb-choice-option input { position: absolute; opacity: 0; pointer-events: none; }
+
+.bb-choice-option.is-selected {
+  background: #fff;
+  color: #1d2327;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* ===================================================================
+ * 10. Live preview (§43)
+ * =================================================================== */
+.bb-studio-preview {
+  position: sticky;
+  inset-block-start: 46px;
+  border: 1px solid #dcdcde;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+}
+
+.bb-studio-preview-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  border-block-end: 1px solid #f0f0f1;
+}
+
+.bb-studio-preview-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.bb-studio-preview-hint {
+  font-size: 11px;
+  color: #787c82;
+}
+
+.bb-studio-preview-frame {
+  padding: 16px;
+  background: linear-gradient(135deg, #f6f7f7 0%, #eef0f3 100%);
+  max-block-size: 620px;
+  overflow: auto;
+}
+
+/* ===================================================================
+ * 11. Footer & reset (§45)
+ * =================================================================== */
+.bb-studio-footer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-block-start: 20px;
+  padding: 16px 18px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.bb-studio-footer-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.bb-studio-footer-note::before {
+  content: "";
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: #dba617;
+}
+
+.bb-studio-advanced-link {
+  margin-inline-start: auto;
+  font-size: 12px;
+}
+
+.bb-studio-reset {
+  margin-block-start: 24px;
+  padding: 16px 18px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #fbfbfc;
+}
+
+.bb-studio-reset-title {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: #1d2327;
+}
+
+.bb-studio-reset-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bb-studio-reset-actions form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.bb-studio-reset-note {
+  font-size: 12px;
+  color: #646970;
+}
+
+/* ===================================================================
+ * 12. Responsive (§36)
+ * =================================================================== */
+@media (max-width: 1200px) {
+  .bb-studio-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The preview must not stick once it is below the controls. */
+  .bb-studio-preview {
+    position: static;
+  }
+
+  .bb-studio-preview-frame {
+    max-block-size: 480px;
+  }
+}
+
+@media (max-width: 782px) {
+  .bb-color-grid,
+  .bb-font-options,
+  .bb-gradient-options {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+
+  .bb-scale-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bb-studio-advanced-link {
+    margin-inline-start: 0;
+  }
+}
+
+/* ===================================================================
+ * 13. Reduced motion (§60)
+ * =================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .bb-studio *,
+  .bb-studio *::before,
+  .bb-studio *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .bb-palette-tile:hover {
+    transform: none !important;
+  }
+}/* ==========================================================================
+ * PHASE 22 — Section Studio
+ * --------------------------------------------------------------------------
+ * The per-section control surface. It follows the same visual language as the
+ * global Studio panel above it (cards, real swatches, named choices) rather
+ * than reverting to a default WordPress field list (§28).
+ *
+ * RTL/LTR: every offset uses a LOGICAL property, so the panel mirrors
+ * correctly without a second stylesheet.
+ * ========================================================================== */
+
+.bb-section-studio {
+  margin-block-start: 2.5rem;
+  padding: 1.5rem;
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+}
+
+/* ---- Section picker (jump chips) ---------------------------------------- */
+.bb-section-picker {
+  display: grid;
+  gap: 1rem;
+  margin-block: 1.25rem 1.75rem;
+  padding-block-end: 1.25rem;
+  border-block-end: 1px solid #f0f0f1;
+}
+
+.bb-section-picker-group {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.bb-section-picker-category {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #646970;
+}
+
+.bb-section-picker-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.bb-section-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #1d2327;
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.bb-section-chip:hover {
+  background: #fff;
+  border-color: #2271b1;
+  color: #2271b1;
+}
+
+.bb-section-chip.is-active {
+  background: #2271b1;
+  border-color: #2271b1;
+  color: #fff;
+}
+
+.bb-section-chip.is-overridden {
+  border-color: #2271b1;
+}
+
+.bb-section-chip .dashicons {
+  font-size: 16px;
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+/* A dot marks a section that carries customizations, so a customer can see
+   their own footprint at a glance without opening every panel. */
+.bb-section-chip-dot {
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: #d63638;
+}
+
+.bb-section-chip.is-active .bb-section-chip-dot {
+  background: #fff;
+}
+
+/* ---- Section panel ------------------------------------------------------- */
+.bb-section-panel {
+  margin-block-end: 1.5rem;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.bb-section-panel.is-overridden {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px rgba(34, 113, 177, 0.15);
+}
+
+.bb-section-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: #f6f7f7;
+  border-block-end: 1px solid #f0f0f1;
+}
+
+.bb-section-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.bb-section-panel-desc,
+.bb-section-panel-meta {
+  margin: 0.25rem 0 0;
+  font-size: 12px;
+  color: #646970;
+}
+
+.bb-section-panel-groups {
+  padding: 0.5rem 1.25rem 1.25rem;
+}
+
+/* ---- Collapsible groups -------------------------------------------------- */
+.bb-section-group {
+  border-block-end: 1px solid #f0f0f1;
+}
+
+.bb-section-group:last-child {
+  border-block-end: 0;
+}
+
+.bb-section-group-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.bb-section-group-summary::-webkit-details-marker {
+  display: none;
+}
+
+.bb-section-group-summary::before {
+  content: "\25B8";
+  margin-inline-end: 0.5rem;
+  color: #646970;
+  transition: transform 0.15s ease;
+}
+
+.bb-section-group[open] > .bb-section-group-summary::before {
+  transform: rotate(90deg);
+}
+
+.bb-section-group-summary > span:first-of-type {
+  flex: 1;
+}
+
+.bb-section-group-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: #2271b1;
+  background: #f0f6fc;
+  border-radius: 9999px;
+  padding: 0.15rem 0.5rem;
+}
+
+.bb-section-group-body {
+  display: grid;
+  gap: 0.9rem;
+  padding-block: 0.25rem 1rem;
+}
+
+/* ---- Controls ------------------------------------------------------------ */
+.bb-section-control {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.bb-section-control-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.bb-section-control.is-changed > .bb-section-control-label::after {
+  content: "";
+  display: inline-block;
+  inline-size: 6px;
+  block-size: 6px;
+  margin-inline-start: 0.4rem;
+  border-radius: 50%;
+  background: #2271b1;
+  vertical-align: middle;
+}
+
+.bb-section-control--color .bb-color-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.bb-section-inherit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 12px;
+  color: #646970;
+}
+
+/* Choices wrap rather than scroll, so a long option list stays usable on a
+   narrow screen (§24). */
+.bb-section-control .bb-choice-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.bb-section-control .bb-choice-option {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  font-size: 12px;
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.bb-section-control .bb-choice-option.is-selected {
+  background: #2271b1;
+  border-color: #2271b1;
+  color: #fff;
+}
+
+/* The radio stays in the accessibility tree (so it is keyboard-navigable and
+   screen-reader announced) but is not painted, because the label IS the
+   control (§35). */
+.bb-section-control .bb-choice-option input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.bb-section-control .bb-choice-option:focus-within {
+  outline: 2px solid #2271b1;
+  outline-offset: 1px;
+}
+
+/* ---- Layout variant reference -------------------------------------------- */
+.bb-section-variants {
+  padding: 0.75rem 1.25rem;
+  background: #fbfbfc;
+  border-block-end: 1px solid #f0f0f1;
+}
+
+.bb-section-variants-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-block-end: 0.4rem;
+}
+
+.bb-section-variants-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.bb-section-variant {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 12px;
+  padding: 0.2rem 0.5rem;
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 4px;
+  color: #1d2327;
+}
+
+.bb-section-variant .dashicons {
+  font-size: 14px;
+  inline-size: 14px;
+  block-size: 14px;
+}
+
+/* ---- Panel footer -------------------------------------------------------- */
+.bb-section-panel-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1.25rem;
+  background: #fbfbfc;
+  border-block-start: 1px solid #f0f0f1;
+}
+
+.bb-section-panel-foot .bb-studio-help {
+  margin: 0;
+}
+
+/* ---- Responsive ---------------------------------------------------------- */
+@media screen and (max-width: 782px) {
+  .bb-section-studio {
+    padding: 1rem;
+  }
+
+  .bb-section-panel-head {
+    flex-direction: column;
+  }
+
+  .bb-section-panel-groups {
+    padding-inline: 1rem;
+  }
+}
