@@ -47,9 +47,24 @@
   gap: var(--bb-grid-gap);
 }
 
-.bb-template .bb-section-inner {
-  max-width: var(--bb-container-width, 1280px);
-}
+/*
+ * PHASE 24 §3/§5 — ONE AUTHORITATIVE OWNER FOR THE CONTAINER WIDTH.
+ *
+ * This block used to re-declare the container width:
+ *
+ *     .bb-template .bb-section-inner { max-width: var(--bb-container-width, 1280px); }
+ *
+ * while `design-sections.css` owns the same property for the same selector
+ * with `max-inline-size` and a DIFFERENT fallback (1200px). Because
+ * `max-width` and `max-inline-size` resolve to the SAME physical property in a
+ * horizontal writing mode, the two declarations competed and the winner was
+ * decided by stylesheet load order — the definition of a DUPLICATE control
+ * (§3). The audit's B3 pass reports it as such.
+ *
+ * The declaration is removed rather than "corrected" so there is exactly ONE
+ * owner. `design-sections.css` sets the width, the minimum and the gutter
+ * together, which is where the container's geometry belongs.
+ */
 
 /* ===================================================================
  * 2. Typography scale

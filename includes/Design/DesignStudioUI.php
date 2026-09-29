@@ -714,7 +714,10 @@ class DesignStudioUI {
 			'layout'     => array(
 				'label' => __( 'Layout & grid', 'business-builder' ),
 				'keys'  => array(
+					'layout_mode',
 					'container_padding_block',
+					'site_margin',
+					'section_gap',
 					'grid_columns',
 					'grid_columns_tablet',
 					'grid_columns_mobile',
@@ -722,6 +725,45 @@ class DesignStudioUI {
 					'card_min_width',
 					'content_width',
 					'section_align',
+				),
+			),
+			'typography' => array(
+				'label' => __( 'Typography', 'business-builder' ),
+				'keys'  => array(
+					'font_body',
+					'font_heading',
+					'font_size_md',
+					'line_height_normal',
+					'body_weight',
+					'heading_weight',
+					'body_letter_spacing',
+					'heading_line_height',
+					'heading_transform',
+				),
+			),
+			'navbar'     => array(
+				'label' => __( 'Navbar', 'business-builder' ),
+				'keys'  => array(
+					'logo_height',
+					'header_height',
+					'nav_position',
+					'nav_gap',
+					'nav_link_size',
+					'nav_link_weight',
+					'nav_link_tracking',
+					'nav_link_hover',
+					'nav_link_active',
+					'nav_indicator',
+					'nav_radius',
+					'header_blur',
+					'header_border_width',
+					'header_initial_bg',
+					'header_initial_nav',
+					'header_initial_transparency',
+					'header_scrolled_bg',
+					'header_scrolled_nav',
+					'header_scrolled_border',
+					'header_scroll_transition',
 				),
 			),
 			'density' => array(
@@ -736,22 +778,6 @@ class DesignStudioUI {
 				'label' => __( 'Glass effect', 'business-builder' ),
 				'keys'  => array( 'glass_level', 'glass_saturate', 'glass_opacity', 'glass_border_opacity' ),
 			),
-			'header' => array(
-				'label' => __( 'Header & scroll', 'business-builder' ),
-				'keys'  => array(
-					'header_height',
-					'header_blur',
-					'header_border_width',
-					'nav_gap',
-					'header_initial_bg',
-					'header_initial_nav',
-					'header_initial_transparency',
-					'header_scrolled_bg',
-					'header_scrolled_nav',
-					'header_scrolled_border',
-					'header_scroll_transition',
-				),
-			),
 			'footer' => array(
 				'label' => __( 'Footer', 'business-builder' ),
 				'keys'  => array(
@@ -765,6 +791,8 @@ class DesignStudioUI {
 			'motion' => array(
 				'label' => __( 'Motion', 'business-builder' ),
 				'keys'  => array(
+					'motion_mode',
+					'motion_ease',
 					'motion_speed',
 					'reveal_kind',
 					'reveal_duration',
@@ -772,6 +800,15 @@ class DesignStudioUI {
 					'reveal_stagger',
 					'hover_lift',
 					'hover_effect',
+				),
+			),
+			'scrollbar' => array(
+				'label' => __( 'Scrollbar', 'business-builder' ),
+				'keys'  => array(
+					'scrollbar_width',
+					'scrollbar_track',
+					'scrollbar_thumb',
+					'scrollbar_thumb_hover',
 				),
 			),
 		);

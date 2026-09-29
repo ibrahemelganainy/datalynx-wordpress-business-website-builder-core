@@ -69,6 +69,13 @@ class DesignSchema {
 		add_filter( 'bb_theme_preset_config', array( $this, 'resolve_gradients' ), 20, 2 );
 		add_filter( 'bb_theme_preset_config', array( $this, 'resolve_units' ), 30, 2 );
 
+		/*
+		 * The motion MASTER PRESET runs after the customer's own overrides have been
+		 * merged in (the Theme does that at priority 10) and BEFORE `resolve_units()`,
+		 * so the durations it publishes still receive their `s` suffix.
+		 */
+		add_filter( 'bb_theme_preset_config', array( $this, 'resolve_motion_mode' ), 25, 2 );
+
 		/**
 		 * Gradient presets offered for the gradient controls.
 		 *
@@ -790,7 +797,455 @@ class DesignSchema {
 					'max'     => 96,
 					'unit'    => 'px',
 				),
+
+				/* ================================================================
+				 * PHASE 23 — GLOBAL LAYOUT (§9)
+				 * ----------------------------------------------------------------
+				 * Added ONLY where the audit measured a gap (docs/phase23-audit.md §5.1
+				 * G9). Container width, section rhythm, grid columns and text measure
+				 * already exist and are NOT re-declared — a second control for an
+				 * existing property is exactly what the specification forbids.
+				 * ================================================================ */
+				array(
+					'key'     => 'layout_mode',
+					'token'   => '--bb-layout-mode',
+					'type'    => 'select',
+					'label'   => __( 'Page layout', 'business-builder' ),
+					'group'   => 'layout',
+					/*
+					 * A select whose value is a KEYWORD resolves to a class on the body
+					 * (DesignShellState), which is how a keyword can drive layout without
+					 * any free-form CSS being stored. Same mechanism Phase 22 already uses
+					 * for the background overlay and the glass flag.
+					 */
+					'default' => 'full',
+					'options' => array(
+						'full'  => __( 'Full width', 'business-builder' ),
+						'boxed' => __( 'Boxed', 'business-builder' ),
+					),
+				),
+				array(
+					'key'     => 'site_margin',
+					'token'   => '--bb-site-margin',
+					'type'    => 'length',
+					'label'   => __( 'Space around the content', 'business-builder' ),
+					'group'   => 'layout',
+					'default' => '0px',
+					'min'     => 0,
+					'max'     => 80,
+					'unit'    => 'px',
+				),
+				array(
+					'key'     => 'section_gap',
+					'token'   => '--bb-section-gap',
+					'type'    => 'length',
+					'label'   => __( 'Space between sections', 'business-builder' ),
+					'group'   => 'layout',
+					'default' => '0px',
+					'min'     => 0,
+					'max'     => 80,
+					'unit'    => 'px',
+				),
+
+				/* ================================================================
+				 * PHASE 23 — GLOBAL TYPOGRAPHY (§10)
+				 * ----------------------------------------------------------------
+				 * The audit (G10) found the family, base size, one bold weight and the
+				 * body line-height already controllable. Body line-height is NOT
+				 * re-declared here: the Theme's `line_height_normal` control IS the body
+				 * line-height, and it is consumed by `.bb-template` — a second control
+				 * would be a duplicate source of truth for one property.
+				 * ================================================================ */
+				array(
+					'key'     => 'body_weight',
+					'token'   => '--bb-font-weight-body',
+					'type'    => 'select',
+					'label'   => __( 'Body weight', 'business-builder' ),
+					'group'   => 'typography',
+					'default' => '400',
+					'options' => array(
+						'300' => __( 'Light', 'business-builder' ),
+						'400' => __( 'Regular', 'business-builder' ),
+						'500' => __( 'Medium', 'business-builder' ),
+						'600' => __( 'Semibold', 'business-builder' ),
+					),
+				),
+				array(
+					'key'     => 'heading_weight',
+					'token'   => '--bb-font-weight-heading',
+					'type'    => 'select',
+					'label'   => __( 'Heading weight', 'business-builder' ),
+					'group'   => 'typography',
+					'default' => '700',
+					'options' => array(
+						'500' => __( 'Medium', 'business-builder' ),
+						'600' => __( 'Semibold', 'business-builder' ),
+						'700' => __( 'Bold', 'business-builder' ),
+						'800' => __( 'Extra bold', 'business-builder' ),
+						'900' => __( 'Black', 'business-builder' ),
+					),
+				),
+				array(
+					'key'     => 'body_letter_spacing',
+					'token'   => '--bb-body-letter-spacing',
+					'type'    => 'number',
+					'label'   => __( 'Body letter spacing', 'business-builder' ),
+					'group'   => 'typography',
+					'default' => '0',
+					'min'     => -0.03,
+					'max'     => 0.1,
+					'step'    => 0.005,
+					/*
+					 * Stored as a NUMBER in `em` and unit-appended by resolve_units(),
+					 * because the Theme's length validator accepts only px/rem/em/%.
+					 */
+					'unit'    => 'em',
+				),
+				array(
+					'key'     => 'heading_line_height',
+					'token'   => '--bb-heading-line-height',
+					'type'    => 'number',
+					'label'   => __( 'Heading line height', 'business-builder' ),
+					'group'   => 'typography',
+					'default' => '1.2',
+					'min'     => 1,
+					'max'     => 1.8,
+					'step'    => 0.05,
+				),
+				array(
+					'key'     => 'heading_transform',
+					'token'   => '--bb-heading-transform',
+					'type'    => 'select',
+					'label'   => __( 'Heading case', 'business-builder' ),
+					'group'   => 'typography',
+					'default' => 'none',
+					'options' => array(
+						'none'       => __( 'As typed', 'business-builder' ),
+						'uppercase'  => __( 'UPPERCASE', 'business-builder' ),
+						'capitalize' => __( 'Capitalize Each Word', 'business-builder' ),
+						'lowercase'  => __( 'lowercase', 'business-builder' ),
+					),
+				),
+
+				/* ================================================================
+				 * PHASE 23 — NAVBAR (§12)
+				 * ----------------------------------------------------------------
+				 * The audit (G11) found height, blur, border, gap and the initial /
+				 * scrolled colours already controllable, so ONLY the missing decisions
+				 * are added here. The token names are new (measured free of collisions)
+				 * and every one is consumed by `design-sections.css` on
+				 * `.bb-theme .bb-site-header`, which is the markup the Theme already
+				 * renders — no Theme file is edited.
+				 * ================================================================ */
+				array(
+					'key'     => 'nav_position',
+					'token'   => '--bb-nav-position',
+					'type'    => 'select',
+					'label'   => __( 'Menu position', 'business-builder' ),
+					'group'   => 'navbar',
+					'default' => 'center',
+					'options' => array(
+						'start'  => __( 'Beside the logo', 'business-builder' ),
+						'center' => __( 'Centered', 'business-builder' ),
+						'end'    => __( 'Beside the buttons', 'business-builder' ),
+					),
+				),
+				array(
+					'key'     => 'nav_link_size',
+					'token'   => '--bb-nav-link-size',
+					'type'    => 'length',
+					'label'   => __( 'Menu text size', 'business-builder' ),
+					'group'   => 'navbar',
+					'default' => '1rem',
+					'min'     => 0.75,
+					'max'     => 1.5,
+					'unit'    => 'rem',
+				),
+				array(
+					'key'     => 'nav_link_weight',
+					'token'   => '--bb-nav-link-weight',
+					'type'    => 'select',
+					'label'   => __( 'Menu text weight', 'business-builder' ),
+					'group'   => 'navbar',
+					'default' => '500',
+					'options' => array(
+						'400' => __( 'Regular', 'business-builder' ),
+						'500' => __( 'Medium', 'business-builder' ),
+						'600' => __( 'Semibold', 'business-builder' ),
+						'700' => __( 'Bold', 'business-builder' ),
+					),
+				),
+				array(
+					'key'     => 'nav_link_tracking',
+					'token'   => '--bb-nav-link-tracking',
+					'type'    => 'number',
+					'label'   => __( 'Menu letter spacing', 'business-builder' ),
+					'group'   => 'navbar',
+					'default' => '0',
+					'min'     => -0.02,
+					'max'     => 0.15,
+					'step'    => 0.005,
+					'unit'    => 'em',
+				),
+				array(
+					'key'     => 'nav_link_hover',
+					'token'   => '--bb-nav-link-hover',
+					'type'    => 'color',
+					'label'   => __( 'Menu link hover colour', 'business-builder' ),
+					'group'   => 'navbar',
+					'default' => '#2563eb',
+				),
+				array(
+					'key'     => 'nav_link_active',
+					'token'   => '--bb-nav-link-active',
+					'type'    => 'color',
+					'label'   => __( 'Current page link colour', 'business-builder' ),
+					'group'   => 'navbar',
+					'default' => '#2563eb',
+				),
+				array(
+					'key'     => 'nav_indicator',
+					'token'   => '--bb-nav-indicator',
+					'type'    => 'select',
+					'label'   => __( 'Active link indicator', 'business-builder' ),
+					'group'   => 'navbar',
+					'default' => 'none',
+					'options' => array(
+						'none'      => __( 'None', 'business-builder' ),
+						'underline' => __( 'Underline', 'business-builder' ),
+						'pill'      => __( 'Pill background', 'business-builder' ),
+						'dot'       => __( 'Dot above', 'business-builder' ),
+					),
+				),
+				array(
+					'key'     => 'nav_radius',
+					'token'   => '--bb-nav-radius',
+					'type'    => 'length',
+					'label'   => __( 'Menu link roundness', 'business-builder' ),
+					'group'   => 'navbar',
+					'default' => '8px',
+					'min'     => 0,
+					'max'     => 32,
+					'unit'    => 'px',
+				),
+				array(
+					'key'     => 'logo_height',
+					'token'   => '--bb-logo-height',
+					'type'    => 'length',
+					'label'   => __( 'Logo height', 'business-builder' ),
+					'group'   => 'navbar',
+					'default' => '48px',
+					'min'     => 20,
+					'max'     => 120,
+					'unit'    => 'px',
+				),
+
+				/* ================================================================
+				 * PHASE 23 — GLOBAL MOTION (§14)
+				 * ----------------------------------------------------------------
+				 * The audit (G8) found tempo / kind / duration / distance / stagger /
+				 * lift / hover already controllable. What was missing is a single
+				 * "how much motion does this site have" decision and an easing.
+				 *
+				 * `motion_mode` is a MASTER PRESET, not a competing control: it writes
+				 * the SAME tokens the individual controls write, and it yields to any
+				 * token the customer has explicitly set (DesignSchema::resolve_motion_mode()).
+				 * There is therefore still exactly one value per token at render time.
+				 * ================================================================ */
+				array(
+					'key'     => 'motion_mode',
+					'token'   => '--bb-motion-mode',
+					'type'    => 'select',
+					'label'   => __( 'Motion intensity', 'business-builder' ),
+					'group'   => 'motion',
+					'default' => 'balanced',
+					'options' => array(
+						'off'        => __( 'None — fully static', 'business-builder' ),
+						'subtle'     => __( 'Subtle', 'business-builder' ),
+						'balanced'   => __( 'Balanced', 'business-builder' ),
+						'expressive' => __( 'Expressive', 'business-builder' ),
+					),
+				),
+				array(
+					'key'     => 'motion_ease',
+					'token'   => '--bb-ease-standard',
+					'type'    => 'select',
+					'label'   => __( 'Motion curve', 'business-builder' ),
+					'group'   => 'motion',
+					'default' => 'ease',
+					'options' => array(
+						'ease'        => __( 'Ease', 'business-builder' ),
+						'ease-in'     => __( 'Ease in', 'business-builder' ),
+						'ease-out'    => __( 'Ease out', 'business-builder' ),
+						'ease-in-out' => __( 'Ease in and out', 'business-builder' ),
+						'linear'      => __( 'Linear', 'business-builder' ),
+					),
+				),
+
+				/* ================================================================
+				 * PHASE 23 — SCROLLBAR (§15)
+				 * ----------------------------------------------------------------
+				 * The audit (G7) found NO scrollbar token anywhere in the codebase, so
+				 * this is a genuinely new capability rather than a duplicate.
+				 *
+				 * The rules are emitted ONLY when a value is actually set
+				 * (SectionStyleSchema::print_scrollbar_styles()), on `html`, because
+				 * `html` — not the page wrapper — is the scrolling element. Emitting
+				 * them unconditionally would restyle the WordPress admin and every
+				 * non-builder site, which is exactly the cross-site leak the
+				 * specification forbids.
+				 * ================================================================ */
+				array(
+					'key'     => 'scrollbar_width',
+					'token'   => '--bb-scrollbar-width',
+					'type'    => 'length',
+					'label'   => __( 'Scrollbar thickness', 'business-builder' ),
+					'group'   => 'scrollbar',
+					'default' => '10px',
+					'min'     => 4,
+					'max'     => 24,
+					'unit'    => 'px',
+				),
+				array(
+					'key'     => 'scrollbar_track',
+					'token'   => '--bb-scrollbar-track',
+					'type'    => 'color',
+					'label'   => __( 'Scrollbar track', 'business-builder' ),
+					'group'   => 'scrollbar',
+					'default' => '#f1f5f9',
+				),
+				array(
+					'key'     => 'scrollbar_thumb',
+					'token'   => '--bb-scrollbar-thumb',
+					'type'    => 'color',
+					'label'   => __( 'Scrollbar handle', 'business-builder' ),
+					'group'   => 'scrollbar',
+					'default' => '#94a3b8',
+				),
+				array(
+					'key'     => 'scrollbar_thumb_hover',
+					'token'   => '--bb-scrollbar-thumb-hover',
+					'type'    => 'color',
+					'label'   => __( 'Scrollbar handle (hover)', 'business-builder' ),
+					'group'   => 'scrollbar',
+					'default' => '#64748b',
+				),
 			);
+	}
+
+	/**
+	 * The motion MASTER PRESET library (§14).
+	 *
+	 * Each intensity level is expressed as a set of values for tokens the schema
+	 * ALREADY declares. The mode therefore introduces no token, no storage and no
+	 * competing control: it is a named bundle of values for existing controls.
+	 *
+	 * `off` is not "no value" — it is the deliberate value 0, so a site that asks for
+	 * no motion gets no motion rather than inheriting the design's tempo.
+	 *
+	 * @return array<string, array<string, string>>
+	 */
+	public function motion_mode_library(): array {
+
+		return array(
+			'off'        => array(
+				'--bb-motion-normal'   => '0.01',
+				'--bb-reveal-duration' => '0.01',
+				'--bb-reveal-distance' => '0px',
+				'--bb-reveal-stagger'  => '0',
+				'--bb-hover-lift'      => '0px',
+				'--bb-reveal-kind'     => 'none',
+				'--bb-hover-effect'    => 'none',
+			),
+			'subtle'     => array(
+				'--bb-motion-normal'   => '0.16',
+				'--bb-reveal-duration' => '0.32',
+				'--bb-reveal-distance' => '12px',
+				'--bb-reveal-stagger'  => '0.04',
+				'--bb-hover-lift'      => '3px',
+				'--bb-reveal-kind'     => 'fade',
+				'--bb-hover-effect'    => 'lift',
+			),
+			'balanced'   => array(
+				'--bb-motion-normal'   => '0.24',
+				'--bb-reveal-duration' => '0.48',
+				'--bb-reveal-distance' => '20px',
+				'--bb-reveal-stagger'  => '0.06',
+				'--bb-hover-lift'      => '6px',
+				'--bb-reveal-kind'     => 'fade-up',
+				'--bb-hover-effect'    => 'lift',
+			),
+			'expressive' => array(
+				'--bb-motion-normal'   => '0.36',
+				'--bb-reveal-duration' => '0.72',
+				'--bb-reveal-distance' => '44px',
+				'--bb-reveal-stagger'  => '0.10',
+				'--bb-hover-lift'      => '10px',
+				'--bb-reveal-kind'     => 'fade-up',
+				'--bb-hover-effect'    => 'scale',
+			),
+		);
+	}
+
+	/**
+	 * Publish the chosen motion intensity as values for the existing motion tokens.
+	 *
+	 * DETERMINISM (§2, §30)
+	 * ---------------------
+	 * A master preset must never silently win over a deliberate choice. The rule is
+	 * therefore explicit and one-directional:
+	 *
+	 *   - the customer's own override ALWAYS wins (it is already in `$config` and is
+	 *     skipped here);
+	 *   - otherwise the mode's value replaces the design's authored value;
+	 *   - a token the mode does not mention is left exactly as the design declared it.
+	 *
+	 * So there is still ONE effective value per token, and the cascade stays
+	 * `design → motion mode → explicit override`.
+	 *
+	 * @param mixed  $config Resolved preset configuration.
+	 * @param string $slug   Active design slug.
+	 * @return array
+	 */
+	public function resolve_motion_mode( $config, $slug = '' ): array {
+
+		$config = is_array( $config ) ? $config : array();
+
+		/* The mode is only applied when the customer (or the design) selected one. */
+		$mode = isset( $config['--bb-motion-mode'] ) ? sanitize_key( (string) $config['--bb-motion-mode'] ) : '';
+
+		if ( '' === $mode ) {
+			return $config;
+		}
+
+		$library = $this->motion_mode_library();
+
+		if ( ! isset( $library[ $mode ] ) ) {
+			return $config;
+		}
+
+		/* Which tokens did the CUSTOMER explicitly set? Those are untouchable. */
+		$explicit = array();
+
+		if ( function_exists( 'bb_theme_customization_overrides' ) ) {
+
+			$overrides = bb_theme_customization_overrides();
+
+			if ( is_array( $overrides ) ) {
+				$explicit = $overrides;
+			}
+		}
+
+		foreach ( $library[ $mode ] as $token => $value ) {
+
+			if ( isset( $explicit[ $token ] ) && '' !== (string) $explicit[ $token ] ) {
+				continue;
+			}
+
+			$config[ $token ] = $value;
+		}
+
+		return $config;
 	}
 
 	/**

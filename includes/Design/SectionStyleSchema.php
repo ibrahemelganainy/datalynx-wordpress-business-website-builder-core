@@ -192,6 +192,26 @@ class SectionStyleSchema {
 	 */
 	protected function is_card_capable( array $section, string $type = '' ): bool {
 
+		/*
+		 * Phase 23 §7: a DECLARED capability is authoritative.
+		 *
+		 * The audit measured that `supports` was documentation nothing read, so the
+		 * Cards group was shown on a heuristic (docs/phase23-audit.md G3). Now a
+		 * section that declares `cards` gets the group, and a section that declares
+		 * no cards capability cannot be offered card controls even if it happens to
+		 * have a `columns` setting.
+		 *
+		 * When `capabilities` is absent the registry has already defaulted it to
+		 * `supports`, so this reads correctly for every pre-existing section too.
+		 */
+		$declared = isset( $section['capabilities'] ) && is_array( $section['capabilities'] )
+			? array_map( 'sanitize_key', $section['capabilities'] )
+			: array();
+
+		if ( in_array( 'cards', $declared, true ) ) {
+			return true;
+		}
+
 		$supports = isset( $section['supports'] ) && is_array( $section['supports'] )
 			? array_map( 'strval', $section['supports'] )
 			: array();

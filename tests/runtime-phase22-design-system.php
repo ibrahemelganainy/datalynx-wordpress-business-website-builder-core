@@ -506,6 +506,23 @@ $phase22js = (string) file_get_contents( dirname( __DIR__ ) . '/assets/js/fronte
 	. (string) file_get_contents( dirname( __DIR__ ) . '/assets/js/admin/design-studio-panel.js' );
 
 /*
+ * PHASE 23 ADDENDUM — THE THIRD DELIVERY MECHANISM
+ * ------------------------------------------------
+ * A `select` control stores a KEYWORD (boxed / pill / off). CSS cannot branch on
+ * a custom property's value, so a keyword control is delivered by reading the
+ * token SERVER-SIDE and emitting a class or data attribute
+ * (`DesignShellState::body_class()`), which the stylesheet then keys on.
+ *
+ * That is a real consumer, but it is neither CSS nor frontend JS, so the sweep
+ * below must recognise the state emitters too — otherwise a perfectly working
+ * keyword control is reported as "unconsumed". Adding the emitters here keeps the
+ * assertion strict (a token with NO consumer in any of the four sources still
+ * fails) while describing Phase 23's architecture accurately.
+ */
+$state_php = (string) file_get_contents( dirname( __DIR__ ) . '/includes/Design/DesignShellState.php' )
+	. (string) file_get_contents( dirname( __DIR__ ) . '/includes/Builder/section-presentation.php' );
+
+/*
  * A token is "consumed" when it is read somewhere in the delivered layer: a
  * stylesheet, the Theme's own stylesheets, or one of the frontend/admin scripts
  * that writes it onto an element.
@@ -521,7 +538,7 @@ foreach ( $schema as $control ) {
 		continue;
 	}
 
-	if ( false !== strpos( $css, $token ) || false !== strpos( $phase22js, $token ) ) {
+	if ( false !== strpos( $css, $token ) || false !== strpos( $phase22js, $token ) || false !== strpos( $state_php, $token ) ) {
 		$consumed[] = $token;
 	} else {
 		$unconsumed[] = ( $control['key'] ?? '?' ) . ' (' . $token . ')';

@@ -1,0 +1,93 @@
+/**
+ * Business Builder Core - Admin: icon picker (Phase 23 §18)
+ * --------------------------------------------------------
+ * Presentation for the searchable icon grid that enhances the icon `select`.
+ *
+ * The select itself is HIDDEN, never removed: it is the value holder and the
+ * no-JavaScript fallback, so `display: none` on it is the only "destructive"
+ * rule here and it is scoped to the class the script adds.
+ */
+
+.bb-icon-picker {
+  border: 1px solid #dcdcde;
+  border-radius: 6px;
+  background: #fff;
+  padding: 8px;
+  max-width: 560px;
+}
+
+.bb-icon-picker-search {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.bb-icon-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.bb-icon-picker-category {
+  grid-column: 1 / -1;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #646970;
+  margin-top: 6px;
+}
+
+.bb-icon-picker-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #fbfbfc;
+  color: #1d2327;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1.2;
+  text-align: center;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.bb-icon-picker-tile:hover,
+.bb-icon-picker-tile:focus-visible {
+  border-color: #2271b1;
+  background: #f0f6fc;
+}
+
+.bb-icon-picker-tile.is-selected {
+  border-color: #2271b1;
+  background: #f0f6fc;
+  box-shadow: 0 0 0 1px #2271b1 inset;
+}
+
+.bb-icon-picker-tile > i {
+  font-size: 18px;
+}
+
+.bb-icon-picker-none {
+  margin-bottom: 8px;
+  align-self: flex-start;
+}
+
+.bb-icon-picker-empty {
+  margin: 8px 0 0;
+  color: #646970;
+  font-style: italic;
+}
+
+/*
+ * The enhanced select is hidden from view but NOT from the form: the browser
+ * still submits it, and a screen reader user still reaches the grid above.
+ */
+.bb-icon-picker-source {
+  display: none;
+}

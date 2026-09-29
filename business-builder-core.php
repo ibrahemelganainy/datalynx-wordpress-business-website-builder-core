@@ -57,6 +57,34 @@ require_once BB_CORE_PATH . 'includes/Builder/section-variants.php';
 require_once BB_CORE_PATH . 'includes/Builder/section-presentation.php';
 
 /*
+ * Phase 23 — Icon library public API (procedural helpers).
+ *
+ * Loaded explicitly for the same reason as the two files above: the autoloader
+ * only resolves classes, and templates need bb_render_icon(), bb_icon_field()
+ * and bb_validate_icon(). Having the helpers available unconditionally is also
+ * what lets `CoreSections` declare an icon field on a section without depending
+ * on load order.
+ */
+require_once BB_CORE_PATH . 'includes/Design/icons.php';
+
+/*
+ * Phase 23 — Services section presentation helper.
+ *
+ * ONE item renderer shared by the inline services renderer and by every
+ * registered `services` variant template, so five layouts cannot drift apart.
+ */
+require_once BB_CORE_PATH . 'includes/Builder/section-services.php';
+
+/*
+ * Phase 23 — Core section variants.
+ *
+ * Registers the layouts the CORE sections can express through the EXISTING
+ * `bb_register_section_variants` extension point (the audit measured zero core
+ * variants, so the Studio's layout picker only appeared for pack sections).
+ */
+require_once BB_CORE_PATH . 'includes/Builder/core-section-variants.php';
+
+/*
  * Enterprise meta box assets (Phase 22 §27, §28).
  *
  * Registered ONCE here rather than by each pack, so a pack that declares a meta

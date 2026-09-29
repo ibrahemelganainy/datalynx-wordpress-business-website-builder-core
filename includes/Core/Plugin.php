@@ -97,6 +97,15 @@ class Plugin {
      */
     protected \BusinessBuilderCore\Design\DesignShellState $design_shell_state;
 
+    /**
+     * Phase 23 icon library (§18).
+     *
+     * Owns the ONE icon vocabulary, the ONE validator and — critically — the
+     * CONDITIONAL, DE-DUPLICATED Font Awesome enqueue. Nothing else in the plugin
+     * is allowed to load an icon font, so a duplicate can never appear.
+     */
+    protected \BusinessBuilderCore\Design\IconLibrary $icon_library;
+
     public function __construct() {
 
         /**
@@ -163,6 +172,16 @@ class Plugin {
 
         $this->design_shell_state = new \BusinessBuilderCore\Design\DesignShellState();
 
+        /*
+         * Phase 23 icon library.
+         *
+         * The SAME instance the procedural helpers use would be ideal; they lazily
+         * construct their own, so this one exists to own the HOOK. Both share the
+         * class's own logic, and the enqueue is idempotent by handle, so a second
+         * instance cannot produce a second stylesheet.
+         */
+        $this->icon_library = new \BusinessBuilderCore\Design\IconLibrary();
+
         /**
          * Register Hooks.
          */
@@ -222,6 +241,12 @@ class Plugin {
         $this->section_styles->register();
 
         $this->design_shell_state->register();
+
+        /*
+         * Phase 23: the icon library. It owns the conditional, de-duplicated Font
+         * Awesome enqueue, so nothing else in the plugin loads an icon font.
+         */
+        $this->icon_library->register();
     }
 
     /**

@@ -9,6 +9,52 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SectionRegistry {
 
     /**
+     * The capability vocabulary (Phase 23 §7/§8).
+     *
+     * A capability is a DECLARED fact about what a section can express, e.g. that
+     * it renders a collection of items (`cards`), that an item may carry an icon
+     * (`icons`), or that it can paint its own background (`background`). The
+     * Studio uses those declarations to show only the controls that can actually
+     * change something — so a control can never be offered to a section that
+     * cannot honour it.
+     *
+     * The list is CLOSED on purpose: an unknown capability is dropped at
+     * registration, which means a typo degrades to "not capable" rather than to
+     * an silently-enabled control.
+     *
+     * @var string[]
+     */
+    public const CAPABILITIES = array(
+        'title',
+        'description',
+        'items',
+        'cards',
+        'card_image',
+        'icons',
+        'image',
+        'media',
+        'button',
+        'buttons',
+        'cta',
+        'links',
+        'background',
+        'overlay',
+        'gradient',
+        'container',
+        'columns',
+        'presentation',
+        'slider',
+        'motion',
+        'glass',
+        'border',
+        'radius',
+        'shadow',
+        'typography',
+        'contact',
+        'map',
+    );
+
+    /**
      * Registered sections.
      */
     protected array $sections = array();
@@ -34,6 +80,20 @@ class SectionRegistry {
             'category'    => 'general',
             'icon'        => 'dashicons-layout',
             'supports'    => array(),
+
+            /*
+             * Phase 23 §7: the same list as `supports`, but machine-read.
+             *
+             * `supports` has always been DECLARATIVE documentation — nothing read
+             * it, so a section could be offered controls it could not honour. The
+             * Audit measured this (docs/phase23-audit.md, G3).
+             *
+             * `capabilities` is the READABLE form of the same idea. It defaults to
+             * `supports`, so every existing section becomes correctly described
+             * with no change at its registration site, and a section that wants to
+             * be precise can declare it explicitly.
+             */
+            'capabilities' => null,
 
             /*
              * Settings schema.
@@ -82,6 +142,22 @@ class SectionRegistry {
         if ( ! is_array( $config['content'] ) ) {
             $config['content'] = array();
         }
+
+        /*
+         * Capabilities: an explicit declaration wins; otherwise the section's own
+         * `supports` list is adopted. Either way the values are filtered against
+         * the closed vocabulary, so an unknown capability cannot enable a control.
+         */
+        if ( ! is_array( $config['capabilities'] ) ) {
+            $config['capabilities'] = $config['supports'];
+        }
+
+        $config['capabilities'] = array_values(
+            array_intersect(
+                array_map( 'sanitize_key', $config['capabilities'] ),
+                self::CAPABILITIES
+            )
+        );
 
         /*
          * Normalize field schemas.
@@ -351,6 +427,57 @@ class SectionRegistry {
         return array_values(
             $categories
         );
+    }
+
+    /**
+     * Get the capabilities a section declares (Phase 23 §7).
+     *
+     * @param string $slug Section slug.
+     * @return string[]
+     */
+    public function get_capabilities( string $slug ): array {
+
+        $section = $this->get( $slug );
+
+        if ( null === $section ) {
+            return array();
+        }
+
+        $capabilities = $section['capabilities'] ?? array();
+
+        return is_array( $capabilities ) ? $capabilities : array();
+    }
+
+    /**
+     * Whether a section declares a capability.
+     *
+     * An unknown section is NEVER capable, so a caller cannot accidentally offer
+     * a control for a section type that does not exist.
+     *
+     * @param string $slug       Section slug.
+     * @param string $capability Capability name.
+     * @return bool
+     */
+    public function has_capability( string $slug, string $capability ): bool {
+
+        $slug       = sanitize_key( $slug );
+        $capability = sanitize_key( $capability );
+
+        if ( '' === $slug || ! $this->exists( $slug ) ) {
+            return false;
+        }
+
+        return in_array( $capability, $this->get_capabilities( $slug ), true );
+    }
+
+    /**
+     * The capability vocabulary.
+     *
+     * @return string[]
+     */
+    public function capabilities(): array {
+
+        return self::CAPABILITIES;
     }
 
     /**

@@ -802,6 +802,56 @@ class PageAdmin {
                 ),
             )
         );
+
+        /*
+         * PHASE 23 (§18) — the visual ICON PICKER.
+         *
+         * Registered as a PROGRESSIVE ENHANCEMENT on top of the icon field's own
+         * `<select>`:
+         *
+         *   - without the script (or if it fails), the select is a complete,
+         *     accessible control listing every icon by category and name;
+         *   - with it, the select is upgraded in place to a searchable, visual
+         *     grid, while the select itself stays in the DOM as the value holder.
+         *
+         * It therefore needs no change to `page-admin.js`, which is the point:
+         * one new field renderer would have to be replicated for repeaters too.
+         */
+        wp_enqueue_script(
+            'bb-icon-picker',
+            BB_CORE_URL . 'assets/js/admin/icon-picker.js',
+            array(),
+            BB_CORE_VERSION,
+            true
+        );
+
+        /*
+         * The picker previews a glyph per option, so THIS screen genuinely needs
+         * the icon font. It is requested through the icon library, which means the
+         * same "reuse an existing Font Awesome / never enqueue twice" rules apply.
+         */
+        if ( function_exists( 'bb_icons' ) ) {
+            bb_icons()->enqueue_for_admin();
+        }
+
+        wp_localize_script(
+            'bb-icon-picker',
+            'BBIconPicker',
+            array(
+                /*
+                 * The slug => Font Awesome name map comes from the SAME library the
+                 * frontend renderer uses, so the preview can never disagree with
+                 * what will be rendered (a slug such as `chart-bar` maps to
+                 * `chart-column`).
+                 */
+                'names'  => function_exists( 'bb_icons' ) ? bb_icons()->names() : array(),
+                'labels' => array(
+                    'search'  => __( 'Search icons…', 'business-builder' ),
+                    'none'    => __( 'No icon', 'business-builder' ),
+                    'empty'   => __( 'No icon matches that search.', 'business-builder' ),
+                ),
+            )
+        );
     }
 
     /**

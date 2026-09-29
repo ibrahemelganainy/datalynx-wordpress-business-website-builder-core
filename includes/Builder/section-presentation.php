@@ -175,6 +175,34 @@ if ( ! function_exists( 'bb_section_presentation_state' ) ) {
 		 */
 		$state['data-bb-reveal-off'] = ( 'none' === $state['data-bb-reveal'] ) ? '1' : '';
 
+		/*
+		 * ---- Surface (§"borders off by default") ----
+		 * A section that paints its OWN background is a distinct surface, so the
+		 * stylesheet can give it a border by default while every other section
+		 * stays borderless. The flag is derived from the SECTION OVERRIDE tokens
+		 * (not from a setting), so it follows the same single-source-of-truth rule
+		 * as glass and hover above.
+		 */
+		$bg       = $resolve( '--bb-section-bg', '' );
+		$bg_image = $resolve( '--bb-section-bg-image', '' );
+
+		$has_surface = ( '' !== $bg )
+			|| ( '' !== $bg_image && 'none' !== $bg_image );
+
+		$state['data-bb-surface'] = $has_surface ? '1' : '';
+
+		/*
+		 * ---- Motion master (§14) ----
+		 * When the site resolves to "no motion" every reveal is suppressed at the
+		 * source, so a section can never animate even if its own token says it
+		 * should. This is the server-side half of the `.has-bb-motion-off` class.
+		 */
+		if ( 'off' === sanitize_key( $resolve( '--bb-motion-mode', '' ) ) ) {
+			$state['data-bb-reveal']     = 'none';
+			$state['data-bb-reveal-off'] = '1';
+			$state['data-bb-hover']      = '';
+		}
+
 		return $state;
 	}
 }

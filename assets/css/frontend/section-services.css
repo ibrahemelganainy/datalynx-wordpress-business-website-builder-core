@@ -1,0 +1,205 @@
+/**
+ * Business Builder Core - Frontend: Services section (Phase 23 §11, §26)
+ * ----------------------------------------------------------------------
+ * The presentation layer for the core Services section.
+ *
+ * WHY ONE FILE FOR FIVE LAYOUTS
+ * -----------------------------
+ * All five layouts render the SAME `.bb-service-card` markup; only the wrapper
+ * class differs. So a layout is a small set of overrides here rather than a
+ * separate stylesheet, a separate template tree, or duplicated markup.
+ *
+ * TWO LAYERS, ON PURPOSE
+ * ----------------------
+ *   - LAYOUT (`.bb-services--<variant>`): where the pieces sit.
+ *   - SKIN (`.bb-services--<style>`): whether a card has a surface, a border or
+ *     neither. Both come from the section's own settings and both read the shared
+ *     card tokens, so the Studio's Shape / Glass / Colour / Card controls still
+ *     apply on top.
+ *
+ * Every value falls back to an existing `--bb-*` token, so this file adds no
+ * namespace and changes nothing on a site that does not use the section.
+ */
+
+.bb-template .bb-services {
+  --bb-services-columns: 3;
+  display: block;
+}
+
+.bb-template .bb-services .bb-section-heading {
+  max-inline-size: var(--bb-content-width, 60rem);
+  margin-block-end: var(--bb-section-heading-gap, 2rem);
+}
+
+.bb-template .bb-services--align-center .bb-section-heading,
+.bb-template .bb-services--align-center .bb-service-card {
+  text-align: center;
+  margin-inline: auto;
+}
+
+.bb-template .bb-services--align-center .bb-service-card-icon {
+  margin-inline: auto;
+}
+
+/* ---- The shared card ----
+ * One definition, so every layout and every Studio card control agree.
+ */
+.bb-template .bb-services .bb-service-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bb-space-sm, 0.75rem);
+  padding: var(--bb-section-card-padding, var(--bb-card-padding, 1.5rem));
+  border-radius: var(--bb-section-card-radius, var(--bb-radius-card, 16px));
+  background-color: var(--bb-section-card-bg, var(--bb-color-surface, #fff));
+  color: inherit;
+  border: var(--bb-section-border-width, 0) solid
+    var(--bb-section-card-border-color, var(--bb-color-border, rgba(15, 23, 42, 0.08)));
+  box-shadow: var(--bb-section-card-shadow, var(--bb-shadow-card, none));
+  transition:
+    transform var(--bb-motion-normal, 0.24s) var(--bb-ease-standard, ease),
+    box-shadow var(--bb-motion-normal, 0.24s) var(--bb-ease-standard, ease);
+}
+
+.bb-template .bb-services .bb-service-card-media img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  border-radius: calc(var(--bb-radius-card, 16px) - 6px);
+}
+
+.bb-template .bb-services .bb-service-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border-radius: var(--bb-radius-md, 10px);
+  background-color: color-mix(
+    in srgb,
+    var(--bb-color-primary, #2563eb) 12%,
+    transparent
+  );
+  color: var(--bb-section-accent, var(--bb-color-primary, #2563eb));
+  font-size: 1.25rem;
+}
+
+.bb-template .bb-services .bb-service-card-title {
+  margin: 0;
+}
+
+.bb-template .bb-services .bb-service-card-text {
+  color: var(--bb-section-text, var(--bb-color-text, #475569));
+}
+
+.bb-template .bb-services .bb-service-card-link {
+  margin-block-start: auto;
+  font-weight: var(--bb-font-weight-medium, 500);
+}
+
+/* ---- Skin: elevated / bordered / flat / minimal ---- */
+.bb-template .bb-services--elevated .bb-service-card {
+  box-shadow: var(--bb-section-card-shadow, var(--bb-shadow-card, 0 10px 30px rgba(15, 23, 42, 0.08)));
+}
+
+.bb-template .bb-services--bordered .bb-service-card {
+  box-shadow: none;
+  border-width: var(--bb-section-border-width, var(--bb-border-width, 1px));
+  border-color: var(--bb-section-card-border-color, var(--bb-color-border, rgba(15, 23, 42, 0.12)));
+}
+
+.bb-template .bb-services--flat .bb-service-card {
+  box-shadow: none;
+  background-color: var(--bb-section-card-bg, var(--bb-color-surface-muted, #f8fafc));
+}
+
+.bb-template .bb-services--minimal .bb-service-card {
+  box-shadow: none;
+  background-color: transparent;
+  border-color: transparent;
+  padding-inline: 0;
+}
+
+/* ---- Layout: list ---- */
+.bb-template .bb-services--list .bb-service-card {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.bb-template .bb-services--list .bb-service-card-media {
+  flex: 0 0 30%;
+  max-inline-size: 30%;
+}
+
+.bb-template .bb-services--list .bb-service-card-body {
+  flex: 1 1 auto;
+}
+
+/* ---- Layout: icon beside text ---- */
+.bb-template .bb-services--icon-text .bb-service-card {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--bb-space-md, 1rem);
+}
+
+.bb-template .bb-services--icon-text .bb-service-card-body {
+  flex: 1 1 auto;
+}
+
+/* ---- Layout: image beside text ---- */
+.bb-template .bb-services--image-text .bb-service-card {
+  padding: 0;
+  overflow: clip;
+}
+
+.bb-template .bb-services--image-text .bb-service-card-body {
+  padding: var(--bb-section-card-padding, var(--bb-card-padding, 1.5rem));
+}
+
+/* ---- Layout: featured (first item emphasised) ---- */
+.bb-template .bb-services--featured .bb-services-featured .bb-service-card {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--bb-space-lg, 2rem);
+}
+
+.bb-template .bb-services--featured .bb-services-featured .bb-service-card-media {
+  flex: 0 0 45%;
+  max-inline-size: 45%;
+}
+
+.bb-template .bb-services--featured .bb-services-featured .bb-service-card-title {
+  font-size: var(--bb-font-size-h3, 1.75rem);
+}
+
+.bb-template .bb-services--featured .bb-services-featured {
+  margin-block-end: var(--bb-grid-gap, 1.5rem);
+}
+
+.bb-template .bb-services-actions {
+  margin-block-start: var(--bb-grid-gap, 1.5rem);
+}
+
+/* ---- Responsive: the grid collapses before it becomes unreadable ---- */
+@media (max-width: 1024px) {
+  .bb-template .bb-services--default .bb-services-list,
+  .bb-template .bb-services--featured .bb-services-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .bb-template .bb-services .bb-services-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bb-template .bb-services--list .bb-service-card,
+  .bb-template .bb-services--featured .bb-services-featured .bb-service-card {
+    flex-direction: column;
+  }
+
+  .bb-template .bb-services--list .bb-service-card-media,
+  .bb-template .bb-services--featured .bb-services-featured .bb-service-card-media {
+    flex: 0 0 auto;
+    max-inline-size: 100%;
+  }
+}

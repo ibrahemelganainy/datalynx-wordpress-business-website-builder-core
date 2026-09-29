@@ -170,8 +170,22 @@
     );
   }
 
+  /*
+   * PHASE 24 §5/§9 — NO MAGIC NUMBERS.
+   *
+   * `min(var(--bb-container-padding-block, 0px), 16px)` already behaved
+   * correctly for the "zero means zero" rule (0 stays 0), but the literal
+   * `16px` was an unnamed cap that no control owned and no Studio UI could
+   * ever explain — exactly the "arbitrary magic number" §5 forbids.
+   *
+   * It is now a named token with the same default, which changes nothing today
+   * and gives the responsive layout work (§9) a real hook: a per-breakpoint
+   * gutter control can write `--bb-container-padding-mobile` and this rule will
+   * consume it. `min()` is kept so a deliberately SMALLER gutter is never
+   * overridden — the mobile cap can only ever reduce, never inflate.
+   */
   .bb-template .bb-section-inner {
-    padding-inline: min(var(--bb-container-padding-block, 0px), 16px);
+    padding-inline: min(var(--bb-container-padding-block, 0px), var(--bb-container-padding-mobile, 16px));
   }
 }
 
@@ -600,3 +614,436 @@
   outline: 2px solid var(--bb-color-primary);
   outline-offset: 2px;
 }
+
+/* ==========================================================================
+ * PHASE 23 — GLOBAL LAYOUT (§9)
+ * --------------------------------------------------------------------------
+ * Every rule below consumes a token the Studio now writes. Nothing here
+ * re-declares a property an earlier layer already owns:
+ *
+ *   - the page WIDTH and the grid come from Phase 22 (`--bb-container-width`,
+ *     `--bb-grid-columns*`), untouched;
+ *   - `layout_mode` is a KEYWORD select, so it is published as a body class by
+ *     `DesignShellState` rather than as a CSS value (a keyword cannot drive a
+ *     declaration on its own).
+ *
+ * `--bb-site-margin` and `--bb-section-gap` are ADDITIVE: both default to 0, so
+ * a site that never opens the Layout group renders byte-identically to before.
+ * ========================================================================== */
+
+/* A gutter of background colour around the whole page. */
+.bb-template {
+  padding-inline: var(--bb-site-margin, 0px);
+}
+
+/* Space BETWEEN sections (distinct from each section's own padding-block). */
+.bb-template > .bb-section + .bb-section {
+  margin-block-start: var(--bb-section-gap, 0px);
+}
+
+/* Boxed layout: the page becomes a centred card on the site background. */
+.has-bb-layout-boxed .bb-template {
+  max-inline-size: var(--bb-container-width, 1180px);
+  margin-inline: auto;
+  border-radius: var(--bb-radius-lg, 14px);
+  overflow: clip;
+  box-shadow: var(--bb-shadow-lg, 0 18px 34px rgba(15, 23, 42, 0.08));
+}
+
+/* ==========================================================================
+ * PHASE 23 — GLOBAL TYPOGRAPHY (§10)
+ * --------------------------------------------------------------------------
+ * ALIAS BRIDGES (D4), the same pattern Phase 22 used for border width and
+ * container padding.
+ *
+ * Four properties already had a SCALE token the design system reads
+ * (`--bb-font-weight-bold`, `--bb-font-weight-normal`, `--bb-line-height-tight`)
+ * and a DEDICATED intent the customer now expresses. Rather than create a
+ * second, competing value, the dedicated control takes precedence and the scale
+ * token is the fallback:
+ *
+ *   --bb-font-weight-heading  ->  --bb-font-weight-bold  ->  700
+ *
+ * So there is exactly ONE effective value, the design system keeps working
+ * standalone (both fallbacks preserve its baseline), and no second namespace or
+ * duplicate stylesheet is introduced.
+ * ========================================================================== */
+
+.bb-template {
+  font-weight: var(--bb-font-weight-body, var(--bb-font-weight-normal, 400));
+  letter-spacing: var(--bb-body-letter-spacing, normal);
+}
+
+.bb-template h1,
+.bb-template h2,
+.bb-template h3,
+.bb-template h4,
+.bb-template h5,
+.bb-template h6,
+.bb-template .bb-h1,
+.bb-template .bb-h2,
+.bb-template .bb-h3,
+.bb-template .bb-section-title,
+.bb-template .bb-section-heading,
+.bb-template .bb-card-title,
+.bb-template .bb-section-card-title {
+  font-weight: var(--bb-font-weight-heading, var(--bb-font-weight-bold, 700));
+  line-height: var(--bb-heading-line-height, var(--bb-line-height-tight, 1.2));
+  text-transform: var(--bb-heading-transform, none);
+}
+
+/* ==========================================================================
+ * PHASE 23 — NAVBAR (§12)
+ * --------------------------------------------------------------------------
+ * The navbar is THEME markup (`.bb-site-header` inside `header.php`), rendered
+ * by the shell. It is therefore styled from this layer on the SAME
+ * `.bb-theme .bb-site-header` scope Phase 22 already uses — no Theme file is
+ * edited, and a site that is not running the canonical Theme never matches the
+ * selector at all (so Astra is untouched by construction).
+ *
+ * `nav_position` and `nav_indicator` are KEYWORD selects and are published as
+ * body classes by `DesignShellState`; everything else is a plain token read.
+ * ========================================================================== */
+
+/* Logo size. */
+.bb-theme .bb-site-header .custom-logo,
+.bb-theme .bb-site-header .bb-brand img {
+  max-height: var(--bb-logo-height, 48px);
+  width: auto;
+}
+
+/* Menu typography and interaction language. */
+.bb-theme .bb-site-header .bb-nav-menu a {
+  font-size: var(--bb-nav-link-size, 1rem);
+  font-weight: var(--bb-nav-link-weight, 500);
+  letter-spacing: var(--bb-nav-link-tracking, normal);
+  border-radius: var(--bb-nav-radius, 8px);
+  padding-inline: calc(var(--bb-nav-gap, 1.5rem) / 3);
+  transition:
+    color var(--bb-motion-normal, 0.24s) var(--bb-ease-standard, ease),
+    background-color var(--bb-motion-normal, 0.24s) var(--bb-ease-standard, ease);
+}
+
+.bb-theme .bb-site-header .bb-nav-menu a:hover,
+.bb-theme .bb-site-header .bb-nav-menu a:focus-visible {
+  color: var(--bb-nav-link-hover, var(--bb-color-primary));
+}
+
+.bb-theme .bb-site-header .bb-nav-menu .current-menu-item > a,
+.bb-theme .bb-site-header .bb-nav-menu .current-menu-ancestor > a,
+.bb-theme .bb-site-header .bb-nav-menu .current_page_item > a {
+  color: var(--bb-nav-link-active, var(--bb-color-primary));
+}
+
+/* ---- Menu position (body class) ----
+ * The header inner is a 3-slot flex row (brand / nav / actions). Repositioning
+ * the menu only changes which slot absorbs the free space, so the markup — and
+ * therefore the accessibility tree — is never reordered.
+ */
+.has-bb-nav-start .bb-theme .bb-site-header .bb-brand {
+  margin-inline-end: 0;
+}
+.has-bb-nav-start .bb-theme .bb-site-header .bb-header-actions {
+  margin-inline-start: auto;
+}
+.has-bb-nav-end .bb-theme .bb-site-header .bb-site-navigation,
+.has-bb-nav-end .bb-theme .bb-site-header .bb-nav {
+  margin-inline-start: auto;
+}
+
+/* ---- Active indicator (body class) ---- */
+.has-bb-nav-underline .bb-theme .bb-site-header .bb-nav-menu .current-menu-item > a,
+.has-bb-nav-underline .bb-theme .bb-site-header .bb-nav-menu .current-menu-ancestor > a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.has-bb-nav-pill .bb-theme .bb-site-header .bb-nav-menu .current-menu-item > a,
+.has-bb-nav-pill .bb-theme .bb-site-header .bb-nav-menu .current-menu-ancestor > a {
+  background-color: color-mix(
+    in srgb,
+    var(--bb-nav-link-active, var(--bb-color-primary)) 14%,
+    transparent
+  );
+}
+
+.has-bb-nav-dot .bb-theme .bb-site-header .bb-nav-menu .current-menu-item > a {
+  position: relative;
+}
+.has-bb-nav-dot .bb-theme .bb-site-header .bb-nav-menu .current-menu-item > a::before {
+  content: "";
+  position: absolute;
+  inset-block-start: -4px;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 50%;
+  background-color: var(--bb-nav-link-active, var(--bb-color-primary));
+}
+
+/* ==========================================================================
+ * PHASE 23 — MOTION MASTER (§14)
+ * --------------------------------------------------------------------------
+ * `motion_mode` composes existing tokens (see DesignSchema::motion_mode_library())
+ * and is published as a body class. The class is what makes "None" absolute:
+ * even a design-authored animation that no token governs is still suppressed,
+ * which is the only honest reading of "fully static".
+ *
+ * The easing control writes `--bb-ease-standard`, which every transition in this
+ * file already reads, so one choice re-curves the whole site.
+ * ========================================================================== */
+.has-bb-motion-off .bb-template [data-bb-reveal],
+.has-bb-motion-off .bb-template [data-bb-reveal] *,
+.has-bb-motion-off .bb-template [class*="bb-grid-columns-"] > * {
+  animation: none !important;
+  transition: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.has-bb-motion-off .bb-template [data-bb-hover]:hover {
+  transform: none !important;
+}
+
+/* ==========================================================================
+ * PHASE 23 — PER-SECTION GLASS AND MOTION (fixes the measured orphans)
+ * --------------------------------------------------------------------------
+ * The audit (docs/phase23-audit.md §2.3) measured FIVE section controls that
+ * saved a value nothing ever read:
+ *
+ *   --bb-section-glass-blur           (only read in PHP to decide on/off)
+ *   --bb-section-glass-opacity        (nothing)
+ *   --bb-section-glass-border-opacity (nothing)
+ *   --bb-section-reveal-duration      (nothing)
+ *   --bb-section-reveal-delay         (nothing)
+ *
+ * They are consumed here by scoping the EXISTING glass and reveal rules to the
+ * section element, using the section token with the site-wide token as the
+ * fallback. That is the Phase 16/22 cascade expressed in CSS: a section that
+ * overrides nothing still reads the global value, so nothing changes for a site
+ * that never opens a section panel.
+ * ========================================================================== */
+.bb-template .bb-section[data-bb-glass="on"] {
+  background-color: color-mix(
+    in srgb,
+    var(--bb-glass-tint, var(--bb-section-bg, var(--bb-color-surface)))
+      calc(
+        var(--bb-section-glass-opacity, var(--bb-glass-opacity, 1)) * 100%
+      ),
+    transparent
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--bb-section-border-color, var(--bb-color-border))
+      calc(
+        var(--bb-section-glass-border-opacity, var(--bb-glass-border-opacity, 1)) *
+          100%
+      ),
+    transparent
+  );
+}
+
+@supports (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .bb-template .bb-section[data-bb-glass="on"] {
+    -webkit-backdrop-filter: blur(
+        var(--bb-section-glass-blur, var(--bb-glass-blur, 0px))
+      )
+      saturate(var(--bb-glass-saturate, 100%));
+    backdrop-filter: blur(
+        var(--bb-section-glass-blur, var(--bb-glass-blur, 0px))
+      )
+      saturate(var(--bb-glass-saturate, 100%));
+  }
+}
+
+/*
+ * Per-section reveal timing. The site-wide duration/delay remain the fallback,
+ * so this is additive rather than a second source of truth.
+ */
+.bb-template .bb-section [data-bb-reveal].is-bb-revealed {
+  animation-duration: var(
+    --bb-section-reveal-duration,
+    var(--bb-reveal-duration, 0.48s)
+  );
+  animation-delay: var(--bb-section-reveal-delay, 0s);
+}
+
+/* ==========================================================================
+ * PHASE 23 — DANGER COLOUR (fixes the measured orphan)
+ * --------------------------------------------------------------------------
+ * `--bb-color-danger` was declared by the Theme schema and read by no
+ * stylesheet (audit §2.2). It is consumed here for the states that genuinely
+ * mean "danger", using the shared form/notice classes the builder already
+ * renders, so the control now has a real, visible effect.
+ * ========================================================================== */
+.bb-template .bb-field-error,
+.bb-template .bb-form-error,
+.bb-template .bb-error-text,
+.bb-template .bb-notice-error,
+.bb-template .bb-payment-error {
+  color: var(--bb-color-danger, #dc2626);
+  border-color: var(--bb-color-danger, #dc2626);
+}
+
+.bb-template .bb-field-error,
+.bb-template .bb-field-error:focus,
+.bb-template .bb-form-error,
+.bb-template .bb-notice-error {
+  border-inline-start: 3px solid var(--bb-color-danger, #dc2626);
+}
+
+/* ==========================================================================
+ * PHASE 23 — SCROLLBAR (§15)
+ * --------------------------------------------------------------------------
+ * TWO consumers, because there are two scrollable surfaces:
+ *
+ *   1. the PAGE scrollbar — `html`, emitted conditionally by
+ *      `DesignShellState::print_scrollbar_styles()` (only on a site that
+ *      deliberately set a scrollbar value, so wp-admin is never restyled);
+ *   2. any INNER scrollable region the builder renders — `.bb-scroll-area`,
+ *      which is inside `.bb-template` and therefore always safe to style.
+ *
+ * Both read the same four tokens, so there is one source of truth.
+ * ========================================================================== */
+.bb-template .bb-scroll-area {
+  scrollbar-color: var(--bb-scrollbar-thumb, #94a3b8)
+    var(--bb-scrollbar-track, #f1f5f9);
+  scrollbar-width: thin;
+}
+
+.bb-template .bb-scroll-area::-webkit-scrollbar {
+  width: var(--bb-scrollbar-width, 10px);
+  height: var(--bb-scrollbar-width, 10px);
+}
+
+.bb-template .bb-scroll-area::-webkit-scrollbar-track {
+  background: var(--bb-scrollbar-track, #f1f5f9);
+}
+
+.bb-template .bb-scroll-area::-webkit-scrollbar-thumb {
+  background: var(--bb-scrollbar-thumb, #94a3b8);
+  border-radius: var(--bb-scrollbar-width, 10px);
+}
+
+.bb-template .bb-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: var(--bb-scrollbar-thumb-hover, #64748b);
+}
+
+/* ==========================================================================
+ * PHASE 23 — SECTION BORDERS OFF BY DEFAULT
+ * --------------------------------------------------------------------------
+ * Sections are rhythm, not boxes. A border is only drawn when the surface or
+ * the section itself declares one, so the default page has no boxed look while
+ * an explicitly authored border (a design preset, or a section override) still
+ * renders exactly as authored.
+ * ========================================================================== */
+.bb-template .bb-section {
+  border-width: var(--bb-section-border-width, 0);
+  border-style: solid;
+  border-color: var(--bb-section-border-color, transparent);
+}
+
+.bb-template .bb-section[data-bb-glass="on"],
+.bb-template .bb-section[data-bb-surface="1"] {
+  border-width: var(
+    --bb-section-border-width,
+    var(--bb-border-width, 1px)
+  );
+  border-color: var(
+    --bb-section-border-color,
+    var(--bb-color-border, rgba(15, 23, 42, 0.08))
+  );
+}
+
+/* ==========================================================================
+ * PHASE 23 — HERO PRESENTATION (§11)
+ * --------------------------------------------------------------------------
+ * The hero already rendered a content image (`.bb-hero-media`); what was missing
+ * was the ability to PLACE it, and a secondary call to action. Both are
+ * additive: the default (`bb-hero-media-end`) is the pre-Phase-23 arrangement,
+ * so an untouched hero renders exactly as it did before.
+ *
+ * Logical properties throughout, so every placement mirrors correctly in RTL.
+ * ========================================================================== */
+.bb-template .bb-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bb-space-md, 1rem);
+  align-items: center;
+}
+
+.bb-template .bb-hero-align-center .bb-hero-actions {
+  justify-content: center;
+}
+
+/* Secondary button: the quiet counterpart of the primary button. */
+.bb-template .bb-hero .bb-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: var(--bb-button-padding-block, 0.75rem)
+    var(--bb-button-padding-inline, 1.5rem);
+  border-radius: var(--bb-button-radius, 10px);
+  border: var(--bb-border-width, 1px) solid currentColor;
+  color: inherit;
+  font-weight: var(--bb-button-weight, 600);
+  text-decoration: none;
+  background-color: transparent;
+  transition:
+    background-color var(--bb-motion-normal, 0.24s) var(--bb-ease-standard, ease),
+    color var(--bb-motion-normal, 0.24s) var(--bb-ease-standard, ease);
+}
+
+.bb-template .bb-hero .bb-secondary-button:hover {
+  background-color: color-mix(in srgb, currentColor 10%, transparent);
+  text-decoration: none;
+}
+
+/* ---- Media placement ----
+ * The hero is a flex row by default (text, then image). Each placement changes
+ * only the ORDER and the growth, never the markup.
+ */
+.bb-template .bb-hero-media-end .bb-hero-media,
+.bb-template .bb-hero-media-start .bb-hero-media {
+  flex: 1 1 45%;
+  max-inline-size: 45%;
+}
+
+.bb-template .bb-hero-media-start .bb-hero-media {
+  order: -1;
+}
+
+.bb-template .bb-hero-media-above,
+.bb-template .bb-hero-media-below {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.bb-template .bb-hero-media-above .bb-hero-media,
+.bb-template .bb-hero-media-below .bb-hero-media {
+  flex: 0 0 auto;
+  max-inline-size: 100%;
+}
+
+/* "Above" means above the TEXT — achieved by order, not by duplicating markup. */
+.bb-template .bb-hero-media-above .bb-hero-media {
+  order: -1;
+}
+
+.bb-template .bb-hero-media-hidden .bb-hero-media {
+  display: none;
+}
+
+@media (max-width: 782px) {
+  .bb-template .bb-hero-media-end .bb-hero-media,
+  .bb-template .bb-hero-media-start .bb-hero-media {
+    flex: 0 0 auto;
+    max-inline-size: 100%;
+  }
+}
+

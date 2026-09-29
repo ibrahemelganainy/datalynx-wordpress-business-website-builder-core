@@ -25,6 +25,7 @@
 
 /* LawFirm pack sections and front-end forms. */
 @import url("frontend/section-base.css");
+@import url("frontend/section-services.css");
 @import url("frontend/section-testimonials.css");
 @import url("frontend/section-lawyers.css");
 @import url("frontend/section-legal-services.css");

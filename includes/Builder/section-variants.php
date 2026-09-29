@@ -106,6 +106,9 @@ if ( ! function_exists( 'bb_section_variant_options' ) ) {
                 'default' => __( 'Default layout', 'business-builder' ),
                 'list'    => __( 'List layout', 'business-builder' ),
                 'featured' => __( 'Featured layout', 'business-builder' ),
+                'icon-text' => __( 'Icon beside text', 'business-builder' ),
+                'image-text' => __( 'Image beside text', 'business-builder' ),
+                'grid'    => __( 'Grid layout', 'business-builder' ),
             ),
             $section_type
         );

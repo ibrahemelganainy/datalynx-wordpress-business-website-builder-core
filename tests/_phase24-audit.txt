@@ -1,0 +1,1385 @@
+﻿PHASE 24 AUDIT ΓÇö read-only
+stylesheets: 47 | rules parsed: 1287
+
+== B. HORIZONTAL SPACE MAP (┬º4/┬º5) ==
+Every rule that can add horizontal space to the page frame.
+  HARDCODE  .bb-container          media  THEME/assets/css/layout.css:21             width              100%                   
+  TOKEN     .bb-container          media  THEME/assets/css/layout.css:21             max-width          var(--bb-container-width) 
+  KEYWORD   .bb-container          media  THEME/assets/css/layout.css:21             margin-inline      auto                   
+  TOKEN     .bb-container          media  THEME/assets/css/layout.css:21             padding-inline     var(--bb-container-padding) 
+  HARDCODE  .bb-main               media  THEME/assets/css/layout.css:16             width              100%                   
+  TOKEN     .bb-section-inner      media  PLUGIN/assets/css/page-admin/components/template-shell.css:119 max-width          var(--bb-container-width, 1200px) 
+  KEYWORD   .bb-section-inner      media  PLUGIN/assets/css/page-admin/components/template-shell.css:119 margin-inline      auto                   
+  TOKEN     .bb-section-inner      media  PLUGIN/assets/css/page-admin/components/template-shell.css:119 padding-inline     var(--bb-container-padding-block, 0px) 
+  TOKEN     .bb-section            media  PLUGIN/assets/css/page-admin/components/template-shell.css:167 margin             0 0 var(--bb-space-md, 20px) 
+  HARDCODE  .bb-section            media  PLUGIN/assets/css/page-admin/components/template-shell.css:196 width              80px                   
+  TOKEN     .bb-section            media  PLUGIN/assets/css/page-admin/components/template-shell.css:58 padding-inline     var(--bb-section-padding-inline, 0px) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/animations.css:287 width              24px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/billing-form.css:102 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/billing-form.css:102 padding            12px 14px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/billing-form.css:15 padding            20px 20px 4px          
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/billing-form.css:158 padding            18px 16px 2px          
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/billing-form.css:69 margin             0 0 4px                
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/billing-form.css:76 margin             0 0 16px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/billing-form.css:83 gap                16px 18px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/billing-form.css:89 gap                6px                    
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/billing-form.css:89 min-width          0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1040 gap                var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1040 padding            var(--bb-space-lg)     
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/components.css:1079 margin-left        auto                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:1079 padding            0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1101 max-width          var(--bb-breakpoint-xl) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:1101 margin             0 auto                 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1101 padding            var(--bb-space-md) var(--bb-space-lg) 
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:1117 margin             0                      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:1117 padding            0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1117 gap                var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1136 padding            var(--bb-space-sm)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1149 gap                var(--bb-space-md)     
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:115 padding            0.5rem 1rem            
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1160 padding            var(--bb-space-3xl) var(--bb-space-lg) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1167 max-width          var(--bb-breakpoint-xl) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:1167 margin             0 auto                 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:1167 gap                var(--bb-space-2xl)    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:120 padding            1rem 2rem              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:125 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:160 width              100%                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:160 padding            0.75rem var(--bb-space-md) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:234 padding            var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:240 padding            var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:244 padding            var(--bb-space-lg)     
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:250 margin             0                      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:257 margin             0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:27 gap                var(--bb-space-sm)     
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:27 padding            0.75rem 1.5rem         
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:275 gap                var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:275 padding            var(--bb-space-lg)     
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/components.css:314 margin-left        auto                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:314 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:344 max-width          500px                  
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:344 width              90%                    
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:353 padding            var(--bb-space-lg)     
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:361 margin             0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:367 padding            var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:371 gap                var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:371 padding            var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:384 max-width          var(--bb-bp-xl)        
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/components.css:384 margin-left        auto                   
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/components.css:384 margin-right       auto                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:384 padding-left       var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:384 padding-right      var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:392 padding            var(--bb-space-3xl) var(--bb-space-lg) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:409 gap                var(--bb-space-sm)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:410 gap                var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:411 gap                var(--bb-space-lg)     
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:432 margin             0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:439 padding            var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:440 padding            var(--bb-space-lg)     
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:444 width              1px                    
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:444 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:444 margin             -1px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:468 width              24px                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:515 gap                var(--bb-space-sm)     
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:515 padding            0.75rem 1.5rem         
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:568 padding            0.75rem 1.5rem         
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:637 padding            0.5rem 1rem            
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:642 padding            1rem 2rem              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:647 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:678 width              100%                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:678 padding            0.75rem var(--bb-space-md) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:706 padding-right      2.5rem                 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:716 width              1.25rem                
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:716 margin-right       var(--bb-space-sm)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:758 padding            var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:764 padding            var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:768 padding            var(--bb-space-lg)     
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:774 margin             0                      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:781 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:811 width              90%                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:811 max-width          500px                  
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:820 padding            var(--bb-space-lg)     
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:828 margin             0                      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:834 padding            0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:848 padding            var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:852 gap                var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:852 padding            var(--bb-space-lg)     
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:864 width              1px                    
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:864 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:864 margin             -1px                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:888 gap                var(--bb-space-sm)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:889 gap                var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:890 gap                var(--bb-space-lg)     
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/components.css:899 margin             0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:906 padding            var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:907 padding            var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:908 padding-left       var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:908 padding-right      var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:955 max-width          var(--bb-breakpoint-xl) 
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/components.css:955 margin-left        auto                   
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/components.css:955 margin-right       auto                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:955 padding-left       var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:955 padding-right      var(--bb-space-lg)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/components.css:963 padding            var(--bb-space-3xl) var(--bb-space-lg) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/components.css:968 width              24px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/design-identity.css:152 inline-size        56px                   
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/design-identity.css:164 margin-inline      auto                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-identity.css:177 padding            var(--bb-button-padding-block) var(--bb-button-padding-inline) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-identity.css:46 gap                var(--bb-grid-gap)     
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/design-identity.css:472 inline-size        40px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/design-identity.css:96 max-width          68ch                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:1012 max-inline-size    45%                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:1028 max-inline-size    100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:1044 max-inline-size    100%                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:112 min-inline-size    0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:112 max-inline-size    var(--bb-card-max-width, none) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:123 min-inline-size    var(--bb-card-min-width, 0px) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:140 max-inline-size    var(    --bb-section-content-width,    var(--bb-content-width, 68ch)  ) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:187 padding-inline     min(var(--bb-container-padding-block, 0px), var(--bb-container-padding-mobile, 16px)) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:201 padding-inline     var(--bb-section-padding-inline, 0px) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:305 padding            var(--bb-section-card-padding, var(--bb-card-padding)) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:635 padding-inline     var(--bb-site-margin, 0px) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:645 max-inline-size    var(--bb-container-width, 1180px) 
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:645 margin-inline      auto                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:79 inline-size        100%                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:79 max-inline-size    var(--bb-container-width, 1200px) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:79 min-inline-size    var(--bb-container-min, 0px) 
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:79 margin-inline      auto                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:79 padding-inline     var(--bb-container-padding-block, 0px) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:919 width              var(--bb-scrollbar-width, 10px) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:92 gap                var(--bb-section-grid-gap, var(--bb-grid-gap, 1.5rem)) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:973 gap                var(--bb-space-md, 1rem) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:985 gap                0.5rem                 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-sections.css:985 padding            var(--bb-button-padding-block, 0.75rem)    var(--bb-button-padding-inline, 1.5rem) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/design-tokens.css:513 padding            var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:114  padding            var(--bb-space-3xl) var(--bb-space-lg) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:121  max-width          var(--bb-breakpoint-xl) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/layout.css:121  margin             0 auto                 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:121  gap                var(--bb-space-2xl)    
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/layout.css:148  width              0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/layout.css:159  width              100%                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:175  gap                var(--bb-space-md)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:175  padding            var(--bb-space-lg)     
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/layout.css:214  margin-left        auto                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/layout.css:214  padding            0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:34   max-width          var(--bb-breakpoint-xl) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/layout.css:34   margin             0 auto                 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:34   padding            var(--bb-space-md) var(--bb-space-lg) 
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/layout.css:50   margin             0                      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/layout.css:50   padding            0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:50   gap                var(--bb-space-lg)     
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/layout.css:70   width              0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/layout.css:81   width              100%                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:86   padding            var(--bb-space-sm)     
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/layout.css:99   gap                var(--bb-space-md)     
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:112 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:123 gap                14px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:123 margin             20px 0 0               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:13 padding            30px 30px 26px         
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:161 padding            22px 18px 20px         
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:170 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:46 gap                14px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:54 width              48px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:66 max-width          34px                   
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:66 width              auto                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:74 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:8 max-width          720px                  
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:8 margin             0 auto                 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:81 margin             2px 0 0                
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:87 gap                6px 14px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:87 margin             18px 0 4px             
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/payment-step.css:87 padding            16px 18px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-base.css:42 padding            40px 32px              
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-base.css:57 gap                var(--bb-fe-section-gap) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:114 padding            14px 18px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:123 margin             10px 0 0               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:134 margin             6px 0 0                
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:17 max-width          820px                  
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:17 margin             0 auto                 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:25 padding            32px 30px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:33 gap                18px 22px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:39 margin             0 0 18px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:39 gap                6px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:54 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:54 padding            12px 14px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:79 gap                8px 28px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:79 margin             0 0 22px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:79 padding            16px 20px              
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:91 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-booking-form.css:91 gap                8px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:13 max-width          820px                  
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:13 margin             0 auto                 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:21 padding            32px 30px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:29 gap                18px 22px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:35 margin             0 0 18px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:35 gap                6px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:54 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:54 padding            12px 14px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:78 margin             6px 0 0                
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation-form.css:88 padding            14px 18px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation.css:19 margin             0 auto 24px            
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation.css:24 margin             0 0 12px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation.css:31 margin             0 auto                 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation.css:31 max-width          680px                  
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation.css:39 margin             8px auto 0             
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-consultation.css:39 padding            14px 24px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-faq.css:11 gap                14px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-faq.css:11 max-width          880px                  
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-faq.css:11 margin             0 auto                 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-faq.css:19 padding            22px 24px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-faq.css:28 margin             0 0 10px !important    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-faq.css:28 padding-left       28px !important        
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-faq.css:40 width              20px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:101 margin             0 0 24px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:108 gap                12px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:114 gap                36px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:121 margin             0 0 16px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:133 gap                16px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:139 padding            18px 20px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:163 gap                12px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:25 gap                36px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:39 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:60 margin             0 0 10px !important    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:69 margin             0 0 16px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:78 gap                10px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyer-profile.css:85 padding            7px 14px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyers.css:33 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyers.css:42 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyers.css:49 gap                6px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyers.css:49 padding            20px 22px 24px         
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyers.css:61 margin             0 !important           
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyers.css:61 padding            0 !important           
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-lawyers.css:72 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-lawyers.css:81 margin             2px 0 6px              
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-lawyers.css:87 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-legal-services.css:13 gap                12px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-legal-services.css:13 padding            26px 24px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-legal-services.css:33 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-legal-services.css:42 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-legal-services.css:49 width              54px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-legal-services.css:63 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-legal-services.css:70 margin             0 !important           
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-legal-services.css:70 padding            0 !important           
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-legal-services.css:81 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:110 width              44px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:123 max-width          32px                   
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:123 width              auto                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:131 gap                2px                    
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:131 min-width          0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:150 gap                8px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:150 margin             14px 0 0               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:16 margin             18px 0 0               
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:16 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:163 padding            14px 16px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:176 padding            14px 16px 14px 44px    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:199 margin             14px 0 0               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:199 padding            16px 18px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:207 gap                12px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:219 margin             0 0 2px                
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:22 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:22 margin             0 0 12px               
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:226 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:233 margin             14px 0 0               
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:233 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:233 gap                8px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:240 gap                14px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:240 padding            9px 12px               
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:252 margin             0                      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:259 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:259 gap                8px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:274 padding            3px 10px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:291 margin             12px 0 0               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:298 margin             0 0 6px                
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:30 gap                12px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:302 gap                14px                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:308 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:308 gap                6px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:322 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:322 padding            11px 13px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:355 gap                8px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:355 margin             14px 0 0               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:54 width              1px                    
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:54 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:62 gap                12px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:62 padding            14px 44px 14px 16px    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-payment.css:77 width              20px                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-practice-areas.css:11 gap                var(--bb-fe-section-gap, 24px) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-practice-areas.css:17 padding            26px 24px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-practice-areas.css:30 width              4px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-practice-areas.css:44 margin             0 0 10px !important    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-practice-areas.css:44 padding            0 !important           
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-practice-areas.css:55 margin             0                      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:115 padding-inline     0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:128 max-inline-size    30%                    
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:138 gap                var(--bb-space-md, 1rem) 
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:149 padding            0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:154 padding            var(--bb-section-card-padding, var(--bb-card-padding, 1.5rem)) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:159 gap                var(--bb-space-lg, 2rem) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:165 max-inline-size    45%                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:201 max-inline-size    100%                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:29 max-inline-size    var(--bb-content-width, 60rem) 
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:35 margin-inline      auto                   
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:40 margin-inline      auto                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:47 gap                var(--bb-space-sm, 0.75rem) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:47 padding            var(--bb-section-card-padding, var(--bb-card-padding, 1.5rem)) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:63 inline-size        100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:70 inline-size        2.75rem                
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-services.css:86 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:108 margin             4px 0 0 !important     
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:108 padding            0 !important           
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:122 margin             0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:18 gap                var(--bb-fe-section-gap, 24px) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:25 gap                14px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:25 padding            28px 26px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:52 width              64px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:62 width              100%                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:81 margin             0                      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-testimonials.css:81 padding            0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:121 gap                var(--bb-space-1)      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:121 padding            var(--bb-space-4) var(--bb-space-4) var(--bb-space-5) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:128 padding            var(--bb-space-4)      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:150 padding            var(--bb-space-4)      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:184 gap                var(--bb-space-2)      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:184 padding            var(--bb-space-5) var(--bb-space-6) var(--bb-space-6) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:199 width              100%                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:20 gap                var(--bb-fe-section-gap) 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:216 gap                var(--bb-space-1)      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:216 padding            var(--bb-space-2) 0    
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:228 width              auto                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:242 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:248 width              100%                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:254 margin             var(--bb-space-5) var(--bb-space-6) 0 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:258 padding            var(--bb-space-6)      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:267 padding-inline     0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:286 gap                var(--bb-space-4)      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:29 width              100%                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:298 min-width          0                      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:307 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:312 width              100%                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:318 margin             var(--bb-space-5) var(--bb-space-6) 0 
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:322 padding            var(--bb-space-6)      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:331 padding-inline     0                      
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:350 gap                var(--bb-space-4)      
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:362 min-width          0                      
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:44 width              auto                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:62 gap                var(--bb-fe-section-gap) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:69 width              100%                   
+  KEYWORD   .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:83 width              auto                   
+  TOKEN     .bb-template           media  PLUGIN/assets/css/frontend/section-variants.css:92 padding            var(--bb-space-8) var(--bb-space-10) 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:13 padding            28px 26px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:133 margin             20px 0 0               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:137 gap                10px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:147 width              16px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:173 margin             16px 0 0               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:173 padding            12px 14px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:189 padding            26px 26px 20px         
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:21 margin             0 0 18px               
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:21 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:210 gap                12px                   
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:219 margin             0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:226 padding            4px 12px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:248 gap                10px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:254 gap                12px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:264 gap                8px                    
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:27 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:27 margin             0 0 10px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:270 padding            10px 16px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:289 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:289 margin             14px 0                 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:296 padding            9px 6px                
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:304 width              45%                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:318 gap                8px 18px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:318 margin             16px 0 4px             
+  ZERO      .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:318 padding            0                      
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:327 gap                7px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:335 width              18px                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:35 gap                6px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:35 padding            5px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:357 margin             16px 0 0               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:361 gap                8px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:385 padding            20px 18px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:50 width              1px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:57 padding            9px 18px               
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:8 max-width          720px                  
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:8 margin             0 auto                 
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:81 gap                16px 18px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:87 gap                6px                    
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:99 width              100%                   
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/frontend/status-lookup.css:99 padding            12px 14px              
+  HARDCODE  .bb-template           media  PLUGIN/assets/css/page-admin/components/template-shell.css:30 width              100%                   
+  TOKEN     .bb-theme              media  PLUGIN/assets/css/frontend/design-identity.css:319 gap                var(--bb-nav-gap, var(--bb-space-6, 1.5rem)) 
+  TOKEN     .bb-theme              media  PLUGIN/assets/css/frontend/design-sections.css:473 gap                var(--bb-footer-column-gap, 2rem) 
+  TOKEN     .bb-theme              media  PLUGIN/assets/css/frontend/design-sections.css:473 column-gap         var(--bb-footer-column-gap, 2rem) 
+  KEYWORD   .bb-theme              media  PLUGIN/assets/css/frontend/design-sections.css:710 width              auto                   
+  TOKEN     .bb-theme              media  PLUGIN/assets/css/frontend/design-sections.css:716 padding-inline     calc(var(--bb-nav-gap, 1.5rem) / 3) 
+  ZERO      .bb-theme              media  PLUGIN/assets/css/frontend/design-sections.css:743 margin-inline-end  0                      
+  KEYWORD   .bb-theme              media  PLUGIN/assets/css/frontend/design-sections.css:746 margin-inline-start auto                   
+  KEYWORD   .bb-theme              media  PLUGIN/assets/css/frontend/design-sections.css:750 margin-inline-start auto                   
+  HARDCODE  .bb-theme              media  PLUGIN/assets/css/frontend/design-sections.css:774 inline-size        5px                    
+  TOKEN     .bb-theme              media  THEME/assets/css/components.css:106        padding            var(--bb-space-1) var(--bb-space-3) 
+  HARDCODE  .bb-theme              media  THEME/assets/css/components.css:117        width              100%                   
+  TOKEN     .bb-theme              media  THEME/assets/css/components.css:117        padding            0.75rem var(--bb-space-4) 
+  TOKEN     .bb-theme              media  THEME/assets/css/components.css:12         gap                var(--bb-space-2)      
+  HARDCODE  .bb-theme              media  THEME/assets/css/components.css:12         padding            0.75rem 1.5rem         
+  HARDCODE  .bb-theme              media  THEME/assets/css/components.css:146        max-width          100%                   
+  TOKEN     .bb-theme              media  THEME/assets/css/components.css:153        gap                var(--bb-space-6)      
+  TOKEN     .bb-theme              media  THEME/assets/css/components.css:166        padding            var(--bb-space-2) var(--bb-space-4) 
+  TOKEN     .bb-theme              media  THEME/assets/css/components.css:97         padding            var(--bb-space-6)      
+  TOKEN     .bb-theme              media  THEME/assets/css/footer.css:11             max-width          var(--bb-container-width) 
+  KEYWORD   .bb-theme              media  THEME/assets/css/footer.css:11             margin-inline      auto                   
+  TOKEN     .bb-theme              media  THEME/assets/css/footer.css:11             padding            var(--bb-space-12) var(--bb-container-padding) var(--bb-space-8) 
+  TOKEN     .bb-theme              media  THEME/assets/css/footer.css:11             gap                var(--bb-space-8)      
+  ZERO      .bb-theme              media  THEME/assets/css/footer.css:36             margin             0                      
+  ZERO      .bb-theme              media  THEME/assets/css/footer.css:36             padding            0                      
+  TOKEN     .bb-theme              media  THEME/assets/css/footer.css:36             gap                var(--bb-space-2)      
+  TOKEN     .bb-theme              media  THEME/assets/css/footer.css:55             padding            var(--bb-space-4) var(--bb-container-padding) 
+  HARDCODE  .bb-theme              media  THEME/assets/css/header.css:112            width              20px                   
+  TOKEN     .bb-theme              media  THEME/assets/css/header.css:129            gap                var(--bb-space-4)      
+  TOKEN     .bb-theme              media  THEME/assets/css/header.css:14             gap                var(--bb-space-6)      
+  TOKEN     .bb-theme              media  THEME/assets/css/header.css:14             max-width          var(--bb-container-width) 
+  KEYWORD   .bb-theme              media  THEME/assets/css/header.css:14             margin-inline      auto                   
+  TOKEN     .bb-theme              media  THEME/assets/css/header.css:14             padding            var(--bb-space-4) var(--bb-container-padding) 
+  TOKEN     .bb-theme              media  THEME/assets/css/header.css:24             gap                var(--bb-space-3)      
+  KEYWORD   .bb-theme              media  THEME/assets/css/header.css:38             width              auto                   
+  TOKEN     .bb-theme              media  THEME/assets/css/header.css:44             gap                var(--bb-space-6)      
+  ZERO      .bb-theme              media  THEME/assets/css/header.css:44             margin             0                      
+  ZERO      .bb-theme              media  THEME/assets/css/header.css:44             padding            0                      
+  ZERO      .bb-theme              media  THEME/assets/css/header.css:67             margin             0                      
+  ZERO      .bb-theme              media  THEME/assets/css/header.css:67             padding            0                      
+  HARDCODE  .bb-theme              media  THEME/assets/css/header.css:78             min-width          200px                  
+  TOKEN     .bb-theme              media  THEME/assets/css/header.css:78             padding            var(--bb-space-2)      
+  TOKEN     .bb-theme              media  THEME/assets/css/header.css:97             padding            var(--bb-space-2)      
+  HARDCODE  .bb-theme              media  THEME/assets/css/header.css:97             width              44px                   
+  ZERO      .bb-theme              media  THEME/assets/css/layout.css:5              margin             0                      
+  HARDCODE  .bb-theme              media  THEME/assets/css/responsive.css:12         width              100%                   
+  ZERO      .bb-theme              media  THEME/assets/css/responsive.css:21         gap                0                      
+  HARDCODE  .bb-theme              media  THEME/assets/css/responsive.css:21         width              100%                   
+  ZERO      .bb-theme              media  THEME/assets/css/shell-content.css:17      margin             0                      
+  ZERO      .bb-theme              media  THEME/assets/css/shell-content.css:17      padding            0                      
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-content.css:17      gap                var(--bb-space-4)      
+  ZERO      .bb-theme              media  THEME/assets/css/shell-content.css:29      margin             0                      
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-content.css:35      gap                var(--bb-space-2)      
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-content.css:41      gap                var(--bb-space-3)      
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-content.css:61      gap                var(--bb-space-3)      
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-content.css:68      gap                var(--bb-space-4)      
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-variants.css:102    padding-inline     var(--bb-container-padding) 
+  ZERO      .bb-theme              media  THEME/assets/css/shell-variants.css:113    gap                0                      
+  HARDCODE  .bb-theme              media  THEME/assets/css/shell-variants.css:113    width              100%                   
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-variants.css:142    gap                var(--bb-space-4)      
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-variants.css:176    gap                var(--bb-space-4)      
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-variants.css:190    gap                var(--bb-space-4)      
+  ZERO      .bb-theme              media  THEME/assets/css/shell-variants.css:199    padding            0                      
+  HARDCODE  .bb-theme              media  THEME/assets/css/shell-variants.css:26     width              100%                   
+  KEYWORD   .bb-theme              media  THEME/assets/css/shell-variants.css:34     margin-inline-start auto                   
+  TOKEN     .bb-theme              media  THEME/assets/css/shell-variants.css:55     gap                var(--bb-space-4)      
+  ZERO      .bb-theme              media  THEME/assets/css/theme.css:15              margin             0                      
+  HARDCODE  .bb-theme              media  THEME/assets/css/theme.css:22              max-width          100%                   
+  TOKEN     .bb-theme              media  THEME/assets/css/theme.css:36              padding-inline-start var(--bb-space-6)      
+  HARDCODE  .bb-theme              media  THEME/assets/css/theme.css:42              width              100%                   
+  TOKEN     .bb-theme              media  THEME/assets/css/typography.css:21         margin             0 0 var(--bb-space-4)  
+  TOKEN     .bb-theme              media  THEME/assets/css/typography.css:35         margin             0 0 var(--bb-space-4)  
+  TOKEN     .bb-theme              media  THEME/assets/css/typography.css:56         margin             0 0 var(--bb-space-4)  
+  TOKEN     .bb-theme              media  THEME/assets/css/typography.css:56         padding-inline-start var(--bb-space-4)      
+  HARDCODE  .bb-theme              media  THEME/assets/css/typography.css:69         width              1px                    
+  ZERO      .bb-theme              media  THEME/assets/css/typography.css:69         padding            0                      
+  HARDCODE  .bb-theme              media  THEME/assets/css/typography.css:69         margin             -1px                   
+
+  frame declarations: 479 | TOKEN: 149 | ZERO: 69 | KEYWORD: 26 | HARDCODE: 235
+
+== B2. HORIZONTAL HARDCODES ΓÇö the pixels NO control owns (┬º5) ==
+  THEME     .bb-theme              THEME/assets/css/components.css:12         padding            0.75rem 1.5rem
+  THEME     .bb-theme              THEME/assets/css/components.css:117        width              100%
+  THEME     .bb-theme              THEME/assets/css/components.css:146        max-width          100%
+  THEME     .bb-theme              THEME/assets/css/header.css:78             min-width          200px
+  THEME     .bb-theme              THEME/assets/css/header.css:97             width              44px
+  THEME     .bb-theme              THEME/assets/css/header.css:112            width              20px
+  THEME     .bb-main               THEME/assets/css/layout.css:16             width              100%
+  THEME     .bb-container          THEME/assets/css/layout.css:21             width              100%
+  THEME     .bb-theme              THEME/assets/css/responsive.css:12         width              100%
+  THEME     .bb-theme              THEME/assets/css/responsive.css:21         width              100%
+  THEME     .bb-theme              THEME/assets/css/shell-variants.css:26     width              100%
+  THEME     .bb-theme              THEME/assets/css/shell-variants.css:113    width              100%
+  THEME     .bb-theme              THEME/assets/css/theme.css:22              max-width          100%
+  THEME     .bb-theme              THEME/assets/css/theme.css:42              width              100%
+  THEME     .bb-theme              THEME/assets/css/typography.css:69         width              1px
+  THEME     .bb-theme              THEME/assets/css/typography.css:69         margin             -1px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/animations.css:287 width              24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/billing-form.css:15 padding            20px 20px 4px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/billing-form.css:69 margin             0 0 4px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/billing-form.css:76 margin             0 0 16px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/billing-form.css:83 gap                16px 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/billing-form.css:89 gap                6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/billing-form.css:102 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/billing-form.css:102 padding            12px 14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/billing-form.css:158 padding            18px 16px 2px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:27 padding            0.75rem 1.5rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:115 padding            0.5rem 1rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:120 padding            1rem 2rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:125 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:160 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:344 max-width          500px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:344 width              90%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:444 width              1px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:444 margin             -1px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:468 width              24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:515 padding            0.75rem 1.5rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:568 padding            0.75rem 1.5rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:637 padding            0.5rem 1rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:642 padding            1rem 2rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:647 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:678 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:706 padding-right      2.5rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:716 width              1.25rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:811 width              90%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:811 max-width          500px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:864 width              1px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:864 margin             -1px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:968 width              24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:1101 margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:1167 margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-identity.css:96 max-width          68ch
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-identity.css:152 inline-size        56px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-identity.css:472 inline-size        40px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-sections.css:79 inline-size        100%
+  FRONTEND  .bb-theme              PLUGIN/assets/css/frontend/design-sections.css:774 inline-size        5px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-sections.css:985 gap                0.5rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-sections.css:1012 max-inline-size    45%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-sections.css:1028 max-inline-size    100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-sections.css:1044 max-inline-size    100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/layout.css:34   margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/layout.css:81   width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/layout.css:121  margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/layout.css:159  width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:8 max-width          720px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:8 margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:13 padding            30px 30px 26px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:46 gap                14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:54 width              48px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:66 max-width          34px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:81 margin             2px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:87 gap                6px 14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:87 margin             18px 0 4px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:87 padding            16px 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:112 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:123 gap                14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:123 margin             20px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:161 padding            22px 18px 20px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:170 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:42 padding            40px 32px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:17 max-width          820px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:17 margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:25 padding            32px 30px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:33 gap                18px 22px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:39 margin             0 0 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:39 gap                6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:54 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:54 padding            12px 14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:79 gap                8px 28px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:79 margin             0 0 22px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:79 padding            16px 20px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:91 gap                8px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:114 padding            14px 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:123 margin             10px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:134 margin             6px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:13 max-width          820px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:13 margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:21 padding            32px 30px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:29 gap                18px 22px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:35 margin             0 0 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:35 gap                6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:54 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:54 padding            12px 14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:78 margin             6px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:88 padding            14px 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation.css:19 margin             0 auto 24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation.css:24 margin             0 0 12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation.css:31 margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation.css:31 max-width          680px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation.css:39 margin             8px auto 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation.css:39 padding            14px 24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-faq.css:11 gap                14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-faq.css:11 max-width          880px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-faq.css:11 margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-faq.css:19 padding            22px 24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-faq.css:28 margin             0 0 10px !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-faq.css:28 padding-left       28px !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-faq.css:40 width              20px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:25 gap                36px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:39 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:60 margin             0 0 10px !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:69 margin             0 0 16px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:78 gap                10px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:85 padding            7px 14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:101 margin             0 0 24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:108 gap                12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:114 gap                36px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:121 margin             0 0 16px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:133 gap                16px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:139 padding            18px 20px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:163 gap                12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyers.css:33 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyers.css:42 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyers.css:49 gap                6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyers.css:49 padding            20px 22px 24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyers.css:61 margin             0 !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyers.css:61 padding            0 !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyers.css:81 margin             2px 0 6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-legal-services.css:13 gap                12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-legal-services.css:13 padding            26px 24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-legal-services.css:33 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-legal-services.css:42 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-legal-services.css:49 width              54px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-legal-services.css:63 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-legal-services.css:70 margin             0 !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-legal-services.css:70 padding            0 !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:16 margin             18px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:22 margin             0 0 12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:30 gap                12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:54 width              1px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:62 gap                12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:62 padding            14px 44px 14px 16px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:77 width              20px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:110 width              44px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:123 max-width          32px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:131 gap                2px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:150 gap                8px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:150 margin             14px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:163 padding            14px 16px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:176 padding            14px 16px 14px 44px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:199 margin             14px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:199 padding            16px 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:207 gap                12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:219 margin             0 0 2px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:233 margin             14px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:233 gap                8px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:240 gap                14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:240 padding            9px 12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:259 gap                8px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:274 padding            3px 10px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:291 margin             12px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:298 margin             0 0 6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:302 gap                14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:308 gap                6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:322 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:322 padding            11px 13px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:355 gap                8px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:355 margin             14px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-practice-areas.css:17 padding            26px 24px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-practice-areas.css:30 width              4px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-practice-areas.css:44 margin             0 0 10px !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-practice-areas.css:44 padding            0 !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-services.css:63 inline-size        100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-services.css:70 inline-size        2.75rem
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-services.css:128 max-inline-size    30%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-services.css:165 max-inline-size    45%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-services.css:201 max-inline-size    100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-testimonials.css:25 gap                14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-testimonials.css:25 padding            28px 26px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-testimonials.css:52 width              64px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-testimonials.css:62 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-testimonials.css:108 margin             4px 0 0 !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-testimonials.css:108 padding            0 !important
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-variants.css:29 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-variants.css:69 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-variants.css:199 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-variants.css:248 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-variants.css:312 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:8 max-width          720px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:8 margin             0 auto
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:13 padding            28px 26px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:21 margin             0 0 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:27 margin             0 0 10px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:35 gap                6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:35 padding            5px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:50 width              1px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:57 padding            9px 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:81 gap                16px 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:87 gap                6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:99 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:99 padding            12px 14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:133 margin             20px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:137 gap                10px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:147 width              16px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:173 margin             16px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:173 padding            12px 14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:189 padding            26px 26px 20px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:210 gap                12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:226 padding            4px 12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:248 gap                10px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:254 gap                12px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:264 gap                8px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:270 padding            10px 16px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:289 width              100%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:289 margin             14px 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:296 padding            9px 6px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:304 width              45%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:318 gap                8px 18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:318 margin             16px 0 4px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:327 gap                7px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:335 width              18px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:357 margin             16px 0 0
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:361 gap                8px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:385 padding            20px 18px
+  PREVIEW   .bb-template           PLUGIN/assets/css/page-admin/components/template-shell.css:30 width              100%
+  PREVIEW   .bb-section            PLUGIN/assets/css/page-admin/components/template-shell.css:196 width              80px
+  total: 235
+
+== B3. TOKEN REDECLARED ON A FRAME SELECTOR (┬º4) ==
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-backdrop-blur                 blur(12px)             (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-backdrop-saturate             saturate(180%)         (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-badge-bg                      var(--bb-color-primary-pale, #dbeafe) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-badge-border                  transparent            (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-badge-color                   var(--bb-color-primary-hover, #1e40af) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bg-attachment                 scroll                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bg-color                      var(--bb-color-background) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bg-gradient                   none                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bg-image                      none                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bg-overlay-opacity            0                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bg-overlay                    none                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bg-position                   center center          (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bg-repeat                     no-repeat              (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bg-size                       cover                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-border-thickness              1px                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bp-2xl                        var(--bb-breakpoint-2xl) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bp-lg                         var(--bb-breakpoint-lg) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bp-md                         var(--bb-breakpoint-md) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bp-sm                         var(--bb-breakpoint-sm) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-bp-xl                         var(--bb-breakpoint-xl) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-breakpoint-2xl                1536px                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-breakpoint-lg                 1024px                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-breakpoint-md                 768px                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-breakpoint-sm                 640px                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-breakpoint-xl                 1280px                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-button-border-width           2px                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-button-padding-block          0.75rem                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-button-padding-inline         1.5rem                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-button-shadow-hover           none                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-button-shadow                 none                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-button-weight                 var(--bb-font-weight-medium, 500) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-card-border-width             var(--bb-border-thickness, 1px) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-card-max-width                none                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-card-min-width                260px                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-card-padding                  var(--bb-space-6, 1.5rem) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-color-border-strong           var(--bb-color-gray-300) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:549 --bb-color-border-strong           #475569                @media (prefers-color-scheme: dark)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-color-border                  var(--bb-color-gray-200) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:549 --bb-color-border                  #334155                @media (prefers-color-scheme: dark)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-color-heading                 var(--bb-color-gray-900) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:549 --bb-color-heading                 #f8fafc                @media (prefers-color-scheme: dark)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-color-link-hover              var(--bb-color-primary-dark) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-color-link                    var(--bb-color-primary) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-color-surface-muted           var(--bb-color-gray-50) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:549 --bb-color-surface-muted           #0f172a                @media (prefers-color-scheme: dark)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-color-surface                 var(--bb-color-white)  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:549 --bb-color-surface                 #1e293b                @media (prefers-color-scheme: dark)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-color-text-muted              var(--bb-color-gray-500) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:549 --bb-color-text-muted              #94a3b8                @media (prefers-color-scheme: dark)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-color-text                    var(--bb-color-gray-700) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:549 --bb-color-text                    #e2e8f0                @media (prefers-color-scheme: dark)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-container-min                 0px                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-container-padding-block       0px                    (none)
+  THEME     .bb-theme              THEME/assets/css/responsive.css:78         --bb-container-padding             var(--bb-container-padding-block, var(--bb-space-4)) @media (max-width: 767px)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-content-width                 68ch                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-ease-emphasis                 cubic-bezier(0.2, 0.8, 0.2, 1) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-ease-standard                 cubic-bezier(0.4, 0, 0.2, 1) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-easing-bounce                 cubic-bezier(0.68, -0.55, 0.265, 1.55) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-easing-in-out-quad            cubic-bezier(0.25, 0.46, 0.45, 0.94) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-easing-in-out                 cubic-bezier(0.4, 0, 0.2, 1) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-accent                     linear-gradient(135deg, var(--bb-color-primary-light, #60a5fa), #a78bfa) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-card-bg                    var(--bb-color-surface, #ffffff) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:17 --bb-fe-card-bg                    #ffffff                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:13 --bb-fe-card-bg                    #ffffff                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:16 --bb-fe-card-bg                    #ffffff                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-card-border                var(--bb-color-border, rgba(15, 23, 42, 0.08)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:17 --bb-fe-card-border                rgba(15, 23, 42, 0.08) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:13 --bb-fe-card-border                rgba(15, 23, 42, 0.08) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:16 --bb-fe-card-border                rgba(15, 23, 42, 0.08) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-card-shadow                var(--bb-shadow-card, 0 18px 34px rgba(15, 23, 42, 0.06)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:17 --bb-fe-card-shadow                0 18px 34px rgba(15, 23, 42, 0.06) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:13 --bb-fe-card-shadow                0 18px 34px rgba(15, 23, 42, 0.06) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:16 --bb-fe-card-shadow                0 18px 34px rgba(15, 23, 42, 0.06) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-font-heading-serif         var(--bb-font-heading-serif, Georgia, "Times New Roman", serif) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-heading-color              var(--bb-color-heading, #0f172a) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:16 --bb-fe-heading-color              #0f172a                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-luxury-border              var(--bb-color-luxury-border, rgba(138, 92, 24, 0.14)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-luxury-pale                var(--bb-color-luxury-pale, #f6e7cf) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-luxury-soft                var(--bb-color-luxury-soft, #dcc29c) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-luxury-strong              var(--bb-color-luxury-strong, #8a5c18) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-luxury                     var(--bb-color-luxury, #b8843c) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-radius-card                var(--bb-radius-card, 20px) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:16 --bb-fe-radius-card                20px                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-section-gap                var(--bb-space-lg, 24px) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-star-color                 var(--bb-color-accent, #f5b301) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-surface-translucent        var(--bb-color-surface-translucent, rgba(255, 255, 255, 0.9)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-base.css:20 --bb-fe-text-color                 var(--bb-color-text, #475569) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:16 --bb-fe-text-color                 #475569                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-mono                     "Menlo", "Monaco", "Courier New", monospace (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-primary                  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",    Arial, sans-serif (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-body-lg             1.125rem               (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-body-sm             0.875rem               (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-body-xs             0.75rem                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-body                1rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-h1                  2.5rem                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-h2                  2rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-h3                  1.75rem                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-h4                  1.5rem                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-h5                  1.25rem                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-size-h6                  1.125rem               (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-weight-bold              700                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-weight-light             300                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-weight-medium            500                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-weight-normal            400                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-font-weight-semibold          600                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-footer-border-width           1px                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-footer-column-gap             var(--bb-space-8, 2rem) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-footer-heading-color          var(--bb-footer-color) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-footer-link-color             var(--bb-footer-color) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-footer-link-hover             var(--bb-color-primary-light, var(--bb-color-primary)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-footer-padding-block          var(--bb-space-12, 3rem) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-glass-blur                    0px                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-glass-border-opacity          1                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-glass-opacity                 1                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-glass-saturate                100%                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-glass-shadow                  none                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-glass-tint                    var(--bb-color-surface) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-gradient-brand                linear-gradient(135deg, var(--bb-color-primary), var(--bb-color-primary-hover, var(--bb-color-primary))) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-gradient-cta                  linear-gradient(135deg, var(--bb-color-primary), var(--bb-color-accent)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-gradient-decorative           linear-gradient(135deg, var(--bb-color-primary-light, var(--bb-color-primary)), var(--bb-color-accent)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-gradient-hero                 linear-gradient(160deg, var(--bb-color-primary), var(--bb-color-primary-hover, var(--bb-color-primary))) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-gradient-surface              linear-gradient(180deg, var(--bb-color-surface), var(--bb-color-surface-muted)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-grid-columns-mobile           1                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-grid-columns-tablet           2                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-grid-columns                  3                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-grid-gap                      var(--bb-space-6, 1.5rem) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-grid-row-gap                  var(--bb-grid-gap, 1.5rem) (none)
+  FRONTEND  .bb-theme              PLUGIN/assets/css/frontend/design-identity.css:476 --bb-header-blur                   0px                    @media (max-width: 767px)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-blur                   0px                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-border-width           1px                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-height                 76px                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-initial-bg             var(--bb-header-bg)    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-initial-border         var(--bb-color-border) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-initial-color          var(--bb-header-color) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-initial-nav            var(--bb-header-color) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-initial-transparency   var(--bb-header-transparency) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-saturate               100%                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-scroll-transition      0.24s                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-scrolled-bg            var(--bb-header-bg)    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-scrolled-border        var(--bb-color-border) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-scrolled-color         var(--bb-header-color) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-scrolled-nav           var(--bb-header-color) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-scrolled-shadow        none                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-header-transparency           1                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-heading-letter-spacing        -0.02em                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-heading-scale                 1                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-hover-effect                  lift                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-hover-lift                    4px                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-hover-zoom                    1                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-line-height-normal            1.5                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-line-height-relaxed           1.75                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-line-height-tight             1.2                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-motion-fast                   0.14s                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-motion-normal                 0.24s                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-motion-slow                   0.42s                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-nav-gap                       var(--bb-space-6, 1.5rem) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-parallax                      0px                    (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-radius-card                   var(--bb-radius-lg, 0.75rem) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-radius-input                  var(--bb-radius-md, 0.5rem) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-radius-lg                     0.75rem                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-radius-md                     0.5rem                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-radius-pill                   9999px                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-radius-sm                     0.375rem               (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-radius-xl                     1rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-reveal-distance               20px                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-reveal-duration               0.42s                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-reveal-kind                   fade-up                (none)
+  FRONTEND  .bb-theme              PLUGIN/assets/css/frontend/design-identity.css:377 --bb-reveal-shift                  -20px                  (none)
+  FRONTEND  .bb-theme              PLUGIN/assets/css/frontend/design-identity.css:382 --bb-reveal-shift                  20px                   (none)
+  FRONTEND  .bb-theme              PLUGIN/assets/css/frontend/design-sections.css:552 --bb-reveal-shift                  20px                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-reveal-stagger                60ms                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-section-align                 start                  (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-section-padding-block-sm      clamp(2rem, 4vw, 3.5rem) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-section-padding-block         clamp(3rem, 6vw, 6rem) (none)
+  THEME     .bb-theme              THEME/assets/css/responsive.css:78         --bb-section-spacing-lg            var(--bb-section-padding-block-mobile, var(--bb-section-spacing-mobile, var(--bb-space-10))) @media (max-width: 767px)
+  THEME     .bb-theme              THEME/assets/css/responsive.css:78         --bb-section-spacing               var(--bb-section-padding-block-mobile, var(--bb-section-spacing-mobile, var(--bb-space-8))) @media (max-width: 767px)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-services.css:24 --bb-services-columns              3                      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-2xl                    0 20px 60px rgba(0, 0, 0, 0.2) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-card-hover             0 12px 32px rgba(0, 0, 0, 0.12) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-card                   var(--bb-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-hover                  var(--bb-shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.12)) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-inner                  inset 0 2px 4px rgba(0, 0, 0, 0.06) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-lg                     0 8px 24px rgba(0, 0, 0, 0.12) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-md                     0 4px 12px rgba(0, 0, 0, 0.08) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-none                   none                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-sm                     0 1px 2px rgba(0, 0, 0, 0.05) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-xl                     0 12px 32px rgba(0, 0, 0, 0.15) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-shadow-xs                     0 1px 1px rgba(0, 0, 0, 0.04) (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-size-128                      8rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-size-16                       1rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-size-24                       1.5rem                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-size-32                       2rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-size-48                       3rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-size-4                        0.25rem                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-size-64                       4rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-size-8                        0.5rem                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-size-96                       6rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-space-2xl                     3rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-space-3xl                     4rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-space-lg                      1.5rem                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-space-md                      1rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-space-sm                      0.5rem                 (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-space-xl                      2rem                   (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-space-xs                      0.25rem                (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-transition-base               0.2s ease-in-out       (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-transition-fast               0.15s ease-in-out      (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-transition-slow               0.3s ease-in-out       (none)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-tokens.css:128 --bb-transition-slower             0.5s ease-in-out       (none)
+  total: 208
+
+== D. HARDCODED VALUES OUTSIDE THE TOKEN FILES (┬º55) ==
+  spacing     THEME     THEME/assets/css/components.css:12         .bb-theme .bb-button,.bb-theme .bb padding          0.75rem 1.5rem
+  border      THEME     THEME/assets/css/footer.css:55             .bb-theme .bb-site-footer-bottom   border-top       1px solid rgba(255, 255, 255, 0.15)
+  spacing     THEME     THEME/assets/css/typography.css:69         .bb-theme .screen-reader-text      margin           -1px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:15 .bb-template .bb-billing           padding          20px 20px 4px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:69 .bb-template .bb-billing-title     margin           0 0 4px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:76 .bb-template .bb-billing-hint      margin           0 0 16px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:76 .bb-template .bb-billing-hint      font-size        0.85rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:83 .bb-template .bb-billing-grid      gap              16px 18px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:89 .bb-template .bb-billing-field     gap              6px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:96 .bb-template .bb-billing-field lab font-size        0.85rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:102 .bb-template .bb-billing-input     padding          12px 14px
+  colour      FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:122 .bb-template .bb-billing-input:hov border-color     rgba(15, 23, 42, 0.28)
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:144 .bb-template .bb-billing-error     font-size        0.78rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/billing-form.css:158 .bb-template .bb-billing           padding          18px 16px 2px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/components.css:27 .bb-template .bb-btn               padding          0.75rem 1.5rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/components.css:115 .bb-template .bb-btn-sm            padding          0.5rem 1rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/components.css:120 .bb-template .bb-btn-lg            padding          1rem 2rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/components.css:314 .bb-template .bb-alert-close       font-size        1.5rem
+  colour      FRONTEND  PLUGIN/assets/css/frontend/components.css:328 .bb-template .bb-modal-overlay     background-color rgba(0, 0, 0, 0.4)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/components.css:444 .bb-template .bb-sr-only           margin           -1px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/components.css:515 .bb-template .bb-primary-button    padding          0.75rem 1.5rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/components.css:568 .bb-template .btn                  padding          0.75rem 1.5rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/components.css:637 .bb-template .btn-sm               padding          0.5rem 1rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/components.css:642 .bb-template .btn-lg               padding          1rem 2rem
+  colour      FRONTEND  PLUGIN/assets/css/frontend/components.css:796 .bb-template .modal-overlay        background-color rgba(0, 0, 0, 0.5)
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/components.css:834 .bb-template .modal-close          font-size        1.5rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/components.css:864 .bb-template .sr-only              margin           -1px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/components.css:1079 .bb-template .alert-close          font-size        1.5rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/design-sections.css:985 .bb-template .bb-hero .bb-secondar gap              0.5rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/layout.css:214  .bb-template .bb-alert-close       font-size        1.5rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:13 .bb-template .bb-pay-step-card     padding          30px 30px 26px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:46 .bb-template .bb-pay-step-head     gap              14px
+  border      FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:46 .bb-template .bb-pay-step-head     border-bottom    1px solid rgba(15, 23, 42, 0.08)
+  border      FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:54 .bb-template .bb-pay-step-logo     border           1px solid rgba(15, 23, 42, 0.06)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:81 .bb-template .bb-pay-step-sub      margin           2px 0 0
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:81 .bb-template .bb-pay-step-sub      font-size        0.9rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:87 .bb-template .bb-pay-step-amount   gap              6px 14px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:87 .bb-template .bb-pay-step-amount   margin           18px 0 4px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:87 .bb-template .bb-pay-step-amount   padding          16px 18px
+  border      FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:87 .bb-template .bb-pay-step-amount   border           1px solid rgba(37, 99, 235, 0.16)
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:100 .bb-template .bb-pay-step-amount-l font-size        0.85rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:106 .bb-template .bb-pay-step-amount-v font-size        1.35rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:112 .bb-template .bb-pay-step-ref      font-size        0.8rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:123 .bb-template .bb-pay-step-actions  gap              14px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:123 .bb-template .bb-pay-step-actions  margin           20px 0 0
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:137 .bb-template .bb-pay-step-back     font-size        0.88rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/payment-step.css:161 .bb-template .bb-pay-step-card     padding          22px 18px 20px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:11 .bb-receipt-modal                  padding          3vh 16px
+  colour      FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:26 .bb-receipt-modal-backdrop         background       rgba(15, 23, 42, 0.4)
+  colour      FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:35 .bb-receipt-modal-panel            background       #f8fafc
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:35 .bb-receipt-modal-panel            padding          12px
+  colour      FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:74 .bb-receipt-modal-close            background       rgba(15, 23, 42, 0.08)
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:74 .bb-receipt-modal-close            font-size        1.4rem
+  colour      FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:91 .bb-receipt-modal-close:hover      background       rgba(15, 23, 42, 0.16)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:104 .bb-receipt-modal-reopen           margin           12px 0 4px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:116 .bb-receipt-modal                  padding          12px 8px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/receipt-modal.css:120 .bb-receipt-modal-panel            padding          8px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-base.css:42 .bb-template .bb-empty-state       padding          40px 32px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:25 .bb-template .bb-booking-form      padding          32px 30px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:33 .bb-template .bb-booking-grid      gap              18px 22px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:39 .bb-template .bb-booking-field     margin           0 0 18px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:39 .bb-template .bb-booking-field     gap              6px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:46 .bb-template .bb-booking-field lab font-size        0.9rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:54 .bb-template .bb-booking-field inp padding          12px 14px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:79 .bb-template .bb-booking-availabil gap              8px 28px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:79 .bb-template .bb-booking-availabil margin           0 0 22px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:79 .bb-template .bb-booking-availabil padding          16px 20px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:91 .bb-template .bb-booking-availabil gap              8px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:91 .bb-template .bb-booking-availabil font-size        0.95rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:104 .bb-template .bb-booking-availabil font-size        1.05rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:109 .bb-template .bb-booking-availabil font-size        0.86rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:114 .bb-template .bb-booking-notice    padding          14px 18px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:123 .bb-template .bb-booking-next-slot margin           10px 0 0
+  border      FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:123 .bb-template .bb-booking-next-slot border-top       1px dashed rgba(138, 36, 36, 0.35)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-booking-form.css:134 .bb-template .bb-booking-submit    margin           6px 0 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation-form.css:21 .bb-template .bb-consultation-form padding          32px 30px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation-form.css:29 .bb-template .bb-consultation-grid gap              18px 22px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation-form.css:35 .bb-template .bb-consultation-fiel margin           0 0 18px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation-form.css:35 .bb-template .bb-consultation-fiel gap              6px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-consultation-form.css:42 .bb-template .bb-consultation-fiel font-size        0.9rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation-form.css:54 .bb-template .bb-consultation-fiel padding          12px 14px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation-form.css:78 .bb-template .bb-consultation-subm margin           6px 0 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation-form.css:88 .bb-template .bb-consultation-noti padding          14px 18px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation.css:19 .bb-template .bb-section-consultat margin           0 auto 24px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation.css:24 .bb-template .bb-section-consultat margin           0 0 12px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation.css:39 .bb-template .bb-section-consultat margin           8px auto 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-consultation.css:39 .bb-template .bb-section-consultat padding          14px 24px
+  colour      FRONTEND  PLUGIN/assets/css/frontend/section-consultation.css:58 .bb-template-luxury .bb-section-co background       linear-gradient(135deg, #b8843c, #dcc29c
+  colour      FRONTEND  PLUGIN/assets/css/frontend/section-consultation.css:58 .bb-template-luxury .bb-section-co color            #2a1c05
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-faq.css:11 .bb-template .bb-faq-list          gap              14px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-faq.css:19 .bb-template .bb-faq-item          padding          22px 24px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-faq.css:28 .bb-template .bb-faq-item h3       margin           0 0 10px !important
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-faq.css:28 .bb-template .bb-faq-item h3       font-size        1.08rem !important
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-faq.css:40 .bb-template .bb-faq-item h3::befo font-size        0.72rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:25 .bb-template .bb-lawyer-profile-he gap              36px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:60 .bb-template .bb-lawyer-profile-na margin           0 0 10px !important
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:60 .bb-template .bb-lawyer-profile-na font-size        clamp(2rem, 4vw, 2.8rem) !important
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:69 .bb-template .bb-lawyer-profile-ro margin           0 0 16px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:69 .bb-template .bb-lawyer-profile-ro font-size        0.95rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:78 .bb-template .bb-lawyer-profile-ar gap              10px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:85 .bb-template .bb-lawyer-profile-ar padding          7px 14px
+  colour      FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:85 .bb-template .bb-lawyer-profile-ar background       rgba(37, 99, 235, 0.08)
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:85 .bb-template .bb-lawyer-profile-ar font-size        0.82rem
+  colour      FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:97 .bb-template .bb-lawyer-profile-ar background       rgba(37, 99, 235, 0.16)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:101 .bb-template .bb-lawyer-profile-le margin           0 0 24px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:101 .bb-template .bb-lawyer-profile-le font-size        1.05rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:108 .bb-template .bb-lawyer-profile-co gap              12px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:114 .bb-template .bb-lawyer-profile-bo gap              36px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:121 .bb-template .bb-lawyer-profile-se margin           0 0 16px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:121 .bb-template .bb-lawyer-profile-se font-size        1.5rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:133 .bb-template .bb-lawyer-profile-si gap              16px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:139 .bb-template .bb-lawyer-profile-fa padding          18px 20px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:147 .bb-template .bb-lawyer-profile-fa font-size        0.78rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyer-profile.css:163 .bb-template .bb-lawyer-profile-so gap              12px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyers.css:49 .bb-template .bb-lawyer-body       gap              6px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyers.css:49 .bb-template .bb-lawyer-body       padding          20px 22px 24px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-lawyers.css:61 .bb-template .bb-lawyer-body h3    font-size        1.18rem !important
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-lawyers.css:81 .bb-template .bb-lawyer-meta       margin           2px 0 6px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-lawyers.css:81 .bb-template .bb-lawyer-meta       font-size        0.88rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-lawyers.css:93 .bb-template .bb-lawyer-body a     font-size        0.9rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-legal-services.css:13 .bb-template .bb-service-card      gap              12px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-legal-services.css:13 .bb-template .bb-service-card      padding          26px 24px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-legal-services.css:70 .bb-template .bb-service-card h3   font-size        1.15rem !important
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:16 .bb-template .bb-payment-methods   margin           18px 0 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:22 .bb-template .bb-payment-legend    margin           0 0 12px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:30 .bb-template .bb-payment-grid      gap              12px
+  colour      FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:49 .bb-template .bb-payment-option:ho border-color     rgba(37, 99, 235, 0.45)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:62 .bb-template .bb-payment-option-bo gap              12px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:62 .bb-template .bb-payment-option-bo padding          14px 44px 14px 16px
+  colour      FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:71 .bb-template .bb-payment-option:ha background       rgba(37, 99, 235, 0.04)
+  border      FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:77 .bb-template .bb-payment-check     border           2px solid rgba(15, 23, 42, 0.25)
+  border      FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:110 .bb-template .bb-payment-logo      border           1px solid rgba(15, 23, 42, 0.06)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:131 .bb-template .bb-payment-option-te gap              2px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:138 .bb-template .bb-payment-option-na font-size        0.95rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:144 .bb-template .bb-payment-option-de font-size        0.82rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:150 .bb-template .bb-payment-secure    gap              8px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:150 .bb-template .bb-payment-secure    margin           14px 0 0
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:150 .bb-template .bb-payment-secure    font-size        0.82rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:159 .bb-template .bb-payment-secure-ic font-size        0.9rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:163 .bb-template .bb-payment-unconfigu padding          14px 16px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:176 .bb-rtl .bb-template .bb-payment-o padding          14px 16px 14px 44px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:199 .bb-template .bb-manual-instructio margin           14px 0 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:199 .bb-template .bb-manual-instructio padding          16px 18px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:207 .bb-template .bb-manual-head       gap              12px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:213 .bb-template .bb-manual-icon       font-size        1.3rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:219 .bb-template .bb-manual-title      margin           0 0 2px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:219 .bb-template .bb-manual-title      font-size        0.98rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:226 .bb-template .bb-manual-note       font-size        0.84rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:233 .bb-template .bb-manual-rows       margin           14px 0 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:233 .bb-template .bb-manual-rows       gap              8px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:240 .bb-template .bb-manual-row        gap              14px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:240 .bb-template .bb-manual-row        padding          9px 12px
+  border      FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:240 .bb-template .bb-manual-row        border           1px solid rgba(15, 23, 42, 0.06)
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:252 .bb-template .bb-manual-row-label  font-size        0.82rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:259 .bb-template .bb-manual-row-value  gap              8px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:266 .bb-template .bb-manual-value      font-size        0.9rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:274 .bb-template .bb-manual-copy       padding          3px 10px
+  border      FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:274 .bb-template .bb-manual-copy       border           1px solid rgba(37, 99, 235, 0.3)
+  colour      FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:274 .bb-template .bb-manual-copy       background       rgba(37, 99, 235, 0.06)
+  colour      FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:287 .bb-template .bb-manual-copy:hover background       rgba(37, 99, 235, 0.12)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:291 .bb-template .bb-manual-help       margin           12px 0 0
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:291 .bb-template .bb-manual-help       font-size        0.84rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:298 .bb-template .bb-manual-help p     margin           0 0 6px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:302 .bb-template .bb-manual-fields     gap              14px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:308 .bb-template .bb-manual-field      gap              6px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:315 .bb-template .bb-manual-field labe font-size        0.86rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:322 .bb-template .bb-manual-input,
+.bb padding          11px 13px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:344 .bb-template .bb-manual-error      font-size        0.78rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:350 .bb-template .bb-manual-hint       font-size        0.76rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:355 .bb-template .bb-manual-verified   gap              8px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:355 .bb-template .bb-manual-verified   margin           14px 0 0
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:355 .bb-template .bb-manual-verified   font-size        0.8rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-payment.css:365 .bb-template .bb-manual-verified-i font-size        0.9rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-practice-areas.css:17 .bb-template .bb-practice-area-car padding          26px 24px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-practice-areas.css:44 .bb-template .bb-practice-area-car margin           0 0 10px !important
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-practice-areas.css:44 .bb-template .bb-practice-area-car font-size        1.15rem !important
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-services.css:70 .bb-template .bb-services .bb-serv font-size        1.25rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-testimonials.css:25 .bb-template .bb-testimonial-card  gap              14px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-testimonials.css:25 .bb-template .bb-testimonial-card  padding          28px 26px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-testimonials.css:39 .bb-template .bb-testimonial-card: font-size        96px
+  colour      FRONTEND  PLUGIN/assets/css/frontend/section-testimonials.css:39 .bb-template .bb-testimonial-card: color            rgba(148, 163, 184, 0.18)
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-testimonials.css:71 .bb-template .bb-testimonial-ratin font-size        1.15rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-testimonials.css:81 .bb-template .bb-testimonial-card  font-size        1rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/section-testimonials.css:108 .bb-template .bb-testimonial-card  margin           4px 0 0 !important
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-testimonials.css:108 .bb-template .bb-testimonial-card  font-size        1.15rem !important
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-testimonials.css:122 .bb-template .bb-testimonial-card  font-size        0.88rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-variants.css:279 .bb-template .bb-service-card--min font-size        1.1em
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/section-variants.css:343 .bb-template .bb-practice-area-car font-size        1.1em
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:13 .bb-template .bb-lookup-form       padding          28px 26px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:21 .bb-template .bb-lookup-types      margin           0 0 18px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:27 .bb-template .bb-lookup-legend     margin           0 0 10px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:35 .bb-template .bb-lookup-tabs       gap              6px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:35 .bb-template .bb-lookup-tabs       padding          5px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:57 .bb-template .bb-lookup-tab span   padding          9px 18px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:57 .bb-template .bb-lookup-tab span   font-size        0.9rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:81 .bb-template .bb-lookup-fields     gap              16px 18px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:87 .bb-template .bb-lookup-field      gap              6px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:93 .bb-template .bb-lookup-field labe font-size        0.88rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:99 .bb-template .bb-lookup-field inpu padding          12px 14px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:123 .bb-template .bb-lookup-error      font-size        0.78rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:133 .bb-template .bb-lookup-submit     margin           20px 0 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:137 .bb-template .bb-lookup-button     gap              10px
+  border      FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:147 .bb-template .bb-lookup-spinner    border           2px solid rgba(255, 255, 255, 0.45)
+  colour      FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:147 .bb-template .bb-lookup-spinner    border-top-color #fff
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:173 .bb-template .bb-lookup-notice     margin           16px 0 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:173 .bb-template .bb-lookup-notice     padding          12px 14px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:173 .bb-template .bb-lookup-notice     font-size        0.88rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:189 .bb-template .bb-lookup-result     padding          26px 26px 20px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:210 .bb-template .bb-lookup-result-hea gap              12px
+  border      FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:210 .bb-template .bb-lookup-result-hea border-bottom    1px solid rgba(15, 23, 42, 0.08)
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:219 .bb-template .bb-lookup-result-tit font-size        1.15rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:226 .bb-template .bb-lookup-badge      padding          4px 12px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:226 .bb-template .bb-lookup-badge      font-size        0.8rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:248 .bb-template .bb-lookup-result-hea gap              10px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:254 .bb-template .bb-lookup-result-act gap              12px
+  border      FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:254 .bb-template .bb-lookup-result-act border-top       1px solid rgba(15, 23, 42, 0.08)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:264 .bb-template .bb-lookup-new-search gap              8px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:270 .bb-template .bb-lookup-result-clo padding          10px 16px
+  colour      FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:283 .bb-template .bb-lookup-result-clo border-color     rgba(15, 23, 42, 0.28)
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:289 .bb-template .bb-lookup-table      margin           14px 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:296 .bb-template .bb-lookup-table th,. padding          9px 6px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:296 .bb-template .bb-lookup-table th,. font-size        0.9rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:318 .bb-template .bb-lookup-timeline   gap              8px 18px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:318 .bb-template .bb-lookup-timeline   margin           16px 0 4px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:327 .bb-template .bb-lookup-step       gap              7px
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:327 .bb-template .bb-lookup-step       font-size        0.85rem
+  font-size   FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:335 .bb-template .bb-lookup-step-dot   font-size        0.7rem
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:357 .bb-template .bb-lookup-receipt    margin           16px 0 0
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:361 .bb-template .bb-lookup-receipt a  gap              8px
+  spacing     FRONTEND  PLUGIN/assets/css/frontend/status-lookup.css:385 .bb-template .bb-lookup-form,  .bb padding          20px 18px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/builder-header.css:39 .bb-builder-header-titles          gap              4px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/builder-header.css:45 .bb-builder-header h3              font-size        18px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/builder-header.css:53 .bb-builder-header .description    font-size        13.5px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/builder-header.css:71 .bb-builder-actions label          font-size        14px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/builder-header.css:117 .bb-builder-template label         font-size        14px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/builder-header.css:160 .bb-builder-sections-header h4     font-size        16px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/builder-header.css:167 .bb-builder-sections-header span   font-size        13px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/builder-header.css:176 .bb-builder-empty                  font-size        15px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/buttons.css:125 .bb-btn-neutral:hover,.bb-section- color            #000000 !important
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/buttons.css:156 .bb-btn-ghost,.bb-close-section-ed font-size        20px !important
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/buttons.css:228 .bb-btn .dashicons,.bb-live-previe font-size        18px !important
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:14 .bb-kicker-label                   padding          6px 14px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:14 .bb-kicker-label                   font-size        12px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:29 .bb-section-title                  font-size        clamp(2.25rem, 4vw, 3.25rem)
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:38 .bb-section-description            font-size        1.125rem
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:78 .bb-about-image-placeholder        font-size        1.25rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:102 .bb-about-metrics div              background       rgba(255, 255, 255, 0.6)
+  border      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:102 .bb-about-metrics div              border           1px solid rgba(255, 255, 255, 0.8)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:114 .bb-about-metrics div:hover        background       rgba(255, 255, 255, 0.9)
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:120 .bb-about-metrics strong           font-size        1.75rem
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:129 .bb-about-metrics span             font-size        12px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:179 .bb-feature-icon                   font-size        26px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:201 .bb-feature-card h3                font-size        1.25rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:232 .bb-cta-band::after                background       radial-gradient(circle, rgba(37,99,235,0
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:244 .bb-cta-copy h2                    color            #ffffff
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:244 .bb-cta-copy h2                    font-size        clamp(2.25rem, 4vw, 3rem)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:253 .bb-cta-copy p                     color            rgba(248, 250, 252, 0.85)
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:253 .bb-cta-copy p                     font-size        1.125rem
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:261 .bb-primary-button                 padding          16px 28px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:261 .bb-primary-button                 color            #ffffff
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:261 .bb-primary-button                 font-size        1rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:278 .bb-primary-button:hover           color            #ffffff
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:284 .bb-primary-button-light           background       linear-gradient(135deg, #ffffff, #f1f5f9
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:290 .bb-primary-button-light:hover     background       #ffffff
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/content-sections.css:339 .bb-section-card-title             font-size        1.25rem
+  border      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:11 .bb-icon-picker                    border           1px solid #dcdcde
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:11 .bb-icon-picker                    background       #fff
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:11 .bb-icon-picker                    padding          8px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:24 .bb-icon-picker-grid               gap              6px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:24 .bb-icon-picker-grid               padding          2px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:33 .bb-icon-picker-category           font-size        11px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:33 .bb-icon-picker-category           color            #646970
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:43 .bb-icon-picker-tile               gap              4px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:43 .bb-icon-picker-tile               padding          8px 4px
+  border      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:43 .bb-icon-picker-tile               border           1px solid #e0e0e0
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:43 .bb-icon-picker-tile               background       #fbfbfc
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:43 .bb-icon-picker-tile               color            #1d2327
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:43 .bb-icon-picker-tile               font-size        11px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:61 .bb-icon-picker-tile:hover,
+.bb-ic border-color     #2271b1
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:61 .bb-icon-picker-tile:hover,
+.bb-ic background       #f0f6fc
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:66 .bb-icon-picker-tile.is-selected   border-color     #2271b1
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:66 .bb-icon-picker-tile.is-selected   background       #f0f6fc
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:72 .bb-icon-picker-tile > i           font-size        18px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:81 .bb-icon-picker-empty              margin           8px 0 0
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/icon-picker.css:81 .bb-icon-picker-empty              color            #646970
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/image-uploader.css:42 .bb-preview-img                    background-color #ffffff
+  background  PREVIEW   PLUGIN/assets/css/page-admin/components/image-uploader.css:42 .bb-preview-img                    background-image linear-gradient(45deg, #f1f5f9 25%, tran
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/live-preview.css:34 .bb-live-preview-overlay           background       rgba(15, 23, 42, 0.5)
+  background  PREVIEW   PLUGIN/assets/css/page-admin/components/live-preview.css:78 .bb-live-preview-header::before    background-image radial-gradient(circle, #ed6a5e 6px, tra
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/live-preview.css:94 .bb-live-preview-header h3         font-size        13px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:34 .bb-section-editor-overlay         background-color rgba(15, 23, 42, 0.6)
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:63 .bb-section-editor-header          padding          16px 24px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:75 .bb-section-editor-header h2       font-size        1.125rem
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:124 .bb-section-editor-preview-header  padding          16px 24px 12px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:129 .bb-section-editor-preview-header  font-size        14px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:138 .bb-section-editor-preview-body    padding          0 24px 24px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:169 .bb-section-editor-preview-card h4 font-size        1.15rem
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:176 .bb-section-editor-preview-card p  font-size        13px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:183 .bb-preview-badge, .bb-preview-pil padding          4px 10px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:183 .bb-preview-badge, .bb-preview-pil font-size        10px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:204 .bb-preview-visual                 background       linear-gradient(135deg, #e0e7ff, #c7d2fe
+  border      PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:204 .bb-preview-visual                 border           1px solid rgba(99, 102, 241, 0.15)
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:215 .bb-preview-visual.is-empty        font-size        12px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:238 .bb-section-editor-field label     font-size        13px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:251 .bb-section-editor-description     margin           0 0 8px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:251 .bb-section-editor-description     font-size        12.5px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:263 .bb-section-editor-field input[typ padding          0 12px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:263 .bb-section-editor-field input[typ font-size        14px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:288 .bb-section-editor-field textarea  padding          12px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:296 .bb-checkbox-field                 font-size        14px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:344 .bb-repeater-subfield label        font-size        11px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:354 .bb-section-editor-footer          padding          16px 24px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:369 .bb-section-editor-footer .button, padding          0 24px !important
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-editor.css:369 .bb-section-editor-footer .button, font-size        14px !important
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/section-list.css:60 .bb-section-item-info              gap              3px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-list.css:68 .bb-section-item-info strong       font-size        14px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/section-list.css:76 .bb-section-item-info span         font-size        12px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:63 .bb-slider-overlay                 background       linear-gradient(        to right,       
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:75 .bb-slider-overlay-light           background       linear-gradient(        to right,       
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:91 .bb-slider-content                 color            #ffffff
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:129 .bb-slider-eyebrow                 padding          6px 14px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:129 .bb-slider-eyebrow                 background       rgba(255, 255, 255, 0.15)
+  border      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:129 .bb-slider-eyebrow                 border           1px solid rgba(255, 255, 255, 0.25)
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:129 .bb-slider-eyebrow                 font-size        0.75rem
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:145 .bb-slider-content h2              font-size        clamp(2.5rem, 5vw, 5rem)
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:155 .bb-slider-content p               font-size        1.125rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:169 .bb-slider-overlay-light + .bb-sli background       rgba(0, 0, 0, 0.05)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:169 .bb-slider-overlay-light + .bb-sli border-color     rgba(0, 0, 0, 0.1)
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:175 .bb-slider-button                  padding          16px 32px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:175 .bb-slider-button                  background       linear-gradient(135deg, #ffffff, #f1f5f9
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:175 .bb-slider-button                  color            #0f172a
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:175 .bb-slider-button                  font-size        1rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:191 .bb-slider-overlay-light + .bb-sli color            #ffffff
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:205 .bb-slider-nav-wrap                gap              12px
+  border      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:214 .bb-slider-nav                     border           1px solid rgba(255, 255, 255, 0.2)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:214 .bb-slider-nav                     background       rgba(15, 23, 42, 0.4)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:214 .bb-slider-nav                     color            #ffffff
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:214 .bb-slider-nav                     font-size        1.25rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:231 .bb-slider-nav:hover               background       rgba(15, 23, 42, 0.7)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:231 .bb-slider-nav:hover               border-color     rgba(255, 255, 255, 0.4)
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:237 .bb-slider-dots                    gap              12px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:246 .bb-slider-dot                     background       rgba(255, 255, 255, 0.3)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:258 .bb-slider-dot:hover               background       rgba(255, 255, 255, 0.6)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/slider.css:262 .bb-slider-dot.is-active           background       #ffffff
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:40 .bb-template-modern                background       radial-gradient(circle at 0% 0%, rgba(59
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:48 .bb-template-luxury                background       radial-gradient(circle at 100% 0%, rgba(
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:105 .bb-template-modern .bb-section    background       linear-gradient(180deg, rgba(255, 255, 2
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:109 .bb-template-luxury .bb-section    background       linear-gradient(180deg, rgba(255, 255, 2
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:155 .bb-template-modern .bb-section-in background       linear-gradient(90deg, transparent, rgba
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:167 .bb-template-modern .bb-section h2 font-size        clamp(2rem, 4vw, 3rem)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:175 .bb-template-modern .bb-section h2 color            #0f172a
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:175 .bb-template-modern .bb-section h2 background       linear-gradient(90deg, #0f172a, #334155)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:182 .bb-template-luxury .bb-section h2 color            #1a1a1a
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:189 .bb-template-modern .bb-section p, color            #475569
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:189 .bb-template-modern .bb-section p, font-size        1.125rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:196 .bb-template-luxury .bb-section .b background       linear-gradient(90deg, #d4af37, #f3e5ab,
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:216 .bb-header-bar,.bb-footer-bar      padding          16px 28px
+  border      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:216 .bb-header-bar,.bb-footer-bar      border           1px solid rgba(255, 255, 255, 0.6)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:216 .bb-header-bar,.bb-footer-bar      background       rgba(255, 255, 255, 0.65)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:249 .bb-template-luxury .bb-header-bar background       rgba(255, 255, 255, 0.75)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:249 .bb-template-luxury .bb-header-bar border-color     rgba(184, 134, 60, 0.15)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:256 .bb-template-luxury .bb-header-ent background       linear-gradient(180deg, #b8863c, #e8cba5
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:264 .bb-header-brand,.bb-footer-brand  font-size        1.35rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:264 .bb-header-brand,.bb-footer-brand  color            #0f172a
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:282 .bb-header-nav a,.bb-footer-meta s color            #475569
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:282 .bb-header-nav a,.bb-footer-meta s font-size        0.95rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:297 .bb-template-luxury .bb-header-nav color            #b8863c
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:324 .bb-header-contact-links           gap              14px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:324 .bb-header-contact-links           font-size        0.85rem
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:331 .bb-header-contact-links a         color            #64748b
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:338 .bb-header-contact-links a:hover   color            #0f172a
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:345 .bb-header-cta                     background       linear-gradient(135deg, #0f172a, #334155
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:345 .bb-header-cta                     color            #ffffff !important
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:345 .bb-header-cta                     padding          12px 24px
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:345 .bb-header-cta                     font-size        0.95rem
+  border      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:345 .bb-header-cta                     border           1px solid rgba(255, 255, 255, 0.1)
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:362 .bb-header-cta:hover               background       linear-gradient(135deg, #000000, #1e293b
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:368 .bb-template-luxury .bb-header-cta background       linear-gradient(135deg, #b8863c, #8a5c18
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:373 .bb-template-luxury .bb-header-cta background       linear-gradient(135deg, #d4af37, #9c6f1c
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:381 .bb-footer-bar                     padding          32px 28px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:393 .bb-footer-brand p                 margin           12px 0 0
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:393 .bb-footer-brand p                 color            #64748b
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:393 .bb-footer-brand p                 font-size        0.9rem
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:401 .bb-footer-meta                    gap              12px
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:407 .bb-footer-socials                 gap              16px
+  colour      PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:413 .bb-footer-copyright               color            #64748b
+  font-size   PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:413 .bb-footer-copyright               font-size        0.9rem
+  spacing     PREVIEW   PLUGIN/assets/css/page-admin/components/template-shell.css:425 .bb-header-bar, .bb-footer-bar     padding          20px
+
+  literals by kind: spacing=168 border=20 font-size=115 colour=83 background=2
+
+== E. PREVIEW vs LIVE DIVERGENCE (┬º58/┬º59) ==
+  shared selectors: 2
+  divergences: 0
+
+== F. LITERAL BORDERS ON STRUCTURAL SELECTORS (┬º57) ==
+  THEME     .bb-theme              THEME/assets/css/components.css:12         border             2px solid transparent
+  THEME     .bb-theme              THEME/assets/css/components.css:78         border-color       transparent
+  THEME     .bb-theme              THEME/assets/css/footer.css:55             border-top         1px solid rgba(255, 255, 255, 0.15)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/animations.css:287 border-radius      50%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/billing-form.css:122 border-color       rgba(15, 23, 42, 0.28)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:27 border             2px solid transparent
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:468 border-radius      50%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:568 border             2px solid transparent
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/components.css:968 border-radius      50%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-identity.css:177 border-style       solid
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-identity.css:193 border-color       transparent
+  FRONTEND  .bb-theme              PLUGIN/assets/css/frontend/design-sections.css:774 border-radius      50%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/design-sections.css:945 border-style       solid
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:46 border-bottom      1px solid rgba(15, 23, 42, 0.08)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:54 border             1px solid rgba(15, 23, 42, 0.06)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/payment-step.css:87 border             1px solid rgba(37, 99, 235, 0.16)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:25 border-radius      20px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-booking-form.css:123 border-top         1px dashed rgba(138, 36, 36, 0.35)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-consultation-form.css:21 border-radius      20px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:33 border-radius      26px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:39 border-radius      26px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-lawyer-profile.css:139 border-radius      16px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:49 border-color       rgba(37, 99, 235, 0.45)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:62 border-radius      14px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:77 border-radius      999px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:77 border             2px solid rgba(15, 23, 42, 0.25)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:110 border             1px solid rgba(15, 23, 42, 0.06)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:240 border             1px solid rgba(15, 23, 42, 0.06)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-payment.css:274 border             1px solid rgba(37, 99, 235, 0.3)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-services.css:115 border-color       transparent
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-testimonials.css:52 border-radius      50%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-testimonials.css:62 border-radius      50%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-variants.css:204 border-color       transparent
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-variants.css:267 border-color       transparent
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/section-variants.css:331 border-color       transparent
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:57 border-radius      9px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:147 border-radius      50%
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:147 border             2px solid rgba(255, 255, 255, 0.45)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:147 border-top-color   #fff
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:173 border-radius      10px
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:210 border-bottom      1px solid rgba(15, 23, 42, 0.08)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:254 border-top         1px solid rgba(15, 23, 42, 0.08)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:283 border-color       rgba(15, 23, 42, 0.28)
+  FRONTEND  .bb-template           PLUGIN/assets/css/frontend/status-lookup.css:289 border-collapse    collapse
+  PREVIEW   .bb-section            PLUGIN/assets/css/page-admin/components/template-shell.css:196 border-radius      999px
+  total: 45
+
+== ENVIRONMENT ==
+  theme: astra | site: 1 | business type: n/a

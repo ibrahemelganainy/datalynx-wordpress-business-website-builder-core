@@ -6,11 +6,32 @@
 /* ---------------------------------------------------
  * Base Template Shell
  * --------------------------------------------------- */
+/*
+ * PHASE 24 §58/§59 — PREVIEW MUST NOT OWN PRESENTATION.
+ *
+ * These two declarations used to read ADMIN-scope tokens:
+ *
+ *     color:       var(--bb-text-dark, #0f172a)
+ *     font-family: var(--bb-font-family, "Inter", "Segoe UI", …)
+ *
+ * `--bb-text-dark` and `--bb-font-family` are declared in
+ * `assets/css/page-admin/variables.css` — they belong to the ADMIN chrome, not
+ * to the design system. Because they resolve inside the preview document, the
+ * preview shell WON over the customer's design: the Studio preview always drew
+ * text in #0f172a and in the admin system font, no matter which font or text
+ * colour was selected. That is exactly the "saved = yes, preview = no"
+ * condition §58 defines as broken, and it is why font selections appeared not
+ * to work in Preview.
+ *
+ * The expressions below are now byte-identical to the LIVE site's own
+ * declarations (`design-tokens.css` for `.bb-template`), including their
+ * fallbacks, so preview === live whichever stylesheet set the iframe loads.
+ */
 .bb-template {
     display: block;
     width: 100%;
-    color: var(--bb-text-dark, #0f172a);
-    font-family: var(--bb-font-family, "Inter", "Segoe UI", Arial, sans-serif);
+    color: var(--bb-color-text, #374151);
+    font-family: var(--bb-font-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -36,9 +57,36 @@
  * --------------------------------------------------- */
 .bb-section {
     position: relative;
-    padding: clamp(3rem, 6vw, 6rem) 0;
-    border-bottom: 1px solid rgba(15, 23, 42, 0.03);
-    
+
+    /*
+     * PHASE 24 §5 — "ZERO MEANS ZERO" IN PREVIEW TOO.
+     *
+     * This used to be `padding: clamp(3rem, 6vw, 6rem) 0`, a literal rhythm no
+     * control could reach, so the Studio's "Section rhythm" slider never moved
+     * the preview and the preview never matched live. The live site's
+     * authoritative owner for this property is
+     * `design-sections.css` -> `.bb-template .bb-section { padding-block:
+     * var(--bb-section-spacing, 0px) }`; the expression (and fallback) is
+     * mirrored here so both render identically.
+     */
+    padding-block: var(--bb-section-spacing, clamp(3rem, 6vw, 6rem));
+    padding-inline: var(--bb-section-padding-inline, 0px);
+
+    /*
+     * PHASE 24 §57 — REMOVE THE UNWANTED BORDER.
+     *
+     * `border-bottom: 1px solid rgba(15, 23, 42, 0.03)` drew a divider under
+     * every section in the PREVIEW ONLY. The live site has no such rule:
+     * borders there are opt-in (`--bb-section-border-width` defaults to 0 and
+     * `--bb-section-border-style` to `none`). The result was a preview that
+     * looked subtly different from the live site for no reason the customer
+     * could control. The three token reads below are the live site's own
+     * declarations, so a Design that WANTS a border still gets one.
+     */
+    border-width: var(--bb-section-border-width, 0px);
+    border-style: var(--bb-section-border-style, none);
+    border-color: var(--bb-section-border-color, var(--bb-color-border, #e5e7eb));
+
     /*
      * FIX (screenshots showing cropped decorative shapes at
      * the bottom of a section): without a defined bound,
@@ -69,9 +117,33 @@
 }
 
 .bb-section-inner {
-    max-width: var(--bb-container-width, 1280px);
-    margin: 0 auto;
-    padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+    /*
+     * PHASE 24 §5/§58 — THE ROOT CAUSE OF "SPACE AROUND THE CONTENT = 0"
+     * STILL LEAVING SPACE.
+     *
+     * This rule used to be:
+     *
+     *     max-width: var(--bb-container-width, 1280px);
+     *     margin: 0 auto;
+     *     padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+     *
+     * The `clamp()` was a hardcoded 20px-40px gutter per side. It meant the
+     * Studio's "Container side gutter" control — and therefore "Space around
+     * the content = 0" — could NEVER produce zero in the Preview: the preview
+     * kept a minimum of 20px on every side at any viewport. The live site
+     * honoured the control (`design-sections.css` reads
+     * `var(--bb-container-padding-block, 0px)`), so the preview and the live
+     * site disagreed, which is the §58 definition of broken.
+     *
+     * The fallback is also corrected from 1280px to 1200px so it matches the
+     * token's real declared value in the Theme (`tokens.css`:
+     * `--bb-container-width: 1200px`). Three different fallbacks for one
+     * property (1200 here, 1280 there, 1180 in the boxed layout) is a
+     * DUPLICATE, not a design decision — see the audit, finding B3.
+     */
+    max-width: var(--bb-container-width, 1200px);
+    margin-inline: auto;
+    padding-inline: var(--bb-container-padding-block, 0px);
 }
 
 .bb-template-modern .bb-section-inner {

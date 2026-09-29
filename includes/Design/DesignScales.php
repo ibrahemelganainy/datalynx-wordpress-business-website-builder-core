@@ -194,6 +194,67 @@ class DesignScales {
 					array( 'label' => __( 'Pronounced', 'business-builder' ), 'value' => '10px', 'bars' => 5 ),
 				),
 			),
+
+			/* ------------------------------------------------ Phase 23 — layout */
+			'section_gap' => array(
+				'label'   => __( 'Space between sections', 'business-builder' ),
+				'help'    => __( 'Extra breathing room BETWEEN sections, on top of each section\'s own padding.', 'business-builder' ),
+				'options' => array(
+					array( 'label' => __( 'None', 'business-builder' ),  'value' => '0px',  'bars' => 1 ),
+					array( 'label' => __( 'Tight', 'business-builder' ), 'value' => '24px', 'bars' => 3 ),
+					array( 'label' => __( 'Airy', 'business-builder' ),  'value' => '56px', 'bars' => 5 ),
+				),
+			),
+			'site_margin' => array(
+				'label'   => __( 'Space around the page', 'business-builder' ),
+				'help'    => __( 'A gap of background colour around the whole page. Useful with the boxed layout.', 'business-builder' ),
+				'options' => array(
+					array( 'label' => __( 'None', 'business-builder' ),        'value' => '0px',  'bars' => 1 ),
+					array( 'label' => __( 'Comfortable', 'business-builder' ), 'value' => '16px', 'bars' => 3 ),
+					array( 'label' => __( 'Wide', 'business-builder' ),        'value' => '40px', 'bars' => 5 ),
+				),
+			),
+
+			/* ------------------------------------------------ Phase 23 — navbar */
+			'nav_link_size' => array(
+				'label'   => __( 'Menu text size', 'business-builder' ),
+				'help'    => __( 'How large the navigation links are.', 'business-builder' ),
+				'options' => array(
+					array( 'label' => __( 'Small', 'business-builder' ),   'value' => '0.875rem', 'bars' => 2 ),
+					array( 'label' => __( 'Default', 'business-builder' ), 'value' => '1rem',     'bars' => 3 ),
+					array( 'label' => __( 'Large', 'business-builder' ),   'value' => '1.125rem', 'bars' => 5 ),
+				),
+			),
+			'nav_radius' => array(
+				'label'   => __( 'Menu link roundness', 'business-builder' ),
+				'help'    => __( 'Used by the pill indicator and by the hover background.', 'business-builder' ),
+				'options' => array(
+					array( 'label' => __( 'Square', 'business-builder' ),  'value' => '0px',  'bars' => 1 ),
+					array( 'label' => __( 'Soft', 'business-builder' ),    'value' => '8px',  'bars' => 3 ),
+					array( 'label' => __( 'Rounded', 'business-builder' ), 'value' => '16px', 'bars' => 4 ),
+					array( 'label' => __( 'Pill', 'business-builder' ),    'value' => '32px', 'bars' => 5 ),
+				),
+			),
+			'logo_height' => array(
+				'label'   => __( 'Logo height', 'business-builder' ),
+				'help'    => __( 'The height of the uploaded logo in the navbar.', 'business-builder' ),
+				'options' => array(
+					array( 'label' => __( 'Small', 'business-builder' ),  'value' => '32px', 'bars' => 2 ),
+					array( 'label' => __( 'Medium', 'business-builder' ), 'value' => '48px', 'bars' => 3 ),
+					array( 'label' => __( 'Large', 'business-builder' ),  'value' => '72px', 'bars' => 5 ),
+				),
+			),
+
+			/* ---------------------------------------------- Phase 23 — scrollbar */
+			'scrollbar_width' => array(
+				'label'   => __( 'Scrollbar thickness', 'business-builder' ),
+				'help'    => __( 'How wide the page scrollbar is. Applied only to the public site.', 'business-builder' ),
+				'options' => array(
+					array( 'label' => __( 'Thin', 'business-builder' ),    'value' => '6px',  'bars' => 1 ),
+					array( 'label' => __( 'Regular', 'business-builder' ), 'value' => '10px', 'bars' => 3 ),
+					array( 'label' => __( 'Wide', 'business-builder' ),    'value' => '16px', 'bars' => 5 ),
+				),
+			),
 		);
 
 		/**

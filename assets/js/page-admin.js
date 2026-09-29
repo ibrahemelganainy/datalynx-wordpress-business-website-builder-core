@@ -2126,6 +2126,17 @@ jQuery(function ($) {
             '" ' +
             'data-bb-field-type="select" ';
 
+        /*
+         * Phase 23 (§18): mark an icon select so assets/js/admin/icon-picker.js can
+         * upgrade it in place. An OPT-IN flag only — every other select is
+         * untouched, and a select without the flag keeps its native rendering.
+         */
+        if (field['data-bb-icon-picker']) {
+
+            html +=
+                'data-bb-icon-picker="1" ';
+        }
+
         if (field.multiple) {
 
             html +=
@@ -2856,7 +2867,13 @@ jQuery(function ($) {
                         fieldKey
                     ) +
                     '" ' +
-                    'data-repeater-field-type="select">';
+                    'data-repeater-field-type="select"' +
+                    (
+                        field['data-bb-icon-picker']
+                            ? ' data-bb-icon-picker="1"'
+                            : ''
+                    ) +
+                    '>';
 
                 Object.keys(
                     field.options || {}

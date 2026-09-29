@@ -274,6 +274,11 @@ class SectionRenderer {
             return;
         }
 
+        if ( 'services' === $type ) {
+            $this->render_services_section( $settings, $content );
+            return;
+        }
+
         if ( 'cta' === $type ) {
             $this->render_cta_section( $content );
             return;
@@ -436,9 +441,199 @@ class SectionRenderer {
     }
 
     /**
+     * Render the Global Services section (Phase 23 §7, §11, §26).
+     *
+     * ONE content model, five presentations. The mode only changes the CLASS the
+     * markup carries (`bb-services--<mode>`), so:
+     *   - the same prepared items render in every layout;
+     *   - the visual work stays in CSS (one stylesheet, no per-mode PHP);
+     *   - a NEW mode can be added by shipping CSS, not by touching this method.
+     *
+     * The markup reuses the same card/heading classes every other section uses
+     * (`.bb-section-inner`, `.bb-section-title`, `.bb-service-card`), which is why
+     * the Studio's global and per-section tokens reach this section with no extra
+     * wiring.
+     *
+     * @param array $settings Section settings.
+     * @param array $content  Section content.
+     */
+    protected function render_services_section( array $settings, array $content ): void {
+
+        $title       = isset( $content['title'] ) ? (string) $content['title'] : '';
+        $description = isset( $content['description'] ) ? (string) $content['description'] : '';
+
+        $modes = array( 'default', 'list', 'featured', 'icon-text', 'image-text' );
+
+        $variant = isset( $settings['variant'] ) ? sanitize_key( (string) $settings['variant'] ) : 'default';
+
+        if ( function_exists( 'bb_resolve_section_variant' ) ) {
+            $variant = bb_resolve_section_variant( 'services', $variant );
+        } elseif ( ! in_array( $variant, $modes, true ) ) {
+            $variant = 'default';
+        }
+
+        $styles = array( 'elevated', 'bordered', 'flat', 'minimal' );
+
+        $card_style = isset( $settings['card_style'] ) ? sanitize_key( (string) $settings['card_style'] ) : 'elevated';
+
+        if ( ! in_array( $card_style, $styles, true ) ) {
+            $card_style = 'elevated';
+        }
+
+        $columns = isset( $settings['columns'] ) ? absint( $settings['columns'] ) : 3;
+        $columns = max( 1, min( 4, $columns ) );
+
+        $align = isset( $settings['align'] ) && 'center' === $settings['align'] ? 'center' : 'start';
+
+        $items = isset( $content['items'] ) && is_array( $content['items'] ) ? $content['items'] : array();
+
+        $button_text = isset( $content['button_text'] ) ? (string) $content['button_text'] : '';
+        $button_url  = isset( $content['button_url'] ) ? (string) $content['button_url'] : '';
+
+        /*
+         * The Phase 11 variant architecture is REUSED, not duplicated: when a
+         * template is registered for this mode it renders instead, so a pack can
+         * override a layout without editing core.
+         */
+        if ( function_exists( 'bb_render_section_variant' ) ) {
+
+            $rendered = bb_render_section_variant(
+                'services',
+                $variant,
+                array(
+                    'items'    => $items,
+                    'settings' => $settings,
+                    'content'  => $content,
+                    'columns'  => $columns,
+                    'type'     => 'services',
+                    'style'    => $card_style,
+                )
+            );
+
+            if ( $rendered ) {
+                return;
+            }
+        }
+
+        $classes = array(
+            'bb-services',
+            'bb-services--' . $variant,
+            'bb-services--' . $card_style,
+            'bb-services--align-' . $align,
+        );
+
+        ?>
+        <div class="bb-section-inner">
+            <div
+                class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
+                style="--bb-services-columns: <?php echo esc_attr( (string) $columns ); ?>;"
+            >
+                <?php if ( '' !== $title || '' !== $description ) : ?>
+                    <div class="bb-section-heading">
+                        <?php if ( '' !== $title ) : ?>
+                            <h2 class="bb-section-title"><?php echo esc_html( $title ); ?></h2>
+                        <?php endif; ?>
+
+                        <?php if ( '' !== $description ) : ?>
+                            <div class="bb-section-description"><?php echo wp_kses_post( $description ); ?></div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $items ) ) : ?>
+                    <div class="bb-services-list bb-grid bb-grid-columns-<?php echo esc_attr( (string) $columns ); ?>">
+                        <?php $this->render_service_items( $items ); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ( '' !== $button_text && '' !== $button_url ) : ?>
+                    <div class="bb-services-actions">
+                        <a class="bb-button bb-button--primary" href="<?php echo esc_url( $button_url ); ?>">
+                            <?php echo esc_html( $button_text ); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render the prepared items of a services section.
+     *
+     * Kept separate so the inline layouts and any variant template share ONE
+     * definition of what a service item looks like.
+     *
+     * @param array $items Prepared items.
+     */
+    protected function render_service_items( array $items ): void {
+
+        /*
+         * Delegated to the shared helper so the inline renderer and every
+         * registered `services` variant template produce identical cards.
+         */
+        if ( function_exists( 'bb_render_service_items' ) ) {
+            bb_render_service_items( $items );
+
+            return;
+        }
+
+        foreach ( $items as $item ) {
+
+            if ( ! is_array( $item ) ) {
+                continue;
+            }
+
+            $item_title = isset( $item['title'] ) ? (string) $item['title'] : '';
+            $item_text  = isset( $item['description'] ) ? (string) $item['description'] : '';
+            $link_url   = isset( $item['link_url'] ) ? (string) $item['link_url'] : '';
+            $link_text  = isset( $item['link_text'] ) ? (string) $item['link_text'] : '';
+            $image_id   = isset( $item['image'] ) ? absint( $item['image'] ) : 0;
+            $icon       = isset( $item['icon'] ) ? (string) $item['icon'] : '';
+
+            $icon_html = function_exists( 'bb_render_icon' )
+                ? bb_render_icon( $icon, array( 'label' => $item_title ) )
+                : '';
+
+            ?>
+            <article class="bb-service-card">
+                <?php if ( $image_id > 0 ) : ?>
+                    <div class="bb-service-card-media">
+                        <?php echo wp_get_attachment_image( $image_id, 'medium_large', false, array( 'loading' => 'lazy' ) ); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ( '' !== $icon_html ) : ?>
+                    <div class="bb-service-card-icon">
+                        <?php echo $icon_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- produced by the validated icon renderer. ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="bb-service-card-body">
+                    <?php if ( '' !== $item_title ) : ?>
+                        <h3 class="bb-service-card-title"><?php echo esc_html( $item_title ); ?></h3>
+                    <?php endif; ?>
+
+                    <?php if ( '' !== $item_text ) : ?>
+                        <div class="bb-service-card-text"><?php echo wp_kses_post( $item_text ); ?></div>
+                    <?php endif; ?>
+
+                    <?php if ( '' !== $link_url ) : ?>
+                        <a class="bb-service-card-link" href="<?php echo esc_url( $link_url ); ?>">
+                            <?php echo esc_html( '' !== $link_text ? $link_text : __( 'Learn more', 'business-builder' ) ); ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </article>
+            <?php
+        }
+    }
+
+    /**
      * Render a hero section.
      */
     protected function render_hero_section( array $settings, array $content ): void {
+
 
         $title = isset( $content['title'] ) ? (string) $content['title'] : '';
         $subheading = isset( $content['subheading'] ) ? (string) $content['subheading'] : '';
@@ -449,9 +644,51 @@ class SectionRenderer {
         $alignment = isset( $settings['alignment'] ) ? sanitize_key( (string) $settings['alignment'] ) : 'center';
         $min_height = isset( $settings['min_height'] ) ? absint( $settings['min_height'] ) : 600;
 
+        /* Phase 23 §11 — secondary CTA, media placement and slider mode. */
+        $button_2_text = isset( $content['button_2_text'] ) ? (string) $content['button_2_text'] : '';
+        $button_2_url  = isset( $content['button_2_url'] ) ? (string) $content['button_2_url'] : '';
+        $slides        = isset( $content['slides'] ) && is_array( $content['slides'] ) ? $content['slides'] : array();
+
+        $positions = array( 'start', 'end', 'above', 'below', 'hidden' );
+
+        $media_position = isset( $settings['media_position'] ) ? sanitize_key( (string) $settings['media_position'] ) : 'end';
+
+        if ( ! in_array( $media_position, $positions, true ) ) {
+            $media_position = 'end';
+        }
+
+        /*
+         * SLIDER MODE REUSES THE EXISTING SLIDER ENGINE.
+         *
+         * The hero does not grow a second slider implementation: it hands the same
+         * settings and the slides to `render_slider_section()`, which is the one
+         * place that knows how a slider is laid out, whether it autoplays, and how
+         * its overlay works. If there are no slides yet, the standard hero renders
+         * instead so the section is never empty.
+         */
+        if ( 'slider' === sanitize_key( (string) ( $settings['mode'] ?? 'standard' ) ) && ! empty( $slides ) ) {
+
+            $this->render_slider_section(
+                array(
+                    'layout'   => 'center',
+                    'height'   => $min_height,
+                    'autoplay' => isset( $settings['autoplay'] ) ? $settings['autoplay'] : true,
+                    'overlay'  => 'dark',
+                ),
+                array( 'slides' => $slides )
+            );
+
+            return;
+        }
+
+        $show_media = $image_id > 0 && 'hidden' !== $media_position;
+
         ?>
         <div class="bb-section-inner">
-            <div class="bb-hero bb-hero-align-<?php echo esc_attr( $alignment ); ?>" style="--bb-hero-min-height: <?php echo esc_attr( $min_height ); ?>px;">
+            <div
+                class="bb-hero bb-hero-align-<?php echo esc_attr( $alignment ); ?> bb-hero-media-<?php echo esc_attr( $media_position ); ?>"
+                style="--bb-hero-min-height: <?php echo esc_attr( $min_height ); ?>px;"
+            >
                 <div class="bb-hero-copy">
                     <?php if ( $subheading ) : ?>
                         <span class="bb-kicker-label"><?php echo esc_html( $subheading ); ?></span>
@@ -465,14 +702,24 @@ class SectionRenderer {
                         <div class="bb-section-description"><?php echo wp_kses_post( $description ); ?></div>
                     <?php endif; ?>
 
-                    <?php if ( $button_text ) : ?>
-                        <a class="bb-primary-button" href="<?php echo esc_url( $button_url ); ?>">
-                            <?php echo esc_html( $button_text ); ?>
-                        </a>
+                    <?php if ( $button_text || $button_2_text ) : ?>
+                        <div class="bb-hero-actions">
+                            <?php if ( $button_text ) : ?>
+                                <a class="bb-primary-button" href="<?php echo esc_url( $button_url ); ?>">
+                                    <?php echo esc_html( $button_text ); ?>
+                                </a>
+                            <?php endif; ?>
+
+                            <?php if ( $button_2_text ) : ?>
+                                <a class="bb-secondary-button" href="<?php echo esc_url( '' !== $button_2_url ? $button_2_url : '#' ); ?>">
+                                    <?php echo esc_html( $button_2_text ); ?>
+                                </a>
+                            <?php endif; ?>
+                        </div>
                     <?php endif; ?>
                 </div>
 
-                <?php if ( $image_id ) : ?>
+                <?php if ( $show_media ) : ?>
                     <div class="bb-hero-media">
                         <?php echo wp_get_attachment_image( $image_id, 'large', false, array( 'class' => 'bb-hero-image' ) ); ?>
                     </div>

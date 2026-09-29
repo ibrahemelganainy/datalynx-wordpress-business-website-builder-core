@@ -1,0 +1,306 @@
+﻿scanned files: 291
+
+== GLOBAL CONTROLS: 106 ==
+CONTROL                       TOKEN                           GROUP       OWNER   FE   PHP  STATUS
+color_primary                  --bb-color-primary               colors       theme    95    15    ok
+color_primary_hover            --bb-color-primary-hover         colors       theme    7     13    ok
+color_secondary                --bb-color-secondary             colors       theme    1     7     ok
+color_accent                   --bb-color-accent                colors       theme    3     12    ok
+color_background               --bb-color-background            colors       theme    5     15    ok
+color_surface                  --bb-color-surface               colors       theme    15    13    ok
+color_surface_muted            --bb-color-surface-muted         colors       theme    6     13    ok
+color_heading                  --bb-color-heading               colors       theme    26    7     ok
+color_text                     --bb-color-text                  colors       theme    16    12    ok
+color_text_muted               --bb-color-text-muted            colors       theme    16    7     ok
+color_border                   --bb-color-border                colors       theme    34    12    ok
+color_success                  --bb-color-success               colors       theme    6     1     ok
+color_warning                  --bb-color-warning               colors       theme    3     1     ok
+color_danger                   --bb-color-danger                colors       theme    3     1     ok
+font_body                      --bb-font-body                   typography   theme    1     1     ok
+font_heading                   --bb-font-heading                typography   theme    6     12    ok
+font_size_md                   --bb-font-size-md                typography   theme    5     2     ok
+font_weight_bold               --bb-font-weight-bold            typography   theme    39    2     ok
+line_height_normal             --bb-line-height-normal          typography   theme    13    2     ok
+container_width                --bb-container-width             layout       theme    7     8     ok
+section_spacing                --bb-section-spacing             layout       theme    3     1     ok
+radius_md                      --bb-radius-md                   radius       theme    20    11    ok
+radius_lg                      --bb-radius-lg                   radius       theme    24    11    ok
+button_radius                  --bb-button-radius               radius       theme    5     11    ok
+header_bg                      --bb-header-bg                   shell        theme    9     11    ok
+header_color                   --bb-header-color                shell        theme    13    11    ok
+footer_bg                      --bb-footer-bg                   shell        theme    2     11    ok
+footer_color                   --bb-footer-color                shell        theme    8     11    ok
+gradient_brand                 --bb-gradient-brand              gradients    plugin   4     7     ok
+gradient_hero                  --bb-gradient-hero               gradients    plugin   2     7     ok
+gradient_cta                   --bb-gradient-cta                gradients    plugin   2     7     ok
+gradient_decorative            --bb-gradient-decorative         gradients    plugin   3     7     ok
+section_padding                --bb-section-padding-block       density      plugin   1     7     ok
+grid_gap                       --bb-grid-gap                    density      plugin   6     7     ok
+card_padding                   --bb-card-padding                density      plugin   4     7     ok
+heading_scale                  --bb-heading-scale               density      plugin   3     8     ok
+heading_letter_spacing         --bb-heading-letter-spacing      density      plugin   4     8     ok
+border_thickness               --bb-border-thickness            shape        plugin   6     7     ok
+card_radius                    --bb-radius-card                 shape        plugin   12    7     ok
+input_radius                   --bb-radius-input                shape        plugin   1     7     ok
+button_padding_block           --bb-button-padding-block        components   plugin   2     7     ok
+button_padding_inline          --bb-button-padding-inline       components   plugin   2     7     ok
+button_weight                  --bb-button-weight               components   plugin   2     7     ok
+badge_bg                       --bb-badge-bg                    components   plugin   2     7     ok
+badge_color                    --bb-badge-color                 components   plugin   1     7     ok
+header_height                  --bb-header-height               shell        plugin   3     7     ok
+header_blur                    --bb-header-blur                 shell        plugin   1     10    ok
+header_border_width            --bb-header-border-width         shell        plugin   2     7     ok
+nav_gap                        --bb-nav-gap                     shell        plugin   3     7     ok
+footer_padding                 --bb-footer-padding-block        shell        plugin   2     7     ok
+motion_speed                   --bb-motion-normal               motion       plugin   15    11    ok
+reveal_duration                --bb-reveal-duration             motion       plugin   3     11    ok
+reveal_distance                --bb-reveal-distance             motion       plugin   3     11    ok
+hover_lift                     --bb-hover-lift                  motion       plugin   4     11    ok
+reveal_kind                    --bb-reveal-kind                 motion       plugin   0     12    NO FRONTEND CONSUMER (author-side only)
+reveal_stagger                 --bb-reveal-stagger              motion       plugin   1     11    ok
+hover_effect                   --bb-hover-effect                motion       plugin   0     12    NO FRONTEND CONSUMER (author-side only)
+bg_gradient                    --bb-bg-gradient                 background   plugin   2     9     ok
+bg_overlay                     --bb-bg-overlay                  background   plugin   2     10    ok
+bg_overlay_opacity             --bb-bg-overlay-opacity          background   plugin   1     8     ok
+container_padding_block        --bb-container-padding-block     layout       plugin   2     1     ok
+grid_columns                   --bb-grid-columns                layout       plugin   1     7     ok
+grid_columns_tablet            --bb-grid-columns-tablet         layout       plugin   1     7     ok
+grid_columns_mobile            --bb-grid-columns-mobile         layout       plugin   1     7     ok
+grid_row_gap                   --bb-grid-row-gap                layout       plugin   1     7     ok
+card_min_width                 --bb-card-min-width              layout       plugin   1     7     ok
+content_width                  --bb-content-width               layout       plugin   2     7     ok
+section_align                  --bb-section-align               layout       plugin   2     1     ok
+glass_level                    --bb-glass-blur                  glass        plugin   4     8     ok
+glass_saturate                 --bb-glass-saturate              glass        plugin   4     7     ok
+glass_opacity                  --bb-glass-opacity               glass        plugin   2     7     ok
+glass_border_opacity           --bb-glass-border-opacity        glass        plugin   2     3     ok
+header_initial_bg              --bb-header-initial-bg           header       plugin   1     8     ok
+header_initial_nav             --bb-header-initial-nav          header       plugin   1     8     ok
+header_initial_transparency    --bb-header-initial-transparency header       plugin   2     7     ok
+header_scrolled_bg             --bb-header-scrolled-bg          header       plugin   2     8     ok
+header_scrolled_nav            --bb-header-scrolled-nav         header       plugin   1     8     ok
+header_scrolled_border         --bb-header-scrolled-border      header       plugin   1     8     ok
+header_scroll_transition       --bb-header-scroll-transition    header       plugin   5     7     ok
+footer_heading_color           --bb-footer-heading-color        footer       plugin   1     7     ok
+footer_link_color              --bb-footer-link-color           footer       plugin   1     7     ok
+footer_link_hover              --bb-footer-link-hover           footer       plugin   1     7     ok
+footer_column_gap              --bb-footer-column-gap           footer       plugin   2     7     ok
+layout_mode                    --bb-layout-mode                 layout       plugin   0     2     NO FRONTEND CONSUMER (author-side only)
+site_margin                    --bb-site-margin                 layout       plugin   1     1     ok
+section_gap                    --bb-section-gap                 layout       plugin   1     1     ok
+body_weight                    --bb-font-weight-body            typography   plugin   1     1     ok
+heading_weight                 --bb-font-weight-heading         typography   plugin   1     1     ok
+body_letter_spacing            --bb-body-letter-spacing         typography   plugin   1     1     ok
+heading_line_height            --bb-heading-line-height         typography   plugin   1     1     ok
+heading_transform              --bb-heading-transform           typography   plugin   1     1     ok
+nav_position                   --bb-nav-position                navbar       plugin   0     2     NO FRONTEND CONSUMER (author-side only)
+nav_link_size                  --bb-nav-link-size               navbar       plugin   1     1     ok
+nav_link_weight                --bb-nav-link-weight             navbar       plugin   1     1     ok
+nav_link_tracking              --bb-nav-link-tracking           navbar       plugin   1     1     ok
+nav_link_hover                 --bb-nav-link-hover              navbar       plugin   1     1     ok
+nav_link_active                --bb-nav-link-active             navbar       plugin   3     1     ok
+nav_indicator                  --bb-nav-indicator               navbar       plugin   0     2     NO FRONTEND CONSUMER (author-side only)
+nav_radius                     --bb-nav-radius                  navbar       plugin   1     1     ok
+logo_height                    --bb-logo-height                 navbar       plugin   1     1     ok
+motion_mode                    --bb-motion-mode                 motion       plugin   0     5     NO FRONTEND CONSUMER (author-side only)
+motion_ease                    --bb-ease-standard               motion       plugin   25    1     ok
+scrollbar_width                --bb-scrollbar-width             scrollbar    plugin   3     3     ok
+scrollbar_track                --bb-scrollbar-track             scrollbar    plugin   2     3     ok
+scrollbar_thumb                --bb-scrollbar-thumb             scrollbar    plugin   2     3     ok
+scrollbar_thumb_hover          --bb-scrollbar-thumb-hover       scrollbar    plugin   1     3     ok
+
+== DUPLICATE TOKENS (two controls -> one token) ==
+  none
+
+== ORPHANED CONTROLS (no frontend consumer) ==
+  reveal_kind                    --bb-reveal-kind                 group=motion      owner=plugin  php-refs=12
+  hover_effect                   --bb-hover-effect                group=motion      owner=plugin  php-refs=12
+  layout_mode                    --bb-layout-mode                 group=layout      owner=plugin  php-refs=2
+  nav_position                   --bb-nav-position                group=navbar      owner=plugin  php-refs=2
+  nav_indicator                  --bb-nav-indicator               group=navbar      owner=plugin  php-refs=2
+  motion_mode                    --bb-motion-mode                 group=motion      owner=plugin  php-refs=5
+
+== INDIRECT CONSUMERS (keyword controls) ==
+--bb-reveal-kind               -> data-bb-reveal                           read=yes   css=yes   CONSUMED (indirect)
+--bb-section-reveal            -> data-bb-reveal                           read=yes   css=yes   CONSUMED (indirect)
+--bb-hover-effect              -> data-bb-hover                            read=yes   css=yes   CONSUMED (indirect)
+--bb-section-hover             -> data-bb-hover                            read=yes   css=yes   CONSUMED (indirect)
+--bb-layout-mode               -> body class .has-bb-layout-boxed          read=yes   css=yes   CONSUMED (indirect)
+--bb-nav-position              -> body class .has-bb-nav-start/end         read=yes   css=yes   CONSUMED (indirect)
+--bb-nav-indicator             -> body class .has-bb-nav-underline/pill/dot read=yes   css=yes   CONSUMED (indirect)
+--bb-motion-mode               -> body class .has-bb-motion-off            read=yes   css=yes   CONSUMED (indirect)
+--bb-bg-overlay-opacity        -> body class .has-bb-overlay               read=yes   css=yes   CONSUMED (indirect)
+
+== FRONTEND CONSUMER MAP ==
+  color_primary                  -> assets\css\admin\design-preview.css (4), assets\css\frontend\animations.css (1), assets\css\frontend\billing-form.css (1), assets\css\frontend\components.css (21), assets\css\frontend\design-identity.css (5), assets\css\frontend\design-sections.css (8), assets\css\frontend\design-tokens.css (10), assets\css\frontend\layout.css (5), assets\css\frontend\payment-step.css (1), assets\css\frontend\section-booking-form.css (1), assets\css\frontend\section-consultation-form.css (1), assets\css\frontend\section-consultation.css (1), assets\css\frontend\section-faq.css (1), assets\css\frontend\section-lawyer-profile.css (3), assets\css\frontend\section-lawyers.css (2), assets\css\frontend\section-legal-services.css (1), assets\css\frontend\section-payment.css (6), assets\css\frontend\section-services.css (2), assets\css\frontend\section-variants.css (2), assets\css\frontend\status-lookup.css (5), assets\js\admin\design-studio-panel.js (1), includes\Design\DesignCatalogue.php (1), includes\Design\DesignSchema.php (3), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (10), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\header.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (2), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  color_primary_hover            -> assets\css\frontend\design-tokens.css (3), includes\Design\DesignSchema.php (2), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (3), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  color_secondary                -> assets\css\frontend\components.css (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  color_accent                   -> assets\css\frontend\design-tokens.css (1), assets\css\frontend\section-base.css (1), assets\css\frontend\section-payment.css (1), includes\Design\DesignCatalogue.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  color_background               -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-sections.css (2), assets\css\frontend\design-tokens.css (1), includes\Design\DesignCatalogue.php (1), includes\Design\DesignSchema.php (2), includes\Design\SectionStyleSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\layout.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  color_surface                  -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (2), assets\css\frontend\design-sections.css (3), assets\css\frontend\design-tokens.css (1), assets\css\frontend\payment-step.css (1), assets\css\frontend\section-base.css (1), assets\css\frontend\section-services.css (1), assets\css\frontend\status-lookup.css (2), includes\Design\DesignCatalogue.php (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (2), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\header.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  color_surface_muted            -> assets\css\admin\design-preview.css (2), assets\css\frontend\components.css (2), assets\css\frontend\section-base.css (1), assets\css\frontend\section-services.css (1), includes\Design\DesignSchema.php (1), includes\Design\SectionStyleSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  color_heading                  -> assets\css\admin\design-preview.css (2), assets\css\frontend\billing-form.css (2), assets\css\frontend\components.css (1), assets\css\frontend\payment-step.css (2), assets\css\frontend\receipt-modal.css (1), assets\css\frontend\section-base.css (1), assets\css\frontend\section-booking-form.css (1), assets\css\frontend\section-consultation-form.css (1), assets\css\frontend\section-payment.css (5), assets\css\frontend\status-lookup.css (5), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (4), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  color_text                     -> assets\css\admin\design-preview.css (1), assets\css\frontend\components.css (1), assets\css\frontend\design-identity.css (2), assets\css\frontend\design-sections.css (1), assets\css\frontend\payment-step.css (1), assets\css\frontend\section-base.css (2), assets\css\frontend\section-payment.css (3), assets\css\frontend\section-services.css (1), assets\css\frontend\status-lookup.css (1), includes\Design\DesignCatalogue.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (2), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  color_text_muted               -> assets\css\frontend\billing-form.css (1), assets\css\frontend\components.css (1), assets\css\frontend\design-identity.css (1), assets\css\frontend\payment-step.css (3), assets\css\frontend\section-lawyer-profile.css (1), assets\css\frontend\section-lawyers.css (1), assets\css\frontend\section-payment.css (3), assets\css\frontend\section-testimonials.css (1), assets\css\frontend\status-lookup.css (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (2), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  color_border                   -> assets\css\admin\design-preview.css (2), assets\css\frontend\billing-form.css (1), assets\css\frontend\components.css (5), assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (7), assets\css\frontend\design-tokens.css (1), assets\css\frontend\layout.css (1), assets\css\frontend\payment-step.css (1), assets\css\frontend\section-base.css (2), assets\css\frontend\section-payment.css (1), assets\css\frontend\section-services.css (2), assets\css\frontend\status-lookup.css (3), includes\Design\DesignCatalogue.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\header.css (3), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\responsive.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\shell-variants.css (2), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  color_success                  -> assets\css\frontend\components.css (5), assets\css\frontend\layout.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  color_warning                  -> assets\css\frontend\components.css (2), assets\css\frontend\layout.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  color_danger                   -> assets\css\frontend\design-sections.css (3), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  font_body                      -> C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  font_heading                   -> assets\css\admin\design-preview.css (3), assets\css\frontend\design-identity.css (1), includes\Design\DesignFonts.php (1), includes\Design\DesignPreviewRenderer.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  font_size_md                   -> includes\Design\DesignTypography.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (2), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\footer.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (2), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  font_weight_bold               -> assets\css\frontend\billing-form.css (1), assets\css\frontend\components.css (7), assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (1), assets\css\frontend\design-tokens.css (1), assets\css\frontend\layout.css (1), assets\css\frontend\payment-step.css (2), assets\css\frontend\section-booking-form.css (1), assets\css\frontend\section-consultation-form.css (1), assets\css\frontend\section-consultation.css (2), assets\css\frontend\section-faq.css (1), assets\css\frontend\section-lawyer-profile.css (3), assets\css\frontend\section-lawyers.css (1), assets\css\frontend\section-legal-services.css (1), assets\css\frontend\section-payment.css (7), assets\css\frontend\status-lookup.css (5), includes\Design\DesignTypography.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\header.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (2), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  line_height_normal             -> assets\css\frontend\billing-form.css (2), assets\css\frontend\components.css (5), assets\css\frontend\section-booking-form.css (1), assets\css\frontend\section-consultation-form.css (1), assets\css\frontend\section-payment.css (1), includes\Design\DesignTypography.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (2), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\typography.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  container_width                -> assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (2), assets\css\page-admin\components\template-shell.css (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\footer.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\header.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\layout.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\setup.php (1)
+  section_spacing                -> assets\css\frontend\design-sections.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\footer.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\layout.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1)
+  radius_md                      -> assets\css\frontend\components.css (8), assets\css\frontend\design-identity.css (2), assets\css\frontend\section-services.css (1), assets\css\page-admin\components\builder-header.css (1), assets\css\page-admin\components\buttons.css (1), assets\css\page-admin\components\content-sections.css (1), assets\css\page-admin\components\image-uploader.css (1), assets\css\page-admin\components\section-editor.css (4), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\header.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  radius_lg                      -> assets\css\frontend\billing-form.css (1), assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (1), assets\css\frontend\payment-step.css (2), assets\css\frontend\section-base.css (1), assets\css\frontend\section-booking-form.css (3), assets\css\frontend\section-consultation-form.css (2), assets\css\frontend\section-legal-services.css (1), assets\css\frontend\section-payment.css (3), assets\css\frontend\status-lookup.css (1), assets\css\page-admin\components\builder-header.css (2), assets\css\page-admin\components\content-sections.css (2), assets\css\page-admin\components\image-uploader.css (1), assets\css\page-admin\components\section-editor.css (2), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  button_radius                  -> assets\css\admin\design-preview.css (2), assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\components.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  header_bg                      -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (3), assets\css\frontend\design-tokens.css (2), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\header.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\shell-variants.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  header_color                   -> assets\css\admin\design-preview.css (2), assets\css\frontend\design-sections.css (3), assets\css\frontend\design-tokens.css (4), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\header.css (4), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  footer_bg                      -> assets\css\admin\design-preview.css (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\footer.css (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  footer_color                   -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-sections.css (2), assets\css\frontend\design-tokens.css (2), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3), packs\Medical\Design\MedicalPresets.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\assets\css\footer.css (3), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\design-schema.php (1), C:\MAMP\htdocs\wordpress\wp-content/themes/business-builder\inc\preset-resolver.php (3)
+  gradient_brand                 -> assets\css\admin\design-preview.css (3), assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  gradient_hero                  -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  gradient_cta                   -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  gradient_decorative            -> assets\css\admin\design-preview.css (2), assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  section_padding                -> assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  grid_gap                       -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (2), assets\css\frontend\section-services.css (2), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  card_padding                   -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-sections.css (1), assets\css\frontend\section-services.css (2), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  heading_scale                  -> assets\css\admin\design-preview.css (2), assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), includes\Design\DesignTypography.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  heading_letter_spacing         -> assets\css\admin\design-preview.css (3), assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), includes\Design\DesignTypography.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  border_thickness               -> assets\css\admin\design-preview.css (2), assets\css\frontend\design-identity.css (3), assets\css\frontend\design-tokens.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  card_radius                    -> assets\css\admin\design-preview.css (3), assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (1), assets\css\frontend\payment-step.css (1), assets\css\frontend\receipt-modal.css (1), assets\css\frontend\section-base.css (1), assets\css\frontend\section-services.css (2), assets\css\frontend\status-lookup.css (2), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  input_radius                   -> assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  button_padding_block           -> assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  button_padding_inline          -> assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  button_weight                  -> assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  badge_bg                       -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  badge_color                    -> assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  header_height                  -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (2), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  header_blur                    -> assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (1), packs\LawFirm\Design\LawFirmDesigns.php (4), packs\Medical\Design\MedicalDesigns.php (4)
+  header_border_width            -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  nav_gap                        -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  footer_padding                 -> assets\css\admin\design-preview.css (1), assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  motion_speed                   -> assets\css\frontend\design-identity.css (9), assets\css\frontend\design-sections.css (4), assets\css\frontend\section-services.css (2), includes\Design\DesignSchema.php (5), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  reveal_duration                -> assets\css\frontend\design-identity.css (2), assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (5), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  reveal_distance                -> assets\css\frontend\design-identity.css (1), assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (5), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  hover_lift                     -> assets\css\frontend\design-identity.css (3), assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (5), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  reveal_stagger                 -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (5), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  bg_gradient                    -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (3), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  bg_overlay                     -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (3), includes\Design\DesignShellState.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  bg_overlay_opacity             -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  container_padding_block        -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1)
+  grid_columns                   -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  grid_columns_tablet            -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  grid_columns_mobile            -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  grid_row_gap                   -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  card_min_width                 -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  content_width                  -> assets\css\frontend\design-sections.css (1), assets\css\frontend\section-services.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  section_align                  -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1)
+  glass_level                    -> assets\css\frontend\design-sections.css (4), includes\Builder\section-presentation.php (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  glass_saturate                 -> assets\css\frontend\design-sections.css (4), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  glass_opacity                  -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  glass_border_opacity           -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (1), packs\Medical\Design\MedicalDesigns.php (1)
+  header_initial_bg              -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  header_initial_nav             -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  header_initial_transparency    -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  header_scrolled_bg             -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  header_scrolled_nav            -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  header_scrolled_border         -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  header_scroll_transition       -> assets\css\frontend\design-sections.css (5), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  footer_heading_color           -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  footer_link_color              -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  footer_link_hover              -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  footer_column_gap              -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+  site_margin                    -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  section_gap                    -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  body_weight                    -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  heading_weight                 -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  body_letter_spacing            -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  heading_line_height            -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  heading_transform              -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  nav_link_size                  -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  nav_link_weight                -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  nav_link_tracking              -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  nav_link_hover                 -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  nav_link_active                -> assets\css\frontend\design-sections.css (3), includes\Design\DesignSchema.php (1)
+  nav_radius                     -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  logo_height                    -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1)
+  motion_ease                    -> assets\css\frontend\design-identity.css (12), assets\css\frontend\design-sections.css (11), assets\css\frontend\section-services.css (2), includes\Design\DesignSchema.php (1)
+  scrollbar_width                -> assets\css\frontend\design-sections.css (3), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (2)
+  scrollbar_track                -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (2)
+  scrollbar_thumb                -> assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (2)
+  scrollbar_thumb_hover          -> assets\css\frontend\design-sections.css (1), includes\Design\DesignSchema.php (1), includes\Design\DesignShellState.php (2)
+
+== SECTION-LEVEL CONTROLS ==
+layout        --bb-section-grid-columns          select  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+layout        --bb-section-grid-columns-tablet   select  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+layout        --bb-section-grid-columns-mobile   select  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+layout        --bb-section-grid-gap              length  FE=2    PHP=0    assets\css\frontend\design-sections.css (2)
+layout        --bb-section-content-width         length  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+layout        --bb-section-align                 select  FE=2    PHP=1    assets\css\frontend\design-sections.css (2), includes\Design\DesignSchema.php (1)
+background    --bb-section-bg                    color   FE=3    PHP=1    assets\css\frontend\design-sections.css (3), includes\Builder\section-presentation.php (1)
+background    --bb-section-bg-image              select  FE=3    PHP=1    assets\css\frontend\design-sections.css (3), includes\Builder\section-presentation.php (1)
+background    --bb-section-bg-overlay-opacity    number  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+colors        --bb-section-text                  color   FE=3    PHP=0    assets\css\frontend\design-sections.css (2), assets\css\frontend\section-services.css (1)
+colors        --bb-section-heading               color   FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+colors        --bb-section-accent                color   FE=2    PHP=0    assets\css\frontend\design-sections.css (1), assets\css\frontend\section-services.css (1)
+colors        --bb-section-button-bg             color   FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+colors        --bb-section-button-color          color   FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+typography    --bb-section-heading-scale         number  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+typography    --bb-section-heading-weight        select  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+typography    --bb-section-heading-transform     select  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+typography    --bb-section-letter-spacing        number  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+spacing       --bb-section-padding-block         length  FE=1    PHP=7    assets\css\frontend\design-identity.css (1), includes\Design\DesignSchema.php (1), packs\LawFirm\Design\LawFirmDesigns.php (3), packs\Medical\Design\MedicalDesigns.php (3)
+spacing       --bb-section-padding-inline        length  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+spacing       --bb-section-card-padding          length  FE=3    PHP=0    assets\css\frontend\design-sections.css (1), assets\css\frontend\section-services.css (2)
+spacing       --bb-section-heading-gap           length  FE=2    PHP=0    assets\css\frontend\design-sections.css (1), assets\css\frontend\section-services.css (1)
+cards         --bb-section-card-bg               color   FE=3    PHP=0    assets\css\frontend\design-sections.css (1), assets\css\frontend\section-services.css (2)
+cards         --bb-section-card-border-color     color   FE=3    PHP=0    assets\css\frontend\design-sections.css (1), assets\css\frontend\section-services.css (2)
+cards         --bb-section-card-radius           length  FE=2    PHP=0    assets\css\frontend\design-sections.css (1), assets\css\frontend\section-services.css (1)
+cards         --bb-section-card-shadow           select  FE=4    PHP=0    assets\css\frontend\design-sections.css (2), assets\css\frontend\section-services.css (2)
+cards         --bb-section-card-image-ratio      select  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+shape         --bb-section-border-width          length  FE=5    PHP=0    assets\css\frontend\design-sections.css (3), assets\css\frontend\section-services.css (2)
+shape         --bb-section-border-color          color   FE=4    PHP=0    assets\css\frontend\design-sections.css (4)
+shape         --bb-section-radius                length  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+glass         --bb-section-glass-blur            select  FE=2    PHP=1    assets\css\frontend\design-sections.css (2), includes\Builder\section-presentation.php (1)
+glass         --bb-section-glass-opacity         number  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+glass         --bb-section-glass-border-opacity  number  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+motion        --bb-section-reveal                select  FE=0    PHP=1    *** NO FRONTEND CONSUMER ***
+motion        --bb-section-reveal-duration       number  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+motion        --bb-section-reveal-delay          number  FE=1    PHP=0    assets\css\frontend\design-sections.css (1)
+motion        --bb-section-hover                 select  FE=0    PHP=1    *** NO FRONTEND CONSUMER ***
+section orphans: 2
+
+== GLOBAL vs SECTION TOKEN COLLISIONS ==
+  --bb-section-align  written by BOTH global 'section_align' and section 'align' (layout)
+  --bb-section-padding-block  written by BOTH global 'section_padding' and section 'padding_block' (spacing)
+resolved section tokens: 9 groups
+
+== REGISTERED SECTIONS ==
+header             cat=navigation     supports=                                             settings=0   content=7
+hero               cat=content        supports=title|description|button|image|background    settings=4   content=9
+slider             cat=marketing      supports=                                             settings=4   content=1
+about              cat=content        supports=title|description|image|button               settings=1   content=5
+features           cat=content        supports=title|description|items|icons                settings=1   content=3
+services           cat=content        supports=                                             settings=4   content=5
+cta                cat=marketing      supports=title|description|button|background          settings=1   content=4
+contact            cat=communication  supports=title|description|phone|email|address|whatsapp|map settings=1   content=6
+footer             cat=navigation     supports=                                             settings=0   content=6
+
+== SECTION VARIANTS (core) ==
+  services: default, list, featured, icon-text, image-text
+
+== THEME SHELL VARIANTS ==
+  header: (no resolver)
+  navigation: (no resolver)
+  footer: (no resolver)
+
+== ENVIRONMENT ==
+  theme: astra | site: 1 | business type: n/a | builder theme present: yes | theme schema file: loaded
+
+== PER-SITE ISOLATION ==
+  site 1: theme=astra            type=(none)       preset=(unset)            design mods=0
+  site 2: theme=business-builder type=law_firm     preset=default            design mods=78
+  site 3: theme=business-builder type=medical      preset=medical-vitality   design mods=0
